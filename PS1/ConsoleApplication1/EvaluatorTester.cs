@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FormulaEvaluator;
-//eafdsafdsfdsafashkhkhjkjkk
+
 namespace EvaluatorTester
 {
     /// <summary>
@@ -31,12 +31,12 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("(X2 * 5) + 1", variableEvaluator);
+                double numTest = Evaluator.Evaluate("X5X+1", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine("Something went wrong.");
+                Console.WriteLine("Something went wrong");
             }
         }
     }

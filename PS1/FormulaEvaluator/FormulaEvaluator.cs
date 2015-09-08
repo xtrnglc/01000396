@@ -287,6 +287,12 @@ namespace FormulaEvaluator
 
                         operatorStack.Push(current);                        //Push + operator onto stack
                     }
+
+                    else
+                    {
+                        Console.WriteLine("Undefined character encountered");
+                        throw new ArgumentException("Undefined character encountered");
+                    }
                 }
             }
 
@@ -363,13 +369,24 @@ namespace FormulaEvaluator
             {
                 testCharASCII = test[i];
 
-                if (!(((int)testCharASCII >= 65 & (int)testCharASCII <= 90) | ((int)testCharASCII >= 97 & (int)testCharASCII <= 122)))  //Check to see if current character is an uppercase or lowercase letter
+                if (i == 0)                                                                                                                 //Check to see if first character of variable is a letter.
                 {
-                    if (!(((int)testCharASCII >= 48 & (int)testCharASCII <= 57)))                                                       //Check to see if current character is a digit
+                    if (!(((int)testCharASCII >= 65 & (int)testCharASCII <= 90) | ((int)testCharASCII >= 97 & (int)testCharASCII <= 122)))
                     {
-                        return false;                                                                                                   //If neither, return false
+                        return false;
+                    }
+                    continue;
+                }
+
+                else if (!(((int)testCharASCII >= 65 & (int)testCharASCII <= 90) | ((int)testCharASCII >= 97 & (int)testCharASCII <= 122))) //Check to see if current character is an uppercase or lowercase letter
+                {
+                    if (!(((int)testCharASCII >= 48 & (int)testCharASCII <= 57)))                                                           //Check to see if current character is a digit
+                    {
+                        return false;                                                                                                       //If neither, return false
                     }
                 }
+                
+                    
             }
             return true;
         }
