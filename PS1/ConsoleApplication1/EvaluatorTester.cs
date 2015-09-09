@@ -43,10 +43,10 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("30/X+S", variableEvaluator);
+                double numTest = Evaluator.Evaluate("30/(X+S)/2+(1+2*3)", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 Console.WriteLine("Something went wrong");
             }
