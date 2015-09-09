@@ -219,8 +219,9 @@ namespace FormulaEvaluator
                             if (operatorStack.Peek().Equals("*"))               //If operator is *
                             {
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                intTemp2 = operandStack.Pop();
                                 stringTemp = operatorStack.Pop();               //Pop * operator
-                                intTemp = num * intTemp;                        //Multiply the two operands
+                                intTemp = intTemp * intTemp2;                   //Multiply the two operands
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
 
@@ -228,9 +229,10 @@ namespace FormulaEvaluator
                             {
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
                                 stringTemp = operatorStack.Pop();               //Pop / operator
-                                if (num != 0)
+                                intTemp2 = operandStack.Pop();
+                                if (intTemp2 != 0)
                                 {
-                                    intTemp = intTemp / num;                    //Divide first operand by second operand
+                                    intTemp = intTemp2 / intTemp;               //Divide first operand by second operand
                                     operandStack.Push(intTemp);                 //Push result onto stack
                                 }
                                 else
