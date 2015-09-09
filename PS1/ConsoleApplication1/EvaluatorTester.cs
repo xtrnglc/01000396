@@ -20,7 +20,15 @@ namespace EvaluatorTester
         /// <returns></returns>
         public static int variableEvaluator(string s)
         {
-            return 1;
+            if (s.Equals("X"))
+            {
+                return 5;
+            }
+
+            else
+            {
+                return 2;
+            }
         }
         static void Main(string[] args)
         {
@@ -31,7 +39,7 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("X5X+1", variableEvaluator);
+                double numTest = Evaluator.Evaluate("X+5+F", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
             catch (ArgumentException e)

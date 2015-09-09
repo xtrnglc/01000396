@@ -288,6 +288,11 @@ namespace FormulaEvaluator
                         operatorStack.Push(current);                        //Push + operator onto stack
                     }
 
+                    else if (current.Equals(""))
+                    {
+                        continue;
+                    }
+
                     else
                     {
                         Console.WriteLine("Undefined character encountered");
