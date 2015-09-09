@@ -30,6 +30,10 @@ namespace EvaluatorTester
                 return 2;
             }
         }
+        /// <summary>
+        /// Main Test Driver
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             Console.WriteLine("This program tests the infix calculator class library");
@@ -39,7 +43,7 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("30/(0)", variableEvaluator);
+                double numTest = Evaluator.Evaluate("30/X+S", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
             catch (ArgumentException e)

@@ -11,12 +11,12 @@ namespace FormulaEvaluator
     /// Evaluator class that contains a function that evaluates a mathematical string expression 
     /// and returns its numerical value.
     /// SORRY FOR POOR MODULARIZING, WILL DO BETTER ON THAT NEXT TIME :/
-    /// </summary>dffgsfdg
+    /// </summary>
     public static class Evaluator
     {
         /// <summary>
         /// Declares a lookup function to lookup variables.
-        /// Must  be provided by tester.
+        /// Must be provided by tester.
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
@@ -350,7 +350,6 @@ namespace FormulaEvaluator
                 else
                 {                                                           //If there isn't 2 operands or 1 operator remaining, report error
                     throw new ArgumentException("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
-
                 }
             }
         }
