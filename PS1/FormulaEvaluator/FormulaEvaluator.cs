@@ -201,13 +201,13 @@ namespace FormulaEvaluator
 
                         try
                         {
-                            if (operatorStack.Peek().Equals("("))
+                            if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
                             {
                                 operatorStack.Pop();
                             }
                             else
                             {
-                                throw new ArgumentException("Opening parenthesis ( not found.");
+                                throw new ArgumentException("Opening parenthesis ( not found.");        //If not found, throw error
                             }
                         }
                         catch (ArgumentException e)
@@ -288,13 +288,13 @@ namespace FormulaEvaluator
                         operatorStack.Push(current);                        //Push + operator onto stack
                     }
 
-                    else if (current.Equals(""))
+                    else if (current.Equals(""))                            //Deal with null character, ignore and move on to next character
                     {
                         continue;
                     }
 
                     else
-                    {
+                    {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
                         Console.WriteLine("Undefined character encountered");
                         throw new ArgumentException("Undefined character encountered");
                     }
@@ -389,9 +389,7 @@ namespace FormulaEvaluator
                     {
                         return false;                                                                                                       //If neither, return false
                     }
-                }
-                
-                    
+                }       
             }
             return true;
         }
