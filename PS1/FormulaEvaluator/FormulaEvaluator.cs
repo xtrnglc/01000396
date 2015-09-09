@@ -230,14 +230,15 @@ namespace FormulaEvaluator
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
                                 stringTemp = operatorStack.Pop();               //Pop / operator
                                 intTemp2 = operandStack.Pop();
-                                if (intTemp2 != 0)
+                                if (intTemp != 0)
                                 {
                                     intTemp = intTemp2 / intTemp;               //Divide first operand by second operand
                                     operandStack.Push(intTemp);                 //Push result onto stack
                                 }
                                 else
                                 {
-                                    throw new ArgumentException("Cannot divide by 0");
+                                    Console.WriteLine("Divide by zero error");
+                                    throw new ArgumentException("Cannot divide by 0");  
                                 }
                             }
                         }

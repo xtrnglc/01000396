@@ -39,7 +39,7 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("30/(15)", variableEvaluator);
+                double numTest = Evaluator.Evaluate("30/(0)", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
             catch (ArgumentException e)
