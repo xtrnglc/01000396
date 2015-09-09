@@ -89,7 +89,6 @@ namespace FormulaEvaluator
 
                 else if (isValidVariable(current))                          //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
                 {
-
                     try
                     {
                         num = VariableEvaluator(current);                   //Look up the variable
