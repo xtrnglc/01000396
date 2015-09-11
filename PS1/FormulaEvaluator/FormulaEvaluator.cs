@@ -362,37 +362,7 @@ namespace FormulaEvaluator
         /// <returns>true if valid ascii, false otherwise</returns>
         public static Boolean isValidVariable(String s)
         {
-            char[] test = s.ToCharArray();                                  //Split the string up into characters and store in char array
-            int testCharASCII;
-            int length = test.Length;
-
-            if (test.Length == 0)                                          //To deal with null character
-            {
-                return false;
-            }
-
-            for (int i = 0; i < test.Length; i++)
-            {
-                testCharASCII = test[i];
-
-                if (i == 0)                                                                                                                 //Check to see if first character of variable is a letter.
-                {
-                    if (!(((int)testCharASCII >= 65 & (int)testCharASCII <= 90) | ((int)testCharASCII >= 97 & (int)testCharASCII <= 122)))
-                    {
-                        return false;
-                    }
-                    continue;
-                }
-
-                else if (!(((int)testCharASCII >= 65 & (int)testCharASCII <= 90) | ((int)testCharASCII >= 97 & (int)testCharASCII <= 122))) //Check to see if current character is an uppercase or lowercase letter
-                {
-                    if (!(((int)testCharASCII >= 48 & (int)testCharASCII <= 57)))                                                           //Check to see if current character is a digit
-                    {
-                        return false;                                                                                                       //If neither, return false
-                    }
-                }       
-            }
-            return true;
+            return Regex.IsMatch(s, "(^[a-z]|[A-Z])+\\d+$");
         }
     }
 }

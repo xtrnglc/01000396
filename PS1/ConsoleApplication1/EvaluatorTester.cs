@@ -20,7 +20,7 @@ namespace EvaluatorTester
         /// <returns></returns>
         public static int variableEvaluator(string s)
         {
-            if (s.Equals("X"))
+            if (s.Equals("X2"))
             {
                 return 5;
             }
@@ -43,7 +43,7 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("30/(X+S)/2+(1+2*3)", variableEvaluator);
+                double numTest = Evaluator.Evaluate("X2 + 5", variableEvaluator);
                 Console.WriteLine("\nThe expression evaluates to: " + numTest);
             }
             catch (Exception e)
