@@ -54,8 +54,8 @@ namespace SpreadsheetUtilities
         /// d -> b -> d
         ///
         /// </summary>
-        private LinkedList<string>[] DependentsList;
-        private LinkedList<string>[] DependeesList;
+        private LinkedList<string>[] DependentsList = new LinkedList<string>[100000];
+        private LinkedList<string>[] DependeesList = new LinkedList<string>[100000];
         private int count;
         private int size;
         private int current;
@@ -66,8 +66,6 @@ namespace SpreadsheetUtilities
         /// </summary>
         public DependencyGraph()
         {
-            DependentsList[0] = null;
-            DependeesList[0] = null;
             count = 0;
             size = 0;
             current = -1;
@@ -101,7 +99,36 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            return false;
+            bool ExistsInDependentsList = false;
+
+            for(int i = 0; i < count; i++)
+            {
+                if (DependentsList[i].First.Equals(s))
+                {
+                    ExistsInDependentsList = true;
+                    if(DependentsList[i].Count > 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    ExistsInDependentsList = false;
+                }
+            }
+
+            if(ExistsInDependentsList == false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
 
@@ -110,7 +137,36 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            return false;
+            bool ExistsInDependeesList = false;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (DependentsList[i].First.Equals(s))
+                {
+                    ExistsInDependeesList = true;
+                    if (DependeesList[i].Count > 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    ExistsInDependeesList = false;
+                }
+            }
+
+            if (ExistsInDependeesList == false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
 
@@ -143,49 +199,42 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t must be evaluated first.  S depends on T</param>
         public void AddDependency(string s, string t)
         {
-            int DependentFlag = 0;                                                                  //Dependent Flag to keep track of whether a new dependent list is added, 0 indicates not added, 1 indicates added
-            int DependeeFlag = 0;                                                                   //Dependee Flag to keep track of whether a dependee list exists or not
+            bool s_ExistsInDependentList = false;
+            bool s_ExistsInDependeeList = false;
+            bool t_ExistsInDependentList = false;
+            bool t_ExistsInDependeeList = false;            
+            
+            /*
+            Initially empty dependent/dependee list
+            */
 
-            for(int i = 0; i < count; i++)
+            if(count == 0)
             {
-                if (DependentsList[i].First.Equals(s) && DependentFlag == 0)                        //Check to see if s already exists in the linked list, if it does then append a new depedent
-                {
-                    if (!DependentsList[i].Contains(t))                                             //Check to see if that dependent already exists, if it does then do nothing, else append a new dependent
-                    {
-                        DependentsList[i].AddLast(t);
-                        DependentFlag = 1;
-                        size++;
-                    }
-                }   
-            }
-
-            if(DependentFlag == 0)
-            {
-                current++;
                 size++;
-                DependentsList[current].AddFirst(s);
-                DependentsList[current].AddLast(t);
-                DependeesList[current].AddFirst(s);
+                count++;
+                current++;
 
-                for(int i = 0; i < count; i++)
-                {
-                    if (DependentsList[i].First.Equals(t)){
-                        DependeeFlag = 1;
-                    }
-                }
+                //Create new linked lists references for dependents list
+                DependentsList[current] = new LinkedList<string>();
+                DependentsList[current + 1] = new LinkedList<string>();
 
-                if(DependeeFlag == 0)
-                {
-                    DependentsList[current + 1].AddFirst(t);
-                    DependeesList[current + 1].AddFirst(t);
-                }
+                //Create new linked lists references for dependees list
+                DependeesList[current] = new LinkedList<string>();
+                DependeesList[current + 1] = new LinkedList<string>();
 
+                DependentsList[current].AddFirst(s);            //Create dependent list entry for s
+                DependentsList[current].AddLast(t);             //Add t as a dependent for s
+                DependeesList[current].AddFirst(s);             //Create a dependee list entry for s
+                DependentsList[current + 1].AddFirst(t);        //Create a dependent list entry for t
+                DependeesList[current + 1].AddFirst(t);         //Create a dependee list entry for t
+                DependeesList[current + 1].AddLast(s);          //Add s as a dependee for t
             }
 
 
 
-
-
+            
+            
+                                                               
         }
 
 
@@ -196,6 +245,11 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
+
+
+
+
+
         }
 
 
