@@ -13,10 +13,11 @@ namespace DepedencyGraphTest
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
-            Console.WriteLine(t.HasDependees("a"));
-            Console.WriteLine(t.HasDependees("b"));
-            Console.WriteLine(t.HasDependents("a"));
-            Console.WriteLine(t.HasDependents("b"));
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "d");
+            t.AddDependency("b", "c");
+            t.AddDependency("e", "d");
+
         }
     }
 }
