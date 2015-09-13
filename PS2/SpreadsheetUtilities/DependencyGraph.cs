@@ -103,7 +103,7 @@ namespace SpreadsheetUtilities
 
             for(int i = 0; i < count; i++)
             {
-                if (DependentsList[i].First.Equals(s))
+                if (DependentsList[i].First.Value.Equals(s))
                 {
                     ExistsInDependentsList = true;
                     if(DependentsList[i].Count > 1)
@@ -141,7 +141,7 @@ namespace SpreadsheetUtilities
 
             for (int i = 0; i < count; i++)
             {
-                if (DependentsList[i].First.Equals(s))
+                if (DependeesList[i].First.Value.Equals(s))
                 {
                     ExistsInDependeesList = true;
                     if (DependeesList[i].Count > 1)
@@ -210,25 +210,31 @@ namespace SpreadsheetUtilities
 
             if(count == 0)
             {
-                size++;
-                count++;
-                current++;
+                size = size + 2;
+                count = count + 2;
+                current = current + 2;
 
                 //Create new linked lists references for dependents list
+                DependentsList[current -1] = new LinkedList<string>();
                 DependentsList[current] = new LinkedList<string>();
-                DependentsList[current + 1] = new LinkedList<string>();
 
                 //Create new linked lists references for dependees list
+                DependeesList[current - 1] = new LinkedList<string>();
                 DependeesList[current] = new LinkedList<string>();
-                DependeesList[current + 1] = new LinkedList<string>();
 
-                DependentsList[current].AddFirst(s);            //Create dependent list entry for s
-                DependentsList[current].AddLast(t);             //Add t as a dependent for s
-                DependeesList[current].AddFirst(s);             //Create a dependee list entry for s
-                DependentsList[current + 1].AddFirst(t);        //Create a dependent list entry for t
-                DependeesList[current + 1].AddFirst(t);         //Create a dependee list entry for t
-                DependeesList[current + 1].AddLast(s);          //Add s as a dependee for t
+                DependentsList[current - 1].AddFirst(s);            //Create dependent list entry for s
+                DependentsList[current - 1].AddLast(t);             //Add t as a dependent for s
+                DependeesList[current - 1].AddFirst(s);             //Create a dependee list entry for s
+                DependentsList[current].AddFirst(t);                //Create a dependent list entry for t
+                DependeesList[current].AddFirst(t);                 //Create a dependee list entry for t
+                DependeesList[current].AddLast(s);                  //Add s as a dependee for t
             }
+
+            /*
+            Case when neither s or t exist in either lists
+            */
+
+           
 
 
 
