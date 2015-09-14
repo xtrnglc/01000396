@@ -342,11 +342,34 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
+            bool s_ExistsInDependentList = false;
+            bool s_ExistsInDependeeList = false;
+            bool t_ExistsInDependentList = false;
+            bool t_ExistsInDependeeList = false;
+            bool done = false;
 
+            for (int i = 0; i < count; i++)
+            {
+                if (DependentsList[i].First.Value == s && !done)
+                {
+                    s_ExistsInDependentList = true;
+                    s_ExistsInDependeeList = true;
 
+                    if (DependentsList[i].Contains(t))
+                    {
+                        DependentsList[i].Remove(t);
 
-
-
+                        for (int j = 0; j < count; j++)
+                        {
+                            if (DependeesList[j].First.Value == t)
+                            {
+                                DependeesList[j].Remove(s);
+                                done = true;
+                            }
+                        }    
+                    }
+                }
+            }
         }
 
 

@@ -18,6 +18,7 @@ namespace DepedencyGraphTest
             t.AddDependency("b", "e");
             t.AddDependency("e", "f");
             t.AddDependency("c", "d");
+            t.RemoveDependency("e", "f");
 
         }
     }
