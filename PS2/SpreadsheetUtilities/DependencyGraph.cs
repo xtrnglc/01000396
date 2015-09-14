@@ -54,8 +54,8 @@ namespace SpreadsheetUtilities
         /// d -> b -> d
         ///
         /// </summary>
-        private LinkedList<string>[] DependentsList = new LinkedList<string>[20];
-        private LinkedList<string>[] DependeesList = new LinkedList<string>[20];
+        private LinkedList<string>[] DependentsList = new LinkedList<string>[100000];
+        private LinkedList<string>[] DependeesList = new LinkedList<string>[100000];
         private int count;
         private int size;
         private int current;
@@ -202,7 +202,7 @@ namespace SpreadsheetUtilities
             bool s_ExistsInDependentList = false;
             bool s_ExistsInDependeeList = false;
             bool t_ExistsInDependentList = false;
-            bool t_ExistsInDependeeList = false;
+            bool t_ExistsInDependeeList = false;            
             bool done = false;          
             
             /*
@@ -234,10 +234,8 @@ namespace SpreadsheetUtilities
             }
 
             /*
-            If s exists in the list and t does not then add t as a depedent for s and create new entries for t
+            Case when neither s or t exist in either lists
             */
-
-
             if (!done)
             {
                 for (int i = 0; i < count; i++)
@@ -256,18 +254,84 @@ namespace SpreadsheetUtilities
                                     t_ExistsInDependeeList = true;
                                     t_ExistsInDependentList = true;
                                 }
+                            }
 
-                                else if (!DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
+                            if (!DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
+                            {
+                                DependentsList[i].AddLast(t);
+
+                                for (int l = 0; l < count; l++)
                                 {
-                                    DependentsList[i].AddLast(t);
+                                    if (DependentsList[l].First.Value == t)
+                                    {
+                                        t_ExistsInDependeeList = true;
+                                        t_ExistsInDependentList = true;
+
+                                        DependeesList[l].AddLast(s);
+                                        done = true;
+                                    }
+                                }
+
+                                done = true;
+                            }
+
+                            else if (!DependentsList[i].Contains(t) && t_ExistsInDependentList == false)
+                            {
+                                DependentsList[i].AddLast(t);
+                                size++;
+                                count++;
+                                current++;
+                                DependentsList[current] = new LinkedList<string>();
+                                DependeesList[current] = new LinkedList<string>();
+
+                                DependeesList[current].AddFirst(t);
+                                DependentsList[current].AddFirst(t);
+                                DependeesList[current].AddLast(s);
+                                done = true;
+                            }
+                        }
+
+                        else if (!(i < count))
+                        {
+                            current++;
+                            size++;
+                            count++;
+                            DependentsList[current] = new LinkedList<string>();
+                            DependeesList[current] = new LinkedList<string>();
+
+                            DependentsList[current].AddFirst(s);
+                            DependeesList[current].AddFirst(s);
+                            DependentsList[current].AddLast(t);
+
+                            for (int k = 0; k < count; k++)
+                            {
+                                if (DependentsList[k].First.Value == t)
+                                {
+                                    t_ExistsInDependeeList = true;
+                                    t_ExistsInDependentList = true;
+
+                                    DependeesList[k].AddLast(s);
                                     done = true;
                                 }
                             }
+
+                            if (t_ExistsInDependentList == false)
+                            {
+                                current++;
+                                size++;
+                                count++;
+                                DependentsList[current] = new LinkedList<string>();
+                                DependeesList[current] = new LinkedList<string>();
+
+                                DependentsList[current].AddFirst(t);
+                                DependeesList[current].AddFirst(t);
+                                DependeesList[current].AddLast(s);
+                                done = true;
+                            }
                         }
-                    }
+                    }   
                 }
-            }
-                                                                       
+            }                                                      
         }
 
 
