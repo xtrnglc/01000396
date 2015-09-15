@@ -12,7 +12,10 @@ namespace DepedencyGraphTest
         static void Main(string[] args)
         {
             DependencyGraph t = new DependencyGraph();
-            
+
+
+            Console.WriteLine(t.Size);
+
             t.AddDependency("b", "e");
             t.AddDependency("e", "f");
             t.AddDependency("c", "d");
@@ -21,6 +24,9 @@ namespace DepedencyGraphTest
             t.AddDependency("a", "b");
             t.AddDependency("a", "c");
             t.AddDependency("a", "d");
+
+            Console.WriteLine(t["d"]);
+
             t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
             t.ReplaceDependees("d", new HashSet<string>() { "w", "q" });
 

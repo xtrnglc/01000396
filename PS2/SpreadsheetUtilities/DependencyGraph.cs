@@ -90,7 +90,20 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int this[string s]
         {
-            get { return 0; }
+            get
+            {
+                bool done = false;
+                for (int i = 0; i < count; i++)
+                {
+                    if (DependeesList[i].First.Value == s)
+                    {
+                        done = true;
+                        return DependeesList[i].Count - 1;
+                    }
+                }
+
+                return 0;
+            }
         }
 
 
@@ -366,8 +379,6 @@ namespace SpreadsheetUtilities
                             }
                         }
                     }
-
-                    x = i;
                 }
 
                 if (!done)
@@ -544,17 +555,8 @@ namespace SpreadsheetUtilities
                     AddDependency(t, s);
                 }
             }
-
-
-
-
         }
-
     }
-
-
-
-
 }
 
 
