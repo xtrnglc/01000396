@@ -238,7 +238,8 @@ namespace SpreadsheetUtilities
             bool s_ExistsInDependeeList = false;
             bool t_ExistsInDependentList = false;
             bool t_ExistsInDependeeList = false;            
-            bool done = false;          
+            bool done = false;
+            int x = 0;    
             
             /*
             Initially empty dependent/dependee list
@@ -364,7 +365,48 @@ namespace SpreadsheetUtilities
                                 done = true;
                             }
                         }
-                    }   
+                    }
+
+                    x = i;
+                }
+
+                if (!done)
+                {
+                    current++;
+                    size++;
+                    count++;
+                    DependentsList[current] = new LinkedList<string>();
+                    DependeesList[current] = new LinkedList<string>();
+
+                    DependentsList[current].AddFirst(s);
+                    DependeesList[current].AddFirst(s);
+                    DependentsList[current].AddLast(t);
+
+                    for (int k = 0; k < count; k++)
+                    {
+                        if (DependentsList[k].First.Value == t)
+                        {
+                            t_ExistsInDependeeList = true;
+                            t_ExistsInDependentList = true;
+
+                            DependeesList[k].AddLast(s);
+                            done = true;
+                        }
+                    }
+
+                    if (t_ExistsInDependentList == false)
+                    {
+                        current++;
+                        size++;
+                        count++;
+                        DependentsList[current] = new LinkedList<string>();
+                        DependeesList[current] = new LinkedList<string>();
+
+                        DependentsList[current].AddFirst(t);
+                        DependeesList[current].AddFirst(t);
+                        DependeesList[current].AddLast(s);
+                        done = true;
+                    }
                 }
             }                                                      
         }
@@ -431,12 +473,40 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            bool done = false;
+            
+            
+
+            for (int i = 0; i < count; i++)
+            {
+                if(DependentsList[i].First.Value == s && !done)
+                {
+                    string[] strings = DependentsList[i].ToArray();
+                    strings[0] = null;
 
 
+                    foreach (string r in strings)
+                    {
+                        RemoveDependency(s, r);
+                    }
 
+                    foreach (string t in newDependents)
+                    {
+                        AddDependency(s, t);
+                    }
 
+                    done = true;
 
+                }
+            }
 
+            if (!done)
+            {
+                foreach (string t in newDependents)
+                {
+                    AddDependency(s, t);
+                }
+            }
         }
 
 
@@ -446,7 +516,34 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
+            bool done = false;
 
+            for (int i = 0; i < count; i++)
+            {
+                if (DependeesList[i].First.Value == s && !done)
+                {
+                    while (DependeesList[i].Count > 1)
+                    {
+                        DependentsList[i].RemoveLast();
+                    }
+
+                    foreach (string t in newDependees)
+                    {
+                        AddDependency(s, t);
+                    }
+
+                    done = true;
+
+                }
+            }
+
+            if (!done)
+            {
+                foreach (string t in newDependees)
+                {
+                    AddDependency(s, t);
+                }
+            }
 
 
 
