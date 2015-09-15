@@ -20,6 +20,14 @@ namespace DepedencyGraphTest
             t.AddDependency("c", "d");
             t.RemoveDependency("e", "f");
 
+            foreach (String s in t.GetDependents("a"))
+                Console.Write(s + " ");
+
+            foreach (string s in t.GetDependees("d"))
+                Console.Write(s + " ");
+
+            Console.WriteLine(t.Size);
+
         }
     }
 }

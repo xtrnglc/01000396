@@ -175,15 +175,51 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            return null;
+            
+            for (int i = 0; i < count; i++)
+            {
+                if (DependentsList[i].First.Value == s)
+                {
+                    LinkedListNode<string> temp;
+                    temp = DependentsList[i].First.Next;
+
+                    while(temp != null)
+                    {
+                        string str = temp.Value;
+                        temp = temp.Next;
+                        yield return str;
+                    }
+                }
+            }
+            
+
+            yield break;
         }
+
+    
 
         /// <summary>
         /// Enumerates dependees(s).
         /// </summary>
         public IEnumerable<string> GetDependees(string s)
         {
-            return null;
+            for (int i = 0; i < count; i++)
+            {
+                if (DependeesList[i].First.Value == s)
+                {
+                    LinkedListNode<string> temp;
+                    temp = DependeesList[i].First.Next;
+
+                    while (temp != null)
+                    {
+                        string str = temp.Value;
+                        temp = temp.Next;
+                        yield return str;
+                    }
+                }
+            }
+
+            yield break;
         }
 
 
@@ -357,13 +393,30 @@ namespace SpreadsheetUtilities
 
                     if (DependentsList[i].Contains(t))
                     {
-                        DependentsList[i].Remove(t);
+                        try
+                        {
+                            DependentsList[i].Remove(t);
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine("Can't remove.");
+                        }
+                        
 
                         for (int j = 0; j < count; j++)
                         {
                             if (DependeesList[j].First.Value == t)
                             {
-                                DependeesList[j].Remove(s);
+
+                                try
+                                {
+                                    DependeesList[j].Remove(s);
+                                }
+                                catch(Exception e)
+                                {
+                                    Console.WriteLine("Can't remove.");
+                                }
+                                
                                 done = true;
                             }
                         }    
@@ -379,6 +432,12 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+
+
+
+
+
+
         }
 
 
