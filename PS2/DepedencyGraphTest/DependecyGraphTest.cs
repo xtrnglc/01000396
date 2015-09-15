@@ -17,6 +17,7 @@ namespace DepedencyGraphTest
             Console.WriteLine(t.Size);
 
             t.AddDependency("b", "e");
+            t.AddDependency("b", "e");
             t.AddDependency("e", "f");
             t.AddDependency("c", "d");
             t.RemoveDependency("e", "f");

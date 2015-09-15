@@ -337,6 +337,14 @@ namespace SpreadsheetUtilities
                                 DependeesList[current].AddLast(s);
                                 done = true;
                             }
+
+                            else if (DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
+                            {
+                                done = true;
+                            }
+
+
+                            
                         }
 
                         else if (!(i < count))
