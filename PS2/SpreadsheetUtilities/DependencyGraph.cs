@@ -101,7 +101,6 @@ namespace SpreadsheetUtilities
                         return DependeesList[i].Count - 1;
                     }
                 }
-
                 return 0;
             }
         }
