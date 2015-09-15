@@ -475,8 +475,6 @@ namespace SpreadsheetUtilities
         {
             bool done = false;
             
-            
-
             for (int i = 0; i < count; i++)
             {
                 if(DependentsList[i].First.Value == s && !done)
@@ -496,7 +494,6 @@ namespace SpreadsheetUtilities
                     }
 
                     done = true;
-
                 }
             }
 
@@ -522,18 +519,21 @@ namespace SpreadsheetUtilities
             {
                 if (DependeesList[i].First.Value == s && !done)
                 {
-                    while (DependeesList[i].Count > 1)
+                    string[] strings = DependeesList[i].ToArray();
+                    strings[0] = null;
+
+
+                    foreach (string r in strings)
                     {
-                        DependentsList[i].RemoveLast();
+                        RemoveDependency(r, s);
                     }
 
                     foreach (string t in newDependees)
                     {
-                        AddDependency(s, t);
+                        AddDependency(t, s);
                     }
 
                     done = true;
-
                 }
             }
 
@@ -541,7 +541,7 @@ namespace SpreadsheetUtilities
             {
                 foreach (string t in newDependees)
                 {
-                    AddDependency(s, t);
+                    AddDependency(t, s);
                 }
             }
 

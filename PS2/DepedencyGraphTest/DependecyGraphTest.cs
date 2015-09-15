@@ -22,6 +22,7 @@ namespace DepedencyGraphTest
             t.AddDependency("a", "c");
             t.AddDependency("a", "d");
             t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
+            t.ReplaceDependees("d", new HashSet<string>() { "w", "q" });
 
             foreach (String s in t.GetDependents("a"))
                 Console.Write(s + " ");
