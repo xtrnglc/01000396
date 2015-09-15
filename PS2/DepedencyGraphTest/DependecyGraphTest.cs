@@ -16,6 +16,10 @@ namespace DepedencyGraphTest
 
             Console.WriteLine(t.Size);
 
+
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+
             t.AddDependency("b", "e");
             t.AddDependency("b", "e");
             t.AddDependency("e", "f");

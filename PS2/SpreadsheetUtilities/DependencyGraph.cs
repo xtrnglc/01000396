@@ -59,6 +59,7 @@ namespace SpreadsheetUtilities
         private int count;
         private int size;
         private int current;
+        private int numberOfOrderedPairs;
 
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace SpreadsheetUtilities
             count = 0;
             size = 0;
             current = -1;
+            numberOfOrderedPairs = 0;
         }
 
 
@@ -77,7 +79,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int Size
         {
-            get { return size; }
+            get { return numberOfOrderedPairs; }
         }
 
 
@@ -259,6 +261,7 @@ namespace SpreadsheetUtilities
 
             if(count == 0)
             {
+                numberOfOrderedPairs++;
                 size = size + 2;
                 count = count + 2;
                 current = current + 2;
@@ -307,6 +310,7 @@ namespace SpreadsheetUtilities
                             if (!DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
                             {
                                 DependentsList[i].AddLast(t);
+                                numberOfOrderedPairs++;
 
                                 for (int l = 0; l < count; l++)
                                 {
@@ -329,6 +333,7 @@ namespace SpreadsheetUtilities
                                 size++;
                                 count++;
                                 current++;
+                                numberOfOrderedPairs++;
                                 DependentsList[current] = new LinkedList<string>();
                                 DependeesList[current] = new LinkedList<string>();
 
@@ -352,6 +357,7 @@ namespace SpreadsheetUtilities
                             current++;
                             size++;
                             count++;
+                            numberOfOrderedPairs++;
                             DependentsList[current] = new LinkedList<string>();
                             DependeesList[current] = new LinkedList<string>();
 
@@ -393,6 +399,7 @@ namespace SpreadsheetUtilities
                     current++;
                     size++;
                     count++;
+                    numberOfOrderedPairs++;
                     DependentsList[current] = new LinkedList<string>();
                     DependeesList[current] = new LinkedList<string>();
 
@@ -455,6 +462,7 @@ namespace SpreadsheetUtilities
                         try
                         {
                             DependentsList[i].Remove(t);
+                            numberOfOrderedPairs--;
                         }
                         catch(Exception e)
                         {
