@@ -500,5 +500,19 @@ namespace PS2GradingTests
 
             Assert.IsTrue(t.Size == 3);
         }
+
+        [TestMethod()]
+        public void myTest3()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "d");
+
+            Assert.IsTrue(t["a"] == 0);
+            Assert.IsTrue(t["b"] == 1);
+            Assert.IsTrue(t["c"] == 1);
+            Assert.IsTrue(t["d"] == 1);
+        }
     }
 }
