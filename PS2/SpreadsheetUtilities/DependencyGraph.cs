@@ -107,7 +107,6 @@ namespace SpreadsheetUtilities
             }
         }
 
-
         /// <summary>
         /// Reports whether dependents(s) is non-empty.
         /// </summary>
@@ -117,10 +116,10 @@ namespace SpreadsheetUtilities
 
             for(int i = 0; i < count; i++)
             {
-                if (DependentsList[i].First.Value.Equals(s))
+                if (DependentsList[i].First.Value.Equals(s))            //Find s
                 {
                     ExistsInDependentsList = true;
-                    if(DependentsList[i].Count > 1)
+                    if(DependentsList[i].Count > 1)                     //If the count of the list is larger than 1 then s has dependents
                     {
                         return true;
                     }
@@ -135,7 +134,7 @@ namespace SpreadsheetUtilities
                 }
             }
 
-            if(ExistsInDependentsList == false)
+            if(ExistsInDependentsList == false)                         //Return false if cant find s
             {
                 return false;
             }
@@ -144,7 +143,6 @@ namespace SpreadsheetUtilities
                 return true;
             }
         }
-
 
         /// <summary>
         /// Reports whether dependees(s) is non-empty.
@@ -155,16 +153,16 @@ namespace SpreadsheetUtilities
 
             for (int i = 0; i < count; i++)
             {
-                if (DependeesList[i].First.Value.Equals(s))
+                if (DependeesList[i].First.Value.Equals(s))             //Find s
                 {
                     ExistsInDependeesList = true;
-                    if (DependeesList[i].Count > 1)
+                    if (DependeesList[i].Count > 1)                     //If list count > 1 then s has dependees, return true
                     {
                         return true;
                     }
                     else
                     {
-                        return false;
+                        return false;               
                     }
                 }
                 else
@@ -173,7 +171,7 @@ namespace SpreadsheetUtilities
                 }
             }
 
-            if (ExistsInDependeesList == false)
+            if (ExistsInDependeesList == false)                         //If cant find s, return false
             {
                 return false;
             }
@@ -183,21 +181,20 @@ namespace SpreadsheetUtilities
             }
         }
 
-
         /// <summary>
         /// Enumerates dependents(s).
         /// </summary>
-        public IEnumerable<string> GetDependents(string s)
+        public IEnumerable<string> GetDependents(string s)              
         {
             
             for (int i = 0; i < count; i++)
             {
-                if (DependentsList[i].First.Value == s)
+                if (DependentsList[i].First.Value == s)                 //Find the array entry that contains s
                 {
                     LinkedListNode<string> temp;
-                    temp = DependentsList[i].First.Next;
+                    temp = DependentsList[i].First.Next;                
 
-                    while(temp != null)
+                    while(temp != null)                                 //Iterate over the list and return the dependents
                     {
                         string str = temp.Value;
                         temp = temp.Next;
@@ -209,8 +206,6 @@ namespace SpreadsheetUtilities
             yield break;
         }
 
-    
-
         /// <summary>
         /// Enumerates dependees(s).
         /// </summary>
@@ -218,14 +213,14 @@ namespace SpreadsheetUtilities
         {
             for (int i = 0; i < count; i++)
             {
-                if (DependeesList[i].First.Value == s)
+                if (DependeesList[i].First.Value == s)                  //Find the array entry that contains s
                 {
                     LinkedListNode<string> temp;
                     temp = DependeesList[i].First.Next;
 
                     while (temp != null)
                     {
-                        string str = temp.Value;
+                        string str = temp.Value;                        //Iterate over the list and return the dependees
                         temp = temp.Next;
                         yield return str;
                     }
@@ -234,7 +229,6 @@ namespace SpreadsheetUtilities
 
             yield break;
         }
-
 
         /// <summary>
         /// <para>Adds the ordered pair (s,t), if it doesn't exist</para>
@@ -343,7 +337,7 @@ namespace SpreadsheetUtilities
                                 done = true;
                             }
 
-                            else if (DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
+                            else if (DependentsList[i].Contains(t) && t_ExistsInDependentList == true)  //Account for when s = t or when t already as a dependent for s
                             {
                                 bool identicalExists = false;
                                 string[] dents = new string[DependentsList[i].Count];
@@ -365,16 +359,8 @@ namespace SpreadsheetUtilities
                                         DependeesList[i].AddLast(t);
                                     }
                                 }
-                                
-                                    
-
-
-
                                 done = true;
-                            }
-
-
-                            
+                            }                           
                         }
 
                         else if (!(i < count))
@@ -530,16 +516,16 @@ namespace SpreadsheetUtilities
             {
                 if(DependentsList[i].First.Value == s && !done)
                 {
-                    string[] strings = DependentsList[i].ToArray();
+                    string[] strings = DependentsList[i].ToArray();             
                     strings[0] = null;
 
 
-                    foreach (string r in strings)
+                    foreach (string r in strings)                       //Remove all existing dependents
                     {
                         RemoveDependency(s, r);
                     }
 
-                    foreach (string t in newDependents)
+                    foreach (string t in newDependents)                 //Add new dependents
                     {
                         AddDependency(s, t);
                     }
@@ -548,7 +534,7 @@ namespace SpreadsheetUtilities
                 }
             }
 
-            if (!done)
+            if (!done)                                                  //If pair does not exist, add new dependents
             {
                 foreach (string t in newDependents)
                 {
@@ -568,18 +554,18 @@ namespace SpreadsheetUtilities
 
             for (int i = 0; i < count; i++)
             {
-                if (DependeesList[i].First.Value == s && !done)
+                if (DependeesList[i].First.Value == s && !done)                 
                 {
                     string[] strings = DependeesList[i].ToArray();
                     strings[0] = null;
 
 
-                    foreach (string r in strings)
+                    foreach (string r in strings)                   //Remove all existing pairs
                     {
                         RemoveDependency(r, s);
                     }
 
-                    foreach (string t in newDependees)
+                    foreach (string t in newDependees)              //Add new pairs
                     {
                         AddDependency(t, s);
                     }
@@ -590,7 +576,7 @@ namespace SpreadsheetUtilities
 
             if (!done)
             {
-                foreach (string t in newDependees)
+                foreach (string t in newDependees)                  //Add new pairs
                 {
                     AddDependency(t, s);
                 }
