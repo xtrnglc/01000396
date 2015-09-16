@@ -345,6 +345,31 @@ namespace SpreadsheetUtilities
 
                             else if (DependentsList[i].Contains(t) && t_ExistsInDependentList == true)
                             {
+                                bool identicalExists = false;
+                                string[] dents = new string[DependentsList[i].Count];
+                                DependentsList[i].ToArray();
+
+                                if (s == t)
+                                { 
+                                    for (int z = 1; z < DependentsList[i].Count; z++)
+                                    {
+                                        if (dents[z] == t)
+                                        {
+                                            identicalExists = true;
+                                        }
+                                    }
+
+                                    if (identicalExists == false)
+                                    {
+                                        DependentsList[i].AddLast(t);
+                                        DependeesList[i].AddLast(t);
+                                    }
+                                }
+                                
+                                    
+
+
+
                                 done = true;
                             }
 
