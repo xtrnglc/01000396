@@ -357,9 +357,11 @@ namespace SpreadsheetUtilities
                                     {
                                         DependentsList[i].AddLast(t);
                                         DependeesList[i].AddLast(t);
+                                        numberOfOrderedPairs++;
                                     }
                                 }
                                 done = true;
+                                
                             }                           
                         }
 

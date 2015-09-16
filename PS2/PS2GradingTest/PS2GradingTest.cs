@@ -478,5 +478,27 @@ namespace PS2GradingTests
                 Assert.IsTrue(dees[i].SetEquals(new HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
+
+        [TestMethod()]
+        public void myTest1()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "a");
+
+            Assert.IsTrue(t.Size == 3);
+        }
+
+        [TestMethod()]
+        public void myTest2()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "d");
+
+            Assert.IsTrue(t.Size == 3);
+        }
     }
 }
