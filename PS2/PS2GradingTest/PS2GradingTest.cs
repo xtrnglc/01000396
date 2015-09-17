@@ -486,7 +486,9 @@ namespace PS2GradingTests
                 Assert.IsTrue(dees[i].SetEquals(new HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
-
+        /// <summary>
+        /// Test self dependency
+        /// </summary>
         [TestMethod()]
         public void myTest1()
         {
@@ -497,7 +499,9 @@ namespace PS2GradingTests
 
             Assert.IsTrue(t.Size == 3);
         }
-
+        /// <summary>
+        /// Test regular pairs
+        /// </summary>
         [TestMethod()]
         public void myTest2()
         {
@@ -508,7 +512,9 @@ namespace PS2GradingTests
 
             Assert.IsTrue(t.Size == 3);
         }
-
+        /// <summary>
+        /// Test for dependees
+        /// </summary>
         [TestMethod()]
         public void myTest3()
         {
@@ -523,6 +529,9 @@ namespace PS2GradingTests
             Assert.IsTrue(t["d"] == 1);
         }
 
+        /// <summary>
+        /// Test for abstraction and encapsulation
+        /// </summary>
         [TestMethod]
         public void PrivateDataTest()
         {
@@ -542,5 +551,62 @@ namespace PS2GradingTests
                     Assert.Fail();
             }
         }
+
+        /// <summary>
+        /// Test for remove depedency
+        /// </summary>
+        [TestMethod]
+        public void myTest4()
+        {
+            DependencyGraph t = new DependencyGraph();
+
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "d");
+            t.AddDependency("e", "f");
+            t.AddDependency("g", "f");
+            t.AddDependency("h", "f");
+
+            t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
+
+            t.AddDependency("z", "c");
+
+            Assert.IsTrue(t["a"] == 0);
+            Assert.IsTrue(t["b"] == 0);
+            Assert.IsTrue(t["c"] == 1);
+            Assert.IsTrue(t["d"] == 0);
+            Assert.IsTrue(t["x"] == 1);
+            Assert.IsTrue(t["y"] == 1);
+            Assert.IsTrue(t["z"] == 1);
+
+
+        }
+
+        /// <summary>
+        /// Test for remove depedency
+        /// </summary>
+        [TestMethod]
+        public void myTest5()
+        {
+            DependencyGraph t = new DependencyGraph();
+
+            t.AddDependency("e", "f");
+            t.AddDependency("g", "f");
+            t.AddDependency("h", "f");
+
+            t.ReplaceDependees("f", new HashSet<string>() { "x", "y", "z" });
+
+            Assert.IsTrue(t["f"] == 3);
+            Assert.IsTrue(t.HasDependents("x"));
+            Assert.IsTrue(t.HasDependents("y"));
+            Assert.IsTrue(t.HasDependents("z"));
+            Assert.IsFalse(t.HasDependents("e"));
+            Assert.IsFalse(t.HasDependents("g"));
+            Assert.IsFalse(t.HasDependents("h"));
+        }
+
+
+
+
     }
 }

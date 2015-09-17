@@ -15,6 +15,9 @@ using SpreadsheetUtilities;
 
 namespace DepedencyGraphTest
 {
+    /// <summary>
+    /// Temporary console test to test basic dependency graph methods
+    /// </summary>
     class DependecyGraphTest
     {
         static void Main(string[] args)
