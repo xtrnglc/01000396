@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+Author: Trung Le
+uID: 01000396
+Date: 09/17/2015
+Course: CS3500
+Purpose: Dependency Graph implementation class
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
