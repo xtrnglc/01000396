@@ -523,15 +523,24 @@ namespace PS2GradingTests
             Assert.IsTrue(t["d"] == 1);
         }
 
-
-
-
-
-
-
-
-
-
-
+        [TestMethod]
+        public void PrivateDataTest()
+        {
+            try
+            {
+                DependencyGraph dg = new DependencyGraph();
+                dg.AddDependency("a", "b");
+                dg.AddDependency("a", "c");
+                ICollection<string> temp = (ICollection<string>)dg.GetDependents("a");
+                temp.Add("d");
+                Assert.IsTrue(new HashSet<string> { "b", "c", "d" }.SetEquals(temp));
+                Assert.IsTrue(new HashSet<string> { "b", "c" }.SetEquals(dg.GetDependents("a")));
+            }
+            catch (Exception e)
+            {
+                if (!(e is NotSupportedException || e is InvalidCastException))
+                    Assert.Fail();
+            }
+        }
     }
 }

@@ -81,7 +81,6 @@ namespace SpreadsheetUtilities
             numberOfOrderedPairs = 0;
         }
 
-
         /// <summary>
         /// The number of ordered pairs in the DependencyGraph.
         /// </summary>
@@ -89,7 +88,6 @@ namespace SpreadsheetUtilities
         {
             get { return numberOfOrderedPairs; }
         }
-
 
         /// <summary>
         /// The size of dependees(s).
@@ -217,6 +215,7 @@ namespace SpreadsheetUtilities
         /// <summary>
         /// Enumerates dependees(s).
         /// </summary>
+        
         public IEnumerable<string> GetDependees(string s)
         {
             for (int i = 0; i < count; i++)
