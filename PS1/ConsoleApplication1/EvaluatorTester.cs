@@ -43,8 +43,8 @@ namespace EvaluatorTester
 
             try
             {
-                double numTest = Evaluator.Evaluate("X2 + 5", variableEvaluator);
-                Console.WriteLine("\nThe expression evaluates to: " + numTest);
+                double test = Evaluator.Evaluate("2+5*7)", s => 0);
+                Console.WriteLine("\nThe expression evaluates to: " + test);
             }
             catch (Exception e)
             {

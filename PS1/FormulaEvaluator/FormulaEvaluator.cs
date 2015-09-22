@@ -63,8 +63,6 @@ namespace FormulaEvaluator
 
                         else if (operatorStack.Peek().Equals("/"))          //If operator is /
                         {
-                            try
-                            {
                                 if (num == 0)
                                 {
                                     throw new ArgumentException("Division by zero error.");
@@ -73,11 +71,6 @@ namespace FormulaEvaluator
                                 stringTemp = operatorStack.Pop();               //Pop / operator
                                 intTemp = intTemp / num;                        //Divide first operand by second operand
                                 operandStack.Push(intTemp);                     //Push result onto stack
-                            }
-                            catch (ArgumentException e)
-                            {
-                                Console.WriteLine("Division by zero error.");
-                            }
                         }
 
                         else                                                //If neither, then push operand onto operand stack
@@ -95,7 +88,7 @@ namespace FormulaEvaluator
                     }
                     catch (ArgumentException e)                             //Throw exception if variable not found
                     {
-                        Console.WriteLine("The variable is undefined.");
+                        throw new ArgumentException("The variable is undefined.");
                     }
 
                     if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
@@ -177,7 +170,7 @@ namespace FormulaEvaluator
 
                         else if (current.Equals("-"))                       //Process a - string 
                         {
-                            if (operatorStack.Peek().Equals("+") && operandStack.Count > 1)
+                            if (operandStack.Count > 1 && operatorStack.Peek().Equals("+"))
                             {
                                 intTemp = operandStack.Pop();               //Pop first operand
                                 intTemp2 = operandStack.Pop();              //Pop second operand
@@ -186,7 +179,7 @@ namespace FormulaEvaluator
                                 operandStack.Push(intTemp);                 //Push result onto stack
                             }
 
-                            else if (operatorStack.Peek().Equals("-") && operandStack.Count > 1)
+                            else if (operandStack.Count > 1 && operatorStack.Peek().Equals("-"))
                             {
                                 intTemp = operandStack.Pop();               //Pop first operand
                                 intTemp2 = operandStack.Pop();              //Pop second operand
@@ -196,7 +189,7 @@ namespace FormulaEvaluator
                             }
 
                             operatorStack.Push(current);                    //Push + operator onto stack
-                        }
+                            }
 
                         try
                         {
@@ -209,10 +202,13 @@ namespace FormulaEvaluator
                                 throw new ArgumentException("Opening parenthesis ( not found.");        //If not found, throw error
                             }
                         }
-                        catch (ArgumentException e)
+                        catch(Exception e)
                         {
-                            Console.WriteLine("Opening parenthesis ( not found.");
+                            throw new ArgumentException("Opening parenthesis ( not found.");
                         }
+                            
+                        
+
 
                         if (operatorStack.Count != 0)
                         {
@@ -237,7 +233,6 @@ namespace FormulaEvaluator
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Divide by zero error");
                                     throw new ArgumentException("Cannot divide by 0");  
                                 }
                             }
@@ -297,7 +292,6 @@ namespace FormulaEvaluator
 
                     else
                     {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
-                        Console.WriteLine("Undefined character encountered");
                         throw new ArgumentException("Undefined character encountered");
                     }
                 }
