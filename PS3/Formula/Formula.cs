@@ -47,7 +47,144 @@ namespace SpreadsheetUtilities
         public Formula(String formula) :
             this(formula, s => s, s => true)
         {
+            int numberOfLeftParentheses = 0;
+            int numberOfRightParentheses = 0;
+            string temp;
+            double number;
+            string previous = null;
+            StringBuilder formulaString = new StringBuilder();
 
+            // Check for empty string, throw error if empty
+            if (formula == "")
+            {
+                throw new FormulaFormatException("The formula string cannot be empty");
+            }
+
+            foreach (string s in GetTokens(formula))
+            {
+                // Deal with first token
+                if (previous == null)
+                {
+                    if (s == "(")
+                    {
+                        formulaString.Append(s);
+                        numberOfLeftParentheses++;
+                        previous = s;
+                    }
+
+                    else if (isVariable(s))
+                    {
+                        formulaString.Append(s);
+                        previous = s;
+                        variableList.AddFirst(s);
+                    }
+
+                    else if (Double.TryParse(s, out number))
+                    {
+                        formulaString.Append(number);
+                        previous = s;
+                    }
+
+                    else
+                        throw new FormulaFormatException("First token needs to be either a double, a variable or a left parenthesis");
+
+                    continue;
+                }
+
+                // Deal with variables
+                if (isVariable(s))
+                {
+                    if (previous == "(" | isOperator(previous))
+                    {
+                        formulaString.Append(s);
+                        previous = s;
+
+                        if (!variableList.Contains(s))
+                        {
+                            variableList.AddLast(s);
+                        }
+                    }
+
+                    else
+                    {
+                        throw new FormulaFormatException("A variable must be preceded by an opening parenthesis or an operator");
+                    }
+                }
+
+                // Deal with operators
+                else if (isOperator(s))
+                {
+                    if (isVariable(previous) | previous == ")" | double.TryParse(previous, out number))
+                    {
+                        formulaString.Append(s);
+                        previous = s;
+                    }
+                    else
+                    {
+                        throw new FormulaFormatException("An operator must be preceded by either a variable, a number or a closing parenthesis");
+                    }
+                }
+
+                // Deal with numbers
+                else if (double.TryParse(s, out number))
+                {
+                    if (isOperator(previous) | previous == "(")
+                    {
+                        formulaString.Append(number);
+                        previous = s;
+                    }
+                    else
+                    {
+                        throw new FormulaFormatException("A number must be preceded by either an operator or an opening parenthesis");
+                    }
+                }
+
+                // Deal with opening parenthesis
+                else if (s == "(")
+                {
+                    if (isOperator(previous) | previous == "(")
+                    {
+                        formulaString.Append(s);
+                        previous = s;
+                        numberOfLeftParentheses++;
+                    }
+                    else
+                    {
+                        throw new FormulaFormatException("An opening parenthesis must be preceded by either an operator or another opening parenthesis");
+                    }
+                }
+
+                // Deal with closing parenthesis
+                else if (s == ")")
+                {
+                    if (isVariable(previous) | double.TryParse(previous, out number) | previous == ")")
+                    {
+                        formulaString.Append(s);
+                        previous = s;
+                        numberOfRightParentheses++;
+                    }
+                }
+
+                else if (s == "")
+                {
+                    continue;
+                }
+            }
+
+            // If unbalanced parentheses encountered, throw error
+            if (numberOfLeftParentheses != numberOfRightParentheses)
+            {
+                throw new FormulaFormatException("Number of opening parentheses do not match number of closing parentheses");
+            }
+
+            // If last token is not a number, a variable or a closing parenthesis, then throw error
+            if (!Double.TryParse(previous, out number) | !isVariable(previous) | previous != ")")
+            {
+                throw new FormulaFormatException("Last token must be a variable, a number of a closing parenthesis");
+            }
+
+            // If all above cases passed, then formula is valid. Create a string of the valid formula
+            validFormula = formulaString.ToString();
         }
 
         /// <summary>
@@ -102,7 +239,7 @@ namespace SpreadsheetUtilities
                     else if (isVariable(s))
                     {
                         temp = normalize(s);
-                        if (!isValid(temp))
+                        if (!isValid(temp) && !isVariable(temp))
                         {
                             throw new FormulaFormatException("Variable failed the is valid test");
                         }
@@ -110,7 +247,6 @@ namespace SpreadsheetUtilities
                         formulaString.Append(temp);
                         previous = temp;
                         variableList.AddFirst(temp);
-
                     }
 
                     else if (Double.TryParse(s, out number))
@@ -130,7 +266,7 @@ namespace SpreadsheetUtilities
                 {
 
                     temp = normalize(s);
-                    if (!isValid(temp))
+                    if (!isValid(temp) && !isVariable(temp))
                     {
                         throw new FormulaFormatException("Variable failed the is valid test");
                     }
@@ -148,7 +284,7 @@ namespace SpreadsheetUtilities
 
                     else
                     {
-                        throw new FormulaFormatException("A variable cannot be preceded by anything other than an opening parenthesis or an operator");
+                        throw new FormulaFormatException("A variable must be preceded by an opening parenthesis or an operator");
                     }
                 }
 
@@ -251,7 +387,6 @@ namespace SpreadsheetUtilities
         /// </summary>
         public object Evaluate(Func<string, double> lookup)
         {
-
             {
                 string[] substrings = Regex.Split(validFormula, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");       //Creates an array of strings consists of substrings of original expression
                 Stack<double> operandStack = new Stack<double>();                                       //Creates an int stack to keep track of operands
@@ -287,7 +422,7 @@ namespace SpreadsheetUtilities
                             {
                                 if (num == 0)
                                 {
-                                    throw new ArgumentException("Division by zero error.");
+                                    return new FormulaError("Division by zero error.");
                                 }
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
                                 stringTemp = operatorStack.Pop();               //Pop / operator
@@ -302,15 +437,15 @@ namespace SpreadsheetUtilities
                         }
                     }
 
-                    else if (isVariable(current))                          //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
+                    else if (isVariable(current))                               //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
                     {
                         try
                         {
-                            num = lookup(current);                   //Look up the variable
+                            num = lookup(current);                              //Look up the variable
                         }
                         catch (ArgumentException e)                             //Throw exception if variable not found
                         {
-                            throw new ArgumentException("The variable is undefined.");
+                            return new FormulaError("The variable is undefined.");
                         }
 
                         if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
@@ -329,8 +464,6 @@ namespace SpreadsheetUtilities
 
                             else if (operatorStack.Peek().Equals("/"))          //If operator is /
                             {
-                                try
-                                {
                                     if (num == 0)
                                     {
                                         throw new ArgumentException("Division by zero error.");
@@ -339,11 +472,6 @@ namespace SpreadsheetUtilities
                                     stringTemp = operatorStack.Pop();               //Pop / operator
                                     intTemp = intTemp / num;                        //Divide first operand by second operand
                                     operandStack.Push(intTemp);                     //Push result onto stack
-                                }
-                                catch (ArgumentException e)
-                                {
-                                    Console.WriteLine("Division by zero error.");
-                                }
                             }
 
                             else                                                //If neither, then push operand onto operand stack
@@ -352,7 +480,6 @@ namespace SpreadsheetUtilities
                             }
                         }
                     }
-
                     else
                     {
                         if (current.Equals("*"))                                //Process a * string by pushing onto stack
@@ -421,12 +548,12 @@ namespace SpreadsheetUtilities
                                 }
                                 else
                                 {
-                                    throw new ArgumentException("Opening parenthesis ( not found.");        //If not found, throw error
+                                    return new FormulaError("Opening parenthesis ( not found.");        //If not found, throw error
                                 }
                             }
                             catch (Exception e)
                             {
-                                throw new ArgumentException("Opening parenthesis ( not found.");
+                                return new FormulaError("Opening parenthesis ( not found.");
                             }
 
                             if (operatorStack.Count != 0)
@@ -452,7 +579,7 @@ namespace SpreadsheetUtilities
                                     }
                                     else
                                     {
-                                        throw new ArgumentException("Cannot divide by 0");
+                                        return new FormulaError("Cannot divide by 0");
                                     }
                                 }
                             }
@@ -511,7 +638,7 @@ namespace SpreadsheetUtilities
 
                         else
                         {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
-                            throw new ArgumentException("Undefined character encountered");
+                            return new FormulaError("Undefined character encountered");
                         }
                     }
                 }
@@ -522,11 +649,9 @@ namespace SpreadsheetUtilities
                     {
                         return (int)operandStack.Pop();
                     }
-
                     else
                     {                                                            //Report error if there isn't exactly 1 value on the operand stack
-                        throw new ArgumentException("There isn't exactly 1 value on the operand stack");
-
+                        return new FormulaError("There isn't exactly 1 value on the operand stack");
                     }
                 }
 
@@ -556,13 +681,13 @@ namespace SpreadsheetUtilities
 
                         else
                         {                                                       //If remaining operator is not + or -
-                            throw new ArgumentException("The last operator is not a + or -");
+                            return new FormulaError("The last operator is not a + or -");
                         }
                     }
 
                     else
                     {                                                           //If there isn't 2 operands or 1 operator remaining, report error
-                        throw new ArgumentException("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
+                        return new FormulaError("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
                     }
                 }
             }
