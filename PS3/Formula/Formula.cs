@@ -252,306 +252,318 @@ namespace SpreadsheetUtilities
         public object Evaluate(Func<string, double> lookup)
         {
 
-            string[] substrings = Regex.Split(validFormula, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");       //Creates an array of strings consists of substrings of original expression
-            Stack<double> operandStack = new Stack<double>();                                       //Creates an int stack to keep track of operands
-            Stack<string> operatorStack = new Stack<string>();                                      //Creates a string stack to keep track of operators
-            string current;
-            double num;
-            double intTemp;
-            double intTemp2;
-            string stringTemp;
-
-            for (int i = 0; i < substrings.Length; i++)
             {
-                current = substrings[i];                                    //Step through substring
-                current = current.Trim();                                   //Trim ignores leading and trailing white space
+                string[] substrings = Regex.Split(validFormula, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");       //Creates an array of strings consists of substrings of original expression
+                Stack<double> operandStack = new Stack<double>();                                       //Creates an int stack to keep track of operands
+                Stack<string> operatorStack = new Stack<string>();                                      //Creates a string stack to keep track of operators
+                string current;
+                double num;
+                double intTemp;
+                double intTemp2;
+                string stringTemp;
 
-                if (double.TryParse(current, out num))                      //Try and parse string to int
+                for (int i = 0; i < substrings.Length; i++)
                 {
-                    if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
+                    current = substrings[i];                                    //Step through substring
+                    current = current.Trim();                                   //Trim ignores leading and trailing white space
+
+                    if (double.TryParse(current, out num))                      //Try and parse string to int
                     {
-                        operandStack.Push(num);
-                    }
-                    else
-                    {
-                        if (operatorStack.Peek().Equals("*"))               //If operator is *
-                        {
-                            intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                            stringTemp = operatorStack.Pop();               //Pop * operator
-                            intTemp = num * intTemp;                        //Multiply the two operands
-                            operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        else if (operatorStack.Peek().Equals("/"))          //If operator is /
-                        {
-
-                                if (num == 0)
-                                {
-                                    return new FormulaError("Division by zero error.");
-                                }
-                                intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                                stringTemp = operatorStack.Pop();               //Pop / operator
-                                intTemp = intTemp / num;                        //Divide first operand by second operand
-                                operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        else                                                //If neither, then push operand onto operand stack
+                        if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
                         {
                             operandStack.Push(num);
                         }
-                    }
-                }
-
-                else if (isVariable(current))                          //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
-                {
-                    try
-                    {
-                        num = lookup(current);                   //Look up the variable
-                    }
-                    catch (ArgumentException e)                             //Throw exception if variable not found
-                    {
-                        Console.WriteLine("The variable is undefined.");
-                    }
-
-                    if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
-                    {
-                        operandStack.Push(num);
-                    }
-                    else
-                    {
-                        if (operatorStack.Peek().Equals("*"))               //If operator is *
-                        {
-                            intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                            stringTemp = operatorStack.Pop();               //Pop * operator
-                            intTemp = num * intTemp;                        //Multiply the two operands
-                            operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        else if (operatorStack.Peek().Equals("/"))          //If operator is /
-                        {
-                                if (num == 0)
-                                {
-                                    return new FormulaError("Division by zero error.");
-                                }
-                                intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                                stringTemp = operatorStack.Pop();               //Pop / operator
-                                intTemp = intTemp / num;                        //Divide first operand by second operand
-                                operandStack.Push(intTemp);                     //Push result onto stack
-                            
-                        }
-
-                        else                                                //If neither, then push operand onto operand stack
-                        {
-                            operandStack.Push(num);
-                        }
-                    }
-                }
-
-                else
-                {
-                    if (current.Equals("*"))                                //Process a * string by pushing onto stack
-                    {
-                        operatorStack.Push(current);
-                    }
-
-                    else if (current.Equals("/"))                           //Process a / string by pushing onto stack
-                    {
-                        operatorStack.Push(current);
-                    }
-
-                    else if (current.Equals("("))                           //Process a ( string by pushing on to stack
-                    {
-                        operatorStack.Push(current);
-                    }
-
-                    else if (current.Equals(")"))                           //Process a ) string
-                    {
-                        if (operatorStack.Peek().Equals("+") && operandStack.Count > 1)
-                        {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp + intTemp2;                   //Add the two operands 
-                            operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        else if (operatorStack.Peek().Equals("-") && operandStack.Count > 1)
-                        {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
-                            operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        else if (current.Equals("-"))                       //Process a - string 
-                        {
-                            if (operatorStack.Peek().Equals("+") && operandStack.Count > 1)
-                            {
-                                intTemp = operandStack.Pop();               //Pop first operand
-                                intTemp2 = operandStack.Pop();              //Pop second operand
-                                operatorStack.Pop();
-                                intTemp = intTemp + intTemp2;               //Add the two operands 
-                                operandStack.Push(intTemp);                 //Push result onto stack
-                            }
-
-                            else if (operatorStack.Peek().Equals("-") && operandStack.Count > 1)
-                            {
-                                intTemp = operandStack.Pop();               //Pop first operand
-                                intTemp2 = operandStack.Pop();              //Pop second operand
-                                operatorStack.Pop();
-                                intTemp = intTemp2 - intTemp;               //Subtract second operand from first operand
-                                operandStack.Push(intTemp);                 //Push result onto stack
-                            }
-
-                            operatorStack.Push(current);                    //Push + operator onto stack
-                        }
-
-                            if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
-                            {
-                                operatorStack.Pop();
-                            }
-                            else
-                            {
-                                return new FormulaError("Opening parenthesis ( not found.");        //If not found, throw error
-                            }
-                        
-
-
-                        if (operatorStack.Count != 0)
+                        else
                         {
                             if (operatorStack.Peek().Equals("*"))               //If operator is *
                             {
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                                intTemp2 = operandStack.Pop();
                                 stringTemp = operatorStack.Pop();               //Pop * operator
-                                intTemp = intTemp * intTemp2;                   //Multiply the two operands
+                                intTemp = num * intTemp;                        //Multiply the two operands
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
 
                             else if (operatorStack.Peek().Equals("/"))          //If operator is /
                             {
+                                if (num == 0)
+                                {
+                                    throw new ArgumentException("Division by zero error.");
+                                }
                                 intTemp = operandStack.Pop();                   //Pop operand from operand stack
                                 stringTemp = operatorStack.Pop();               //Pop / operator
-                                intTemp2 = operandStack.Pop();
-                                if (intTemp != 0)
-                                {
-                                    intTemp = intTemp2 / intTemp;               //Divide first operand by second operand
-                                    operandStack.Push(intTemp);                 //Push result onto stack
-                                }
-                                else
-                                {
-                                    return new FormulaError("Cannot divide by 0");
-                                }
+                                intTemp = intTemp / num;                        //Divide first operand by second operand
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else                                                //If neither, then push operand onto operand stack
+                            {
+                                operandStack.Push(num);
                             }
                         }
                     }
 
-                    else if (current.Equals("+"))                           //Process a + string
+                    else if (isVariable(current))                          //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
                     {
-                        if (operatorStack.Count != 0 && operatorStack.Peek() == "+" && (operandStack.Count() > 1.0))
+                        try
                         {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp + intTemp2;                   //Add the two operands 
-                            operandStack.Push(intTemp);                     //Push result onto stack
+                            num = lookup(current);                   //Look up the variable
+                        }
+                        catch (ArgumentException e)                             //Throw exception if variable not found
+                        {
+                            throw new ArgumentException("The variable is undefined.");
                         }
 
-                        else if (operatorStack.Count != 0 && operatorStack.Peek() == "-" && (operandStack.Count > 1))
+                        if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
                         {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
-                            operandStack.Push(intTemp);                     //Push result onto stack
+                            operandStack.Push(num);
                         }
-
-                        operatorStack.Push(current);                        //Push + operator onto stack
-                    }
-
-                    else if (current.Equals("-"))                           //Process a - string 
-                    {
-                        if (operatorStack.Count != 0 && operatorStack.Peek() == "+" && (operandStack.Count > 1))
+                        else
                         {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp + intTemp2;                   //Add the two operands 
-                            operandStack.Push(intTemp);                     //Push result onto stack
+                            if (operatorStack.Peek().Equals("*"))               //If operator is *
+                            {
+                                intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                stringTemp = operatorStack.Pop();               //Pop * operator
+                                intTemp = num * intTemp;                        //Multiply the two operands
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else if (operatorStack.Peek().Equals("/"))          //If operator is /
+                            {
+                                try
+                                {
+                                    if (num == 0)
+                                    {
+                                        throw new ArgumentException("Division by zero error.");
+                                    }
+                                    intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                    stringTemp = operatorStack.Pop();               //Pop / operator
+                                    intTemp = intTemp / num;                        //Divide first operand by second operand
+                                    operandStack.Push(intTemp);                     //Push result onto stack
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Console.WriteLine("Division by zero error.");
+                                }
+                            }
+
+                            else                                                //If neither, then push operand onto operand stack
+                            {
+                                operandStack.Push(num);
+                            }
                         }
-
-                        else if (operatorStack.Count != 0 && operatorStack.Peek() == "-" && (operandStack.Count > 1))
-                        {
-                            intTemp = operandStack.Pop();                   //Pop first operand
-                            intTemp2 = operandStack.Pop();                  //Pop second operand
-                            operatorStack.Pop();
-                            intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
-                            operandStack.Push(intTemp);                     //Push result onto stack
-                        }
-
-                        operatorStack.Push(current);                        //Push + operator onto stack
-                    }
-
-                    else if (current.Equals(""))                            //Deal with null character, ignore and move on to next character
-                    {
-                        continue;
                     }
 
                     else
-                    {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
-                        return new FormulaError("Undefined character encountered");
+                    {
+                        if (current.Equals("*"))                                //Process a * string by pushing onto stack
+                        {
+                            operatorStack.Push(current);
+                        }
+
+                        else if (current.Equals("/"))                           //Process a / string by pushing onto stack
+                        {
+                            operatorStack.Push(current);
+                        }
+
+                        else if (current.Equals("("))                           //Process a ( string by pushing on to stack
+                        {
+                            operatorStack.Push(current);
+                        }
+
+                        else if (current.Equals(")"))                           //Process a ) string
+                        {
+                            if (operatorStack.Peek().Equals("+") && operandStack.Count > 1)
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp + intTemp2;                   //Add the two operands 
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else if (operatorStack.Peek().Equals("-") && operandStack.Count > 1)
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else if (current.Equals("-"))                       //Process a - string 
+                            {
+                                if (operandStack.Count > 1 && operatorStack.Peek().Equals("+"))
+                                {
+                                    intTemp = operandStack.Pop();               //Pop first operand
+                                    intTemp2 = operandStack.Pop();              //Pop second operand
+                                    operatorStack.Pop();
+                                    intTemp = intTemp + intTemp2;               //Add the two operands 
+                                    operandStack.Push(intTemp);                 //Push result onto stack
+                                }
+
+                                else if (operandStack.Count > 1 && operatorStack.Peek().Equals("-"))
+                                {
+                                    intTemp = operandStack.Pop();               //Pop first operand
+                                    intTemp2 = operandStack.Pop();              //Pop second operand
+                                    operatorStack.Pop();
+                                    intTemp = intTemp2 - intTemp;               //Subtract second operand from first operand
+                                    operandStack.Push(intTemp);                 //Push result onto stack
+                                }
+
+                                operatorStack.Push(current);                    //Push + operator onto stack
+                            }
+
+                            try
+                            {
+                                if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
+                                {
+                                    operatorStack.Pop();
+                                }
+                                else
+                                {
+                                    throw new ArgumentException("Opening parenthesis ( not found.");        //If not found, throw error
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                throw new ArgumentException("Opening parenthesis ( not found.");
+                            }
+
+                            if (operatorStack.Count != 0)
+                            {
+                                if (operatorStack.Peek().Equals("*"))               //If operator is *
+                                {
+                                    intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                    intTemp2 = operandStack.Pop();
+                                    stringTemp = operatorStack.Pop();               //Pop * operator
+                                    intTemp = intTemp * intTemp2;                   //Multiply the two operands
+                                    operandStack.Push(intTemp);                     //Push result onto stack
+                                }
+
+                                else if (operatorStack.Peek().Equals("/"))          //If operator is /
+                                {
+                                    intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                    stringTemp = operatorStack.Pop();               //Pop / operator
+                                    intTemp2 = operandStack.Pop();
+                                    if (intTemp != 0)
+                                    {
+                                        intTemp = intTemp2 / intTemp;               //Divide first operand by second operand
+                                        operandStack.Push(intTemp);                 //Push result onto stack
+                                    }
+                                    else
+                                    {
+                                        throw new ArgumentException("Cannot divide by 0");
+                                    }
+                                }
+                            }
+                        }
+
+                        else if (current.Equals("+"))                           //Process a + string
+                        {
+                            if (operatorStack.Count != 0 && operatorStack.Peek() == "+" && (operandStack.Count() > 1.0))
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp + intTemp2;                   //Add the two operands 
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else if (operatorStack.Count != 0 && operatorStack.Peek() == "-" && (operandStack.Count > 1))
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            operatorStack.Push(current);                        //Push + operator onto stack
+                        }
+
+                        else if (current.Equals("-"))                           //Process a - string 
+                        {
+                            if (operatorStack.Count != 0 && operatorStack.Peek() == "+" && (operandStack.Count > 1))
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp + intTemp2;                   //Add the two operands 
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            else if (operatorStack.Count != 0 && operatorStack.Peek() == "-" && (operandStack.Count > 1))
+                            {
+                                intTemp = operandStack.Pop();                   //Pop first operand
+                                intTemp2 = operandStack.Pop();                  //Pop second operand
+                                operatorStack.Pop();
+                                intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
+                                operandStack.Push(intTemp);                     //Push result onto stack
+                            }
+
+                            operatorStack.Push(current);                        //Push + operator onto stack
+                        }
+
+                        else if (current.Equals(""))                            //Deal with null character, ignore and move on to next character
+                        {
+                            continue;
+                        }
+
+                        else
+                        {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
+                            throw new ArgumentException("Undefined character encountered");
+                        }
                     }
                 }
-            }
 
-            if (operatorStack.Count == 0)                                   //After processing through string, if operator stack is empty then pop operand stack and return value. 
-            {
-                if (operandStack.Count == 1)
+                if (operatorStack.Count == 0)                                   //After processing through string, if operator stack is empty then pop operand stack and return value. 
                 {
-                    return (int)operandStack.Pop();
-                }
-
-                else
-                {                                                            //Report error if there isn't exactly 1 value on the operand stack
-                    return new FormulaError("There isn't exactly 1 value on the operand stack");
-
-                }
-            }
-
-            else
-            {                                                               //If operator stack not empty, then there should be 2 operands and 1 operator. The operator must be + or -, else report error
-                if (operandStack.Count == 2 && operatorStack.Count == 1)
-                {
-                    if (operatorStack.Peek() == "+")                        //If operator is +, pop and add two remaining operands and return value
+                    if (operandStack.Count == 1)
                     {
-                        operatorStack.Pop();
-                        intTemp = operandStack.Pop();
-                        intTemp2 = operandStack.Pop();
-                        num = intTemp + intTemp2;
-
-                        return (int)num;
-                    }
-
-                    else if (operatorStack.Peek() == "-")                   //If operator is -, pop and subtract two remaining operands and return value
-                    {
-                        operatorStack.Pop();
-                        intTemp = operandStack.Pop();
-                        intTemp2 = operandStack.Pop();
-                        num = intTemp2 - intTemp;
-
-                        return (int)num;
+                        return (int)operandStack.Pop();
                     }
 
                     else
-                    {                                                       //If remaining operator is not + or -
-                        return new FormulaError("The last operator is not a + or -");
+                    {                                                            //Report error if there isn't exactly 1 value on the operand stack
+                        throw new ArgumentException("There isn't exactly 1 value on the operand stack");
+
                     }
                 }
 
                 else
-                {                                                           //If there isn't 2 operands or 1 operator remaining, report error
-                    return new FormulaError("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
+                {                                                               //If operator stack not empty, then there should be 2 operands and 1 operator. The operator must be + or -, else report error
+                    if (operandStack.Count == 2 && operatorStack.Count == 1)
+                    {
+                        if (operatorStack.Peek() == "+")                        //If operator is +, pop and add two remaining operands and return value
+                        {
+                            operatorStack.Pop();
+                            intTemp = operandStack.Pop();
+                            intTemp2 = operandStack.Pop();
+                            num = intTemp + intTemp2;
+
+                            return (int)num;
+                        }
+
+                        else if (operatorStack.Peek() == "-")                   //If operator is -, pop and subtract two remaining operands and return value
+                        {
+                            operatorStack.Pop();
+                            intTemp = operandStack.Pop();
+                            intTemp2 = operandStack.Pop();
+                            num = intTemp2 - intTemp;
+
+                            return (int)num;
+                        }
+
+                        else
+                        {                                                       //If remaining operator is not + or -
+                            throw new ArgumentException("The last operator is not a + or -");
+                        }
+                    }
+
+                    else
+                    {                                                           //If there isn't 2 operands or 1 operator remaining, report error
+                        throw new ArgumentException("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
+                    }
                 }
             }
         }
