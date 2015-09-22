@@ -47,144 +47,7 @@ namespace SpreadsheetUtilities
         public Formula(String formula) :
             this(formula, s => s, s => true)
         {
-            int numberOfLeftParentheses = 0;
-            int numberOfRightParentheses = 0;
-            string temp;
-            double number;
-            string previous = null;
-            StringBuilder formulaString = new StringBuilder();
-
-            // Check for empty string, throw error if empty
-            if (formula == "")
-            {
-                throw new FormulaFormatException("The formula string cannot be empty");
-            }
-
-            foreach (string s in GetTokens(formula))
-            {
-                // Deal with first token
-                if (previous == null)
-                {
-                    if (s == "(")
-                    {
-                        formulaString.Append(s);
-                        numberOfLeftParentheses++;
-                        previous = s;
-                    }
-
-                    else if (isVariable(s))
-                    {
-                        formulaString.Append(s);
-                        previous = s;
-                        variableList.AddFirst(s);
-                    }
-
-                    else if (Double.TryParse(s, out number))
-                    {
-                        formulaString.Append(number);
-                        previous = s;
-                    }
-
-                    else
-                        throw new FormulaFormatException("First token needs to be either a double, a variable or a left parenthesis");
-
-                    continue;
-                }
-
-                // Deal with variables
-                if (isVariable(s))
-                {
-                    if (previous == "(" | isOperator(previous))
-                    {
-                        formulaString.Append(s);
-                        previous = s;
-
-                        if (!variableList.Contains(s))
-                        {
-                            variableList.AddLast(s);
-                        }
-                    }
-
-                    else
-                    {
-                        throw new FormulaFormatException("A variable must be preceded by an opening parenthesis or an operator");
-                    }
-                }
-
-                // Deal with operators
-                else if (isOperator(s))
-                {
-                    if (isVariable(previous) | previous == ")" | double.TryParse(previous, out number))
-                    {
-                        formulaString.Append(s);
-                        previous = s;
-                    }
-                    else
-                    {
-                        throw new FormulaFormatException("An operator must be preceded by either a variable, a number or a closing parenthesis");
-                    }
-                }
-
-                // Deal with numbers
-                else if (double.TryParse(s, out number))
-                {
-                    if (isOperator(previous) | previous == "(")
-                    {
-                        formulaString.Append(number);
-                        previous = s;
-                    }
-                    else
-                    {
-                        throw new FormulaFormatException("A number must be preceded by either an operator or an opening parenthesis");
-                    }
-                }
-
-                // Deal with opening parenthesis
-                else if (s == "(")
-                {
-                    if (isOperator(previous) | previous == "(")
-                    {
-                        formulaString.Append(s);
-                        previous = s;
-                        numberOfLeftParentheses++;
-                    }
-                    else
-                    {
-                        throw new FormulaFormatException("An opening parenthesis must be preceded by either an operator or another opening parenthesis");
-                    }
-                }
-
-                // Deal with closing parenthesis
-                else if (s == ")")
-                {
-                    if (isVariable(previous) | double.TryParse(previous, out number) | previous == ")")
-                    {
-                        formulaString.Append(s);
-                        previous = s;
-                        numberOfRightParentheses++;
-                    }
-                }
-
-                else if (s == "")
-                {
-                    continue;
-                }
-            }
-
-            // If unbalanced parentheses encountered, throw error
-            if (numberOfLeftParentheses != numberOfRightParentheses)
-            {
-                throw new FormulaFormatException("Number of opening parentheses do not match number of closing parentheses");
-            }
-
-            // If last token is not a number, a variable or a closing parenthesis, then throw error
-            if (!Double.TryParse(previous, out number) | !isVariable(previous) | previous != ")")
-            {
-                throw new FormulaFormatException("Last token must be a variable, a number of a closing parenthesis");
-            }
-
-            // If all above cases passed, then formula is valid. Create a string of the valid formula
-            validFormula = formulaString.ToString();
+           
         }
 
         /// <summary>
@@ -355,7 +218,11 @@ namespace SpreadsheetUtilities
             }
 
             // If last token is not a number, a variable or a closing parenthesis, then throw error
-            if (!Double.TryParse(previous, out number) | !isVariable(previous) | previous != ")")
+            if (Double.TryParse(previous, out number) | isVariable(previous) | previous == ")")
+            {
+                
+            }
+            else
             {
                 throw new FormulaFormatException("Last token must be a variable, a number of a closing parenthesis");
             }

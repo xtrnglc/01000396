@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula", "Formula\Formula.csproj", "{5895D682-2191-4D36-AF7E-2027EB4A3BFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS3Test", "PS3Test\PS3Test.csproj", "{DE0B3D8F-EFB7-43B6-A98F-FD2B58D4C373}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS3ConsoleTest", "PS3ConsoleTest\PS3ConsoleTest.csproj", "{325D7818-344F-4BB1-A288-62824BF0E036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{5895D682-2191-4D36-AF7E-2027EB4A3BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5895D682-2191-4D36-AF7E-2027EB4A3BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5895D682-2191-4D36-AF7E-2027EB4A3BFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0B3D8F-EFB7-43B6-A98F-FD2B58D4C373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0B3D8F-EFB7-43B6-A98F-FD2B58D4C373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0B3D8F-EFB7-43B6-A98F-FD2B58D4C373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0B3D8F-EFB7-43B6-A98F-FD2B58D4C373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325D7818-344F-4BB1-A288-62824BF0E036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325D7818-344F-4BB1-A288-62824BF0E036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325D7818-344F-4BB1-A288-62824BF0E036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325D7818-344F-4BB1-A288-62824BF0E036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
