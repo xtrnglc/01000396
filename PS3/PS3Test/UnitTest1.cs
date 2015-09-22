@@ -18,6 +18,8 @@ namespace PS3Test
             Formula test = new Formula("5+5");
             Assert.AreEqual(test.Evaluate(s => 0), 10);
 
+            Formula test2 = new Formula()
+
         }
 
         /// <summary>
@@ -29,6 +31,8 @@ namespace PS3Test
             Formula test = new Formula("5.0+10.0");
             Assert.AreEqual(test.Evaluate(s => 0), 15);
         }
+
+ 
     }
 }
 
