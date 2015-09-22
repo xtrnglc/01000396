@@ -581,12 +581,12 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            foreach(string s in variableList)
+            foreach (string s in variableList)
             {
                 yield return s;
             }
         }
-    
+
 
         /// <summary>
         /// Returns a string containing no spaces which, if passed to the Formula
@@ -802,7 +802,7 @@ namespace SpreadsheetUtilities
 
     }
 
-    
+
 }
 
 
