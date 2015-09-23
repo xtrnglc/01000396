@@ -1,4 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿/*
+Author: Trung Le
+Course: CS 3500
+Date: 09/21/2015
+Purpose: Formula Class Unit Testing. Covers 90% of code. All relevant code covered.
+*/
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using SpreadsheetUtilities;
@@ -12,7 +18,7 @@ namespace PS3Test
         /// Test evaluate method using two integers
         /// </summary>
         [TestMethod]
-        public void TestMethod1()
+        public void EvaluatorTest1()
         {
             Formula test = new Formula("10+5");
             Assert.AreEqual(test.Evaluate(s => 0), 15);
@@ -31,7 +37,7 @@ namespace PS3Test
         /// Test evaluate method using two doubles
         /// </summary>
         [TestMethod]
-        public void TestMethod2()
+        public void EvaluatorTest2()
         {
             Formula test = new Formula("5.0+10.0");
             Assert.AreEqual(test.Evaluate(s => 0), 15);
@@ -51,7 +57,7 @@ namespace PS3Test
         /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod3()
+        public void ConstructorTest1()
         {
             Formula test = new Formula("((4+1)))");
         }
@@ -61,7 +67,7 @@ namespace PS3Test
         /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod4()
+        public void ConstructorTest2()
         {
             Formula test = new Formula("(((4+1))");
         }
@@ -71,7 +77,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod5()
+        public void ConstructorTest3()
         {
             Formula test = new Formula("8(");
         }
@@ -81,7 +87,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod6()
+        public void ConstructorTest4()
         {
             Formula test = new Formula("(8");
         }
@@ -90,7 +96,7 @@ namespace PS3Test
         /// Test .Equals
         /// </summary>
         [TestMethod()]
-        public void TestMethod7()
+        public void EqualsTest1()
         {
             Formula test = new Formula("10+5");
             Assert.AreEqual(false, test.Equals(null));
@@ -110,7 +116,7 @@ namespace PS3Test
         /// Test ==
         /// </summary>
         [TestMethod()]
-        public void TestMethod8()
+        public void EqualsTest2()
         {
             Formula test = new Formula("10+5");
             Formula test2 = new Formula("2+2");
@@ -132,7 +138,7 @@ namespace PS3Test
         /// Test !=
         /// </summary>
         [TestMethod()]
-        public void TestMethod9()
+        public void NotEqualsTest()
         {
             Formula test = new Formula("10+5");
             Formula test2 = new Formula("2+2");
@@ -154,7 +160,7 @@ namespace PS3Test
         /// Test getHashCode
         /// </summary>
         [TestMethod()]
-        public void TestMethod10()
+        public void HashCodeTest()
         {
             Formula test = new Formula("10+5");
             Formula test2 = new Formula("2+2");
@@ -182,7 +188,7 @@ namespace PS3Test
         /// Test toString()
         /// </summary>
         [TestMethod()]
-        public void TestMethod11()
+        public void toStringTest1()
         {
             Formula test = new Formula("10+5");
             Formula test2 = new Formula("2+2");
@@ -207,7 +213,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod12()
+        public void ConstructorTest5()
         {
             Formula test = new Formula("/8-9");
         }
@@ -217,7 +223,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod13()
+        public void ConstructorTest6()
         {
             Formula test = new Formula(")+8-9");
         }
@@ -227,7 +233,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod14()
+        public void ConstructorTest7()
         {
             Formula test = new Formula("(8-9)-");
         }
@@ -237,7 +243,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod15()
+        public void ConstructorTest8()
         {
             Formula test = new Formula("8-+9");
         }
@@ -247,7 +253,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod16()
+        public void ConstructorTest9()
         {
             Formula test = new Formula("8-9 8");
         }
@@ -257,7 +263,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod17()
+        public void ConstructorTest10()
         {
             Formula test = new Formula("8+x", s => s, s=> false);
         }
@@ -267,7 +273,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod18()
+        public void ConstructorTest11()
         {
             Formula test = new Formula("");
         }
@@ -276,9 +282,45 @@ namespace PS3Test
         /// Test for divide by zero
         ///</summary>
         [TestMethod()]
-        public void TestMethod19()
+        public void DivideByZeroTest1()
         {
             Assert.IsInstanceOfType(new Formula("10+2/0").Evaluate(s => 0), typeof(FormulaError));
+        }
+
+        /// <summary>
+        /// Test for divide by zero
+        ///</summary>
+        [TestMethod()]
+        public void DivideByZeroTest2()
+        {
+            Assert.IsInstanceOfType(new Formula("(10+2)/(5-5)").Evaluate(s => 0), typeof(FormulaError));
+        }
+
+        /// <summary>
+        /// Test for divide by zero
+        ///</summary>
+        [TestMethod()]
+        public void DivideByZeroTest3()
+        {
+            Assert.IsInstanceOfType(new Formula("(10+2)/(x5)").Evaluate(s => 0), typeof(FormulaError));
+        }
+
+        /// <summary>
+        /// Test for divide by zero
+        ///</summary>
+        [TestMethod()]
+        public void DivideByZeroTest4()
+        {
+            Assert.IsInstanceOfType(new Formula("(x5/0)").Evaluate(s => 1), typeof(FormulaError));
+        }
+
+        /// <summary>
+        /// Test for divide by zero
+        ///</summary>
+        [TestMethod()]
+        public void DivideByZeroTest5()
+        {
+            Assert.IsInstanceOfType(new Formula("(12/x5)").Evaluate(s => 0), typeof(FormulaError));
         }
 
         /// <summary>
@@ -286,7 +328,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod20()
+        public void ConstructorTest12()
         {
             Formula test = new Formula("8*");
         }
@@ -296,7 +338,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod21()
+        public void ConstructorTest13()
         {
             Formula test = new Formula("*8");
         }
@@ -306,7 +348,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod22()
+        public void ConstructorTest14()
         {
             Formula test = new Formula("*");
         }
@@ -316,7 +358,7 @@ namespace PS3Test
         /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod23()
+        public void ConstructorTest15()
         {
             Formula test = new Formula("5+xx");
         }
@@ -326,7 +368,7 @@ namespace PS3Test
         /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod24()
+        public void ConstructorTest16()
         {
             Formula test = new Formula("5+x1x");
         }
@@ -335,7 +377,7 @@ namespace PS3Test
         /// Test for getVariables
         /// </summary>
         [TestMethod()]
-        public void TestMethod25()
+        public void GetVariablesTest1()
         {
             int count = 0;
             Formula test = new Formula("x1 + x2 - y3 * y4");
@@ -351,7 +393,7 @@ namespace PS3Test
         /// Test for getVariables
         /// </summary>
         [TestMethod()]
-        public void TestMethod26()
+        public void GetVariablesTest2()
         {
             Formula test = new Formula("x1 + x2 - y3 * y4");
             IEnumerable<string> temp = test.GetVariables();
@@ -370,7 +412,7 @@ namespace PS3Test
         ///</summary>
         [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void TestMethod27()
+        public void ConstructorTest17()
         {
             Formula test = new Formula("8+x");
         }
@@ -379,7 +421,7 @@ namespace PS3Test
         /// Large test for evaluate
         ///</summary>
         [TestMethod()]
-        public void TestMethod28()
+        public void LargeEvaluateTest()
         {
             Assert.AreEqual(13, new Formula("x5").Evaluate(s => 13));
             Assert.AreEqual(16, new Formula("x5+5-2").Evaluate(s => 13));
@@ -393,6 +435,8 @@ namespace PS3Test
             Assert.AreEqual(29, new Formula("(20+10)-1").Evaluate(s => 0));
             Assert.AreEqual(31, new Formula("(20+10)+1").Evaluate(s => 0));
             Assert.AreEqual(40, new Formula("(2*10)*2").Evaluate(s => 0));
+            Assert.AreEqual(1,  new Formula("(20/10)/2").Evaluate(s => 0));
+            Assert.AreEqual(15, new Formula("(20+10)/2").Evaluate(s => 0));
             Assert.AreEqual(3,  new Formula("2+2-1").Evaluate(s => 0));
             Assert.AreEqual(5,  new Formula("2+2+1").Evaluate(s => 0));
             Assert.AreEqual(-1, new Formula("2-2-1").Evaluate(s => 0));
@@ -402,6 +446,8 @@ namespace PS3Test
             Assert.AreEqual(5,  new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
             Assert.AreEqual(24, new Formula("(x5/2)*(x4*3)").Evaluate(s => 4));
             Assert.AreEqual(8,  new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
+            Assert.AreEqual(2,  new Formula("(32/x5)/4").Evaluate(s => 4));
+            Assert.AreEqual(8,  new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
 
             Formula test = new Formula("x5 + 6");
             Assert.AreEqual(8, test.Evaluate(s => 2));
@@ -413,194 +459,36 @@ namespace PS3Test
             Assert.AreEqual(14, test.Evaluate(x => 0));
         }
 
+        /// <summary>
+        /// Test for unbalaned parentheses
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest18()
+        {
+            Formula test = new Formula("x5(");
+        }
 
+        /// <summary>
+        /// Test for unbalaned parentheses
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest19()
+        {
+            Formula test = new Formula("(2+1)x5");
+        }
 
-
-
-
-
-
+        /// <summary>
+        /// Test for undefined variable
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest20()
+        {
+            Formula test = new Formula("5+1xx");
+        }
     }
 }
 
-
-/*
-[TestMethod()]
-        public void Test1()
-        {
-            Assert.AreEqual(5, Evaluator.Evaluate("5", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test2()
-        {
-            Assert.AreEqual(13, Evaluator.Evaluate("X5", s => 13));
-        }
-
-        [TestMethod()]
-        public void Test3()
-        {
-            Assert.AreEqual(8, Evaluator.Evaluate("5+3", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test4()
-        {
-            Assert.AreEqual(8, Evaluator.Evaluate("18-10", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test5()
-        {
-            Assert.AreEqual(8, Evaluator.Evaluate("2*4", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test6()
-        {
-            Assert.AreEqual(8, Evaluator.Evaluate("16/2", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test7()
-        {
-            Assert.AreEqual(6, Evaluator.Evaluate("2+X1", s => 4));
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test8()
-        {
-            Evaluator.Evaluate("2+X1", s => { throw new ArgumentException("Unknown variable"); });
-        }
-
-        [TestMethod()]
-        public void Test9()
-        {
-            Assert.AreEqual(15, Evaluator.Evaluate("2*6+3", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test10()
-        {
-            Assert.AreEqual(20, Evaluator.Evaluate("2+6*3", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test11()
-        {
-            Assert.AreEqual(24, Evaluator.Evaluate("(2+6)*3", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test12()
-        {
-            Assert.AreEqual(16, Evaluator.Evaluate("2*(3+5)", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test13()
-        {
-            Assert.AreEqual(10, Evaluator.Evaluate("2+(3+5)", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test14()
-        {
-            Assert.AreEqual(50, Evaluator.Evaluate("2+(3+5*9)", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test15()
-        {
-            Assert.AreEqual(26, Evaluator.Evaluate("2+3*(3+5)", s => 0));
-        }
-
-        [TestMethod()]
-        public void Test16()
-        {
-            Assert.AreEqual(194, Evaluator.Evaluate("2+3*5+(3+4*8)*5+2", s => 0));
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test17()
-        {
-            Evaluator.Evaluate("5/0", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test18()
-        {
-            Evaluator.Evaluate("+", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test19()
-        {
-            Evaluator.Evaluate("2+5+", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test20()
-        {
-            Evaluator.Evaluate("2+5*7)", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test21()
-        {
-            Evaluator.Evaluate("xx", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test22()
-        {
-            Evaluator.Evaluate("5+xx", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test23()
-        {
-            Evaluator.Evaluate("5+7+(5)8", s => 0);
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Test24()
-        {
-            Evaluator.Evaluate("", s => 0);
-        }
-
-        [TestMethod()]
-        public void Test25()
-        {
-            Assert.AreEqual(-12, Evaluator.Evaluate("y1*3-8/2+4*(8-9*2)/2*x7", s => (s == "x7") ? 1 : 4));
-        }
-
-        [TestMethod()]
-        public void Test26()
-        {
-            Assert.AreEqual(6, Evaluator.Evaluate("x1+(x2+(x3+(x4+(x5+x6))))", s => 1));
-        }
-
-        [TestMethod()]
-        public void Test27()
-        {
-            Assert.AreEqual(12, Evaluator.Evaluate("((((x1+x2)+x3)+x4)+x5)+x6", s => 2));
-        }
-
-        [TestMethod()]
-        public void Test28()
-        {
-            Assert.AreEqual(0, Evaluator.Evaluate("a4-a4*a4/a4", s => 3));
-        }
-
-*/
 

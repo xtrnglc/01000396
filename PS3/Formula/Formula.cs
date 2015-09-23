@@ -209,6 +209,11 @@ namespace SpreadsheetUtilities
                 {
                     continue;
                 }
+
+                else
+                {
+                    throw new FormulaFormatException("Unrecognized token");
+                }
             }
 
             // If unbalanced parentheses encountered, throw error
@@ -306,14 +311,8 @@ namespace SpreadsheetUtilities
 
                     else if (isVariable(current))                               //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
                     {
-                        try
-                        {
-                            num = lookup(current);                              //Look up the variable
-                        }
-                        catch (ArgumentException e)                             //Throw exception if variable not found
-                        {
-                            return new FormulaError("The variable is undefined.");
-                        }
+
+                        num = lookup(current);                              //Look up the variable
 
                         if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
                         {
@@ -333,7 +332,7 @@ namespace SpreadsheetUtilities
                             {
                                     if (num == 0)
                                     {
-                                        throw new ArgumentException("Division by zero error.");
+                                        return new FormulaError("Division by zero error.");
                                     }
                                     intTemp = operandStack.Pop();                   //Pop operand from operand stack
                                     stringTemp = operatorStack.Pop();               //Pop / operator
@@ -384,23 +383,11 @@ namespace SpreadsheetUtilities
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
 
+                            if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
+                            {
+                                operatorStack.Pop();
+                            }
                             
-
-                            try
-                            {
-                                if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
-                                {
-                                    operatorStack.Pop();
-                                }
-                                else
-                                {
-                                    return new FormulaError("Opening parenthesis ( not found.");        //If not found, throw error
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                return new FormulaError("Opening parenthesis ( not found.");
-                            }
 
                             if (operatorStack.Count != 0)
                             {
@@ -482,10 +469,6 @@ namespace SpreadsheetUtilities
                             continue;
                         }
 
-                        else
-                        {                                                           //If character is not a digit or a variable or a mathematical operator then throw error
-                            return new FormulaError("Undefined character encountered");
-                        }
                     }
                 }
 
@@ -621,31 +604,13 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            if (f1.Equals(null) && f2.Equals(null))
+            if (f1.Equals(f2))
             {
                 return true;
             }
-
-            else if (f1.Equals(null) && f2.Equals(null))
-            {
-                return false;
-            }
-
-            else if (f1.Equals(null) && f2.Equals(null))
-            {
-                return false;
-            }
-
             else
             {
-                if (f1.Equals(f2))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -656,23 +621,6 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            if (f1.Equals(null) && f2.Equals(null))
-            {
-                return false;
-            }
-
-            else if (f1.Equals(null) && f2.Equals(null))
-            {
-                return true;
-            }
-
-            else if (f1.Equals(null) && f2.Equals(null))
-            {
-                return true;
-            }
-
-            else
-            {
                 if (f1.Equals(f2))
                 {
                     return false;
@@ -681,7 +629,7 @@ namespace SpreadsheetUtilities
                 {
                     return true;
                 }
-            }
+
         }
 
         /// <summary>
