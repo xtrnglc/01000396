@@ -7,6 +7,7 @@ Purpose: Formula Class Unit Testing. Covers 90% of code. All relevant code cover
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using SpreadsheetUtilities;
 
 /*
@@ -272,7 +273,7 @@ namespace PS3Test
         [ExpectedException(typeof(FormulaFormatException))]
         public void ConstructorTest10()
         {
-            Formula test = new Formula("8+x", s => s, s=> false);
+            Formula test = new Formula("8+x", s => s, s => false);
         }
 
         /// <summary>
@@ -404,7 +405,7 @@ namespace PS3Test
         {
             Formula test = new Formula("x1 + x2 - y3 * y4");
             IEnumerable<string> temp = test.GetVariables();
-            string[] testArray = new string[4] {"x1", "x2", "y3", "y4"};
+            string[] testArray = new string[4] { "x1", "x2", "y3", "y4" };
             int i = 0;
 
             foreach (String s in temp)
@@ -433,30 +434,30 @@ namespace PS3Test
             Assert.AreEqual(13.0, new Formula("x5").Evaluate(s => 13));
             Assert.AreEqual(16.0, new Formula("x5+5-2").Evaluate(s => 13));
             Assert.AreEqual(36.0, new Formula("(x5+5)*2").Evaluate(s => 13));
-            Assert.AreEqual(9.0,  new Formula("(x5+5)/2").Evaluate(s => 13));
+            Assert.AreEqual(9.0, new Formula("(x5+5)/2").Evaluate(s => 13));
             Assert.AreEqual(75.0, new Formula("(x5+y5+5)*3").Evaluate(s => 10));
             Assert.AreEqual(16.0, new Formula("((x5+5)/5)*2+y5").Evaluate(s => 10));
             Assert.AreEqual(16.0, new Formula("((x5+5*1)/5-0)*2+y5").Evaluate(s => 10));
             Assert.AreEqual(11.0, new Formula("(20-10)+1").Evaluate(s => 0));
-            Assert.AreEqual(9.0,  new Formula("(20-10)-1").Evaluate(s => 0));
+            Assert.AreEqual(9.0, new Formula("(20-10)-1").Evaluate(s => 0));
             Assert.AreEqual(29.0, new Formula("(20+10)-1").Evaluate(s => 0));
             Assert.AreEqual(31.0, new Formula("(20+10)+1").Evaluate(s => 0));
             Assert.AreEqual(40.0, new Formula("(2*10)*2").Evaluate(s => 0));
-            Assert.AreEqual(1.0,  new Formula("(20/10)/2").Evaluate(s => 0));
+            Assert.AreEqual(1.0, new Formula("(20/10)/2").Evaluate(s => 0));
             Assert.AreEqual(15.0, new Formula("(20+10)/2").Evaluate(s => 0));
-            Assert.AreEqual(3.0,  new Formula("2+2-1").Evaluate(s => 0));
-            Assert.AreEqual(5.0,  new Formula("2+2+1").Evaluate(s => 0));
+            Assert.AreEqual(3.0, new Formula("2+2-1").Evaluate(s => 0));
+            Assert.AreEqual(5.0, new Formula("2+2+1").Evaluate(s => 0));
             Assert.AreEqual(-1.0, new Formula("2-2-1").Evaluate(s => 0));
-            Assert.AreEqual(1.0,  new Formula("2-2+1").Evaluate(s => 0));
-            Assert.AreEqual(2.0,  new Formula("(2*1)").Evaluate(s => 0));
-            Assert.AreEqual(2.0,  new Formula("(2/1)").Evaluate(s => 0));
-            Assert.AreEqual(5.0,  new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
+            Assert.AreEqual(1.0, new Formula("2-2+1").Evaluate(s => 0));
+            Assert.AreEqual(2.0, new Formula("(2*1)").Evaluate(s => 0));
+            Assert.AreEqual(2.0, new Formula("(2/1)").Evaluate(s => 0));
+            Assert.AreEqual(5.0, new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
             Assert.AreEqual(24.0, new Formula("(x5/2)*(x4*3)").Evaluate(s => 4));
-            Assert.AreEqual(8.0,  new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
-            Assert.AreEqual(2.0,  new Formula("(32/x5)/4").Evaluate(s => 4));
-            Assert.AreEqual(8.0,  new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
-            Assert.AreEqual(3.7,  new Formula("1.5+2.2").Evaluate(s => 4));
-            Assert.AreEqual(3.7,  new Formula("1.5+x5").Evaluate(s => 2.2));
+            Assert.AreEqual(8.0, new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
+            Assert.AreEqual(2.0, new Formula("(32/x5)/4").Evaluate(s => 4));
+            Assert.AreEqual(8.0, new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
+            Assert.AreEqual(3.7, new Formula("1.5+2.2").Evaluate(s => 4));
+            Assert.AreEqual(3.7, new Formula("1.5+x5").Evaluate(s => 2.2));
             Assert.AreEqual(3.700000, new Formula("1.5+2.2").Evaluate(s => 4));
             Assert.AreEqual(3.7000000000000000001, new Formula("1.5+2.2").Evaluate(s => 4));
 
@@ -533,7 +534,7 @@ namespace PS3Test
             Formula test2 = new Formula("10E-2+3");
 
             Assert.AreEqual(3.1, test.Evaluate(s => 0));
-            Assert.AreEqual(3.100000, test2 .Evaluate(s => 0));
+            Assert.AreEqual(3.100000, test2.Evaluate(s => 0));
         }
 
         /// <summary>
@@ -558,6 +559,153 @@ namespace PS3Test
         {
             Formula test = new Formula("8 x");
         }
+
+        /// <summary>
+        /// Test for normalizer
+        ///</summary>
+        [TestMethod()]
+        public void ConstructorTest23()
+        {
+            Formula test = new Formula("8+y2+z2+w2+q2", normalizer1, validator1);
+
+            IEnumerable<string> temp = test.GetVariables();
+            string[] testArray = new string[4] { "x5", "y5", "z5", "w5" };
+            int i = 0;
+
+            foreach (String s in temp)
+            {
+                Assert.AreEqual(testArray[i], s);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Test for normalizer
+        ///</summary>
+        [TestMethod()]
+        public void ConstructorTest24()
+        {
+            Formula test = new Formula("8+y2+z2+w2+q2", normalizer2, validator1);
+
+            IEnumerable<string> temp = test.GetVariables();
+            string[] testArray = new string[4] { "Y2", "Z2", "W2", "Q2" };
+            int i = 0;
+
+            foreach (String s in temp)
+            {
+                Assert.AreEqual(testArray[i], s);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        public void ConstructorTest25()
+        {
+            Formula test = new Formula("8+yy5+zz5+ww5+qq5", normalizer2, validator2);
+
+            IEnumerable<string> temp = test.GetVariables();
+            string[] testArray = new string[4] { "YY5", "ZZ5", "WW5", "QQ5" };
+            int i = 0;
+
+            foreach (String s in temp)
+            {
+                Assert.AreEqual(testArray[i], s);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest26()
+        {
+            Formula test = new Formula("8+yy5+zz2+ww5+qq5", normalizer2, validator2);
+        }
+
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest27()
+        {
+            Formula test = new Formula("8+yy5+z2+ww5+qq5", normalizer2, validator2);
+        }
+
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        public void ConstructorTest28()
+        {
+            Formula test = new Formula("8+yy5+zz5+ww5+qq5", normalizer2, validator2);
+        }
+
+
+        /// <summary>
+        /// Normalizer test, returns X
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private string normalizer1(string s)
+        {
+            if (s == "y2")
+            {
+                return "x5";
+            }
+
+            else if (s == "z2")
+            {
+                return "y5";
+            }
+
+            else if (s == "w2")
+            {
+                return "z5";
+            }
+
+            else
+            {
+                return "w5";
+            }
+        }
+
+        /// <summary>
+        /// Normalizer test, returns X
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private string normalizer2(string s)
+        {
+            return s.ToUpper();
+        }
+
+        /// <summary>
+        /// return true always
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private bool validator1(string s)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true only if variable is form AA5
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static bool validator2(String s)
+        {
+            return Regex.IsMatch(s, "^([A-Z]){2}[5]$");
+        }
+
+
     }
 }
 

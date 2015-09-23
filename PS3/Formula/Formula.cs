@@ -102,7 +102,7 @@ namespace SpreadsheetUtilities
                     else if (isVariable(s))
                     {
                         temp = normalize(s);
-                        if (!isValid(temp) && !isVariable(temp))
+                        if (!isValid(temp))
                         {
                             throw new FormulaFormatException("Variable failed the is valid test");
                         }
@@ -129,7 +129,7 @@ namespace SpreadsheetUtilities
                 {
 
                     temp = normalize(s);
-                    if (!isValid(temp) && !isVariable(temp))
+                    if (!isValid(temp))
                     {
                         throw new FormulaFormatException("Variable failed the is valid test");
                     }
@@ -260,7 +260,7 @@ namespace SpreadsheetUtilities
         public object Evaluate(Func<string, double> lookup)
         {
             {
-                string[] substrings = Regex.Split(validFormula, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");       //Creates an array of strings consists of substrings of original expression
+                string[] substrings = Regex.Split(validFormula, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");     //Creates an array of strings consists of substrings of original expression
                 Stack<double> operandStack = new Stack<double>();                                       //Creates an int stack to keep track of operands
                 Stack<string> operatorStack = new Stack<string>();                                      //Creates a string stack to keep track of operators
                 string current;
@@ -388,7 +388,6 @@ namespace SpreadsheetUtilities
                                 operatorStack.Pop();
                             }
                             
-
                             if (operatorStack.Count != 0)
                             {
                                 if (operatorStack.Peek().Equals("*"))               //If operator is *
@@ -629,7 +628,6 @@ namespace SpreadsheetUtilities
                 {
                     return true;
                 }
-
         }
 
         /// <summary>
@@ -670,7 +668,6 @@ namespace SpreadsheetUtilities
                     yield return s;
                 }
             }
-
         }
 
         /// <summary>
@@ -730,16 +727,7 @@ namespace SpreadsheetUtilities
         ///  The reason why this FormulaError was created.
         /// </summary>
         public string Reason { get; private set; }
-
-
-
-
-
-
-
     }
-
-
 }
 
 
