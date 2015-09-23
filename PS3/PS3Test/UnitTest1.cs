@@ -434,30 +434,30 @@ namespace PS3Test
             Assert.AreEqual(13.0, new Formula("x5").Evaluate(s => 13));
             Assert.AreEqual(16.0, new Formula("x5+5-2").Evaluate(s => 13));
             Assert.AreEqual(36.0, new Formula("(x5+5)*2").Evaluate(s => 13));
-            Assert.AreEqual(9.0, new Formula("(x5+5)/2").Evaluate(s => 13));
+            Assert.AreEqual(9.0,  new Formula("(x5+5)/2").Evaluate(s => 13));
             Assert.AreEqual(75.0, new Formula("(x5+y5+5)*3").Evaluate(s => 10));
             Assert.AreEqual(16.0, new Formula("((x5+5)/5)*2+y5").Evaluate(s => 10));
             Assert.AreEqual(16.0, new Formula("((x5+5*1)/5-0)*2+y5").Evaluate(s => 10));
             Assert.AreEqual(11.0, new Formula("(20-10)+1").Evaluate(s => 0));
-            Assert.AreEqual(9.0, new Formula("(20-10)-1").Evaluate(s => 0));
+            Assert.AreEqual(9.0,  new Formula("(20-10)-1").Evaluate(s => 0));
             Assert.AreEqual(29.0, new Formula("(20+10)-1").Evaluate(s => 0));
             Assert.AreEqual(31.0, new Formula("(20+10)+1").Evaluate(s => 0));
             Assert.AreEqual(40.0, new Formula("(2*10)*2").Evaluate(s => 0));
-            Assert.AreEqual(1.0, new Formula("(20/10)/2").Evaluate(s => 0));
+            Assert.AreEqual(1.0,  new Formula("(20/10)/2").Evaluate(s => 0));
             Assert.AreEqual(15.0, new Formula("(20+10)/2").Evaluate(s => 0));
-            Assert.AreEqual(3.0, new Formula("2+2-1").Evaluate(s => 0));
-            Assert.AreEqual(5.0, new Formula("2+2+1").Evaluate(s => 0));
+            Assert.AreEqual(3.0,  new Formula("2+2-1").Evaluate(s => 0));
+            Assert.AreEqual(5.0,  new Formula("2+2+1").Evaluate(s => 0));
             Assert.AreEqual(-1.0, new Formula("2-2-1").Evaluate(s => 0));
-            Assert.AreEqual(1.0, new Formula("2-2+1").Evaluate(s => 0));
-            Assert.AreEqual(2.0, new Formula("(2*1)").Evaluate(s => 0));
-            Assert.AreEqual(2.0, new Formula("(2/1)").Evaluate(s => 0));
-            Assert.AreEqual(5.0, new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
+            Assert.AreEqual(1.0,  new Formula("2-2+1").Evaluate(s => 0));
+            Assert.AreEqual(2.0,  new Formula("(2*1)").Evaluate(s => 0));
+            Assert.AreEqual(2.0,  new Formula("(2/1)").Evaluate(s => 0));
+            Assert.AreEqual(5.0,  new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
             Assert.AreEqual(24.0, new Formula("(x5/2)*(x4*3)").Evaluate(s => 4));
-            Assert.AreEqual(8.0, new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
-            Assert.AreEqual(2.0, new Formula("(32/x5)/4").Evaluate(s => 4));
-            Assert.AreEqual(8.0, new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
-            Assert.AreEqual(3.7, new Formula("1.5+2.2").Evaluate(s => 4));
-            Assert.AreEqual(3.7, new Formula("1.5+x5").Evaluate(s => 2.2));
+            Assert.AreEqual(8.0,  new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
+            Assert.AreEqual(2.0,  new Formula("(32/x5)/4").Evaluate(s => 4));
+            Assert.AreEqual(8.0,  new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
+            Assert.AreEqual(3.7,  new Formula("1.5+2.2").Evaluate(s => 4));
+            Assert.AreEqual(3.7,  new Formula("1.5+x5").Evaluate(s => 2.2));
             Assert.AreEqual(3.700000, new Formula("1.5+2.2").Evaluate(s => 4));
             Assert.AreEqual(3.7000000000000000001, new Formula("1.5+2.2").Evaluate(s => 4));
 
@@ -641,7 +641,17 @@ namespace PS3Test
         /// Test for normalizer and validator
         ///</summary>
         [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
         public void ConstructorTest28()
+        {
+            Formula test = new Formula("y5+zz5+ww5+qq5", normalizer2, validator2);
+        }
+
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        public void ConstructorTest29()
         {
             Formula test = new Formula("8+yy5+zz5+ww5+qq5", normalizer2, validator2);
         }

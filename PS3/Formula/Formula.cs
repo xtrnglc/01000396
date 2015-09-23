@@ -205,11 +205,6 @@ namespace SpreadsheetUtilities
                     }
                 }
 
-                else if (s == "")
-                {
-                    continue;
-                }
-
                 else
                 {
                     throw new FormulaFormatException("Unrecognized token");
