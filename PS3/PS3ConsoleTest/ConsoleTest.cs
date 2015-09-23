@@ -20,7 +20,7 @@ namespace PS3ConsoleTest
         {
             try
             {
-                Formula test = new Formula("8+yy2+z2+we2+qw2", normalizer2, validator2);
+                Formula test = new Formula("8+yy5+Zz5+we5+QW5", normalizer2, validator2);
 
                 IEnumerable<string> temp = test.GetVariables();
 
@@ -35,11 +35,7 @@ namespace PS3ConsoleTest
             } 
         }
 
-        /// <summary>
-        /// Normalizer test, returns X
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+
         public static string normalizer1(string s)
         {
             if(s == "y2")
@@ -63,11 +59,7 @@ namespace PS3ConsoleTest
             }
         }
 
-        /// <summary>
-        /// Normalizer test, returns X
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+        
         public static string normalizer2(string s)
         {
             return s.ToUpper();
@@ -88,28 +80,3 @@ namespace PS3ConsoleTest
 }
 
 
-
-/*
-/// <summary>
-        /// Test for normalizer
-        ///</summary>
-        [TestMethod()]
-        public void ConstructorTest23()
-        {
-            Formula test = new Formula("8+y2+z2+w2+q2", normalizer1, validator);
-
-            IEnumerable<string> temp = test.GetVariables();
-            string[] testArray = new string[4] { "X", "X", "X", "X" };
-            int i = 0;
-
-            foreach (String s in temp)
-            {
-                Assert.AreEqual(s, testArray[i]);
-                i++;
-            }
-        }
-
-        
-
-        
-*/
