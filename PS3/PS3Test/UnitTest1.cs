@@ -9,6 +9,13 @@ using System;
 using System.Collections.Generic;
 using SpreadsheetUtilities;
 
+/*
+Code coverage at 93.05%. 
+The only blocks that arent covered are those that throw errors in the evaluate method. It won't ever get to here because the constructor would have detected invalid syntax
+before it gets to the evaluate method.
+The other blocks that don't get covered is throwing an error when the variable test fails.
+*/
+
 namespace PS3Test
 {
     [TestClass]
@@ -21,16 +28,16 @@ namespace PS3Test
         public void EvaluatorTest1()
         {
             Formula test = new Formula("10+5");
-            Assert.AreEqual(test.Evaluate(s => 0), 15);
+            Assert.AreEqual(test.Evaluate(s => 0), 15.0);
 
             Formula test2 = new Formula("10-5");
-            Assert.AreEqual(test2.Evaluate(s => 0), 5);
+            Assert.AreEqual(test2.Evaluate(s => 0), 5.0);
 
             Formula test3 = new Formula("10/5");
-            Assert.AreEqual(test3.Evaluate(s => 0), 2);
+            Assert.AreEqual(test3.Evaluate(s => 0), 2.0);
 
             Formula test4 = new Formula("10*5");
-            Assert.AreEqual(test4.Evaluate(s => 0), 50);
+            Assert.AreEqual(test4.Evaluate(s => 0), 50.0);
         }
 
         /// <summary>
@@ -40,16 +47,16 @@ namespace PS3Test
         public void EvaluatorTest2()
         {
             Formula test = new Formula("5.0+10.0");
-            Assert.AreEqual(test.Evaluate(s => 0), 15);
+            Assert.AreEqual(test.Evaluate(s => 0), 15.0);
 
             Formula test2 = new Formula("10.000-5.0");
-            Assert.AreEqual(test2.Evaluate(s => 0), 5);
+            Assert.AreEqual(test2.Evaluate(s => 0), 5.0);
 
             Formula test3 = new Formula("10.0/5.00");
-            Assert.AreEqual(test3.Evaluate(s => 0), 2);
+            Assert.AreEqual(test3.Evaluate(s => 0), 2.0);
 
             Formula test4 = new Formula("10.00*5.00");
-            Assert.AreEqual(test4.Evaluate(s => 0), 50);
+            Assert.AreEqual(test4.Evaluate(s => 0), 50.0);
         }
 
         /// <summary>
@@ -423,40 +430,44 @@ namespace PS3Test
         [TestMethod()]
         public void LargeEvaluateTest()
         {
-            Assert.AreEqual(13, new Formula("x5").Evaluate(s => 13));
-            Assert.AreEqual(16, new Formula("x5+5-2").Evaluate(s => 13));
-            Assert.AreEqual(36, new Formula("(x5+5)*2").Evaluate(s => 13));
-            Assert.AreEqual(9,  new Formula("(x5+5)/2").Evaluate(s => 13));
-            Assert.AreEqual(75, new Formula("(x5+y5+5)*3").Evaluate(s => 10));
-            Assert.AreEqual(16, new Formula("((x5+5)/5)*2+y5").Evaluate(s => 10));
-            Assert.AreEqual(16, new Formula("((x5+5*1)/5-0)*2+y5").Evaluate(s => 10));
-            Assert.AreEqual(11, new Formula("(20-10)+1").Evaluate(s => 0));
-            Assert.AreEqual(9,  new Formula("(20-10)-1").Evaluate(s => 0));
-            Assert.AreEqual(29, new Formula("(20+10)-1").Evaluate(s => 0));
-            Assert.AreEqual(31, new Formula("(20+10)+1").Evaluate(s => 0));
-            Assert.AreEqual(40, new Formula("(2*10)*2").Evaluate(s => 0));
-            Assert.AreEqual(1,  new Formula("(20/10)/2").Evaluate(s => 0));
-            Assert.AreEqual(15, new Formula("(20+10)/2").Evaluate(s => 0));
-            Assert.AreEqual(3,  new Formula("2+2-1").Evaluate(s => 0));
-            Assert.AreEqual(5,  new Formula("2+2+1").Evaluate(s => 0));
-            Assert.AreEqual(-1, new Formula("2-2-1").Evaluate(s => 0));
-            Assert.AreEqual(1,  new Formula("2-2+1").Evaluate(s => 0));
-            Assert.AreEqual(2,  new Formula("(2*1)").Evaluate(s => 0));
-            Assert.AreEqual(2,  new Formula("(2/1)").Evaluate(s => 0));
-            Assert.AreEqual(5,  new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
-            Assert.AreEqual(24, new Formula("(x5/2)*(x4*3)").Evaluate(s => 4));
-            Assert.AreEqual(8,  new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
-            Assert.AreEqual(2,  new Formula("(32/x5)/4").Evaluate(s => 4));
-            Assert.AreEqual(8,  new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
+            Assert.AreEqual(13.0, new Formula("x5").Evaluate(s => 13));
+            Assert.AreEqual(16.0, new Formula("x5+5-2").Evaluate(s => 13));
+            Assert.AreEqual(36.0, new Formula("(x5+5)*2").Evaluate(s => 13));
+            Assert.AreEqual(9.0,  new Formula("(x5+5)/2").Evaluate(s => 13));
+            Assert.AreEqual(75.0, new Formula("(x5+y5+5)*3").Evaluate(s => 10));
+            Assert.AreEqual(16.0, new Formula("((x5+5)/5)*2+y5").Evaluate(s => 10));
+            Assert.AreEqual(16.0, new Formula("((x5+5*1)/5-0)*2+y5").Evaluate(s => 10));
+            Assert.AreEqual(11.0, new Formula("(20-10)+1").Evaluate(s => 0));
+            Assert.AreEqual(9.0,  new Formula("(20-10)-1").Evaluate(s => 0));
+            Assert.AreEqual(29.0, new Formula("(20+10)-1").Evaluate(s => 0));
+            Assert.AreEqual(31.0, new Formula("(20+10)+1").Evaluate(s => 0));
+            Assert.AreEqual(40.0, new Formula("(2*10)*2").Evaluate(s => 0));
+            Assert.AreEqual(1.0,  new Formula("(20/10)/2").Evaluate(s => 0));
+            Assert.AreEqual(15.0, new Formula("(20+10)/2").Evaluate(s => 0));
+            Assert.AreEqual(3.0,  new Formula("2+2-1").Evaluate(s => 0));
+            Assert.AreEqual(5.0,  new Formula("2+2+1").Evaluate(s => 0));
+            Assert.AreEqual(-1.0, new Formula("2-2-1").Evaluate(s => 0));
+            Assert.AreEqual(1.0,  new Formula("2-2+1").Evaluate(s => 0));
+            Assert.AreEqual(2.0,  new Formula("(2*1)").Evaluate(s => 0));
+            Assert.AreEqual(2.0,  new Formula("(2/1)").Evaluate(s => 0));
+            Assert.AreEqual(5.0,  new Formula("(x5+1)+(x4*3)").Evaluate(s => 1));
+            Assert.AreEqual(24.0, new Formula("(x5/2)*(x4*3)").Evaluate(s => 4));
+            Assert.AreEqual(8.0,  new Formula("(16/x5)+(1*x6)").Evaluate(s => 4));
+            Assert.AreEqual(2.0,  new Formula("(32/x5)/4").Evaluate(s => 4));
+            Assert.AreEqual(8.0,  new Formula("(32/x5)/(x4/4)").Evaluate(s => 4));
+            Assert.AreEqual(3.7,  new Formula("1.5+2.2").Evaluate(s => 4));
+            Assert.AreEqual(3.7,  new Formula("1.5+x5").Evaluate(s => 2.2));
+            Assert.AreEqual(3.700000, new Formula("1.5+2.2").Evaluate(s => 4));
+            Assert.AreEqual(3.7000000000000000001, new Formula("1.5+2.2").Evaluate(s => 4));
 
             Formula test = new Formula("x5 + 6");
-            Assert.AreEqual(8, test.Evaluate(s => 2));
+            Assert.AreEqual(8.0, test.Evaluate(s => 2));
 
             test = new Formula("6 + 6 + 2");
-            Assert.AreEqual(14, test.Evaluate(x => 0));
+            Assert.AreEqual(14.0, test.Evaluate(x => 0));
 
             test = new Formula("6 + 6 + 2");
-            Assert.AreEqual(14, test.Evaluate(x => 0));
+            Assert.AreEqual(14.0, test.Evaluate(x => 0));
         }
 
         /// <summary>
@@ -487,6 +498,65 @@ namespace PS3Test
         public void ConstructorTest20()
         {
             Formula test = new Formula("5+1xx");
+        }
+
+        /// <summary>
+        /// Test for invalid syntax
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest21()
+        {
+            Formula test = new Formula("10 - + 3");
+        }
+
+        /// <summary>
+        /// Test for scientific notation
+        /// </summary>
+        [TestMethod()]
+        public void ScientificNotationTest1()
+        {
+            Formula test = new Formula("10e2+3");
+            Formula test2 = new Formula("10E2+3");
+
+            Assert.AreEqual(1003.0, test.Evaluate(s => 0));
+            Assert.AreEqual(1003.0, test2.Evaluate(s => 0));
+        }
+
+        /// <summary>
+        /// Test for scientific notation
+        /// </summary>
+        [TestMethod()]
+        public void ScientificNotationTest2()
+        {
+            Formula test = new Formula("10e-2+3");
+            Formula test2 = new Formula("10E-2+3");
+
+            Assert.AreEqual(3.1, test.Evaluate(s => 0));
+            Assert.AreEqual(3.100000, test2 .Evaluate(s => 0));
+        }
+
+        /// <summary>
+        /// Test for scientific notation
+        /// </summary>
+        [TestMethod()]
+        public void ScientificNotationTest3()
+        {
+            Formula test = new Formula("10e2+3");
+            Formula test2 = new Formula("1000+3");
+
+            Assert.AreEqual(test2.Evaluate(s => 0), test.Evaluate(s => 0));
+            Assert.AreEqual(test2.GetHashCode(), test.GetHashCode());
+        }
+
+        /// <summary>
+        /// Test for invalid syntax
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest22()
+        {
+            Formula test = new Formula("8 x");
         }
     }
 }

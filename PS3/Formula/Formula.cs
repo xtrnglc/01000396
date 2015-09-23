@@ -476,7 +476,7 @@ namespace SpreadsheetUtilities
                 {
                     if (operandStack.Count == 1)
                     {
-                        return (int)operandStack.Pop();
+                        return operandStack.Pop();
                     }
                     else
                     {                                                            //Report error if there isn't exactly 1 value on the operand stack
@@ -495,7 +495,7 @@ namespace SpreadsheetUtilities
                             intTemp2 = operandStack.Pop();
                             num = intTemp + intTemp2;
 
-                            return (int)num;
+                            return num;
                         }
 
                         else if (operatorStack.Peek() == "-")                   //If operator is -, pop and subtract two remaining operands and return value
@@ -505,7 +505,7 @@ namespace SpreadsheetUtilities
                             intTemp2 = operandStack.Pop();
                             num = intTemp2 - intTemp;
 
-                            return (int)num;
+                            return num;
                         }
 
                         else

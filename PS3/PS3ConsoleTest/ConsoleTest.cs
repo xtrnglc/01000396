@@ -19,9 +19,8 @@ namespace PS3ConsoleTest
         {
             try
             {
-                Formula test = new Formula("5+1xx");
+                Formula test = new Formula("10e2+3");
                 Console.WriteLine(test.Evaluate(s => 0));
-
             }
             catch(Exception e)
             {
