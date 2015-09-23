@@ -468,50 +468,31 @@ namespace SpreadsheetUtilities
 
                 if (operatorStack.Count == 0)                                   //After processing through string, if operator stack is empty then pop operand stack and return value. 
                 {
-                    if (operandStack.Count == 1)
-                    {
                         return operandStack.Pop();
-                    }
-                    else
-                    {                                                            //Report error if there isn't exactly 1 value on the operand stack
-                        return new FormulaError("There isn't exactly 1 value on the operand stack");
-                    }
                 }
 
                 else
                 {                                                               //If operator stack not empty, then there should be 2 operands and 1 operator. The operator must be + or -, else report error
-                    if (operandStack.Count == 2 && operatorStack.Count == 1)
+                    if (operatorStack.Peek() == "+")                        //If operator is +, pop and add two remaining operands and return value
                     {
-                        if (operatorStack.Peek() == "+")                        //If operator is +, pop and add two remaining operands and return value
-                        {
-                            operatorStack.Pop();
-                            intTemp = operandStack.Pop();
-                            intTemp2 = operandStack.Pop();
-                            num = intTemp + intTemp2;
+                        operatorStack.Pop();
+                        intTemp = operandStack.Pop();
+                        intTemp2 = operandStack.Pop();
+                        num = intTemp + intTemp2;
 
-                            return num;
-                        }
-
-                        else if (operatorStack.Peek() == "-")                   //If operator is -, pop and subtract two remaining operands and return value
-                        {
-                            operatorStack.Pop();
-                            intTemp = operandStack.Pop();
-                            intTemp2 = operandStack.Pop();
-                            num = intTemp2 - intTemp;
-
-                            return num;
-                        }
-
-                        else
-                        {                                                       //If remaining operator is not + or -
-                            return new FormulaError("The last operator is not a + or -");
-                        }
+                        return num;
                     }
 
-                    else
-                    {                                                           //If there isn't 2 operands or 1 operator remaining, report error
-                        return new FormulaError("There isn't exactly 2 values on the operand stack and 1 operator on the operator stack");
+                    else                  //If operator is -, pop and subtract two remaining operands and return value
+                    {
+                        operatorStack.Pop();
+                        intTemp = operandStack.Pop();
+                        intTemp2 = operandStack.Pop();
+                        num = intTemp2 - intTemp;
+
+                        return num;
                     }
+
                 }
             }
         }
