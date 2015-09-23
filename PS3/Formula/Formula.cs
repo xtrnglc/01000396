@@ -306,8 +306,7 @@ namespace SpreadsheetUtilities
 
                     else if (isVariable(current))                               //Check to see whether current sub string is potentially a variable, if so proceed as if it were integer
                     {
-
-                        num = lookup(current);                              //Look up the variable
+                        num = lookup(current);
 
                         if (operandStack.Count() == 0)                          //If value stack is empty, push current int onto stack
                         {
@@ -325,14 +324,14 @@ namespace SpreadsheetUtilities
 
                             else if (operatorStack.Peek().Equals("/"))          //If operator is /
                             {
-                                    if (num == 0)
-                                    {
-                                        return new FormulaError("Division by zero error.");
-                                    }
-                                    intTemp = operandStack.Pop();                   //Pop operand from operand stack
-                                    stringTemp = operatorStack.Pop();               //Pop / operator
-                                    intTemp = intTemp / num;                        //Divide first operand by second operand
-                                    operandStack.Push(intTemp);                     //Push result onto stack
+                                if (num == 0)
+                                {
+                                    return new FormulaError("Division by zero error.");
+                                }
+                                intTemp = operandStack.Pop();                   //Pop operand from operand stack
+                                stringTemp = operatorStack.Pop();               //Pop / operator
+                                intTemp = intTemp / num;                        //Divide first operand by second operand
+                                operandStack.Push(intTemp);                     //Push result onto stack
                             }
 
                             else                                                //If neither, then push operand onto operand stack
@@ -492,7 +491,6 @@ namespace SpreadsheetUtilities
 
                         return num;
                     }
-
                 }
             }
         }

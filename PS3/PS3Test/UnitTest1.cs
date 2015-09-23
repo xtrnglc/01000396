@@ -656,6 +656,16 @@ namespace PS3Test
             Formula test = new Formula("8+yy5+zz5+ww5+qq5", normalizer2, validator2);
         }
 
+        /// <summary>
+        /// Test for normalizer and validator
+        ///</summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void ConstructorTest30()
+        {
+            Formula test = new Formula("8+yy5+zz5+ww5+qq5", s=>s, s=> false);
+        }
+
 
         /// <summary>
         /// Normalizer test, returns X
