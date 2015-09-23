@@ -384,28 +384,7 @@ namespace SpreadsheetUtilities
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
 
-                            else if (current.Equals("-"))                       //Process a - string 
-                            {
-                                if (operandStack.Count > 1 && operatorStack.Peek().Equals("+"))
-                                {
-                                    intTemp = operandStack.Pop();               //Pop first operand
-                                    intTemp2 = operandStack.Pop();              //Pop second operand
-                                    operatorStack.Pop();
-                                    intTemp = intTemp + intTemp2;               //Add the two operands 
-                                    operandStack.Push(intTemp);                 //Push result onto stack
-                                }
-
-                                else if (operandStack.Count > 1 && operatorStack.Peek().Equals("-"))
-                                {
-                                    intTemp = operandStack.Pop();               //Pop first operand
-                                    intTemp2 = operandStack.Pop();              //Pop second operand
-                                    operatorStack.Pop();
-                                    intTemp = intTemp2 - intTemp;               //Subtract second operand from first operand
-                                    operandStack.Push(intTemp);                 //Push result onto stack
-                                }
-
-                                operatorStack.Push(current);                    //Push + operator onto stack
-                            }
+                            
 
                             try
                             {
@@ -613,7 +592,26 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object obj)
         {
-            return false;
+            if (obj == null)      
+                return false;
+
+            if (obj.GetType() != this.GetType())
+                return false;
+
+            Formula temp = (Formula)obj;
+
+            string tempString = this.ToString();
+            string objTempString = obj.ToString();
+
+            if (tempString.Equals(objTempString))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -623,17 +621,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            if (f1 == null && f2 == null)
+            if (f1.Equals(null) && f2.Equals(null))
             {
                 return true;
             }
 
-            else if (f1 == null && f2 != null)
+            else if (f1.Equals(null) && f2.Equals(null))
             {
                 return false;
             }
 
-            else if (f1 != null && f2 == null)
+            else if (f1.Equals(null) && f2.Equals(null))
             {
                 return false;
             }
@@ -649,7 +647,6 @@ namespace SpreadsheetUtilities
                     return false;
                 }
             }
-
         }
 
         /// <summary>
@@ -659,17 +656,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            if (f1 == null && f2 == null)
+            if (f1.Equals(null) && f2.Equals(null))
             {
                 return false;
             }
 
-            else if (f1 == null && f2 != null)
+            else if (f1.Equals(null) && f2.Equals(null))
             {
                 return true;
             }
 
-            else if (f1 != null && f2 == null)
+            else if (f1.Equals(null) && f2.Equals(null))
             {
                 return true;
             }
@@ -733,7 +730,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="s">String</param>
         /// <returns>Boolean</returns>
-        public static Boolean isVariable(String s)
+        private static Boolean isVariable(String s)
         {
             return Regex.IsMatch(s, "^[a-zA-Z]+[1-9][0-9]*$");
         }
@@ -743,7 +740,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="s">String</param>
         /// <returns>Boolean</returns>
-        public static Boolean isOperator(String s)
+        private static Boolean isOperator(String s)
         {
             if (s == "+" | s == "*" | s == "-" | s == "/")
                 return true;

@@ -13,9 +13,18 @@ namespace PS3ConsoleTest
         {
             try
             {
-                Formula test = new Formula("5+5");
-                Console.WriteLine(test.ToString());
-                Console.WriteLine(test.Evaluate(s => 0));
+                Formula test3 = null;
+                Formula test4 = null;
+
+                Console.WriteLine(test3 == test4);
+
+                Formula test = new Formula("x1 + x2 - y3 * y4");
+                IEnumerable<string> temp = test.GetVariables();
+                foreach(string s in temp)
+                {
+                    Console.WriteLine(s);
+                }
+
             }
             catch(Exception e)
             {
