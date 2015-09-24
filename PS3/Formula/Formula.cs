@@ -333,7 +333,6 @@ namespace SpreadsheetUtilities
                                 intTemp = intTemp / num;                        //Divide first operand by second operand
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
-
                             else                                                //If neither, then push operand onto operand stack
                             {
                                 operandStack.Push(num);
@@ -346,17 +345,14 @@ namespace SpreadsheetUtilities
                         {
                             operatorStack.Push(current);
                         }
-
                         else if (current.Equals("/"))                           //Process a / string by pushing onto stack
                         {
                             operatorStack.Push(current);
                         }
-
                         else if (current.Equals("("))                           //Process a ( string by pushing on to stack
                         {
                             operatorStack.Push(current);
                         }
-
                         else if (current.Equals(")"))                           //Process a ) string
                         {
                             if (operatorStack.Peek().Equals("+") && operandStack.Count > 1)
@@ -376,12 +372,10 @@ namespace SpreadsheetUtilities
                                 intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
-
                             if (operatorStack.Peek().Equals("("))           //Try and look for opening parenthesis
                             {
                                 operatorStack.Pop();
                             }
-                            
                             if (operatorStack.Count != 0)
                             {
                                 if (operatorStack.Peek().Equals("*"))               //If operator is *
@@ -392,7 +386,6 @@ namespace SpreadsheetUtilities
                                     intTemp = intTemp * intTemp2;                   //Multiply the two operands
                                     operandStack.Push(intTemp);                     //Push result onto stack
                                 }
-
                                 else if (operatorStack.Peek().Equals("/"))          //If operator is /
                                 {
                                     intTemp = operandStack.Pop();                   //Pop operand from operand stack
@@ -421,7 +414,6 @@ namespace SpreadsheetUtilities
                                 intTemp = intTemp + intTemp2;                   //Add the two operands 
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
-
                             else if (operatorStack.Count != 0 && operatorStack.Peek() == "-" && (operandStack.Count > 1))
                             {
                                 intTemp = operandStack.Pop();                   //Pop first operand
@@ -430,10 +422,8 @@ namespace SpreadsheetUtilities
                                 intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
-
                             operatorStack.Push(current);                        //Push + operator onto stack
                         }
-
                         else if (current.Equals("-"))                           //Process a - string 
                         {
                             if (operatorStack.Count != 0 && operatorStack.Peek() == "+" && (operandStack.Count > 1))
@@ -453,7 +443,6 @@ namespace SpreadsheetUtilities
                                 intTemp = intTemp2 - intTemp;                   //Subtract second operand from first operand
                                 operandStack.Push(intTemp);                     //Push result onto stack
                             }
-
                             operatorStack.Push(current);                        //Push + operator onto stack
                         }
 
@@ -461,7 +450,6 @@ namespace SpreadsheetUtilities
                         {
                             continue;
                         }
-
                     }
                 }
 
@@ -469,7 +457,6 @@ namespace SpreadsheetUtilities
                 {
                         return operandStack.Pop();
                 }
-
                 else
                 {                                                               //If operator stack not empty, then there should be 2 operands and 1 operator. The operator must be + or -, else report error
                     if (operatorStack.Peek() == "+")                        //If operator is +, pop and add two remaining operands and return value
@@ -481,7 +468,6 @@ namespace SpreadsheetUtilities
 
                         return num;
                     }
-
                     else                  //If operator is -, pop and subtract two remaining operands and return value
                     {
                         operatorStack.Pop();
@@ -567,7 +553,6 @@ namespace SpreadsheetUtilities
             {
                 return false;
             }
-            
         }
 
         /// <summary>
@@ -594,14 +579,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-                if (f1.Equals(f2))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            if (f1.Equals(f2))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         /// <summary>
@@ -651,7 +636,7 @@ namespace SpreadsheetUtilities
         /// <returns>Boolean</returns>
         private static Boolean isVariable(String s)
         {
-            return Regex.IsMatch(s, "^[a-zA-Z]+[1-9][0-9]*$");
+            return Regex.IsMatch(s, "^(_)*[a-zA-Z]+[1-9][0-9]*$");
         }
 
         /// <summary>

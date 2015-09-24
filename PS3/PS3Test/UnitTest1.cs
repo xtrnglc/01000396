@@ -189,6 +189,8 @@ namespace PS3Test
 
             Assert.AreEqual(true, new Formula("5.0 + x5").GetHashCode() == (new Formula("5.000 + x5")).GetHashCode());
 
+            Assert.AreEqual(true, new Formula("x2 + x5").GetHashCode() == (new Formula("x2 + x5")).GetHashCode());
+
             Assert.AreEqual(false, new Formula("5.0 + x5").GetHashCode() == (new Formula("5.00 + X5")).GetHashCode());
         }
 
