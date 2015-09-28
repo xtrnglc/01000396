@@ -634,9 +634,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="s">String</param>
         /// <returns>Boolean</returns>
-        private static Boolean isVariable(String s)
+        public static Boolean isVariable(String s)
         {
-            return Regex.IsMatch(s, "^(_)*[a-zA-Z]+[1-9][0-9]*$");
+            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+[1-9][0-9]*)|(_)+$");
         }
 
         /// <summary>
