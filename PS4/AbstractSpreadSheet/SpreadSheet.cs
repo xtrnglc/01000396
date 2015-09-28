@@ -203,8 +203,6 @@ namespace SS
             }
 
             cellList.Add(name, new Cell(number));
-            
-
 
             if (dependecies.HasDependees(name))
             {
