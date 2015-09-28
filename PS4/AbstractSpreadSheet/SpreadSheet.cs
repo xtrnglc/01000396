@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using SpreadsheetUtilities;
 
 namespace SS
@@ -157,7 +158,7 @@ namespace SS
         /// </summary>
         public override IEnumerable<String> GetNamesOfAllNonemptyCells()
         {
-            
+            return cellList.Keys;
         }
 
 
@@ -168,7 +169,19 @@ namespace SS
         /// value should be either a string, a double, or a Formula.
         public override object GetCellContents(String name)
         {
+            if (string.IsNullOrEmpty(name) | !isVariable(name))
+                throw new InvalidNameException();
 
+            Cell c;
+
+            if (cellList.TryGetValue(name, out c))
+            {
+                return c.getContent();
+            }
+            else
+            {
+                return null;
+            }  
         }
 
 
@@ -184,6 +197,26 @@ namespace SS
         /// </summary>
         public override ISet<String> SetCellContents(String name, double number)
         {
+            if (string.IsNullOrEmpty(name) | !isVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
+            cellList.Add(name, new Cell(number));
+            
+
+
+            if (dependecies.HasDependees(name))
+            {
+                HashSet<String> toReturn = new HashSet<string>();
+
+                foreach (String s in GetCellsToRecalculate(name))
+                    toReturn.Add(s);
+
+                return toReturn;
+            }
+
+            return new HashSet<String> { name };
 
         }
 
@@ -201,6 +234,16 @@ namespace SS
         /// </summary>
         public override ISet<String> SetCellContents(String name, String text)
         {
+            if (text == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (string.IsNullOrEmpty(name) | !isVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
 
         }
 
@@ -221,7 +264,15 @@ namespace SS
         /// </summary>
         public override ISet<String> SetCellContents(String name, Formula formula)
         {
+            if (formula == null)
+            {
+                throw new ArgumentNullException();
+            }
 
+            if (string.IsNullOrEmpty(name) | !isVariable(name))
+            {
+                throw new InvalidNameException();
+            }
         }
 
 
@@ -242,9 +293,27 @@ namespace SS
         /// D1 contains the formula B1 - C1
         /// The direct dependents of A1 are B1 and C1
         /// </summary>
-        public override IEnumerable<String> GetDirectDependents(String name)
+        protected override IEnumerable<String> GetDirectDependents(String name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException();
+            }
 
+            if (!isVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
+            if (dependecies.HasDependees(name))
+            {
+                return dependecies.GetDependees(name);
+            }
+
+            else
+            {
+                return new HashSet<string>();
+            }
         }
 
 
@@ -317,6 +386,16 @@ namespace SS
                 }
             }
             changed.AddFirst(name);
+        }
+
+        /// <summary>
+        /// Check to see if a string is a valid variable.
+        /// </summary>
+        /// <param name="s">String</param>
+        /// <returns>Boolean</returns>
+        public static Boolean isVariable(String s)
+        {
+            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
         }
     }
 }
