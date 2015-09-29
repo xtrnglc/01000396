@@ -206,12 +206,12 @@ namespace SS
 
             if (dependecies.HasDependees(name))
             {
-                HashSet<String> toReturn = new HashSet<string>();
+                HashSet<String> cellsToRecalculate = new HashSet<string>();
 
                 foreach (String s in GetCellsToRecalculate(name))
-                    toReturn.Add(s);
+                    cellsToRecalculate.Add(s);
 
-                return toReturn;
+                return cellsToRecalculate;
             }
 
             return new HashSet<String> { name };
@@ -242,7 +242,19 @@ namespace SS
                 throw new InvalidNameException();
             }
 
+            cellList.Add(name, new Cell(text));
 
+            if (dependecies.HasDependees(name))
+            {
+                HashSet<String> cellsToRecalculate = new HashSet<string>();
+
+                foreach (String s in GetCellsToRecalculate(name))
+                    cellsToRecalculate.Add(s);
+
+                return cellsToRecalculate;
+            }
+
+            return new HashSet<String> { name };
         }
 
         /// <summary>
@@ -271,6 +283,20 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+
+            cellList.Add(name, new Cell(formula));
+
+            if (dependecies.HasDependees(name))
+            {
+                HashSet<String> cellsToRecalculate = new HashSet<string>();
+
+                foreach (String s in GetCellsToRecalculate(name))
+                    cellsToRecalculate.Add(s);
+
+                return cellsToRecalculate;
+            }
+
+            return new HashSet<String> { name };
         }
 
 
