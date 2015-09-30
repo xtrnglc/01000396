@@ -111,6 +111,7 @@ namespace PS4Test
             s.SetCellContents("C1", "hello");
             s.SetCellContents("D1", new Formula("13+A1"));
 
+
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] testArray = new string[4] { "A1", "B1", "C1", "D1"};
             int i = 0;
