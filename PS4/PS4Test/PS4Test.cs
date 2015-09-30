@@ -51,6 +51,78 @@ namespace PS4Test
         }
 
         /// <summary>
+        /// Test for initializing and getting cell string contents
+        /// </summary>
+        [TestMethod]
+        public void formulaContentTest1()
+        {
+            Formula f = new Formula("5+10");
+            SpreadSheet s = new SpreadSheet();
+            s.SetCellContents("A1", new Formula("5+10"));
+            Assert.AreEqual(f, s.GetCellContents("A1"));
+        }
+
+        /// <summary>
+        /// Test for circular dependency
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void circularDependecyTest1()
+        {
+            SpreadSheet s = new SpreadSheet();
+            s.SetCellContents("A1", new Formula("5+10+A1"));
+        }
+
+        /// <summary>
+        /// Test for  circular dependency
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void circularDependecyTest2()
+        {
+            SpreadSheet s = new SpreadSheet();
+            s.SetCellContents("A1", new Formula("4+C1"));
+            s.SetCellContents("B1", new Formula("19+D1"));
+            s.SetCellContents("C1", new Formula("B1+2"));
+            s.SetCellContents("D1", new Formula("1+A1"));
+        }
+
+        /// <summary>
+        /// Test for circular dependency
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void circularDependecyTest3()
+        {
+            SpreadSheet s = new SpreadSheet();
+            s.SetCellContents("A1", new Formula("4+B1"));
+            s.SetCellContents("B1", new Formula("19+A1"));
+        }
+
+        /// <summary>
+        /// Test for constructors
+        /// </summary>
+        [TestMethod]
+        public void constructorTest1()
+        {
+            SpreadSheet s = new SpreadSheet();
+            s.SetCellContents("A1", new Formula("4+B1"));
+            s.SetCellContents("B1", 10);
+            s.SetCellContents("C1", "hello");
+            s.SetCellContents("D1", new Formula("13+A1"));
+
+            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
+            string[] testArray = new string[4] { "A1", "B1", "C1", "D1"};
+            int i = 0;
+
+            foreach (String t in temp)
+            {
+                Assert.AreEqual(testArray[i], t);
+                i++;
+            }
+        }
+
+        /// <summary>
         /// Test for invalid naming practices
         /// </summary>
         [TestMethod]

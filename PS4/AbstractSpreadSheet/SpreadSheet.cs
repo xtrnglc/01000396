@@ -60,7 +60,7 @@ namespace SS
     public class SpreadSheet : AbstractSpreadsheet
     {
 
-        private DependencyGraph dependecies;
+        private DependencyGraph dependencies;
         private Dictionary<string, Cell> cellList;
 
 
@@ -73,6 +73,7 @@ namespace SS
         {
             string stringContent = null;
             double doubleContent = double.PositiveInfinity;
+            double doubleContent1 = double.PositiveInfinity;
             Formula formulaContent = null;
             FormulaError formulaErrorContent;
 
@@ -91,7 +92,7 @@ namespace SS
             /// <param name="content"></param>
             public Cell(double content)
             {
-                doubleContent = content;
+                doubleContent1 = doubleContent = content;
             }
 
             /// <summary>
@@ -124,7 +125,7 @@ namespace SS
                 {
                     return stringContent;
                 }
-                else if (doubleContent != double.PositiveInfinity)
+                else if(doubleContent1 != double.PositiveInfinity)
                 {
                     return doubleContent;
                 }
@@ -132,6 +133,7 @@ namespace SS
                 {
                     return formulaContent;
                 }
+                
             }
 
             /// <summary>
@@ -158,7 +160,7 @@ namespace SS
         /// </summary>
         public SpreadSheet()
         {
-            dependecies = new DependencyGraph();
+            dependencies = new DependencyGraph();
             cellList = new Dictionary<string, Cell>();
         }
      
@@ -223,7 +225,9 @@ namespace SS
                 cellList.Add(name, new Cell(number));
             }
 
-            if (dependecies.HasDependees(name))
+            dependencies.ReplaceDependees(name, new HashSet<String>());
+
+            if (dependencies.HasDependees(name))
             {
                 HashSet<String> cellsToRecalculate = new HashSet<string>();
 
@@ -232,6 +236,8 @@ namespace SS
 
                 return cellsToRecalculate;
             }
+
+            
 
             return new HashSet<String> { name };
 
@@ -275,8 +281,7 @@ namespace SS
                 }      
             }
             
-
-            if (dependecies.HasDependees(name))
+            if (dependencies.HasDependees(name))
             {
                 HashSet<String> cellsToRecalculate = new HashSet<string>();
 
@@ -306,6 +311,10 @@ namespace SS
         /// </summary>
         public override ISet<String> SetCellContents(String name, Formula formula)
         {
+            IEnumerable<String> dependees = dependencies.GetDependees(name);
+
+            dependencies.ReplaceDependees(name, formula.GetVariables());
+
             if (formula == null)
             {
                 throw new ArgumentNullException();
@@ -317,20 +326,41 @@ namespace SS
             }
 
             try
-            {
-                cellList.Add(name, new Cell(formula));
+            { 
+                if (cellList.ContainsKey(name))
+                {
+                    cellList[name] = new Cell(formula); ;
+                }
+
+                else
+                {
+                    cellList.Add(name, new Cell(formula));
+                }
+
+
+                if (dependencies.HasDependees(name))
+                {
+                    HashSet<String> cellsToRecalculate = new HashSet<string>();
+
+                    foreach (String s in GetCellsToRecalculate(name))
+                        cellsToRecalculate.Add(s);
+
+                    return cellsToRecalculate;
+                }
+
+                foreach (string s in formula.GetVariables())
+                {
+                    if (s.Equals(name))
+                    {
+                        throw new CircularException();
+                    }
+                }
             }
-            catch (ArgumentException)
+            catch (CircularException)
             {
-                cellList.Remove(name);
-                cellList.Add(name, new Cell(formula));
-                
+                dependencies.ReplaceDependees(name, dependees);
+                throw new CircularException();
             }
-
-
-
-
-
 
             return new HashSet<String> { name };
         }
@@ -365,9 +395,9 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            if (dependecies.HasDependees(name))
+            if (dependencies.HasDependents(name))
             {
-                return dependecies.GetDependees(name);
+                return dependencies.GetDependents(name);
             }
 
             else
@@ -460,43 +490,7 @@ namespace SS
     }
 }
 
-/*
-private void updateDependency(String name)
-        {
-            try
-            {
-                Cell temp;
-                sp.TryGetValue(name, out temp);
-                Formula formula = (Formula)temp.getContents();
-
-                foreach (String s in formula.GetVariables())
-                    dg.RemoveDependency(name, s);
-            }
-            catch (InvalidCastException) { }
-        }
 
 
 
-    private ISet<String> processLinks(String name, Formula formula, IEnumerable<String> oldDependents)
-        {
-            dg.ReplaceDependents(name, formula.GetVariables());
-
-            try
-            {
-                IEnumerable<String> use = GetCellsToRecalculate(name);
-                HashSet<String> toReturn = new HashSet<string>();
-
-                foreach (String s in use)
-                    toReturn.Add(s);
-
-                return toReturn;
-            }
-            catch (CircularException)
-            {
-                foreach (String s in formula.GetVariables())
-                    dg.RemoveDependency(name, s);
-
-                throw new CircularException();
-            }
-        }
-*/
+    
