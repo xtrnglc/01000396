@@ -316,6 +316,21 @@ namespace SS
                 throw new InvalidNameException();
             }
 
+            try
+            {
+                cellList.Add(name, new Cell(formula));
+            }
+            catch (ArgumentException)
+            {
+                cellList.Remove(name);
+                cellList.Add(name, new Cell(formula));
+                
+            }
+
+
+
+
+
 
             return new HashSet<String> { name };
         }
