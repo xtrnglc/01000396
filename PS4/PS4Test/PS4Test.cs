@@ -1,4 +1,9 @@
-﻿using SS;
+﻿/*
+Author: Trung Le
+Date: 09/29/2015
+Purpose: Console test used mainly for debugging
+*/
+using SS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

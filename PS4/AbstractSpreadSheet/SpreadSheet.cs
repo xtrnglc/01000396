@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+Author: Trung Le
+Date: 09/29/2015
+Purpose: SpreadSheet class implementation
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -311,17 +316,6 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            cellList.Add(name, new Cell(formula));
-
-            if (dependecies.HasDependees(name))
-            {
-                HashSet<String> cellsToRecalculate = new HashSet<string>();
-
-                foreach (String s in GetCellsToRecalculate(name))
-                    cellsToRecalculate.Add(s);
-
-                return cellsToRecalculate;
-            }
 
             return new HashSet<String> { name };
         }
@@ -444,7 +438,7 @@ namespace SS
         /// </summary>
         /// <param name="s">String</param>
         /// <returns>Boolean</returns>
-        public static Boolean isVariable(String s)
+        private static Boolean isVariable(String s)
         {
             return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
         }
