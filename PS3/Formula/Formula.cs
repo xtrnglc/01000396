@@ -579,7 +579,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            if(f1.Equals(null) | f2.Equals(null))
+            if(f1 == (null) | f2 == (null))
             {
                 return false;
             }
