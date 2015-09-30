@@ -14,6 +14,9 @@ namespace PS4Test
     [TestClass]
     public class PS4Test
     {
+        /// <summary>
+        /// Test for initializing and getting cell double contents
+        /// </summary>
         [TestMethod]
         public void doubleContentTest1()
         {
@@ -29,6 +32,9 @@ namespace PS4Test
             Assert.AreEqual((double)s.GetCellContents("A1"), 19);
         }
 
+        /// <summary>
+        /// Test for initializing and getting cell string contents
+        /// </summary>
         [TestMethod]
         public void stringContentTest1()
         {
@@ -44,6 +50,9 @@ namespace PS4Test
             Assert.AreEqual((string)s.GetCellContents("A1"), "Not hello");
         }
 
+        /// <summary>
+        /// Test for invalid naming practices
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidNameException))]
         public void stringContentTest2()
@@ -52,6 +61,9 @@ namespace PS4Test
             s.SetCellContents("2A1", "Hello");
         }
 
+        /// <summary>
+        /// Test for invalid naming practices
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidNameException))]
         public void stringContentTest3()
