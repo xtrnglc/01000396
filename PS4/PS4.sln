@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadSheet", "AbstractSpre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{0FD8E2B7-7582-4936-B7EE-BBC96A4EDDC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4Test", "PS4Test\PS4Test.csproj", "{F5FF40E2-CB54-4CD2-A0AC-93527FB84423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4ConsoleTest", "PS4ConsoleTest\PS4ConsoleTest.csproj", "{52506442-C95A-466C-8BB4-2C013B3FAFEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{0FD8E2B7-7582-4936-B7EE-BBC96A4EDDC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FD8E2B7-7582-4936-B7EE-BBC96A4EDDC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FD8E2B7-7582-4936-B7EE-BBC96A4EDDC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5FF40E2-CB54-4CD2-A0AC-93527FB84423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5FF40E2-CB54-4CD2-A0AC-93527FB84423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5FF40E2-CB54-4CD2-A0AC-93527FB84423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5FF40E2-CB54-4CD2-A0AC-93527FB84423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,7 +19,7 @@ namespace SS
     /// Note that this is the same as the definition of valid variable from the PS3 Formula class.
     /// 
     /// For example, "x", "_", "x2", "y_15", and "___" are all valid cell  names, but
-    /// "25", "2x", and "&" are not.  Cell names are case sensitive, so "x" and "X" are
+    /// "25", "2x", and "" are not.  Cell names are case sensitive, so "x" and "X" are
     /// different cell names.
     /// 
     /// A spreadsheet contains a cell corresponding to every possible cell name.  (This
@@ -51,7 +51,8 @@ namespace SS
     /// For example, suppose that A1 contains B1*2, B1 contains C1*2, and C1 contains A1*2.
     /// A1 depends on B1, which depends on C1, which depends on A1.  That's a circular
     /// dependency.
-    class SpreadSheet : AbstractSpreadsheet
+    /// </summary>
+    public class SpreadSheet : AbstractSpreadsheet
     {
 
         private DependencyGraph dependecies;
@@ -147,6 +148,9 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SpreadSheet()
         {
             dependecies = new DependencyGraph();
@@ -167,6 +171,7 @@ namespace SS
         /// 
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
         /// value should be either a string, a double, or a Formula.
+        /// </summary>
         public override object GetCellContents(String name)
         {
             if (string.IsNullOrEmpty(name) | !isVariable(name))
@@ -178,6 +183,7 @@ namespace SS
             {
                 return c.getContent();
             }
+
             else
             {
                 return null;
@@ -202,7 +208,15 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            cellList.Add(name, new Cell(number));
+            try
+            {
+                cellList.Add(name, new Cell(number));
+            }
+            catch (ArgumentException)
+            {
+                cellList.Remove(name);
+                cellList.Add(name, new Cell(number));
+            }
 
             if (dependecies.HasDependees(name))
             {
@@ -242,7 +256,20 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            cellList.Add(name, new Cell(text));
+            try
+            {
+                cellList.Add(name, new Cell(text));
+            }
+            catch (ArgumentException)
+            {
+                cellList.Remove(name);
+
+                if (text != "")
+                {
+                    cellList.Add(name, new Cell(text));
+                }      
+            }
+            
 
             if (dependecies.HasDependees(name))
             {
@@ -423,3 +450,44 @@ namespace SS
         }
     }
 }
+
+/*
+private void updateDependency(String name)
+        {
+            try
+            {
+                Cell temp;
+                sp.TryGetValue(name, out temp);
+                Formula formula = (Formula)temp.getContents();
+
+                foreach (String s in formula.GetVariables())
+                    dg.RemoveDependency(name, s);
+            }
+            catch (InvalidCastException) { }
+        }
+
+
+
+    private ISet<String> processLinks(String name, Formula formula, IEnumerable<String> oldDependents)
+        {
+            dg.ReplaceDependents(name, formula.GetVariables());
+
+            try
+            {
+                IEnumerable<String> use = GetCellsToRecalculate(name);
+                HashSet<String> toReturn = new HashSet<string>();
+
+                foreach (String s in use)
+                    toReturn.Add(s);
+
+                return toReturn;
+            }
+            catch (CircularException)
+            {
+                foreach (String s in formula.GetVariables())
+                    dg.RemoveDependency(name, s);
+
+                throw new CircularException();
+            }
+        }
+*/
