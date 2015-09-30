@@ -35,7 +35,6 @@ namespace PS3ConsoleTest
             } 
         }
 
-
         public static string normalizer1(string s)
         {
             if(s == "y2")
@@ -75,8 +74,6 @@ namespace PS3ConsoleTest
             return Regex.IsMatch(s, "^([A-Z]){2}[5]$");
         }
     }
-
-
 }
 
 

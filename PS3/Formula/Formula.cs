@@ -579,6 +579,10 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
+            if(f1.Equals(null) | f2.Equals(null))
+            {
+                return false;
+            }
             if (f1.Equals(f2))
             {
                 return false;
@@ -636,7 +640,7 @@ namespace SpreadsheetUtilities
         /// <returns>Boolean</returns>
         public static Boolean isVariable(String s)
         {
-            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+[1-9][0-9]*)|(_)+$");
+            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+[1-9][0-9]*)$");
         }
 
         /// <summary>
