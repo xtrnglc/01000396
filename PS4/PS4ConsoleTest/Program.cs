@@ -15,12 +15,22 @@ namespace PS4ConsoleTest
 
 
             SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("D1", "");
+            s.SetCellContents("A1", 10);
+            s.SetCellContents("B1", new Formula("A1*2"));
+            s.SetCellContents("C1", new Formula("B1+A1"));
+            s.SetCellContents("A1", 12.0);
+
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
+            string[] nameArray = new string[3] { "A1", "B1", "C1" };
+            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
+            int i = 0;
+
+            foreach (String t in temp)
+            {
+                Console.WriteLine(s.GetCellContents(nameArray[i]));
+                i++;
+            }
 
         }
     }
