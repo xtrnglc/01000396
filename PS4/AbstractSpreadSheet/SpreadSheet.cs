@@ -140,6 +140,7 @@ namespace SS
             /// Return the value of the cell
             /// Returns the double if it exists,
             /// If not then return formulaError
+            /// NOT USED IN PS4
             /// </summary>
             /// <returns></returns>
             public object getValue()
@@ -230,8 +231,6 @@ namespace SS
                 cellList.Add(name, new Cell(number));
             }
             
-
-
             dependencies.ReplaceDependees(name, new HashSet<String>());
 
             HashSet<String> cellsToRecalculate = new HashSet<string>();
@@ -240,8 +239,6 @@ namespace SS
                 cellsToRecalculate.Add(s);
 
             return cellsToRecalculate;
-
-
         }
 
         /// <summary>
@@ -298,7 +295,6 @@ namespace SS
                 cellsToRecalculate.Add(s);
 
             return cellsToRecalculate;
-
 
             return new HashSet<String> { name };
         }
@@ -438,8 +434,6 @@ namespace SS
         /// and they must be recalculated in either the order A1,B1,C1,D1 or B1,A1,C1,D1.
         /// The method will produce one of those enumerations.
         /// 
-        /// PLEASE NOTE THAT THIS METHOD DEPENDS ON THE ABSTRACT METHOD GetDirectDependents.
-        /// IT WON'T WORK UNTIL GetDirectDependents IS IMPLEMENTED CORRECTLY.
         /// </summary>
         protected IEnumerable<String> GetCellsToRecalculate(ISet<String> names)
         {

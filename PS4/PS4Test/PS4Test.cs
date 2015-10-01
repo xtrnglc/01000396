@@ -367,7 +367,6 @@ namespace PS4Test
             s.SetCellContents("E1", 2);
             s.SetCellContents("C1", 6);
             s.SetCellContents("A3", f5);
-
         }
 
         /// <summary>
@@ -383,6 +382,18 @@ namespace PS4Test
             s.SetCellContents("B1", new Formula("C1*2"));
             s.SetCellContents("C1", new Formula("A1*2"));
         }
+
+        /// <summary>
+        /// Test for empty cell being requested to return cell content
+        /// </summary>
+        [TestMethod]
+        public void nullTest()
+        {
+            AbstractSpreadsheet s = new SpreadSheet();
+
+            Assert.AreEqual(s.GetCellContents("D1"), null);
+        }
+
 
     }
 
