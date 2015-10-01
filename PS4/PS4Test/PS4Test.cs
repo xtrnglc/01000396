@@ -203,11 +203,6 @@ namespace PS4Test
         /// <summary>
         /// Test for constructors
         /// 
-        /*
-
-            A1, B1 contains A1*2, and C1 contains B1+A1, the
-            set {A1, B1, C1} is returned.
-        */
         /// </summary>
         [TestMethod]
         public void constructorTest5()
@@ -356,7 +351,7 @@ namespace PS4Test
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(CircularException))]
-        public void TestMethod15()
+        public void circularDepedencyTest4()
         {
             Formula f1 = new Formula("A1+B1");
             Formula f2 = new Formula("A3*B4");
@@ -374,6 +369,21 @@ namespace PS4Test
             s.SetCellContents("A3", f5);
 
         }
+
+        /// <summary>
+        /// Test for circular exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void circularDepedencyTest()
+        {
+            AbstractSpreadsheet s = new SpreadSheet();
+
+            s.SetCellContents("A1", new Formula("B1*2"));
+            s.SetCellContents("B1", new Formula("C1*2"));
+            s.SetCellContents("C1", new Formula("A1*2"));
+        }
+
     }
 
 }

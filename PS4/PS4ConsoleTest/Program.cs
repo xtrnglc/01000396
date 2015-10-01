@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Author: Trung Le
+Date: 09/28/2015
+PS4 Console Test
+Used mainly for debugging
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
