@@ -216,11 +216,6 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            if (cellList.ContainsKey(name))
-            {
-                updateDependencies(name);
-            }  
-
             try
             {
                 cellList.Add(name, new Cell(number));
@@ -230,8 +225,6 @@ namespace SS
                 cellList.Remove(name);
                 cellList.Add(name, new Cell(number));
             }
-            
-            dependencies.ReplaceDependees(name, new HashSet<String>());
 
             HashSet<String> cellsToRecalculate = new HashSet<string>();
 
@@ -263,11 +256,6 @@ namespace SS
             if (string.IsNullOrEmpty(name) || !isVariable(name))
             {
                 throw new InvalidNameException();
-            }
-
-            if (cellList.ContainsKey(name))
-            {
-                updateDependencies(name);
             }
 
             try
@@ -318,7 +306,7 @@ namespace SS
         {
             IEnumerable<String> dependees = dependencies.GetDependees(name);
 
-            dependencies.ReplaceDependees(name, formula.GetVariables());
+            dependencies.ReplaceDependents(name, formula.GetVariables());
 
             if (formula == null)
             {
@@ -400,9 +388,9 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            if (dependencies.HasDependents(name))
+            if (dependencies.HasDependees(name))
             {
-                return dependencies.GetDependents(name);
+                return dependencies.GetDependees(name);
             }
 
             else
@@ -482,37 +470,12 @@ namespace SS
         }
 
         /// <summary>
-        /// Remove dependencies when setting a cell to a double or string
-        /// </summary>
-        /// <param name="name">string name of cell</param>
-        private void updateDependencies(String name)
-        {
-            try
-            {
-                Cell c;
-                cellList.TryGetValue(name, out c);
-
-                Formula formula = (Formula)c.getContent();
-
-                foreach (String s in formula.GetVariables())
-                {
-                    dependencies.RemoveDependency(name, s);
-                }   
-            }
-            catch (InvalidCastException) { }
-        }
-
-        /// <summary>
         /// Check to see if a string is a valid variable.
         /// </summary>
         /// <param name="s">String</param>
         /// <returns>Boolean</returns>
         private static Boolean isVariable(String s)
         {
-            if(s == null)
-            {
-                return false;
-            }
             return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
         }
     }
