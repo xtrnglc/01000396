@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using SpreadsheetUtilities;
+using System.Xml;
 
 namespace SS
 {
@@ -63,8 +64,7 @@ namespace SS
 
         private DependencyGraph dependencies;
         private Dictionary<string, Cell> cellList;
-
-
+        bool changed;
 
         /// <summary>
         /// Represents a cell
@@ -102,17 +102,17 @@ namespace SS
             /// Else, assign formulaError to formulaErrorContent
             /// </summary>
             /// <param name="content"></param>
-            public Cell(Formula content)
+            public Cell(Formula content, Func<string, double> lookup)
             {
                 formulaContent = content;
 
                 try
                 {
-                    doubleContent = (double)content.Evaluate(s => 0);
+                    doubleContent = (double)content.Evaluate(lookup);
                 }
                 catch (InvalidCastException)
                 {
-                    formulaErrorContent = (FormulaError)content.Evaluate(s => 0);
+                    formulaErrorContent = (FormulaError)content.Evaluate(lookup);
                 }
             }
 
@@ -134,16 +134,12 @@ namespace SS
                 {
                     return formulaContent;
                 }
-
-
-                //adsfjdhsfds
             }
 
             /// <summary>
             /// Return the value of the cell
             /// Returns the double if it exists,
             /// If not then return formulaError
-            /// NOT USED IN PS4
             /// </summary>
             /// <returns></returns>
             public object getValue()
@@ -212,7 +208,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<String> SetCellContents(String name, double number)
+        protected override ISet<String> SetCellContents(String name, double number)
         {
             if (string.IsNullOrEmpty(name) || !isVariable(name))
             {
@@ -249,7 +245,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<String> SetCellContents(String name, String text)
+        protected override ISet<String> SetCellContents(String name, String text)
         {
             if (text == null)
             {
@@ -305,7 +301,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<String> SetCellContents(String name, Formula formula)
+        protected override ISet<String> SetCellContents(String name, Formula formula)
         {
             IEnumerable<String> dependees = dependencies.GetDependees(name);
 
@@ -480,6 +476,118 @@ namespace SS
         private static Boolean isVariable(String s)
         {
             return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
+        }
+
+        /// <summary>
+        /// If name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
+        /// value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
+        /// </summary>
+        public override object GetCellValue(String name)
+        {
+            if (string.IsNullOrEmpty(name) || !isVariable(name))
+                throw new InvalidNameException();
+
+            Cell c;
+
+            if (cellList.TryGetValue(name, out c))
+            {
+                return c.getValue();
+            }
+
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// If content is null, throws an ArgumentNullException.
+        /// 
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, if content parses as a double, the contents of the named
+        /// cell becomes that double.
+        /// 
+        /// Otherwise, if content begins with the character '=', an attempt is made
+        /// to parse the remainder of content into a Formula f using the Formula
+        /// constructor.  There are then three possibilities:
+        /// 
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a 
+        ///       SpreadsheetUtilities.FormulaFormatException is thrown.
+        ///       
+        ///   (2) Otherwise, if changing the contents of the named cell to be f
+        ///       would cause a circular dependency, a CircularException is thrown.
+        ///       
+        ///   (3) Otherwise, the contents of the named cell becomes f.
+        /// 
+        /// Otherwise, the contents of the named cell becomes content.
+        /// 
+        /// If an exception is not thrown, the method returns a set consisting of
+        /// name plus the names of all other cells whose value depends, directly
+        /// or indirectly, on the named cell.
+        /// 
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        /// </summary>
+        public override ISet<String> SetContentsOfCell(String name, String content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (string.IsNullOrEmpty(name) || !isVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
+            double valueDouble;
+            if (Double.TryParse(content, out valueDouble))
+            {
+                SetCellContents(name, valueDouble);
+
+                ISet<String> cellsToRecalculate = new HashSet<String>();
+
+                foreach (String s in GetCellsToRecalculate(name))
+                    cellsToRecalculate.Add(s);
+
+                changed = true;
+                return cellsToRecalculate;
+            }
+
+            if (content.StartsWith("="))
+            {
+                String contentTemp = content.Substring(1);
+
+                Formula testFormula = new Formula(contentTemp, IsValid, Normalize);
+
+                try
+                {
+                    Changed = true;
+                    toReturn = SetCellContents(name, testFormula);
+
+                    foreach (String s in toReturn)
+                    {
+                        Cell temp;
+                        sp.TryGetValue(s, out temp);
+
+                        temp.recalculateValue(GetCellValueIfDouble);
+                    }
+
+                    return toReturn;
+                }
+                catch (CircularException)
+                {
+                    Changed = false;
+                    throw new CircularException();
+                }
+            }
+
+
+
+
         }
     }
 }
