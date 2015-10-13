@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using SpreadsheetUtilities;
+using System.Text.RegularExpressions;
 using System.Xml;
+using System.IO;
+
 
 namespace SS
 {
@@ -59,7 +61,7 @@ namespace SS
     /// A1 depends on B1, which depends on C1, which depends on A1.  That's a circular
     /// dependency.
     /// </summary>
-    public class SpreadSheet : AbstractSpreadsheet
+    public class Spreadsheet : AbstractSpreadsheet
     {
 
         private DependencyGraph dependencies;
@@ -158,12 +160,47 @@ namespace SS
         /// <summary>
         /// Constructor
         /// </summary>
-        public SpreadSheet()
+        public Spreadsheet() : base(s => true, s => s, "default")
         {
-            dependencies = new DependencyGraph();
             cellList = new Dictionary<string, Cell>();
+            dependencies = new DependencyGraph();
+            Changed = false;
         }
-     
+
+        /// <summary>
+        /// Constructs a spreadsheet by recording its variable validity test,
+        /// its normalization method, and its version information.  The variable validity
+        /// test is used throughout to determine whether a string that consists of one or
+        /// more letters followed by one or more digits is a valid cell name.  The variable
+        /// equality test should be used thoughout to determine whether two variables are
+        /// equal.
+        /// </summary>
+        /// <param name="isValid"></param>
+        /// <param name="normalize"></param>
+        /// <param name="version"></param>
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)        
+        {
+            cellList = new Dictionary<string, Cell>();
+            dependencies = new DependencyGraph();
+            Changed = false;
+        }
+
+        /// <summary>
+        /// True if this spreadsheet has been modified since it was created or saved                  
+        /// (whichever happened most recently); false otherwise.
+        /// </summary>
+        public override bool Changed
+        {
+            get
+            {
+                return changed;
+            }
+            protected set
+            {
+                changed = value;
+            }
+        }
+
         /// <summary>
         /// Enumerates the names of all the non-empty cells in the spreadsheet.
         /// </summary>
@@ -321,12 +358,12 @@ namespace SS
             { 
                 if (cellList.ContainsKey(name))
                 {
-                    cellList[name] = new Cell(formula); ;
+                    cellList[name] = new Cell(formula, LookupValue); ;
                 }
 
                 else
                 {
-                    cellList.Add(name, new Cell(formula));
+                    cellList.Add(name, new Cell(formula, LookupValue));
                 }
 
 
@@ -475,7 +512,7 @@ namespace SS
         /// <returns>Boolean</returns>
         private static Boolean isVariable(String s)
         {
-            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
+            return Regex.IsMatch(s, "^([a-zA-Z]+[1-9][0-9]*)$");
         }
 
         /// <summary>
@@ -559,24 +596,21 @@ namespace SS
 
             if (content.StartsWith("="))
             {
-                String contentTemp = content.Substring(1);
+                string temp = content.Substring(1);
 
-                Formula testFormula = new Formula(contentTemp, IsValid, Normalize);
+                Formula formula = new Formula(temp, Normalize, IsValid);
 
                 try
                 {
                     Changed = true;
-                    toReturn = SetCellContents(name, testFormula);
+                    ISet<String> cellsToRecalculate = new HashSet<String>();
+                    SetCellContents(name, formula);
 
-                    foreach (String s in toReturn)
-                    {
-                        Cell temp;
-                        sp.TryGetValue(s, out temp);
+                    foreach (String s in GetCellsToRecalculate(name))
+                        cellsToRecalculate.Add(s);
 
-                        temp.recalculateValue(GetCellValueIfDouble);
-                    }
-
-                    return toReturn;
+                    changed = true;
+                    return cellsToRecalculate;
                 }
                 catch (CircularException)
                 {
@@ -584,12 +618,86 @@ namespace SS
                     throw new CircularException();
                 }
             }
+            else
+            {
+                SetCellContents(name, content);
+                ISet<String> cellsToRecalculate = new HashSet<String>();
+                foreach (String s in GetCellsToRecalculate(name))
+                    cellsToRecalculate.Add(s);
 
+                changed = true;
+                return cellsToRecalculate;
+            }
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns>The double value of cell named s</returns>
+        private double LookupValue(string s)
+        {
+            Cell c;
 
+            if (cellList.TryGetValue(s, out c))
+            {                            
+                if (c.getValue() is double)
+                {
+                    return (double)c.getValue();
+                }
+                    
+                else
+                {
+                    throw new ArgumentException();
+                }
+                    
+            }
+            else
+                throw new ArgumentException();
+        }
+
+        /// <summary>
+        /// Returns the version information of the spreadsheet saved in the named file.
+        /// If there are any problems opening, reading, or closing the file, the method
+        /// should throw a SpreadsheetReadWriteException with an explanatory message.
+        /// </summary>
+        public override string GetSavedVersion(String filename)
+        {
+
+        }
+
+        /// <summary>
+        /// Writes the contents of this spreadsheet to the named file using an XML format.
+        /// The XML elements should be structured as follows:
+        /// 
+        /// <spreadsheet version="version information goes here">
+        /// 
+        /// <cell>
+        /// <name>
+        /// cell name goes here
+        /// </name>
+        /// <contents>
+        /// cell contents goes here
+        /// </contents>    
+        /// </cell>
+        /// 
+        /// </spreadsheet>
+        /// 
+        /// There should be one cell element for each non-empty cell in the spreadsheet.  
+        /// If the cell contains a string, it should be written as the contents.  
+        /// If the cell contains a double d, d.ToString() should be written as the contents.  
+        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
+        /// 
+        /// If there are any problems opening, writing, or closing the file, the method should throw a
+        /// SpreadsheetReadWriteException with an explanatory message.
+        /// </summary>
+        public override void Save(String filename)
+        {
 
         }
     }
+
+
 }
 
 
