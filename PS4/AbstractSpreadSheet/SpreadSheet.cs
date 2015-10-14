@@ -633,9 +633,22 @@ namespace SS
                 SetCellContents(name, valueDouble);
 
                 ISet<String> cellsToRecalculate = new HashSet<String>();
+                Cell temp;
 
                 foreach (String s in GetCellsToRecalculate(name))
                     cellsToRecalculate.Add(s);
+
+                foreach (String s in cellsToRecalculate)
+                {
+                    cellList.TryGetValue(s, out temp);
+
+                    Formula formula = new Formula(temp.getContent().ToString());
+
+                    if (cellList.ContainsKey(s))
+                    {
+                        cellList[s] = new Cell(formula, LookupValue); ;
+                    }
+                }
 
                 changed = true;
                 return cellsToRecalculate;
@@ -700,7 +713,7 @@ namespace SS
 
             }
             else
-                throw new ArgumentException();
+                return 0;
         }
 
         /// <summary>

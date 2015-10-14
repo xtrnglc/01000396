@@ -34,3 +34,15 @@ C1 is dependent on nothing
 A1 has no dependees
 B1 has dependees A1
 C1 has dependees A1 and B1
+
+=================================================================READ ME FOR PS5=================================================================
+
+Regarding a cell formula that contains cells/variables that have not yet been defined, the undefined variable will be set to equal 0 until it has been properly defined
+Example:
+s.SetContentsOfCell("A1", "10");
+s.SetContentsOfCell("B1", "=A1+10");
+s.SetContentsOfCell("E1", "=F1+2");
+
+B1 value is 20
+E1 value is 2
+

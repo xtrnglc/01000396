@@ -22,14 +22,14 @@ namespace PS4Test
         {
             Spreadsheet s = new Spreadsheet();
             s.SetContentsOfCell("A1", "10");
-            Assert.AreEqual((double)s.GetCellContents("A1"), 10);
+            Assert.AreEqual(s.GetCellValue("A1"), 10.0);
 
             s.SetContentsOfCell("B1", "10.2");
-            Assert.AreEqual((double)s.GetCellContents("B1"), 10.2);
+            Assert.AreEqual(s.GetCellValue("B1"), 10.2);
 
             s.SetContentsOfCell("A1", "19");
-            Assert.AreNotEqual((double)s.GetCellContents("A1"), 10);
-            Assert.AreEqual((double)s.GetCellContents("A1"), 19);
+            Assert.AreNotEqual((double)s.GetCellValue("A1"), 10.0);
+            Assert.AreEqual((double)s.GetCellValue("A1"), 19.0);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { ("4+B1"), ("13+E1"), "hello", "21.0" };
+            object[] testArray = new object[4] { ("4+B1"), ("13+E1"), "hello", "21" };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -164,7 +164,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { ("4+B1"), "12.0", ("10+B1"), };
+            object[] testArray = new object[3] { ("4+B1"), "12", ("10+B1"), };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -190,7 +190,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { "12.0", "10.0", "hello", "21.0" };
+            object[] testArray = new object[4] { "12", "10", "hello", "21" };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -356,12 +356,7 @@ namespace PS4Test
             AbstractSpreadsheet s = new Spreadsheet();
             s.SetContentsOfCell("D1", "=A1+B1");
             s.SetContentsOfCell("A1", "=A3*B4");
-            s.SetContentsOfCell("B1", "=A3*B4");
-            s.SetContentsOfCell("A3", "=E1+C1");
-            s.SetContentsOfCell("B4", "=C1-A3");
-            s.SetContentsOfCell("E1", "2");
-            s.SetContentsOfCell("C1", "6");
-            s.SetContentsOfCell("A3", "A1");
+            s.SetContentsOfCell("A3", "=A1");
         }
 
         /// <summary>
