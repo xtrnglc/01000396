@@ -476,7 +476,7 @@ namespace SS
         /// <returns>Boolean</returns>
         private static Boolean isVariable(String s)
         {
-            return Regex.IsMatch(s, "^((_)*[a-zA-Z]+(_)*[1-9][0-9]*)|(_)+$");
+            return Regex.IsMatch(s, "^([a-zA-Z]+[1-9][0-9]*)$");
         }
     }
 }
