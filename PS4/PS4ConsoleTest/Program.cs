@@ -18,22 +18,26 @@ namespace PS4ConsoleTest
     {
         static void Main(string[] args)
         {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", 10);
-            s.SetCellContents("B1", new Formula("A1*2"));
-            s.SetCellContents("C1", new Formula("B1+A1"));
-            s.SetCellContents("A1", 12);
+            Spreadsheet s = new Spreadsheet();
+            s.SetContentsOfCell("A1", "10");
+            s.SetContentsOfCell("B1", "=A1+10");
+            s.SetContentsOfCell("C1", ("=5+10"));
+            s.SetContentsOfCell("D1", "=B1+4");
+            
 
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
-            int i = 0;
+            s.SetContentsOfCell("A1", "12");
 
-            foreach (String t in temp)
-            {
-                Console.WriteLine(s.GetCellContents(nameArray[i]));
-                i++;
-            }
+            Console.WriteLine(s.GetCellValue("A1"));
+            Console.WriteLine(s.GetCellValue("B1"));
+            Console.WriteLine(s.GetCellValue("C1"));
+            Console.WriteLine(s.GetCellValue("D1"));
+            Console.WriteLine();
+
+            Console.WriteLine(s.GetCellContents("A1"));
+            Console.WriteLine(s.GetCellContents("B1"));
+            Console.WriteLine(s.GetCellContents("C1"));
+            Console.WriteLine(s.GetCellContents("D1"));
+
 
         }
     }

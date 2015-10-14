@@ -21,13 +21,13 @@ namespace PS4Test
         public void doubleContentTest1()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", 10);
+            s.SetContentsOfCell("A1", "10");
             Assert.AreEqual((double)s.GetCellContents("A1"), 10);
 
-            s.SetCellContents("B1", 10.2);
+            s.SetContentsOfCell("B1", "10.2");
             Assert.AreEqual((double)s.GetCellContents("B1"), 10.2);
 
-            s.SetCellContents("A1", 19);
+            s.SetContentsOfCell("A1", "19");
             Assert.AreNotEqual((double)s.GetCellContents("A1"), 10);
             Assert.AreEqual((double)s.GetCellContents("A1"), 19);
         }
@@ -39,13 +39,13 @@ namespace PS4Test
         public void stringContentTest1()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", "Hello");
+            s.SetContentsOfCell("A1", "Hello");
             Assert.AreEqual((string)s.GetCellContents("A1"), "Hello");
 
-            s.SetCellContents("B1", "World");
+            s.SetContentsOfCell("B1", "World");
             Assert.AreEqual((string)s.GetCellContents("B1"), "World");
 
-            s.SetCellContents("A1", "Not hello");
+            s.SetContentsOfCell("A1", "Not hello");
             Assert.AreNotEqual((string)s.GetCellContents("A1"), "Hello");
             Assert.AreEqual((string)s.GetCellContents("A1"), "Not hello");
         }
@@ -58,8 +58,8 @@ namespace PS4Test
         {
             Formula f = new Formula("5+10");
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("5+10"));
-            Assert.AreEqual(f, s.GetCellContents("A1"));
+            s.SetContentsOfCell("A1", ("=5+10"));
+            Assert.AreEqual(f.Evaluate(x => 0), s.GetCellValue("A1"));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace PS4Test
         public void circularDependecyTest1()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("5+10+A1"));
+            s.SetContentsOfCell("A1", ("=5+10+A1"));
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace PS4Test
         public void circularDependecyTest2()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+C1"));
-            s.SetCellContents("B1", new Formula("19+D1"));
-            s.SetCellContents("C1", new Formula("B1+2"));
-            s.SetCellContents("D1", new Formula("1+A1"));
+            s.SetContentsOfCell("A1", ("=4+C1"));
+            s.SetContentsOfCell("B1", ("=19+D1"));
+            s.SetContentsOfCell("C1", ("=B1+2"));
+            s.SetContentsOfCell("D1", ("=1+A1"));
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace PS4Test
         public void circularDependecyTest3()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", new Formula("19+A1"));
+            s.SetContentsOfCell("A1", ("=4+B1"));
+            s.SetContentsOfCell("B1", ("=19+A1"));
         }
 
         /// <summary>
@@ -106,10 +106,10 @@ namespace PS4Test
         public void constructorTest1()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("D1", new Formula("13+A1"));
+            s.SetContentsOfCell("A1", ("=4+B1"));
+            s.SetContentsOfCell("B1", "10");
+            s.SetContentsOfCell("C1", "hello");
+            s.SetContentsOfCell("D1", ("=13+A1"));
 
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
@@ -130,16 +130,16 @@ namespace PS4Test
         public void constructorTest2()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("B1", new Formula("13+E1"));
-            s.SetCellContents("E1", 21.0);
+            s.SetContentsOfCell("A1", ("=4+B1"));
+            s.SetContentsOfCell("B1", "10");
+            s.SetContentsOfCell("C1", "hello");
+            s.SetContentsOfCell("B1", ("=13+E1"));
+            s.SetContentsOfCell("E1", "21.0");
 
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { new Formula("4+B1"), new Formula("13+E1"), "hello", 21.0 };
+            object[] testArray = new object[4] { ("4+B1"), ("13+E1"), "hello", "21.0" };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -156,15 +156,15 @@ namespace PS4Test
         public void constructorTest3()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", new Formula("10+B1"));
-            s.SetCellContents("B1", 12.0);
+            s.SetContentsOfCell("A1", ("=4+B1"));
+            s.SetContentsOfCell("B1", "10");
+            s.SetContentsOfCell("C1", ("=10+B1"));
+            s.SetContentsOfCell("B1", "12.0");
 
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { new Formula("4+B1"), 12.0, new Formula("10+B1"), };
+            object[] testArray = new object[3] { ("4+B1"), "12.0", ("10+B1"), };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -181,16 +181,16 @@ namespace PS4Test
         public void constructorTest4()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("A1", 12.0);
-            s.SetCellContents("E1", 21.0);
+            s.SetContentsOfCell("A1", ("=4+B1"));
+            s.SetContentsOfCell("B1", "10");
+            s.SetContentsOfCell("C1", "hello");
+            s.SetContentsOfCell("A1", "12.0");
+            s.SetContentsOfCell("E1", "21.0");
 
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { 12.0, 10.0, "hello", 21.0 };
+            object[] testArray = new object[4] { "12.0", "10.0", "hello", "21.0" };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -208,15 +208,15 @@ namespace PS4Test
         public void constructorTest5()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", 10);
-            s.SetCellContents("B1", new Formula("A1*2"));
-            s.SetCellContents("C1", new Formula("B1+A1"));
-            s.SetCellContents("A1", 12.0);
+            s.SetContentsOfCell("A1", "10");
+            s.SetContentsOfCell("B1", ("=A1*2"));
+            s.SetContentsOfCell("C1", ("=B1+A1"));
+            s.SetContentsOfCell("A1", "12.0");
 
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
+            object[] testArray = new object[3] { "12", ("A1*2"), ("B1+A1") };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -234,7 +234,7 @@ namespace PS4Test
         public void stringContentTest2()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("2A1", "Hello");
+            s.SetContentsOfCell("2A1", "Hello");
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace PS4Test
         public void stringContentTest3()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("$A1", "Hello");
+            s.SetContentsOfCell("$A1", "Hello");
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace PS4Test
         public void stringContentTest4()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", "Hello");
+            s.SetContentsOfCell("A1", "Hello");
             Assert.AreEqual(null, s.GetCellContents("A3"));
         }
 
@@ -267,18 +267,18 @@ namespace PS4Test
         public void doubleContentTest4()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("2A1A", 12);
+            s.SetContentsOfCell("2A1A", "12");
         }
 
         /// <summary>
         /// Test for invalid naming practices
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(InvalidNameException))]
         public void formulaContentTest2()
         {
             Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A2", "5");
+            s.SetContentsOfCell("2A2", "5");
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace PS4Test
         {
             String empty = null;
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents("A1", empty);
+            s.SetContentsOfCell("A1", empty);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace PS4Test
         {
             Formula test = new Formula("1+51");
             Spreadsheet s = new Spreadsheet();
-            s.SetCellContents(null, test);
+            s.SetContentsOfCell(null, "=1+2");
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace PS4Test
         public void TestMethod10()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("4356", 42);
+            s.SetContentsOfCell("4356", "42");
 
         }
 
@@ -334,11 +334,10 @@ namespace PS4Test
         [TestMethod]
         public void emptyStringTest()
         {
-            Formula f1 = new Formula("C1+B1", x => x.ToUpper(), x => true);
             AbstractSpreadsheet sheet = new Spreadsheet();
-            sheet.SetCellContents("A1", "");
-            sheet.SetCellContents("B1", 20);
-            sheet.SetCellContents("C1", "String");
+            sheet.SetContentsOfCell("A1", "");
+            sheet.SetContentsOfCell("B1", "20");
+            sheet.SetContentsOfCell("C1", "String");
             HashSet<string> s1 = new HashSet<string>(sheet.GetNamesOfAllNonemptyCells());
             HashSet<string> s2 = new HashSet<string>();
             s2.Add("B1");
@@ -353,20 +352,16 @@ namespace PS4Test
         [ExpectedException(typeof(CircularException))]
         public void circularDepedencyTest4()
         {
-            Formula f1 = new Formula("A1+B1");
-            Formula f2 = new Formula("A3*B4");
-            Formula f3 = new Formula("E1+C1");
-            Formula f4 = new Formula("C1-A3");
-            Formula f5 = new Formula("A1");
+            
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetCellContents("D1", f1);
-            s.SetCellContents("A1", f2);
-            s.SetCellContents("B1", f2);
-            s.SetCellContents("A3", f3);
-            s.SetCellContents("B4", f4);
-            s.SetCellContents("E1", 2);
-            s.SetCellContents("C1", 6);
-            s.SetCellContents("A3", f5);
+            s.SetContentsOfCell("D1", "=A1+B1");
+            s.SetContentsOfCell("A1", "=A3*B4");
+            s.SetContentsOfCell("B1", "=A3*B4");
+            s.SetContentsOfCell("A3", "=E1+C1");
+            s.SetContentsOfCell("B4", "=C1-A3");
+            s.SetContentsOfCell("E1", "2");
+            s.SetContentsOfCell("C1", "6");
+            s.SetContentsOfCell("A3", "A1");
         }
 
         /// <summary>
@@ -378,9 +373,9 @@ namespace PS4Test
         {
             AbstractSpreadsheet s = new Spreadsheet();
 
-            s.SetCellContents("A1", new Formula("B1*2"));
-            s.SetCellContents("B1", new Formula("C1*2"));
-            s.SetCellContents("C1", new Formula("A1*2"));
+            s.SetContentsOfCell("A1", ("=B1*2"));
+            s.SetContentsOfCell("B1", ("=C1*2"));
+            s.SetContentsOfCell("C1", ("=A1*2"));
         }
 
         /// <summary>

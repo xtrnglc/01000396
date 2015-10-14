@@ -272,7 +272,7 @@ namespace SS
 
             if (cellList.TryGetValue(name, out c))
             {
-                return c.getContent();
+                return c.getContent().ToString();
             }
 
             else
