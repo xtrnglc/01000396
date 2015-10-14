@@ -20,7 +20,7 @@ namespace PS4Test
         [TestMethod]
         public void doubleContentTest1()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", 10);
             Assert.AreEqual((double)s.GetCellContents("A1"), 10);
 
@@ -38,7 +38,7 @@ namespace PS4Test
         [TestMethod]
         public void stringContentTest1()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", "Hello");
             Assert.AreEqual((string)s.GetCellContents("A1"), "Hello");
 
@@ -57,7 +57,7 @@ namespace PS4Test
         public void formulaContentTest1()
         {
             Formula f = new Formula("5+10");
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("5+10"));
             Assert.AreEqual(f, s.GetCellContents("A1"));
         }
@@ -69,7 +69,7 @@ namespace PS4Test
         [ExpectedException(typeof(CircularException))]
         public void circularDependecyTest1()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("5+10+A1"));
         }
 
@@ -80,7 +80,7 @@ namespace PS4Test
         [ExpectedException(typeof(CircularException))]
         public void circularDependecyTest2()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+C1"));
             s.SetCellContents("B1", new Formula("19+D1"));
             s.SetCellContents("C1", new Formula("B1+2"));
@@ -94,7 +94,7 @@ namespace PS4Test
         [ExpectedException(typeof(CircularException))]
         public void circularDependecyTest3()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+B1"));
             s.SetCellContents("B1", new Formula("19+A1"));
         }
@@ -105,7 +105,7 @@ namespace PS4Test
         [TestMethod]
         public void constructorTest1()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+B1"));
             s.SetCellContents("B1", 10);
             s.SetCellContents("C1", "hello");
@@ -129,7 +129,7 @@ namespace PS4Test
         [TestMethod]
         public void constructorTest2()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+B1"));
             s.SetCellContents("B1", 10);
             s.SetCellContents("C1", "hello");
@@ -155,7 +155,7 @@ namespace PS4Test
         [TestMethod]
         public void constructorTest3()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+B1"));
             s.SetCellContents("B1", 10);
             s.SetCellContents("C1", new Formula("10+B1"));
@@ -180,7 +180,7 @@ namespace PS4Test
         [TestMethod]
         public void constructorTest4()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", new Formula("4+B1"));
             s.SetCellContents("B1", 10);
             s.SetCellContents("C1", "hello");
@@ -207,7 +207,7 @@ namespace PS4Test
         [TestMethod]
         public void constructorTest5()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", 10);
             s.SetCellContents("B1", new Formula("A1*2"));
             s.SetCellContents("C1", new Formula("B1+A1"));
@@ -233,7 +233,7 @@ namespace PS4Test
         [ExpectedException(typeof(InvalidNameException))]
         public void stringContentTest2()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("2A1", "Hello");
         }
 
@@ -244,7 +244,7 @@ namespace PS4Test
         [ExpectedException(typeof(InvalidNameException))]
         public void stringContentTest3()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("$A1", "Hello");
         }
 
@@ -254,7 +254,7 @@ namespace PS4Test
         [TestMethod]
         public void stringContentTest4()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", "Hello");
             Assert.AreEqual(null, s.GetCellContents("A3"));
         }
@@ -266,7 +266,7 @@ namespace PS4Test
         [ExpectedException(typeof(InvalidNameException))]
         public void doubleContentTest4()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("2A1A", 12);
         }
 
@@ -277,8 +277,8 @@ namespace PS4Test
         [ExpectedException(typeof(ArgumentNullException))]
         public void formulaContentTest2()
         {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A2", new Formula(null));
+            Spreadsheet s = new Spreadsheet();
+            s.SetContentsOfCell("A2", "5");
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace PS4Test
         public void nullTest1()
         {
             String empty = null;
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents("A1", empty);
         }
 
@@ -300,7 +300,7 @@ namespace PS4Test
         [ExpectedException(typeof(InvalidNameException))]
         public void nullTest2()
         {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.GetCellContents(null);
         }
 
@@ -312,7 +312,7 @@ namespace PS4Test
         public void TestMethod7()
         {
             Formula test = new Formula("1+51");
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.SetCellContents(null, test);
         }
 
@@ -323,7 +323,7 @@ namespace PS4Test
         [ExpectedException(typeof(InvalidNameException))]
         public void TestMethod10()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
+            AbstractSpreadsheet s = new Spreadsheet();
             s.SetCellContents("4356", 42);
 
         }
@@ -335,7 +335,7 @@ namespace PS4Test
         public void emptyStringTest()
         {
             Formula f1 = new Formula("C1+B1", x => x.ToUpper(), x => true);
-            AbstractSpreadsheet sheet = new SpreadSheet();
+            AbstractSpreadsheet sheet = new Spreadsheet();
             sheet.SetCellContents("A1", "");
             sheet.SetCellContents("B1", 20);
             sheet.SetCellContents("C1", "String");
@@ -358,7 +358,7 @@ namespace PS4Test
             Formula f3 = new Formula("E1+C1");
             Formula f4 = new Formula("C1-A3");
             Formula f5 = new Formula("A1");
-            AbstractSpreadsheet s = new SpreadSheet();
+            AbstractSpreadsheet s = new Spreadsheet();
             s.SetCellContents("D1", f1);
             s.SetCellContents("A1", f2);
             s.SetCellContents("B1", f2);
@@ -376,7 +376,7 @@ namespace PS4Test
         [ExpectedException(typeof(CircularException))]
         public void circularDepedencyTest()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
+            AbstractSpreadsheet s = new Spreadsheet();
 
             s.SetCellContents("A1", new Formula("B1*2"));
             s.SetCellContents("B1", new Formula("C1*2"));
@@ -389,7 +389,7 @@ namespace PS4Test
         [TestMethod]
         public void nullTest()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
+            AbstractSpreadsheet s = new Spreadsheet();
 
             Assert.AreEqual(s.GetCellContents("D1"), null);
         }

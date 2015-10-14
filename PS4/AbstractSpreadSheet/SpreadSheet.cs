@@ -128,7 +128,7 @@ namespace SS
                 {
                     return stringContent;
                 }
-                else if(doubleContent1 != double.PositiveInfinity)
+                else if (doubleContent1 != double.PositiveInfinity)
                 {
                     return doubleContent;
                 }
@@ -158,7 +158,8 @@ namespace SS
         }
 
         /// <summary>
-        /// Constructor
+        /// Zero argument constructor
+        /// Creates an empty spreadsheet that imposes no extra validity conditions, normalizes every cell name to itself, and has version "default".
         /// </summary>
         public Spreadsheet() : base(s => true, s => s, "default")
         {
@@ -168,21 +169,67 @@ namespace SS
         }
 
         /// <summary>
-        /// Constructs a spreadsheet by recording its variable validity test,
-        /// its normalization method, and its version information.  The variable validity
-        /// test is used throughout to determine whether a string that consists of one or
-        /// more letters followed by one or more digits is a valid cell name.  The variable
-        /// equality test should be used thoughout to determine whether two variables are
-        /// equal.
+        /// Three-argument constructor. 
+        /// Creates an empty spreadsheet. Allows the user to provide a validity delegate (first parameter), 
+        /// a normalization delegate (second parameter), and a version (third parameter)
         /// </summary>
         /// <param name="isValid"></param>
         /// <param name="normalize"></param>
         /// <param name="version"></param>
-        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)        
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
         {
             cellList = new Dictionary<string, Cell>();
             dependencies = new DependencyGraph();
             Changed = false;
+        }
+
+        /// <summary>
+        /// Four-argument constructor to the Spreadsheet class. Allows the user to provide a string representing a path to a file (first parameter),
+        /// a validity delegate (second parameter), a normalization delegate (third parameter), and a version (fourth parameter). 
+        /// Reads a saved spreadsheet from a file (see the Save method) and use it to construct a new spreadsheet. 
+        /// The new spreadsheet should use the provided validity delegate, normalization delegate, and version.
+        /// </summary>
+        /// <param name="pathToFile"></param>
+        /// <param name="isValid"></param>
+        /// <param name="normalize"></param>
+        /// <param name="version"></param>
+        public Spreadsheet(string pathToFile, Func<string, bool> isValid, Func<string, string> normalize, string version) : base(isValid, normalize, version)
+        {
+            cellList = new Dictionary<string, Cell>();
+            dependencies = new DependencyGraph();
+
+            if (pathToFile == null)
+            {
+                throw new SpreadsheetReadWriteException("Path name cannot be null");
+            }
+
+            if (!(GetSavedVersion(pathToFile).Equals(version)))
+            {
+                throw new SpreadsheetReadWriteException("Version of the file from " + pathToFile + " does not match the version from the parameter");
+            }
+
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(pathToFile))
+                {
+                    while (reader.Read())
+                    {
+
+                    }
+                }
+            }
+            catch (InvalidNameException)
+            {
+                throw new SpreadsheetReadWriteException("Invalid name encountered");
+            }
+            catch (FormulaFormatException)
+            {
+                throw new SpreadsheetReadWriteException("Invalid formula encountered");
+            }
+            catch (CircularException)
+            {
+                throw new SpreadsheetReadWriteException("Circular dependency found");
+            }
         }
 
         /// <summary>
@@ -231,7 +278,7 @@ namespace SS
             else
             {
                 return null;
-            }  
+            }
         }
 
 
@@ -305,7 +352,7 @@ namespace SS
                 if (text != "")
                 {
                     cellList.Add(name, new Cell(text));
-                }      
+                }
             }
 
             if (text == "")
@@ -355,7 +402,7 @@ namespace SS
             }
 
             try
-            { 
+            {
                 if (cellList.ContainsKey(name))
                 {
                     cellList[name] = new Cell(formula, LookupValue); ;
@@ -640,17 +687,17 @@ namespace SS
             Cell c;
 
             if (cellList.TryGetValue(s, out c))
-            {                            
+            {
                 if (c.getValue() is double)
                 {
                     return (double)c.getValue();
                 }
-                    
+
                 else
                 {
                     throw new ArgumentException();
                 }
-                    
+
             }
             else
                 throw new ArgumentException();
@@ -663,6 +710,63 @@ namespace SS
         /// </summary>
         public override string GetSavedVersion(String filename)
         {
+            if (filename.Equals(null))
+                throw new SpreadsheetReadWriteException("Filename cannot be null");
+
+            if (filename.Equals(""))
+                throw new SpreadsheetReadWriteException("Filename cannot be empty");
+
+            try
+            {
+                using (XmlReader doc = XmlReader.Create(filename))
+                {
+                    try
+                    {
+                        doc.Read(); 
+                    }
+                    catch (XmlException)
+                    {
+                        throw new SpreadsheetReadWriteException("Spreadsheet file: " + filename + " was empty.");
+                    }
+
+                    try
+                    {
+                        if (doc.Read())
+                        {
+                            if (doc.IsStartElement())
+                            {
+                                if (doc.Name == "Spreadsheet")
+                                {
+                                    return doc.GetAttribute("Version");
+                                }
+                                else
+                                    throw new SpreadsheetReadWriteException("First element in " + filename + " was not \"Spreadsheet\".");
+                            }
+                            else
+                                throw new SpreadsheetReadWriteException("First element was not an opening tag.");
+                        }
+                        else
+                            throw new SpreadsheetReadWriteException("No elements in file.");
+                    }
+                    catch (XmlException)
+                    {
+                        throw new SpreadsheetReadWriteException("Spreadsheet file: " + filename + " cannot be read.");
+                    }
+                }
+            }
+            catch (ArgumentException)
+            {
+                throw new SpreadsheetReadWriteException("Filename was invalid.");
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                throw new SpreadsheetReadWriteException("Directory not found.");
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                throw new SpreadsheetReadWriteException("File not found.");
+            }
+
 
         }
 
@@ -693,11 +797,77 @@ namespace SS
         /// </summary>
         public override void Save(String filename)
         {
+            Cell temp;
+            Object content;
 
+            if (filename.Equals(null))
+                throw new SpreadsheetReadWriteException("Filename cannot be null");
+
+            if (filename.Equals(""))
+                throw new SpreadsheetReadWriteException("Filename cannot be empty");
+
+            try
+            {
+                using (XmlWriter doc = XmlWriter.Create(filename))
+                {
+                    doc.WriteStartDocument();
+                    doc.WriteStartElement("Spreadsheet");
+                    doc.WriteAttributeString("Version", Version);
+
+                    foreach (String s in GetNamesOfAllNonemptyCells())
+                    {
+                        cellList.TryGetValue(s, out temp);
+                        content = temp.getContent();
+
+                        if (content is String)
+                        {
+                            String contentsOfCell = (String)content;
+
+                            doc.WriteStartElement("Cell");
+                            doc.WriteElementString("Name: ", s);
+                            doc.WriteElementString("Content: ", contentsOfCell);
+                            doc.WriteEndElement();
+                        }
+                        else if (content is double)
+                        {
+                            double contentsofCell = (double)content;
+
+                            doc.WriteStartElement("Cell");
+                            doc.WriteElementString("Name: ", s);
+                            doc.WriteElementString("Content: ", contentsofCell.ToString());
+                            doc.WriteEndElement();
+                        }
+                        else
+                        {
+                            Formula contentsOfCell = (Formula)content;
+
+                            doc.WriteStartElement("Cell");
+                            doc.WriteElementString("Name", s);
+                            doc.WriteElementString("Content: =", contentsOfCell.ToString());
+                            doc.WriteEndElement();
+                        }
+                    }
+
+                    doc.WriteEndElement();
+                    doc.WriteEndDocument();
+                }
+            }
+            catch (ArgumentException)
+            {
+                throw new SpreadsheetReadWriteException("Filename was invalid.");
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                throw new SpreadsheetReadWriteException("Directory not found.");
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                throw new SpreadsheetReadWriteException("File not found.");
+            }
+
+            Changed = false;
         }
     }
-
-
 }
 
 
