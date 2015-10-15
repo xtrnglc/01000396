@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpreadsheetUtilities;
 using SS;
+using System.Text.RegularExpressions;
 
 namespace PS4ConsoleTest
 {
@@ -18,42 +19,40 @@ namespace PS4ConsoleTest
     {
         static void Main(string[] args)
         {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("D1", "=A1+B1");
-            s.SetContentsOfCell("A1", "=A3*B4");
-            s.SetContentsOfCell("A3", "=A1");
-            /*
-            s.SetContentsOfCell("A1", "10");
-            s.SetContentsOfCell("B1", "=A1+10");
-            s.SetContentsOfCell("C1", "=B1+10");
-            Console.WriteLine(s.GetCellValue("B1"));
-            Console.WriteLine(s.GetCellValue("C1"));
-            s.SetContentsOfCell("A1", "100");
-            Console.WriteLine(s.GetCellValue("B1"));
-            Console.WriteLine(s.GetCellValue("C1"));
+            AbstractSpreadsheet s = new Spreadsheet(validator2, normalizer2, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=ee5+2");
+            s.SetContentsOfCell("D1", "Hello World");
+        }
 
-            s.SetContentsOfCell("E1", "=F1");
-            s.SetContentsOfCell("C1", "=B1+10");
-            s.SetContentsOfCell("D1", "=B1+A1+4");
-            s.SetContentsOfCell("A1", "100");
-            s.SetContentsOfCell("F1", "12");
-            
-            
+        /// <summary>
+        /// Normalizer test, returns X
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static string normalizer2(string s)
+        {
+            return s.ToUpper();
+        }
 
+        /// <summary>
+        /// return true always
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private bool validator1(string s)
+        {
+            return true;
+        }
 
-            Console.WriteLine(s.GetCellValue("A1"));
-            Console.WriteLine(s.GetCellValue("B1"));
-            Console.WriteLine(s.GetCellValue("C1"));
-            Console.WriteLine(s.GetCellValue("D1"));
-            Console.WriteLine(s.GetCellValue("E1"));
-            Console.WriteLine();
-
-            Console.WriteLine(s.GetCellContents("A1"));
-            Console.WriteLine(s.GetCellContents("B1"));
-            Console.WriteLine(s.GetCellContents("C1"));
-            Console.WriteLine(s.GetCellContents("D1"));
-            Console.WriteLine(s.GetCellContents("E1"));
-            */
+        /// <summary>
+        /// Returns true only if variable is form AA5
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static bool validator2(String s)
+        {
+            return Regex.IsMatch(s, "^([A-Z]){2}[5]$");
         }
     }
 }

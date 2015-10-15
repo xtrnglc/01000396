@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
 
-
 namespace SS
 {
 
@@ -272,7 +271,7 @@ namespace SS
 
             if (cellList.TryGetValue(name, out c))
             {
-                return c.getContent().ToString();
+                return c.getContent();
             }
 
             else
@@ -644,7 +643,7 @@ namespace SS
 
                     Formula formula = new Formula(temp.getContent().ToString());
 
-                    if (cellList.ContainsKey(s))
+                    if (cellList.ContainsKey(s) & name != s)
                     {
                         cellList[s] = new Cell(formula, LookupValue); ;
                     }
@@ -657,20 +656,30 @@ namespace SS
             if (content.StartsWith("="))
             {
                 string temp = content.Substring(1);
-
-                Formula formula = new Formula(temp, Normalize, IsValid);
+                
+                
 
                 try
                 {
-                    Changed = true;
-                    ISet<String> cellsToRecalculate = new HashSet<String>();
-                    SetCellContents(name, formula);
+                    try
+                    {
+                        Formula formula = new Formula(temp, Normalize, IsValid);
+                        Changed = true;
+                        ISet<String> cellsToRecalculate = new HashSet<String>();
+                        SetCellContents(name, formula);
 
-                    foreach (String s in GetCellsToRecalculate(name))
-                        cellsToRecalculate.Add(s);
+                        foreach (String s in GetCellsToRecalculate(name))
+                            cellsToRecalculate.Add(s);
 
-                    changed = true;
-                    return cellsToRecalculate;
+                        changed = true;
+                        return cellsToRecalculate;
+                    }
+                    catch (FormulaFormatException)
+                    {
+                        throw new FormulaFormatException("Invalid variable");
+                    }
+
+                    
                 }
                 catch (CircularException)
                 {
@@ -813,9 +822,6 @@ namespace SS
             Cell temp;
             Object content;
 
-            if (filename.Equals(null))
-                throw new SpreadsheetReadWriteException("Filename cannot be null");
-
             if (filename.Equals(""))
                 throw new SpreadsheetReadWriteException("Filename cannot be empty");
 
@@ -837,8 +843,8 @@ namespace SS
                             String contentsOfCell = (String)content;
 
                             doc.WriteStartElement("Cell");
-                            doc.WriteElementString("Name: ", s);
-                            doc.WriteElementString("Content: ", contentsOfCell);
+                            doc.WriteElementString("Name", s);
+                            doc.WriteElementString("Content", contentsOfCell);
                             doc.WriteEndElement();
                         }
                         else if (content is double)
@@ -846,8 +852,8 @@ namespace SS
                             double contentsofCell = (double)content;
 
                             doc.WriteStartElement("Cell");
-                            doc.WriteElementString("Name: ", s);
-                            doc.WriteElementString("Content: ", contentsofCell.ToString());
+                            doc.WriteElementString("Name", s);
+                            doc.WriteElementString("Content", contentsofCell.ToString());
                             doc.WriteEndElement();
                         }
                         else
@@ -856,7 +862,7 @@ namespace SS
 
                             doc.WriteStartElement("Cell");
                             doc.WriteElementString("Name", s);
-                            doc.WriteElementString("Content: =", contentsOfCell.ToString());
+                            doc.WriteElementString("Content", contentsOfCell.ToString());
                             doc.WriteEndElement();
                         }
                     }

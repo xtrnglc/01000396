@@ -8,6 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using SpreadsheetUtilities;
+using System.IO;
+using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace PS4Test
 {
@@ -139,7 +142,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { ("4+B1"), ("13+E1"), "hello", "21" };
+            object[] testArray = new object[4] { new Formula("4+B1"), new Formula("13+E1"), "hello", 21.0 };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -164,7 +167,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { ("4+B1"), "12", ("10+B1"), };
+            object[] testArray = new object[3] { new Formula("4+B1"), 12.0, new Formula("10+B1"), };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -190,7 +193,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { "12", "10", "hello", "21" };
+            object[] testArray = new object[4] { 12.0, 10.0, "hello", 21.0 };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -216,7 +219,7 @@ namespace PS4Test
 
             IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
             string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { "12", ("A1*2"), ("B1+A1") };
+            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
             int i = 0;
 
             foreach (String t in nameArray)
@@ -384,7 +387,228 @@ namespace PS4Test
             Assert.AreEqual(s.GetCellContents("D1"), null);
         }
 
+        /// <summary>
+        /// Test for empty cell being requested to return cell value
+        /// </summary>
+        [TestMethod]
+        public void nullTest3()
+        {
+            AbstractSpreadsheet s = new Spreadsheet();
 
+            Assert.AreEqual(s.GetCellValue("D1"), null);
+        }
+
+        /// <summary>
+        /// Test for empty cell being requested to return cell value
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void nullTest4()
+        {
+            AbstractSpreadsheet s = new Spreadsheet();
+
+            Assert.AreEqual(s.GetCellValue(null), null);
+        }
+
+        /// <summary>
+        /// Test for invalid naming practices
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void invalidNameTest()
+        {
+            AbstractSpreadsheet s = new Spreadsheet();
+
+            s.SetContentsOfCell("2D", "=2+M2");
+        }
+
+        /// <summary>
+        /// Test for invalid naming practices
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void invalidFormulaTest()
+        {
+            AbstractSpreadsheet s = new Spreadsheet();
+
+            s.SetContentsOfCell("D2", "=2++M2");
+        }
+
+        /// <summary>
+        /// Test for three argument constructor
+        /// </summary>
+        [TestMethod]
+        public void constructorTest6()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "2.1");
+            s.SetContentsOfCell("D2", "=2+M2");
+            s.SetContentsOfCell("M2", "12");
+            Assert.AreEqual(s.GetCellValue("M2"), 12.0);
+            Assert.AreEqual(s.GetCellValue("D2"), 14.0);
+
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        public void SaveTest()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.0");
+            s.Save("save1.txt");
+            Assert.AreEqual("1.0", new Spreadsheet().GetSavedVersion("save1.txt"));
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        public void SaveTest1()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+            s.SetContentsOfCell("D1", "Hello World");
+            s.Save("save2.txt");
+            Assert.AreEqual("1.1", new Spreadsheet().GetSavedVersion("save2.txt"));
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void SaveTest2()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+            s.SetContentsOfCell("D1", "Hello World");
+            s.Save("");
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void SaveTest3()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+            s.SetContentsOfCell("D1", "Hello World");
+            new Spreadsheet().GetSavedVersion("ducky");
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void SaveTest4()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+            s.SetContentsOfCell("D1", "Hello World");
+            new Spreadsheet().GetSavedVersion("");
+        }
+
+        /// <summary>
+        /// Test for save method
+        /// </summary>
+        [TestMethod()]
+        public void SaveTest5()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+            s.SetContentsOfCell("D1", "Hello World");
+            Assert.AreEqual(s.Changed, true);
+            s.Save("save3.txt");
+            Assert.AreEqual(s.Changed, false);
+        }
+
+        /// <summary>
+        /// Test for validator and normalizer
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void constructorTest7()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(validator2, normalizer2, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=E1+2");
+        }
+
+        /// <summary>
+        /// Test for validator and normalizer
+        /// </summary>
+        [TestMethod()]
+        public void constructorTest8()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(validator2, normalizer2, "1.1");
+            s.SetContentsOfCell("E1", "21.0");
+            s.SetContentsOfCell("A1", "=ee5+2");
+        }
+
+        /// <summary>
+        /// Normalizer test, returns X
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private string normalizer1(string s)
+        {
+            if (s == "y2")
+            {
+                return "x5";
+            }
+
+            else if (s == "z2")
+            {
+                return "y5";
+            }
+
+            else if (s == "w2")
+            {
+                return "z5";
+            }
+
+            else
+            {
+                return "w5";
+            }
+        }
+
+        /// <summary>
+        /// Normalizer test, returns X
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private string normalizer2(string s)
+        {
+            return s.ToUpper();
+        }
+
+        /// <summary>
+        /// return true always
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private bool validator1(string s)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true only if variable is form AA5
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static bool validator2(String s)
+        {
+            return Regex.IsMatch(s, "^([A-Z]){2}[5]$");
+        }
     }
-
 }

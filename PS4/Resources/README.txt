@@ -46,3 +46,5 @@ s.SetContentsOfCell("E1", "=F1+2");
 B1 value is 20
 E1 value is 2
 
+Regarding a cell formula that contains cells/variables that have been updated, when a cell has been updated with a double, the setContentsOfCell method
+gets all other cells that depend on that one cell and reevaluates it.
