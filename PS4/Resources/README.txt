@@ -48,3 +48,5 @@ E1 value is 2
 
 Regarding a cell formula that contains cells/variables that have been updated, when a cell has been updated with a double, the setContentsOfCell method
 gets all other cells that depend on that one cell and reevaluates it.
+
+Still unsure on how to pass in a lookup method delegate for formula evaluate

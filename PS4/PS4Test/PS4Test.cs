@@ -2,6 +2,7 @@
 Author: Trung Le
 Date: 09/29/2015
 Purpose: Console test used mainly for debugging
+PS5 BRANCH
 */
 using SS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using SpreadsheetUtilities;
 using System.IO;
-using System.Threading;
 using System.Text.RegularExpressions;
 
 namespace PS4Test
@@ -552,6 +552,59 @@ namespace PS4Test
             s.SetContentsOfCell("E1", "21.0");
             s.SetContentsOfCell("A1", "=ee5+2");
         }
+
+        /// <summary>
+        /// Test for save
+        /// </summary>
+        [TestMethod()]
+        public void SaveTest7()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("A1", "21.0");
+            s.SetContentsOfCell("B1", "13+A1");
+            s.SetContentsOfCell("C1", "Hello World");
+            s.Save("save8.txt");
+            AbstractSpreadsheet ss = new Spreadsheet("save8.txt", x => true, x => x, "1.1");
+            Assert.AreEqual(ss.GetCellContents("A1"), s.GetCellContents("A1"));
+            Assert.AreEqual(ss.GetCellContents("B1"), s.GetCellContents("B1"));
+            Assert.AreEqual(ss.GetCellContents("C1"), s.GetCellContents("C1"));
+
+            Assert.AreEqual(ss.GetCellValue("A1"), s.GetCellValue("A1"));
+            Assert.AreEqual(ss.GetCellValue("B1"), s.GetCellValue("B1"));
+            Assert.AreEqual(ss.GetCellValue("C1"), s.GetCellValue("C1"));
+        }
+
+        /// <summary>
+        /// Test for save
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void SaveTest8()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("A1", "21.0");
+            s.SetContentsOfCell("B1", "13+A1");
+            s.SetContentsOfCell("C1", "Hello World");
+            s.Save("save8.txt");
+            AbstractSpreadsheet ss = new Spreadsheet("WOOHOO.txt", x => true, x => x, "1.1");
+        }
+
+        /// <summary>
+        /// Test for save
+        /// </summary>
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void SaveTest9()
+        {
+            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
+            s.SetContentsOfCell("A1", "21.0");
+            s.SetContentsOfCell("B1", "13+A1");
+            s.SetContentsOfCell("C1", "Hello World");
+            s.Save("save8.txt");
+            AbstractSpreadsheet ss = new Spreadsheet("save8.txt", x => true, x => x, "2.3");
+        }
+
+
 
         /// <summary>
         /// Normalizer test, returns X

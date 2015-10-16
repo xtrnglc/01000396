@@ -2,7 +2,7 @@
 Author: Trung Le
 Date: 09/29/2015
 Purpose: SpreadSheet class implementatio
-THIS IS THE PS5 BRANCH
+PS5 BRANCH
 */
 using System;
 using System.Collections.Generic;
@@ -196,6 +196,8 @@ namespace SS
         {
             cellList = new Dictionary<string, Cell>();
             dependencies = new DependencyGraph();
+            String name = null;
+            String content = null;
 
             if (pathToFile == null)
             {
@@ -213,7 +215,38 @@ namespace SS
                 {
                     while (reader.Read())
                     {
+                        if (reader.IsStartElement())
+                        {
+                            switch (reader.Name)
+                            {
+                                case "Spreadsheet":
+                                    break;
 
+                                case "Cell":
+                                    break;
+
+                                case "Name":
+                                    reader.Read();
+                                    name = reader.Value;
+                                    break;
+
+                                case "Content":
+                                    reader.Read();
+                                    content = reader.Value;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (reader.Name == "Cell")
+                            {
+
+                                SetContentsOfCell(name, content);
+
+                                name = null;
+                                content = null;
+                            }
+                        }
                     }
                 }
             }
@@ -221,14 +254,9 @@ namespace SS
             {
                 throw new SpreadsheetReadWriteException("Invalid name encountered");
             }
-            catch (FormulaFormatException)
-            {
-                throw new SpreadsheetReadWriteException("Invalid formula encountered");
-            }
-            catch (CircularException)
-            {
-                throw new SpreadsheetReadWriteException("Circular dependency found");
-            }
+            
+
+            changed = false;
         }
 
         /// <summary>
@@ -656,9 +684,6 @@ namespace SS
             if (content.StartsWith("="))
             {
                 string temp = content.Substring(1);
-                
-                
-
                 try
                 {
                     try
@@ -788,8 +813,6 @@ namespace SS
             {
                 throw new SpreadsheetReadWriteException("File not found.");
             }
-
-
         }
 
         /// <summary>
@@ -862,7 +885,7 @@ namespace SS
 
                             doc.WriteStartElement("Cell");
                             doc.WriteElementString("Name", s);
-                            doc.WriteElementString("Content", contentsOfCell.ToString());
+                            doc.WriteElementString("Content", "=" + contentsOfCell.ToString());
                             doc.WriteEndElement();
                         }
                     }
