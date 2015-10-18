@@ -1,400 +1,566 @@
-﻿/*
-Author: Trung Le
-Date: 09/29/2015
-Purpose: Console test used mainly for debugging
-*/
-using SS;
+﻿using SS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using SpreadsheetUtilities;
 
-namespace PS4Test
+namespace GradingTests
 {
-    [TestClass]
-    public class PS4Test
+
+
+    /// <summary>
+    ///This is a test class for SpreadsheetTest and is intended
+    ///to contain all SpreadsheetTest Unit Tests
+    ///</summary>
+    [TestClass()]
+    public class SpreadsheetTest
     {
-        /// <summary>
-        /// Test for initializing and getting cell double contents
-        /// </summary>
-        [TestMethod]
-        public void doubleContentTest1()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", 10);
-            Assert.AreEqual((double)s.GetCellContents("A1"), 10);
 
-            s.SetCellContents("B1", 10.2);
-            Assert.AreEqual((double)s.GetCellContents("B1"), 10.2);
 
-            s.SetCellContents("A1", 19);
-            Assert.AreNotEqual((double)s.GetCellContents("A1"), 10);
-            Assert.AreEqual((double)s.GetCellContents("A1"), 19);
-        }
+        private TestContext testContextInstance;
 
         /// <summary>
-        /// Test for initializing and getting cell string contents
-        /// </summary>
-        [TestMethod]
-        public void stringContentTest1()
+        ///Gets or sets the test context which provides
+        ///information about and functionality for the current test run.
+        ///</summary>
+        public TestContext TestContext
         {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", "Hello");
-            Assert.AreEqual((string)s.GetCellContents("A1"), "Hello");
-
-            s.SetCellContents("B1", "World");
-            Assert.AreEqual((string)s.GetCellContents("B1"), "World");
-
-            s.SetCellContents("A1", "Not hello");
-            Assert.AreNotEqual((string)s.GetCellContents("A1"), "Hello");
-            Assert.AreEqual((string)s.GetCellContents("A1"), "Not hello");
-        }
-
-        /// <summary>
-        /// Test for initializing and getting cell string contents
-        /// </summary>
-        [TestMethod]
-        public void formulaContentTest1()
-        {
-            Formula f = new Formula("5+10");
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("5+10"));
-            Assert.AreEqual(f, s.GetCellContents("A1"));
-        }
-
-        /// <summary>
-        /// Test for circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest1()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("5+10+A1"));
-        }
-
-        /// <summary>
-        /// Test for  circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest2()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+C1"));
-            s.SetCellContents("B1", new Formula("19+D1"));
-            s.SetCellContents("C1", new Formula("B1+2"));
-            s.SetCellContents("D1", new Formula("1+A1"));
-        }
-
-        /// <summary>
-        /// Test for circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest3()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", new Formula("19+A1"));
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest1()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("D1", new Formula("13+A1"));
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] testArray = new string[4] { "A1", "B1", "C1", "D1"};
-            int i = 0;
-
-            foreach (String t in temp)
+            get
             {
-                Assert.AreEqual(testArray[i], t);
-                i++;
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
             }
         }
 
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest2()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("B1", new Formula("13+E1"));
-            s.SetCellContents("E1", 21.0);
+        #region Additional test attributes
+        // 
+        //You can use the following additional attributes as you write your tests:
+        //
+        //Use ClassInitialize to run code before running the first test in the class
+        //[ClassInitialize()]
+        //public static void MyClassInitialize(TestContext testContext)
+        //{
+        //}
+        //
+        //Use ClassCleanup to run code after all tests in a class have run
+        //[ClassCleanup()]
+        //public static void MyClassCleanup()
+        //{
+        //}
+        //
+        //Use TestInitialize to run code before running each test
+        //[TestInitialize()]
+        //public void MyTestInitialize()
+        //{
+        //}
+        //
+        //Use TestCleanup to run code after each test has run
+        //[TestCleanup()]
+        //public void MyTestCleanup()
+        //{
+        //}
+        //
+        #endregion
 
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { new Formula("4+B1"), new Formula("13+E1"), "hello", 21.0 };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest3()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", new Formula("10+B1"));
-            s.SetCellContents("B1", 12.0);
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { new Formula("4+B1"), 12.0, new Formula("10+B1"), };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest4()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", new Formula("4+B1"));
-            s.SetCellContents("B1", 10);
-            s.SetCellContents("C1", "hello");
-            s.SetCellContents("A1", 12.0);
-            s.SetCellContents("E1", 21.0);
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { 12.0, 10.0, "hello", 21.0 };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// 
-        /// </summary>
-        [TestMethod]
-        public void constructorTest5()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", 10);
-            s.SetCellContents("B1", new Formula("A1*2"));
-            s.SetCellContents("C1", new Formula("B1+A1"));
-            s.SetCellContents("A1", 12.0);
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
+        // EMPTY SPREADSHEETS
+        [TestMethod()]
         [ExpectedException(typeof(InvalidNameException))]
-        public void stringContentTest2()
+        public void Test1()
         {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("2A1", "Hello");
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void stringContentTest3()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("$A1", "Hello");
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        public void stringContentTest4()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", "Hello");
-            Assert.AreEqual(null, s.GetCellContents("A3"));
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void doubleContentTest4()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("2A1A", 12);
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void formulaContentTest2()
-        {
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A2", new Formula(null));
-        }
-
-        /// <summary>
-        /// Tests null exception 
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void nullTest1()
-        {
-            String empty = null;
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents("A1", empty);
-        }
-
-        /// <summary>
-        /// Tests null name exception 
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void nullTest2()
-        {
-            SpreadSheet s = new SpreadSheet();
+            Spreadsheet s = new Spreadsheet();
             s.GetCellContents(null);
         }
 
-        /// <summary>
-        /// Tests null name exception 
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
         [ExpectedException(typeof(InvalidNameException))]
-        public void TestMethod7()
+        public void Test2()
         {
-            Formula test = new Formula("1+51");
-            SpreadSheet s = new SpreadSheet();
-            s.SetCellContents(null, test);
+            Spreadsheet s = new Spreadsheet();
+            s.GetCellContents("1AA");
         }
 
-        /// <summary>
-        /// Tests invalid name exception
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
+        public void Test3()
+        {
+            Spreadsheet s = new Spreadsheet();
+            Assert.AreEqual("", s.GetCellContents("A2"));
+        }
+
+        // SETTING CELL TO A DOUBLE
+        [TestMethod()]
         [ExpectedException(typeof(InvalidNameException))]
-        public void TestMethod10()
+        public void Test4()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
-            s.SetCellContents("4356", 42);
-
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents(null, 1.5);
         }
 
-        /// <summary>
-        /// Test for empty text string
-        /// </summary>
-        [TestMethod]
-        public void emptyStringTest()
+        [TestMethod()]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void Test5()
         {
-            Formula f1 = new Formula("C1+B1", x => x.ToUpper(), x => true);
-            AbstractSpreadsheet sheet = new SpreadSheet();
-            sheet.SetCellContents("A1", "");
-            sheet.SetCellContents("B1", 20);
-            sheet.SetCellContents("C1", "String");
-            HashSet<string> s1 = new HashSet<string>(sheet.GetNamesOfAllNonemptyCells());
-            HashSet<string> s2 = new HashSet<string>();
-            s2.Add("B1");
-            s2.Add("C1");
-            Assert.AreEqual(s2.Count, s1.Count);
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("1A1A", 1.5);
         }
 
-        /// <summary>
-        /// Test for circular exception
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
+        public void Test6()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("Z7", 1.5);
+            Assert.AreEqual(1.5, (double)s.GetCellContents("Z7"), 1e-9);
+        }
+
+        // SETTING CELL TO A STRING
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test7()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A8", (string)null);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void Test8()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents(null, "hello");
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void Test9()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("1AZ", "hello");
+        }
+
+        [TestMethod()]
+        public void Test10()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("Z7", "hello");
+            Assert.AreEqual("hello", s.GetCellContents("Z7"));
+        }
+
+        // SETTING CELL TO A FORMULA
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test11()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A8", (Formula)null);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void Test12()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents(null, new Formula("2"));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void Test13()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("1AZ", new Formula("2"));
+        }
+
+        [TestMethod()]
+        public void Test14()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("Z7", new Formula("3"));
+            Formula f = (Formula)s.GetCellContents("Z7");
+            Assert.AreEqual(new Formula("3"), f);
+            Assert.AreNotEqual(new Formula("2"), f);
+        }
+
+        // CIRCULAR FORMULA DETECTION
+        [TestMethod()]
         [ExpectedException(typeof(CircularException))]
-        public void circularDepedencyTest4()
+        public void Test15()
         {
-            Formula f1 = new Formula("A1+B1");
-            Formula f2 = new Formula("A3*B4");
-            Formula f3 = new Formula("E1+C1");
-            Formula f4 = new Formula("C1-A3");
-            Formula f5 = new Formula("A1");
-            AbstractSpreadsheet s = new SpreadSheet();
-            s.SetCellContents("D1", f1);
-            s.SetCellContents("A1", f2);
-            s.SetCellContents("B1", f2);
-            s.SetCellContents("A3", f3);
-            s.SetCellContents("B4", f4);
-            s.SetCellContents("E1", 2);
-            s.SetCellContents("C1", 6);
-            s.SetCellContents("A3", f5);
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("A2"));
+            s.SetCellContents("A2", new Formula("A1"));
         }
 
-        /// <summary>
-        /// Test for circular exception
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
         [ExpectedException(typeof(CircularException))]
-        public void circularDepedencyTest()
+        public void Test16()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
-
-            s.SetCellContents("A1", new Formula("B1*2"));
-            s.SetCellContents("B1", new Formula("C1*2"));
-            s.SetCellContents("C1", new Formula("A1*2"));
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("A2+A3"));
+            s.SetCellContents("A3", new Formula("A4+A5"));
+            s.SetCellContents("A5", new Formula("A6+A7"));
+            s.SetCellContents("A7", new Formula("A1+A1"));
         }
 
-        /// <summary>
-        /// Test for empty cell being requested to return cell content
-        /// </summary>
-        [TestMethod]
-        public void nullTest()
+        [TestMethod()]
+        [ExpectedException(typeof(CircularException))]
+        public void Test17()
         {
-            AbstractSpreadsheet s = new SpreadSheet();
-
-            Assert.AreEqual(s.GetCellContents("D1"), null);
+            Spreadsheet s = new Spreadsheet();
+            try
+            {
+                s.SetCellContents("A1", new Formula("A2+A3"));
+                s.SetCellContents("A2", 15);
+                s.SetCellContents("A3", 30);
+                s.SetCellContents("A2", new Formula("A3*A1"));
+            }
+            catch (CircularException e)
+            {
+                Assert.AreEqual(15, (double)s.GetCellContents("A2"), 1e-9);
+                throw e;
+            }
         }
 
+        // NONEMPTY CELLS
+        [TestMethod()]
+        public void Test18()
+        {
+            Spreadsheet s = new Spreadsheet();
+            Assert.IsFalse(s.GetNamesOfAllNonemptyCells().GetEnumerator().MoveNext());
+        }
+
+        [TestMethod()]
+        public void Test19()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("B1", "");
+            Assert.IsFalse(s.GetNamesOfAllNonemptyCells().GetEnumerator().MoveNext());
+        }
+
+        [TestMethod()]
+        public void Test20()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("B1", "hello");
+            Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
+        }
+
+        [TestMethod()]
+        public void Test21()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("B1", 52.25);
+            Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
+        }
+
+        [TestMethod()]
+        public void Test22()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("B1", new Formula("3.5"));
+            Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "B1" }));
+        }
+
+        [TestMethod()]
+        public void Test23()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", 17.2);
+            s.SetCellContents("C1", "hello");
+            s.SetCellContents("B1", new Formula("3.5"));
+            Assert.IsTrue(new HashSet<string>(s.GetNamesOfAllNonemptyCells()).SetEquals(new HashSet<string>() { "A1", "B1", "C1" }));
+        }
+
+        // RETURN VALUE OF SET CELL CONTENTS
+        [TestMethod()]
+        public void Test24()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("B1", "hello");
+            s.SetCellContents("C1", new Formula("5"));
+            Assert.IsTrue(s.SetCellContents("A1", 17.2).SetEquals(new HashSet<string>() { "A1" }));
+        }
+
+        [TestMethod()]
+        public void Test25()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", 17.2);
+            s.SetCellContents("C1", new Formula("5"));
+            Assert.IsTrue(s.SetCellContents("B1", "hello").SetEquals(new HashSet<string>() { "B1" }));
+        }
+
+        [TestMethod()]
+        public void Test26()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", 17.2);
+            s.SetCellContents("B1", "hello");
+            Assert.IsTrue(s.SetCellContents("C1", new Formula("5")).SetEquals(new HashSet<string>() { "C1" }));
+        }
+
+        [TestMethod()]
+        public void Test27()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("A2+A3"));
+            s.SetCellContents("A2", 6);
+            s.SetCellContents("A3", new Formula("A2+A4"));
+            s.SetCellContents("A4", new Formula("A2+A5"));
+            Assert.IsTrue(s.SetCellContents("A5", 82.5).SetEquals(new HashSet<string>() { "A5", "A4", "A3", "A1" }));
+        }
+
+        // CHANGING CELLS
+        [TestMethod()]
+        public void Test28()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("A2+A3"));
+            s.SetCellContents("A1", 2.5);
+            Assert.AreEqual(2.5, (double)s.GetCellContents("A1"), 1e-9);
+        }
+
+        [TestMethod()]
+        public void Test29()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("A2+A3"));
+            s.SetCellContents("A1", "Hello");
+            Assert.AreEqual("Hello", (string)s.GetCellContents("A1"));
+        }
+
+        [TestMethod()]
+        public void Test30()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", "Hello");
+            s.SetCellContents("A1", new Formula("23"));
+            Assert.AreEqual(new Formula("23"), (Formula)s.GetCellContents("A1"));
+            Assert.AreNotEqual(new Formula("24"), (Formula)s.GetCellContents("A1"));
+        }
+
+        // STRESS TESTS
+        [TestMethod()]
+        public void Test31()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetCellContents("A1", new Formula("B1+B2"));
+            s.SetCellContents("B1", new Formula("C1-C2"));
+            s.SetCellContents("B2", new Formula("C3*C4"));
+            s.SetCellContents("C1", new Formula("D1*D2"));
+            s.SetCellContents("C2", new Formula("D3*D4"));
+            s.SetCellContents("C3", new Formula("D5*D6"));
+            s.SetCellContents("C4", new Formula("D7*D8"));
+            s.SetCellContents("D1", new Formula("E1"));
+            s.SetCellContents("D2", new Formula("E1"));
+            s.SetCellContents("D3", new Formula("E1"));
+            s.SetCellContents("D4", new Formula("E1"));
+            s.SetCellContents("D5", new Formula("E1"));
+            s.SetCellContents("D6", new Formula("E1"));
+            s.SetCellContents("D7", new Formula("E1"));
+            s.SetCellContents("D8", new Formula("E1"));
+            ISet<String> cells = s.SetCellContents("E1", 0);
+            Assert.IsTrue(new HashSet<string>() { "A1", "B1", "B2", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "E1" }.SetEquals(cells));
+        }
+        [TestMethod()]
+        public void Test32()
+        {
+            Test31();
+        }
+        [TestMethod()]
+        public void Test33()
+        {
+            Test31();
+        }
+        [TestMethod()]
+        public void Test34()
+        {
+            Test31();
+        }
+
+        [TestMethod()]
+        public void Test35()
+        {
+            Spreadsheet s = new Spreadsheet();
+            ISet<String> cells = new HashSet<string>();
+            for (int i = 1; i < 200; i++)
+            {
+                cells.Add("A" + i);
+                Assert.IsTrue(cells.SetEquals(s.SetCellContents("A" + i, new Formula("A" + (i + 1)))));
+            }
+        }
+        [TestMethod()]
+        public void Test36()
+        {
+            Test35();
+        }
+        [TestMethod()]
+        public void Test37()
+        {
+            Test35();
+        }
+        [TestMethod()]
+        public void Test38()
+        {
+            Test35();
+        }
+        [TestMethod()]
+        public void Test39()
+        {
+            Spreadsheet s = new Spreadsheet();
+            for (int i = 1; i < 200; i++)
+            {
+                s.SetCellContents("A" + i, new Formula("A" + (i + 1)));
+            }
+            try
+            {
+                s.SetCellContents("A150", new Formula("A50"));
+                Assert.Fail();
+            }
+            catch (CircularException)
+            {
+            }
+        }
+        [TestMethod()]
+        public void Test40()
+        {
+            Test39();
+        }
+        [TestMethod()]
+        public void Test41()
+        {
+            Test39();
+        }
+        [TestMethod()]
+        public void Test42()
+        {
+            Test39();
+        }
+
+        [TestMethod()]
+        public void Test43()
+        {
+            Spreadsheet s = new Spreadsheet();
+            for (int i = 0; i < 500; i++)
+            {
+                s.SetCellContents("A1" + i, new Formula("A1" + (i + 1)));
+            }
+            HashSet<string> firstCells = new HashSet<string>();
+            HashSet<string> lastCells = new HashSet<string>();
+            for (int i = 0; i < 250; i++)
+            {
+                firstCells.Add("A1" + i);
+                lastCells.Add("A1" + (i + 250));
+            }
+            Assert.IsTrue(s.SetCellContents("A1249", 25.0).SetEquals(firstCells));
+            Assert.IsTrue(s.SetCellContents("A1499", 0).SetEquals(lastCells));
+
+            
+        }
+        [TestMethod()]
+        public void Test44()
+        {
+            Test43();
+        }
+        [TestMethod()]
+        public void Test45()
+        {
+            Test43();
+        }
+        [TestMethod()]
+        public void Test46()
+        {
+            Test43();
+        }
+
+        [TestMethod()]
+        public void Test47()
+        {
+            RunRandomizedTest(47, 2519);
+        }
+        [TestMethod()]
+        public void Test48()
+        {
+            RunRandomizedTest(48, 2521);
+        }
+        [TestMethod()]
+        public void Test49()
+        {
+            RunRandomizedTest(49, 2526);
+        }
+        [TestMethod()]
+        public void Test50()
+        {
+            RunRandomizedTest(50, 2521);
+        }
+
+        public void RunRandomizedTest(int seed, int size)
+        {
+            Spreadsheet s = new Spreadsheet();
+            Random rand = new Random(seed);
+            for (int i = 0; i < 10000; i++)
+            {
+                try
+                {
+                    switch (rand.Next(3))
+                    {
+                        case 0:
+                            s.SetCellContents(randomName(rand), 3.14);
+                            break;
+                        case 1:
+                            s.SetCellContents(randomName(rand), "hello");
+                            break;
+                        case 2:
+                            s.SetCellContents(randomName(rand), randomFormula(rand));
+                            break;
+                    }
+                }
+                catch (CircularException)
+                {
+                }
+            }
+            ISet<string> set = new HashSet<string>(s.GetNamesOfAllNonemptyCells());
+            Assert.AreEqual(size, set.Count);
+        }
+
+        private String randomName(Random rand)
+        {
+            return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Substring(rand.Next(26), 1) + (rand.Next(99) + 1);
+        }
+
+        private String randomFormula(Random rand)
+        {
+            String f = randomName(rand);
+            for (int i = 0; i < 10; i++)
+            {
+                switch (rand.Next(4))
+                {
+                    case 0:
+                        f += "+";
+                        break;
+                    case 1:
+                        f += "-";
+                        break;
+                    case 2:
+                        f += "*";
+                        break;
+                    case 3:
+                        f += "/";
+                        break;
+                }
+                switch (rand.Next(2))
+                {
+                    case 0:
+                        f += 7.2;
+                        break;
+                    case 1:
+                        f += randomName(rand);
+                        break;
+                }
+            }
+            return f;
+        }
 
     }
-
 }

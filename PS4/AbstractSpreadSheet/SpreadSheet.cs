@@ -57,7 +57,7 @@ namespace SS
     /// A1 depends on B1, which depends on C1, which depends on A1.  That's a circular
     /// dependency.
     /// </summary>
-    public class SpreadSheet : AbstractSpreadsheet
+    public class Spreadsheet : AbstractSpreadsheet
     {
 
         private DependencyGraph dependencies;
@@ -159,7 +159,7 @@ namespace SS
         /// <summary>
         /// Constructor
         /// </summary>
-        public SpreadSheet()
+        public Spreadsheet()
         {
             dependencies = new DependencyGraph();
             cellList = new Dictionary<string, Cell>();
@@ -194,7 +194,7 @@ namespace SS
 
             else
             {
-                return null;
+                return "";
             }  
         }
 
@@ -305,18 +305,27 @@ namespace SS
         public override ISet<String> SetCellContents(String name, Formula formula)
         {
             IEnumerable<String> dependees = dependencies.GetDependees(name);
-
-            dependencies.ReplaceDependents(name, formula.GetVariables());
-
-            if (formula == null)
+            try
+            {
+                if (formula.Equals(null))
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (Exception)
             {
                 throw new ArgumentNullException();
             }
+                
 
             if (string.IsNullOrEmpty(name) || !isVariable(name))
             {
                 throw new InvalidNameException();
             }
+
+            dependencies.ReplaceDependents(name, formula.GetVariables());
+
+            
 
             try
             { 
