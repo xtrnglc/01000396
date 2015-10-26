@@ -17,8 +17,36 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            //spreadsheetPanel1.SelectionChanged += displaySelection;
-            //spreadsheetPanel1.SetSelection(2, 3);
+            spreadsheetPanel1.SelectionChanged += displaySelection;
+            spreadsheetPanel1.SetSelection(2, 3);
+        }
+
+        private void displaySelection(SpreadsheetPanel ss)
+        {
+            int row, col;
+            String value;
+            ss.GetSelection(out col, out row);
+            ss.GetValue(col, row, out value);
+
+            
+            if (value == "")
+            {
+                ss.SetValue(col, row, DisplayCellName(col, row).ToString());
+                ss.GetValue(col, row, out value);
+                //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
+            }
+        }
+
+        private string DisplayCellName(int col, int row)
+        {
+            
+            row += 1;
+            col += 65;
+            char c = (char)col;
+            string s = "";
+            s += c;
+            s += row.ToString();
+            return s;
         }
 
 
@@ -46,6 +74,11 @@ namespace SpreadsheetGUI
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            this.Cell.Text = "Hello World!";
         }
     }
 }
