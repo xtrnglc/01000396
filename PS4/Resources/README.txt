@@ -1,7 +1,6 @@
-﻿
-Author: Trung Le
-Date: 09/28/2015
-PS4 Implementation.
+﻿"I certify that the work to create this GUI was done entirely by myself and my partner - Trung Le, Adam Sorensen"
+
+=================================================================READ ME FOR PS4=================================================================
 
 Combining PS2 - Dependency Graph, PS3 - Formula Class
 Dependency graph uses array of linked lists which might present an efficiency problem in the future. Might need to change but for now we'll stick with it.
@@ -50,3 +49,5 @@ Regarding a cell formula that contains cells/variables that have been updated, w
 gets all other cells that depend on that one cell and reevaluates it.
 
 Still unsure on how to pass in a lookup method delegate for formula evaluate
+
+=================================================================READ ME FOR PS6=================================================================

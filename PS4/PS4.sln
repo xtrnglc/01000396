@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4Test", "PS4Test\PS4Test.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS4ConsoleTest", "PS4ConsoleTest\PS4ConsoleTest.csproj", "{52506442-C95A-466C-8BB4-2C013B3FAFEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetGUI", "SpreadsheetGUI\SpreadsheetGUI.csproj", "{D90914C4-B1FC-49B5-952C-5912765AE8E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52506442-C95A-466C-8BB4-2C013B3FAFEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D90914C4-B1FC-49B5-952C-5912765AE8E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90914C4-B1FC-49B5-952C-5912765AE8E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90914C4-B1FC-49B5-952C-5912765AE8E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90914C4-B1FC-49B5-952C-5912765AE8E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
