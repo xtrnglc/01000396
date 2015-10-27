@@ -46,16 +46,18 @@ namespace SpreadsheetGUI
 
             if (value == "")
             {
-                ss.SetValue(col, row, this.Cell_Contents_text.Text);
+                //ss.SetValue(col, row, this.Cell_Contents_text.Text);
                 ss.GetValue(col, row, out value);
                 this.Cell_Value_text.Text = value;
                 
                 this.Cell_Contents_text.Text = "";
+                this.textBox3.Text = "";
             }
             else
             {
                 this.Cell_Contents_text.Text = value;
                 this.Cell_Value_text.Text = value;
+                DisplayContentType(value);
             }
 
         }
@@ -69,6 +71,22 @@ namespace SpreadsheetGUI
             s += c;
             s += row.ToString();
             return s;
+        }
+
+        private void DisplayContentType (string value)
+        {
+            double temp;
+
+            if (value.StartsWith("="))
+            {
+                this.textBox3.Text = "Formula";
+            }
+            else if (double.TryParse(value, out temp))
+            {
+                this.textBox3.Text = "Double";
+            }
+            else
+                this.textBox3.Text = "String";
         }
 
 
@@ -85,7 +103,7 @@ namespace SpreadsheetGUI
 
         private void changeCellContentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("To change a cell's contents, select the desired cell and edit the contents box.");
+            System.Windows.Forms.MessageBox.Show("To change a cell's contents, select the desired cell and edit the contents box and then press enter.");
         }
 
         private void spreadsheetPanel1_Load(object sender, EventArgs e)
@@ -116,24 +134,37 @@ namespace SpreadsheetGUI
         {
             if (e.KeyChar == 13)
             {
-                double temp;
+                
                 int row, col;
                 String value;
                 spreadsheetPanel1.GetSelection(out col, out row);
                 spreadsheetPanel1.GetValue(col, row, out value);
 
+
+
                 this.Cell_name_text.Text = DisplayCellName(col, row);      
                 
-                spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                spreadsheetPanel1.GetValue(col, row, out value);
+                
+
+                try
+                {
+                    Sheet.SetContentsOfCell(DisplayCellName(col, row), value);
+
+                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
+                    spreadsheetPanel1.GetValue(col, row, out value);
+                }
+                catch (Exception excep)
+                {
+                    System.Windows.Forms.MessageBox.Show(excep.Message);
+                }
                 this.Cell_Value_text.Text = value;
                 
                 this.Cell_Contents_text.Text = "";
 
-                if(value.StartsWith("="))
-                {
-                    this.ce = "Formula";
-                }
+                DisplayContentType(value);
+
+                
+                
                 
             }
         }

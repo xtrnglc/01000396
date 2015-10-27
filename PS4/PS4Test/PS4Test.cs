@@ -36,6 +36,17 @@ namespace PS4Test
         }
 
         /// <summary>
+        /// Test for initializing and getting cell double contents
+        /// </summary>
+        [TestMethod]
+        public void test4()
+        {
+            Spreadsheet s = new Spreadsheet();
+            s.SetContentsOfCell("A1", "=&");
+            
+        }
+
+        /// <summary>
         /// Test for initializing and getting cell string contents
         /// </summary>
         [TestMethod]
