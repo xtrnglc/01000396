@@ -113,7 +113,11 @@ namespace SS
                 }
                 catch (InvalidCastException)
                 {
-                    formulaErrorContent = (FormulaError)content.Evaluate(lookup);
+                    formulaErrorContent = new FormulaError();
+                }
+                catch (ArgumentException)
+                {
+                    formulaErrorContent = new FormulaError();
                 }
             }
 
@@ -148,6 +152,10 @@ namespace SS
                 if (doubleContent != double.PositiveInfinity)
                 {
                     return doubleContent;
+                }
+                if (stringContent != null)
+                {
+                    return stringContent;
                 }
                 else
                 {
@@ -219,18 +227,18 @@ namespace SS
                         {
                             switch (reader.Name)
                             {
-                                case "Spreadsheet":
+                                case "spreadsheet":
                                     break;
 
-                                case "Cell":
+                                case "cell":
                                     break;
 
-                                case "Name":
+                                case "name":
                                     reader.Read();
                                     name = reader.Value;
                                     break;
 
-                                case "Content":
+                                case "contents":
                                     reader.Read();
                                     content = reader.Value;
                                     break;
@@ -238,7 +246,7 @@ namespace SS
                         }
                         else
                         {
-                            if (reader.Name == "Cell")
+                            if (reader.Name == "cell")
                             {
 
                                 SetContentsOfCell(name, content);
@@ -295,16 +303,18 @@ namespace SS
             if (string.IsNullOrEmpty(name) || !isVariable(name))
                 throw new InvalidNameException();
 
+            string temp = Normalize(name);
+
             Cell c;
 
-            if (cellList.TryGetValue(name, out c))
+            if (cellList.TryGetValue(temp, out c))
             {
                 return c.getContent();
             }
 
             else
             {
-                return null;
+                return "";
             }
         }
 
@@ -609,7 +619,7 @@ namespace SS
 
             else
             {
-                return null;
+                return "";
             }
         }
 
@@ -649,7 +659,7 @@ namespace SS
                 throw new ArgumentNullException();
             }
 
-            if (string.IsNullOrEmpty(name) || !isVariable(name))
+            if (string.IsNullOrEmpty(name) || !isVariable(name) || !IsValid(name))
             {
                 throw new InvalidNameException();
             }
@@ -684,6 +694,7 @@ namespace SS
             if (content.StartsWith("="))
             {
                 string temp = content.Substring(1);
+                Cell c;
                 try
                 {
                     try
@@ -695,6 +706,18 @@ namespace SS
 
                         foreach (String s in GetCellsToRecalculate(name))
                             cellsToRecalculate.Add(s);
+
+                        foreach (String s in cellsToRecalculate)
+                        {
+                            cellList.TryGetValue(s, out c);
+
+                            Formula formula1 = new Formula(c.getContent().ToString());
+
+                            if (cellList.ContainsKey(s) & name != s)
+                            {
+                                cellList[s] = new Cell(formula1, LookupValue); ;
+                            }
+                        }
 
                         changed = true;
                         return cellsToRecalculate;
@@ -747,7 +770,7 @@ namespace SS
 
             }
             else
-                return 0;
+                throw new ArgumentException();
         }
 
         /// <summary>
@@ -782,9 +805,9 @@ namespace SS
                         {
                             if (doc.IsStartElement())
                             {
-                                if (doc.Name == "Spreadsheet")
+                                if (doc.Name == "spreadsheet")
                                 {
-                                    return doc.GetAttribute("Version");
+                                    return doc.GetAttribute("version");
                                 }
                                 else
                                     throw new SpreadsheetReadWriteException("First element in " + filename + " was not \"Spreadsheet\".");
@@ -853,8 +876,8 @@ namespace SS
                 using (XmlWriter doc = XmlWriter.Create(filename))
                 {
                     doc.WriteStartDocument();
-                    doc.WriteStartElement("Spreadsheet");
-                    doc.WriteAttributeString("Version", Version);
+                    doc.WriteStartElement("spreadsheet");
+                    doc.WriteAttributeString("version", Version);
 
                     foreach (String s in GetNamesOfAllNonemptyCells())
                     {
@@ -865,27 +888,27 @@ namespace SS
                         {
                             String contentsOfCell = (String)content;
 
-                            doc.WriteStartElement("Cell");
-                            doc.WriteElementString("Name", s);
-                            doc.WriteElementString("Content", contentsOfCell);
+                            doc.WriteStartElement("cell");
+                            doc.WriteElementString("name", s);
+                            doc.WriteElementString("contents", contentsOfCell);
                             doc.WriteEndElement();
                         }
                         else if (content is double)
                         {
                             double contentsofCell = (double)content;
 
-                            doc.WriteStartElement("Cell");
-                            doc.WriteElementString("Name", s);
-                            doc.WriteElementString("Content", contentsofCell.ToString());
+                            doc.WriteStartElement("cell");
+                            doc.WriteElementString("name", s);
+                            doc.WriteElementString("contents", contentsofCell.ToString());
                             doc.WriteEndElement();
                         }
                         else
                         {
                             Formula contentsOfCell = (Formula)content;
 
-                            doc.WriteStartElement("Cell");
-                            doc.WriteElementString("Name", s);
-                            doc.WriteElementString("Content", "=" + contentsOfCell.ToString());
+                            doc.WriteStartElement("cell");
+                            doc.WriteElementString("name", s);
+                            doc.WriteElementString("contents", "=" + contentsOfCell.ToString());
                             doc.WriteEndElement();
                         }
                     }

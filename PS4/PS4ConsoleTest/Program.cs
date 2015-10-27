@@ -20,12 +20,10 @@ namespace PS4ConsoleTest
     {
         static void Main(string[] args)
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("A1", "21.0");
-            s.SetContentsOfCell("B1", "=A1+13");
-            s.SetContentsOfCell("C1", "Hello World");
-            s.Save("save8.txt");
-            AbstractSpreadsheet ss = new Spreadsheet("save8.txt", x => true, x => x, "1.1");
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("A1", "4.1");
+            ss.SetContentsOfCell("C1", "= A1 + B1");
+            
         }
 
         /// <summary>

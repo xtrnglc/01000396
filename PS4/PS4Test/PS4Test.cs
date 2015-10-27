@@ -1,667 +1,739 @@
-﻿/*
-Author: Trung Le
-Date: 09/29/2015
-Purpose: Console test used mainly for debugging
-PS5 BRANCH
-*/
-using SS;
+﻿using SS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using SpreadsheetUtilities;
 using System.IO;
-using System.Text.RegularExpressions;
+using SpreadsheetUtilities;
+using System.Threading;
+using System.Xml;
 
-namespace PS4Test
+namespace SpreadsheetTester
 {
-    [TestClass]
-    public class PS4Test
+
+
+    /// <summary>
+    ///This is a test class for SpreadsheetTest and is intended
+    ///to contain all SpreadsheetTest Unit Tests
+    ///</summary>
+    [TestClass()]
+    public class GradingTests
     {
-        /// <summary>
-        /// Test for initializing and getting cell double contents
-        /// </summary>
-        [TestMethod]
-        public void doubleContentTest1()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", "10");
-            Assert.AreEqual(s.GetCellValue("A1"), 10.0);
 
-            s.SetContentsOfCell("B1", "10.2");
-            Assert.AreEqual(s.GetCellValue("B1"), 10.2);
 
-            s.SetContentsOfCell("A1", "19");
-            Assert.AreNotEqual((double)s.GetCellValue("A1"), 10.0);
-            Assert.AreEqual((double)s.GetCellValue("A1"), 19.0);
-        }
+        private TestContext testContextInstance;
 
         /// <summary>
-        /// Test for initializing and getting cell string contents
-        /// </summary>
-        [TestMethod]
-        public void stringContentTest1()
+        ///Gets or sets the test context which provides
+        ///information about and functionality for the current test run.
+        ///</summary>
+        public TestContext TestContext
         {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", "Hello");
-            Assert.AreEqual((string)s.GetCellContents("A1"), "Hello");
-
-            s.SetContentsOfCell("B1", "World");
-            Assert.AreEqual((string)s.GetCellContents("B1"), "World");
-
-            s.SetContentsOfCell("A1", "Not hello");
-            Assert.AreNotEqual((string)s.GetCellContents("A1"), "Hello");
-            Assert.AreEqual((string)s.GetCellContents("A1"), "Not hello");
-        }
-
-        /// <summary>
-        /// Test for initializing and getting cell string contents
-        /// </summary>
-        [TestMethod]
-        public void formulaContentTest1()
-        {
-            Formula f = new Formula("5+10");
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=5+10"));
-            Assert.AreEqual(f.Evaluate(x => 0), s.GetCellValue("A1"));
-        }
-
-        /// <summary>
-        /// Test for circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest1()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=5+10+A1"));
-        }
-
-        /// <summary>
-        /// Test for  circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest2()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+C1"));
-            s.SetContentsOfCell("B1", ("=19+D1"));
-            s.SetContentsOfCell("C1", ("=B1+2"));
-            s.SetContentsOfCell("D1", ("=1+A1"));
-        }
-
-        /// <summary>
-        /// Test for circular dependency
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDependecyTest3()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+B1"));
-            s.SetContentsOfCell("B1", ("=19+A1"));
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest1()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+B1"));
-            s.SetContentsOfCell("B1", "10");
-            s.SetContentsOfCell("C1", "hello");
-            s.SetContentsOfCell("D1", ("=13+A1"));
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] testArray = new string[4] { "A1", "B1", "C1", "D1"};
-            int i = 0;
-
-            foreach (String t in temp)
+            get
             {
-                Assert.AreEqual(testArray[i], t);
-                i++;
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
             }
         }
 
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest2()
+        #region Additional test attributes
+        // 
+        //You can use the following additional attributes as you write your tests:
+        //
+        //Use ClassInitialize to run code before running the first test in the class
+        //[ClassInitialize()]
+        //public static void MyClassInitialize(TestContext testContext)
+        //{
+        //}
+        //
+        //Use ClassCleanup to run code after all tests in a class have run
+        //[ClassCleanup()]
+        //public static void MyClassCleanup()
+        //{
+        //}
+        //
+        //Use TestInitialize to run code before running each test
+        //[TestInitialize()]
+        //public void MyTestInitialize()
+        //{
+        //}
+        //
+        //Use TestCleanup to run code after each test has run
+        //[TestCleanup()]
+        //public void MyTestCleanup()
+        //{
+        //}
+        //
+        #endregion
+
+        // Verifies cells and their values, which must alternate.
+        public void VV(AbstractSpreadsheet sheet, params object[] constraints)
         {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+B1"));
-            s.SetContentsOfCell("B1", "10");
-            s.SetContentsOfCell("C1", "hello");
-            s.SetContentsOfCell("B1", ("=13+E1"));
-            s.SetContentsOfCell("E1", "21.0");
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { new Formula("4+B1"), new Formula("13+E1"), "hello", 21.0 };
-            int i = 0;
-
-            foreach (String t in nameArray)
+            for (int i = 0; i < constraints.Length; i += 2)
             {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
+                if (constraints[i + 1] is double)
+                {
+                    Assert.AreEqual((double)constraints[i + 1], (double)sheet.GetCellValue((string)constraints[i]), 1e-9);
+                }
+                else
+                {
+                    Assert.AreEqual(constraints[i + 1], sheet.GetCellValue((string)constraints[i]));
+                }
             }
         }
 
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest3()
+
+        // For setting a spreadsheet cell.
+        public IEnumerable<string> Set(AbstractSpreadsheet sheet, string name, string contents)
         {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+B1"));
-            s.SetContentsOfCell("B1", "10");
-            s.SetContentsOfCell("C1", ("=10+B1"));
-            s.SetContentsOfCell("B1", "12.0");
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { new Formula("4+B1"), 12.0, new Formula("10+B1"), };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
+            List<string> result = new List<string>(sheet.SetContentsOfCell(name, contents));
+            return result;
         }
 
-        /// <summary>
-        /// Test for constructors
-        /// </summary>
-        [TestMethod]
-        public void constructorTest4()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", ("=4+B1"));
-            s.SetContentsOfCell("B1", "10");
-            s.SetContentsOfCell("C1", "hello");
-            s.SetContentsOfCell("A1", "12.0");
-            s.SetContentsOfCell("E1", "21.0");
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[4] { "A1", "B1", "C1", "E1" };
-            object[] testArray = new object[4] { 12.0, 10.0, "hello", 21.0 };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for constructors
-        /// 
-        /// </summary>
-        [TestMethod]
-        public void constructorTest5()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", "10");
-            s.SetContentsOfCell("B1", ("=A1*2"));
-            s.SetContentsOfCell("C1", ("=B1+A1"));
-            s.SetContentsOfCell("A1", "12.0");
-
-
-            IEnumerable<string> temp = s.GetNamesOfAllNonemptyCells();
-            string[] nameArray = new string[3] { "A1", "B1", "C1" };
-            object[] testArray = new object[3] { 12.0, new Formula("A1*2"), new Formula("B1+A1") };
-            int i = 0;
-
-            foreach (String t in nameArray)
-            {
-                Assert.AreEqual(testArray[i], s.GetCellContents(nameArray[i]));
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void stringContentTest2()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("2A1", "Hello");
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void stringContentTest3()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("$A1", "Hello");
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        public void stringContentTest4()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", "Hello");
-            Assert.AreEqual(null, s.GetCellContents("A3"));
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void doubleContentTest4()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("2A1A", "12");
-        }
-
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void formulaContentTest2()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("2A2", "5");
-        }
-
-        /// <summary>
-        /// Tests null exception 
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void nullTest1()
-        {
-            String empty = null;
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("A1", empty);
-        }
-
-        /// <summary>
-        /// Tests null name exception 
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void nullTest2()
-        {
-            Spreadsheet s = new Spreadsheet();
-            s.GetCellContents(null);
-        }
-
-        /// <summary>
-        /// Tests null name exception 
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void TestMethod7()
-        {
-            Formula test = new Formula("1+51");
-            Spreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell(null, "=1+2");
-        }
-
-        /// <summary>
-        /// Tests invalid name exception
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void TestMethod10()
+        // Tests IsValid
+        [TestMethod()]
+        public void IsValidTest1()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("4356", "42");
-
+            s.SetContentsOfCell("A1", "x");
         }
 
-        /// <summary>
-        /// Test for empty text string
-        /// </summary>
-        [TestMethod]
-        public void emptyStringTest()
-        {
-            AbstractSpreadsheet sheet = new Spreadsheet();
-            sheet.SetContentsOfCell("A1", "");
-            sheet.SetContentsOfCell("B1", "20");
-            sheet.SetContentsOfCell("C1", "String");
-            HashSet<string> s1 = new HashSet<string>(sheet.GetNamesOfAllNonemptyCells());
-            HashSet<string> s2 = new HashSet<string>();
-            s2.Add("B1");
-            s2.Add("C1");
-            Assert.AreEqual(s2.Count, s1.Count);
-        }
-
-        /// <summary>
-        /// Test for circular exception
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDepedencyTest4()
-        {
-            
-            AbstractSpreadsheet s = new Spreadsheet();
-            s.SetContentsOfCell("D1", "=A1+B1");
-            s.SetContentsOfCell("A1", "=A3*B4");
-            s.SetContentsOfCell("A3", "=A1");
-        }
-
-        /// <summary>
-        /// Test for circular exception
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(CircularException))]
-        public void circularDepedencyTest()
-        {
-            AbstractSpreadsheet s = new Spreadsheet();
-
-            s.SetContentsOfCell("A1", ("=B1*2"));
-            s.SetContentsOfCell("B1", ("=C1*2"));
-            s.SetContentsOfCell("C1", ("=A1*2"));
-        }
-
-        /// <summary>
-        /// Test for empty cell being requested to return cell content
-        /// </summary>
-        [TestMethod]
-        public void nullTest()
-        {
-            AbstractSpreadsheet s = new Spreadsheet();
-
-            Assert.AreEqual(s.GetCellContents("D1"), null);
-        }
-
-        /// <summary>
-        /// Test for empty cell being requested to return cell value
-        /// </summary>
-        [TestMethod]
-        public void nullTest3()
-        {
-            AbstractSpreadsheet s = new Spreadsheet();
-
-            Assert.AreEqual(s.GetCellValue("D1"), null);
-        }
-
-        /// <summary>
-        /// Test for empty cell being requested to return cell value
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
         [ExpectedException(typeof(InvalidNameException))]
-        public void nullTest4()
+        public void IsValidTest2()
         {
-            AbstractSpreadsheet s = new Spreadsheet();
-
-            Assert.AreEqual(s.GetCellValue(null), null);
+            AbstractSpreadsheet ss = new Spreadsheet(s => s[0] != 'A', s => s, "");
+            ss.SetContentsOfCell("A1", "x");
         }
 
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
-        public void invalidNameTest()
+        [TestMethod()]
+        public void IsValidTest3()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-
-            s.SetContentsOfCell("2D", "=2+M2");
+            s.SetContentsOfCell("B1", "= A1 + C1");
         }
 
-        /// <summary>
-        /// Test for invalid naming practices
-        /// </summary>
-        [TestMethod]
+        [TestMethod()]
         [ExpectedException(typeof(FormulaFormatException))]
-        public void invalidFormulaTest()
+        public void IsValidTest4()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet(s => s[0] != 'A', s => s, "");
+            ss.SetContentsOfCell("B1", "= A1 + C1");
+        }
+
+        // Tests Normalize
+        [TestMethod()]
+        public void NormalizeTest1()
         {
             AbstractSpreadsheet s = new Spreadsheet();
-
-            s.SetContentsOfCell("D2", "=2++M2");
+            s.SetContentsOfCell("B1", "hello");
+            Assert.AreEqual("", s.GetCellContents("b1"));
         }
 
-        /// <summary>
-        /// Test for three argument constructor
-        /// </summary>
-        [TestMethod]
-        public void constructorTest6()
-        {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "2.1");
-            s.SetContentsOfCell("D2", "=2+M2");
-            s.SetContentsOfCell("M2", "12");
-            Assert.AreEqual(s.GetCellValue("M2"), 12.0);
-            Assert.AreEqual(s.GetCellValue("D2"), 14.0);
-
-        }
-
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
-        public void SaveTest()
+        public void NormalizeTest2()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.0");
-            s.Save("save1.txt");
-            Assert.AreEqual("1.0", new Spreadsheet().GetSavedVersion("save1.txt"));
+            AbstractSpreadsheet ss = new Spreadsheet(s => true, s => s.ToUpper(), "");
+            ss.SetContentsOfCell("B1", "hello");
+            Assert.AreEqual("hello", ss.GetCellContents("b1"));
         }
 
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
+        public void NormalizeTest3()
+        {
+            AbstractSpreadsheet s = new Spreadsheet();
+            s.SetContentsOfCell("a1", "5");
+            s.SetContentsOfCell("A1", "6");
+            s.SetContentsOfCell("B1", "= a1");
+            Assert.AreEqual(5.0, (double) s.GetCellValue("B1"), 1e-9);
+        }
+
+        [TestMethod()]
+        public void NormalizeTest4()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet(s => true, s => s.ToUpper(), "");
+            ss.SetContentsOfCell("a1", "5");
+            ss.SetContentsOfCell("A1", "6");
+            ss.SetContentsOfCell("B1", "= a1");
+            Assert.AreEqual(6.0, (double)ss.GetCellValue("B1"), 1e-9);
+        }
+
+        // Simple tests
+        [TestMethod()]
+        public void EmptySheet()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            VV(ss, "A1", "");
+        }
+
+
+        [TestMethod()]
+        public void OneString()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            OneString(ss);
+        }
+
+        public void OneString(AbstractSpreadsheet ss)
+        {
+            Set(ss, "B1", "hello");
+            VV(ss, "B1", "hello");
+        }
+
+
+        [TestMethod()]
+        public void OneNumber()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            OneNumber(ss);
+        }
+
+        public void OneNumber(AbstractSpreadsheet ss)
+        {
+            Set(ss, "C1", "17.5");
+            VV(ss, "C1", 17.5);
+        }
+
+
+        [TestMethod()]
+        public void OneFormula()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            OneFormula(ss);
+        }
+
+        public void OneFormula(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "B1", "5.2");
+            Set(ss, "C1", "= A1+B1");
+            VV(ss, "A1", 4.1, "B1", 5.2, "C1", 9.3);
+        }
+
+
+        [TestMethod()]
+        public void Changed()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            Assert.IsFalse(ss.Changed);
+            Set(ss, "C1", "17.5");
+            Assert.IsTrue(ss.Changed);
+        }
+
+
+        [TestMethod()]
+        public void DivisionByZero1()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            DivisionByZero1(ss);
+        }
+
+        public void DivisionByZero1(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "B1", "0.0");
+            Set(ss, "C1", "= A1 / B1");
+            Assert.IsInstanceOfType(ss.GetCellValue("C1"), typeof(FormulaError));
+        }
+
+        [TestMethod()]
+        public void DivisionByZero2 ()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            DivisionByZero2(ss);
+        }
+
+        public void DivisionByZero2(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "5.0");
+            Set(ss, "A3", "= A1 / 0.0");
+            Assert.IsInstanceOfType(ss.GetCellValue("A3"), typeof(FormulaError));
+        }
+            
+
+
+        [TestMethod()]
+        public void EmptyArgument()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            EmptyArgument(ss);
+        }
+
+        public void EmptyArgument(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "C1", "= A1 + B1");
+            Assert.IsInstanceOfType(ss.GetCellValue("C1"), typeof(FormulaError));
+        }
+
+
+        [TestMethod()]
+        public void StringArgument()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            StringArgument(ss);
+        }
+
+        public void StringArgument(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "B1", "hello");
+            Set(ss, "C1", "= A1 + B1");
+            Assert.IsInstanceOfType(ss.GetCellValue("C1"), typeof(FormulaError));
+        }
+
+
+        [TestMethod()]
+        public void ErrorArgument()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            ErrorArgument(ss);
+        }
+
+        public void ErrorArgument(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "B1", "");
+            Set(ss, "C1", "= A1 + B1");
+            Set(ss, "D1", "= C1");
+            Assert.IsInstanceOfType(ss.GetCellValue("D1"), typeof(FormulaError));
+        }
+
+
+        [TestMethod()]
+        public void NumberFormula1()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            NumberFormula1(ss);
+        }
+
+        public void NumberFormula1(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.1");
+            Set(ss, "C1", "= A1 + 4.2");
+            VV(ss, "C1", 8.3);
+        }
+
+
+        [TestMethod()]
+        public void NumberFormula2()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            NumberFormula2(ss);
+        }
+
+        public void NumberFormula2(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "= 4.6");
+            VV(ss, "A1", 4.6);
+        }
+
+
+        // Repeats the simple tests all together
+        [TestMethod()]
+        public void RepeatSimpleTests()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            Set(ss, "A1", "17.32");
+            Set(ss, "B1", "This is a test");
+            Set(ss, "C1", "= A1+B1");
+            OneString(ss);
+            OneNumber(ss);
+            OneFormula(ss);
+            DivisionByZero1(ss);
+            DivisionByZero2(ss);
+            StringArgument(ss);
+            ErrorArgument(ss);
+            NumberFormula1(ss);
+            NumberFormula2(ss);
+        }
+
+        // Four kinds of formulas
+        [TestMethod()]
+        public void Formulas()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            Formulas(ss);
+        }
+
+        public void Formulas(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "4.4");
+            Set(ss, "B1", "2.2");
+            Set(ss, "C1", "= A1 + B1");
+            Set(ss, "D1", "= A1 - B1");
+            Set(ss, "E1", "= A1 * B1");
+            Set(ss, "F1", "= A1 / B1");
+            VV(ss, "C1", 6.6, "D1", 2.2, "E1", 4.4 * 2.2, "F1", 2.0);
+        }
+
+        [TestMethod()]
+        public void Formulasa()
+        {
+            Formulas();
+        }
+
+        [TestMethod()]
+        public void Formulasb()
+        {
+            Formulas();
+        }
+
+
+        // Are multiple spreadsheets supported?
+        [TestMethod()]
+        public void Multiple()
+        {
+            AbstractSpreadsheet s1 = new Spreadsheet();
+            AbstractSpreadsheet s2 = new Spreadsheet();
+            Set(s1, "X1", "hello");
+            Set(s2, "X1", "goodbye");
+            VV(s1, "X1", "hello");
+            VV(s2, "X1", "goodbye");
+        }
+
+        [TestMethod()]
+        public void Multiplea()
+        {
+            Multiple();
+        }
+
+        [TestMethod()]
+        public void Multipleb()
+        {
+            Multiple();
+        }
+
+        [TestMethod()]
+        public void Multiplec()
+        {
+            Multiple();
+        }
+
+        // Reading/writing spreadsheets
+        [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest1()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
-            s.SetContentsOfCell("D1", "Hello World");
-            s.Save("save2.txt");
-            Assert.AreEqual("1.1", new Spreadsheet().GetSavedVersion("save2.txt"));
+            AbstractSpreadsheet ss = new Spreadsheet();
+            ss.Save("q:\\missing\\save.txt");
         }
 
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest2()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
-            s.SetContentsOfCell("D1", "Hello World");
-            s.Save("");
+            AbstractSpreadsheet ss = new Spreadsheet("q:\\missing\\save.txt", s => true, s => s, "");
         }
 
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest3()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
-            s.SetContentsOfCell("D1", "Hello World");
-            new Spreadsheet().GetSavedVersion("ducky");
+            AbstractSpreadsheet s1 = new Spreadsheet();
+            Set(s1, "A1", "hello");
+            s1.Save("save1.txt");
+            s1 = new Spreadsheet("save1.txt", s => true, s => s, "default");
+            Assert.AreEqual("hello", s1.GetCellContents("A1"));
         }
 
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
         [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest4()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
-            s.SetContentsOfCell("D1", "Hello World");
-            new Spreadsheet().GetSavedVersion("");
+            using (StreamWriter writer = new StreamWriter("save2.txt"))
+            {
+                writer.WriteLine("This");
+                writer.WriteLine("is");
+                writer.WriteLine("a");
+                writer.WriteLine("test!");
+            }
+            AbstractSpreadsheet ss = new Spreadsheet("save2.txt", s => true, s => s, "");
         }
 
-        /// <summary>
-        /// Test for save method
-        /// </summary>
         [TestMethod()]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest5()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
-            s.SetContentsOfCell("D1", "Hello World");
-            Assert.AreEqual(s.Changed, true);
-            s.Save("save3.txt");
-            Assert.AreEqual(s.Changed, false);
+            AbstractSpreadsheet ss = new Spreadsheet();
+            ss.Save("save3.txt");
+            ss = new Spreadsheet("save3.txt", s => true, s => s, "version");
         }
 
-        /// <summary>
-        /// Test for validator and normalizer
-        /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(FormulaFormatException))]
-        public void constructorTest7()
+        public void SaveTest6()
         {
-            AbstractSpreadsheet s = new Spreadsheet(validator2, normalizer2, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=E1+2");
+            AbstractSpreadsheet ss = new Spreadsheet(s => true, s => s, "hello");
+            ss.Save("save4.txt");
+            Assert.AreEqual("hello", new Spreadsheet().GetSavedVersion("save4.txt"));
         }
 
-        /// <summary>
-        /// Test for validator and normalizer
-        /// </summary>
-        [TestMethod()]
-        public void constructorTest8()
-        {
-            AbstractSpreadsheet s = new Spreadsheet(validator2, normalizer2, "1.1");
-            s.SetContentsOfCell("E1", "21.0");
-            s.SetContentsOfCell("A1", "=ee5+2");
-        }
-
-        /// <summary>
-        /// Test for save
-        /// </summary>
         [TestMethod()]
         public void SaveTest7()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("A1", "21.0");
-            s.SetContentsOfCell("B1", "13+A1");
-            s.SetContentsOfCell("C1", "Hello World");
-            s.Save("save8.txt");
-            AbstractSpreadsheet ss = new Spreadsheet("save8.txt", x => true, x => x, "1.1");
-            Assert.AreEqual(ss.GetCellContents("A1"), s.GetCellContents("A1"));
-            Assert.AreEqual(ss.GetCellContents("B1"), s.GetCellContents("B1"));
-            Assert.AreEqual(ss.GetCellContents("C1"), s.GetCellContents("C1"));
+            using (XmlWriter writer = XmlWriter.Create("save5.txt"))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("spreadsheet");
+                writer.WriteAttributeString("version", "");
+                
+                writer.WriteStartElement("cell");
+                writer.WriteElementString("name", "A1");
+                writer.WriteElementString("contents", "hello");
+                writer.WriteEndElement();
 
-            Assert.AreEqual(ss.GetCellValue("A1"), s.GetCellValue("A1"));
-            Assert.AreEqual(ss.GetCellValue("B1"), s.GetCellValue("B1"));
-            Assert.AreEqual(ss.GetCellValue("C1"), s.GetCellValue("C1"));
+                writer.WriteStartElement("cell");
+                writer.WriteElementString("name", "A2");
+                writer.WriteElementString("contents", "5.0");
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("cell");
+                writer.WriteElementString("name", "A3");
+                writer.WriteElementString("contents", "4.0");
+                writer.WriteEndElement();
+                
+                writer.WriteStartElement("cell");
+                writer.WriteElementString("name", "A4");
+                writer.WriteElementString("contents", "= A2 + A3");
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+            }
+            AbstractSpreadsheet ss = new Spreadsheet("save5.txt", s => true, s => s, "");
+            VV(ss, "A1", "hello", "A2", 5.0, "A3", 4.0, "A4", 9.0);
         }
 
-        /// <summary>
-        /// Test for save
-        /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void SaveTest8()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("A1", "21.0");
-            s.SetContentsOfCell("B1", "13+A1");
-            s.SetContentsOfCell("C1", "Hello World");
-            s.Save("save8.txt");
-            AbstractSpreadsheet ss = new Spreadsheet("WOOHOO.txt", x => true, x => x, "1.1");
+            AbstractSpreadsheet ss = new Spreadsheet();
+            Set(ss, "A1", "hello");
+            Set(ss, "A2", "5.0");
+            Set(ss, "A3", "4.0");
+            Set(ss, "A4", "= A2 + A3");
+            ss.Save("save6.txt");
+            using (XmlReader reader = XmlReader.Create("save6.txt"))
+            {
+                int spreadsheetCount = 0;
+                int cellCount = 0;
+                bool A1 = false;
+                bool A2 = false;
+                bool A3 = false;
+                bool A4 = false;
+                string name = null;
+                string contents = null;
+
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        switch (reader.Name)
+                        {
+                            case "spreadsheet":
+                                Assert.AreEqual("default", reader["version"]);
+                                spreadsheetCount++;
+                                break;
+
+                            case "cell":
+                                cellCount++;
+                                break;
+
+                            case "name":
+                                reader.Read();
+                                name = reader.Value;
+                                break;
+
+                            case "contents":
+                                reader.Read();
+                                contents = reader.Value;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (reader.Name)
+                        {
+                            case "cell":
+                                if (name.Equals("A1")) { Assert.AreEqual("hello", contents); A1 = true; }
+                                else if (name.Equals("A2")) { Assert.AreEqual(5.0, Double.Parse(contents), 1e-9); A2 = true; }
+                                else if (name.Equals("A3")) { Assert.AreEqual(4.0, Double.Parse(contents), 1e-9); A3 = true; }
+                                else if (name.Equals("A4")) { contents = contents.Replace(" ", ""); Assert.AreEqual("=A2+A3", contents); A4 = true; }
+                                else Assert.Fail();
+                                break;
+                        }
+                    }
+                }
+                Assert.AreEqual(1, spreadsheetCount);
+                Assert.AreEqual(4, cellCount);
+                Assert.IsTrue(A1);
+                Assert.IsTrue(A2);
+                Assert.IsTrue(A3);
+                Assert.IsTrue(A4);
+            }
         }
 
-        /// <summary>
-        /// Test for save
-        /// </summary>
+
+        // Fun with formulas
         [TestMethod()]
-        [ExpectedException(typeof(SpreadsheetReadWriteException))]
-        public void SaveTest9()
+        public void Formula1()
         {
-            AbstractSpreadsheet s = new Spreadsheet(x => true, x => x, "1.1");
-            s.SetContentsOfCell("A1", "21.0");
-            s.SetContentsOfCell("B1", "13+A1");
-            s.SetContentsOfCell("C1", "Hello World");
-            s.Save("save8.txt");
-            AbstractSpreadsheet ss = new Spreadsheet("save8.txt", x => true, x => x, "2.3");
+            Formula1(new Spreadsheet());
+        }
+        public void Formula1(AbstractSpreadsheet ss)
+        {
+            Set(ss, "a1", "= a2 + a3");
+            Set(ss, "a2", "= b1 + b2");
+            Assert.IsInstanceOfType(ss.GetCellValue("a1"), typeof(FormulaError));
+            Assert.IsInstanceOfType(ss.GetCellValue("a2"), typeof(FormulaError));
+            Set(ss, "a3", "5.0");
+            Set(ss, "b1", "2.0");
+            Set(ss, "b2", "3.0");
+            VV(ss, "a1", 10.0, "a2", 5.0);
+            Set(ss, "b2", "4.0");
+            VV(ss, "a1", 11.0, "a2", 6.0);
+        }
+
+        [TestMethod()]
+        public void Formula2()
+        {
+            Formula2(new Spreadsheet());
+        }
+        public void Formula2(AbstractSpreadsheet ss)
+        {
+            Set(ss, "a1", "= a2 + a3");
+            Set(ss, "a2", "= a3");
+            Set(ss, "a3", "6.0");
+            VV(ss, "a1", 12.0, "a2", 6.0, "a3", 6.0);
+            Set(ss, "a3", "5.0");
+            VV(ss, "a1", 10.0, "a2", 5.0, "a3", 5.0);
+        }
+
+        [TestMethod()]
+        public void Formula3()
+        {
+            Formula3(new Spreadsheet());
+        }
+        public void Formula3(AbstractSpreadsheet ss)
+        {
+            Set(ss, "a1", "= a3 + a5");
+            Set(ss, "a2", "= a5 + a4");
+            Set(ss, "a3", "= a5");
+            Set(ss, "a4", "= a5");
+            Set(ss, "a5", "9.0");
+            VV(ss, "a1", 18.0);
+            VV(ss, "a2", 18.0);
+            Set(ss, "a5", "8.0");
+            VV(ss, "a1", 16.0);
+            VV(ss, "a2", 16.0);
+        }
+
+        [TestMethod()]
+        public void Formula4()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            Formula1(ss);
+            Formula2(ss);
+            Formula3(ss);
+        }
+
+        [TestMethod()]
+        public void Formula4a()
+        {
+            Formula4();
         }
 
 
-
-        /// <summary>
-        /// Normalizer test, returns X
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        private string normalizer1(string s)
+        [TestMethod()]
+        public void MediumSheet()
         {
-            if (s == "y2")
-            {
-                return "x5";
+            AbstractSpreadsheet ss = new Spreadsheet();
+            MediumSheet(ss);
+        }
+
+        public void MediumSheet(AbstractSpreadsheet ss)
+        {
+            Set(ss, "A1", "1.0");
+            Set(ss, "A2", "2.0");
+            Set(ss, "A3", "3.0");
+            Set(ss, "A4", "4.0");
+            Set(ss, "B1", "= A1 + A2");
+            Set(ss, "B2", "= A3 * A4");
+            Set(ss, "C1", "= B1 + B2");
+            VV(ss, "A1", 1.0, "A2", 2.0, "A3", 3.0, "A4", 4.0, "B1", 3.0, "B2", 12.0, "C1", 15.0);
+            Set(ss, "A1", "2.0");
+            VV(ss, "A1", 2.0, "A2", 2.0, "A3", 3.0, "A4", 4.0, "B1", 4.0, "B2", 12.0, "C1", 16.0);
+            Set(ss, "B1", "= A1 / A2");
+            VV(ss, "A1", 2.0, "A2", 2.0, "A3", 3.0, "A4", 4.0, "B1", 1.0, "B2", 12.0, "C1", 13.0);
+        }
+
+        [TestMethod()]
+        public void MediumSheeta()
+        {
+            MediumSheet();
+        }
+
+        
+        [TestMethod()]
+        public void MediumSave()
+        {
+            AbstractSpreadsheet ss = new Spreadsheet();
+            MediumSheet(ss);
+            ss.Save("save7.txt");
+            ss = new Spreadsheet("save7.txt", s => true, s => s, "default");
+            VV(ss, "A1", 2.0, "A2", 2.0, "A3", 3.0, "A4", 4.0, "B1", 1.0, "B2", 12.0, "C1", 13.0);
+        }
+
+        [TestMethod()]
+        public void MediumSavea()
+        {
+            MediumSave();
+        }
+
+
+        // A long chained formula.  If this doesn't finish within 60 seconds, it fails.
+        [TestMethod()]
+        public void LongFormulaTest()
+        {
+            object result = "";
+            Thread t = new Thread(() => LongFormulaHelper(out result));
+            t.Start();
+            t.Join(60 * 1000);
+            if (t.IsAlive) {
+                t.Abort();
+                Assert.Fail("Computation took longer than 60 seconds");
             }
-
-            else if (s == "z2")
-            {
-                return "y5";
-            }
-
-            else if (s == "w2")
-            {
-                return "z5";
-            }
-
-            else
-            {
-                return "w5";
-            }
+            Assert.AreEqual("ok", result);
         }
 
-        /// <summary>
-        /// Normalizer test, returns X
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        private string normalizer2(string s)
+        public void LongFormulaHelper(out object result)
         {
-            return s.ToUpper();
+            try
+            {
+                AbstractSpreadsheet s = new Spreadsheet();
+                s.SetContentsOfCell("sum1", "= a1 + a2");
+                int i;
+                int depth = 100;
+                for (i = 1; i <= depth * 2; i += 2)
+                {
+                    s.SetContentsOfCell("a" + i, "= a" + (i + 2) + " + a" + (i + 3));
+                    s.SetContentsOfCell("a" + (i + 1), "= a" + (i + 2) + "+ a" + (i + 3));
+                }
+                s.SetContentsOfCell("a" + i, "1");
+                s.SetContentsOfCell("a" + (i + 1), "1");
+                Assert.AreEqual(Math.Pow(2, depth + 1), (double)s.GetCellValue("sum1"), 1.0);
+                s.SetContentsOfCell("a" + i, "0");
+                Assert.AreEqual(Math.Pow(2, depth), (double)s.GetCellValue("sum1"), 1.0);
+                s.SetContentsOfCell("a" + (i + 1), "0");
+                Assert.AreEqual(0.0, (double)s.GetCellValue("sum1"), 0.1);
+                result = "ok";
+            }
+            catch (Exception e)
+            {
+                result = e;
+            }
         }
 
-        /// <summary>
-        /// return true always
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        private bool validator1(string s)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Returns true only if variable is form AA5
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        private static bool validator2(String s)
-        {
-            return Regex.IsMatch(s, "^([A-Z]){2}[5]$");
-        }
     }
 }
