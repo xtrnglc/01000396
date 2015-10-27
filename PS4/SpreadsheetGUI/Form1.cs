@@ -205,10 +205,6 @@ namespace SpreadsheetGUI
                 this.Cell_Contents_text.Text = "";
 
                 DisplayContentType(value);
-
-                
-                
-                
             }
         }
     }
