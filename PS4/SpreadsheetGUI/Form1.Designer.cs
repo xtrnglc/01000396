@@ -41,10 +41,10 @@
             this.Cell_Contents = new System.Windows.Forms.Label();
             this.Cell_Content_Type = new System.Windows.Forms.Label();
             this.Cell_Value = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.Cell_name_text = new System.Windows.Forms.TextBox();
+            this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.Cell_Contents_text = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -155,47 +155,49 @@
             this.Cell_Value.TabIndex = 5;
             this.Cell_Value.Text = "Cell Value:";
             // 
-            // textBox1
+            // Cell_name_text
             // 
-            this.textBox1.Location = new System.Drawing.Point(78, 28);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.TextChanged += new System.EventHandler(this.Form1_Load);
+            this.Cell_name_text.Location = new System.Drawing.Point(78, 28);
+            this.Cell_name_text.Name = "Cell_name_text";
+            this.Cell_name_text.ReadOnly = true;
+            this.Cell_name_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_name_text.TabIndex = 6;
+            this.Cell_name_text.TextChanged += new System.EventHandler(this.spreadsheetPanel1_Load);
             // 
-            // textBox2
+            // Cell_Value_text
             // 
-            this.textBox2.Location = new System.Drawing.Point(768, 28);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 7;
+            this.Cell_Value_text.Location = new System.Drawing.Point(276, 25);
+            this.Cell_Value_text.Name = "Cell_Value_text";
+            this.Cell_Value_text.ReadOnly = true;
+            this.Cell_Value_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_Value_text.TabIndex = 7;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(276, 28);
+            this.textBox3.Location = new System.Drawing.Point(533, 25);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 8;
             // 
-            // textBox4
+            // Cell_Contents_text
             // 
-            this.textBox4.Location = new System.Drawing.Point(533, 28);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 9;
+            this.Cell_Contents_text.Location = new System.Drawing.Point(768, 25);
+            this.Cell_Contents_text.Name = "Cell_Contents_text";
+            this.Cell_Contents_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_Contents_text.TabIndex = 9;
+            this.Cell_Contents_text.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Cell_Contents_text_KeyDown);
+            this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1131, 537);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.Cell_Contents_text);
             this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.Cell_Value_text);
+            this.Controls.Add(this.Cell_name_text);
             this.Controls.Add(this.Cell_Value);
             this.Controls.Add(this.Cell_Content_Type);
             this.Controls.Add(this.Cell_Contents);
@@ -228,10 +230,10 @@
         private System.Windows.Forms.Label Cell_Contents;
         private System.Windows.Forms.Label Cell_Content_Type;
         private System.Windows.Forms.Label Cell_Value;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox Cell_name_text;
+        private System.Windows.Forms.TextBox Cell_Value_text;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox Cell_Contents_text;
     }
 }
 

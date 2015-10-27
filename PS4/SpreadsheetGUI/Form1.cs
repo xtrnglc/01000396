@@ -11,16 +11,30 @@ using SS;
 
 namespace SpreadsheetGUI
 {
+    
+
+
     public partial class Form1 : Form
     {
+        private bool SelectionChange = false;
+        private Spreadsheet Sheet = new Spreadsheet();
+        SpreadsheetPanel ss = new SpreadsheetPanel();
         public Form1()
         {
+            
+
             InitializeComponent();
 
             spreadsheetPanel1.SelectionChanged += displaySelection;
-            spreadsheetPanel1.SetSelection(2, 3);
+            spreadsheetPanel1.SetSelection(0, 0);
+
+            
         }
 
+        /// <summary>
+        /// Clicking on a cell
+        /// </summary>
+        /// <param name="ss"></param>
         private void displaySelection(SpreadsheetPanel ss)
         {
             int row, col;
@@ -28,12 +42,23 @@ namespace SpreadsheetGUI
             ss.GetSelection(out col, out row);
             ss.GetValue(col, row, out value);
 
+            //DisplayCellName(col, row).ToString()
+
+            this.Cell_name_text.Text = DisplayCellName(col, row);
+
             
             if (value == "")
             {
-                ss.SetValue(col, row, DisplayCellName(col, row).ToString());
-                ss.GetValue(col, row, out value);
+                //ss.SetValue(col, row, this.Cell_Contents_text.Text);
+                //ss.GetValue(col, row, out value);
+                this.Cell_Value_text.Text = value;
                 //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
+                this.Cell_Contents_text.Text = "";
+            }
+            else
+            {
+                this.Cell_Contents_text.Text = value;
+                this.Cell_Value_text.Text = value;
             }
         }
 
@@ -76,9 +101,46 @@ namespace SpreadsheetGUI
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void Cell_name_text_TextChanged(object sender, EventArgs e)
         {
-            this.Cell.Text = "Hello World!";
+            this.Cell_name_text.Text = "Hello";
+        }
+
+        private void Cell_Contents_text_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Cell_Contents_text_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '6')
+            {
+                int row, col;
+                String value;
+                ss.GetSelection(out col, out row);
+                ss.GetValue(col, row, out value);
+
+                //DisplayCellName(col, row).ToString()
+
+                this.Cell_name_text.Text = DisplayCellName(col, row);
+
+
+                if (value == "")
+                {
+                    ss.SetValue(col, row, this.Cell_Contents_text.Text);
+                    ss.GetValue(col, row, out value);
+                    this.Cell_Value_text.Text = value;
+                    //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
+                    this.Cell_Contents_text.Text = "";
+                }
+                else
+                {
+                    this.Cell_Contents_text.Text = value;
+                    this.Cell_Value_text.Text = value;
+                }
+            }
+
+            
         }
     }
 }
