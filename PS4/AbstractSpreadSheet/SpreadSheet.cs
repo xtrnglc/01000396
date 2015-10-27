@@ -450,6 +450,10 @@ namespace SS
                     cellList.Add(name, new Cell(formula, LookupValue));
                 }
 
+                if(GetCellValue(name) is FormulaError)
+                {
+                    throw new ArgumentException("One of the variables is undefined");
+                }
 
                 if (dependencies.HasDependees(name))
                 {
@@ -724,7 +728,7 @@ namespace SS
                     }
                     catch (FormulaFormatException)
                     {
-                        throw new FormulaFormatException("Invalid variable");
+                        throw new FormulaFormatException("Invalid variable or token");
                     }
 
 

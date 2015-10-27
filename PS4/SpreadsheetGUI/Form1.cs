@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SS;
+using SpreadsheetUtilities;
 
 namespace SpreadsheetGUI
 {
@@ -42,7 +43,7 @@ namespace SpreadsheetGUI
             ss.GetSelection(out col, out row);
             ss.GetValue(col, row, out value);
 
-            this.Cell_name_text.Text = DisplayCellName(col, row);
+            this.Cell_name_text.Text = GetCellName(col, row);
 
             if (value == "")
             {
@@ -55,14 +56,32 @@ namespace SpreadsheetGUI
             }
             else
             {
-                this.Cell_Contents_text.Text = value;
-                this.Cell_Value_text.Text = value;
-                DisplayContentType(value);
+                if (!(Sheet.GetCellContents(GetCellName(col, row)) is string) && !(Sheet.GetCellContents(GetCellName(col, row)) is double))
+                {
+                    string temp = "=";
+                    temp += Sheet.GetCellContents(GetCellName(col, row)).ToString();
+                    this.Cell_Contents_text.Text = temp;
+                    this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
+                    DisplayContentType(value);
+                }
+
+                else
+                {
+                    this.Cell_Contents_text.Text = Sheet.GetCellContents(GetCellName(col, row)).ToString();
+                    this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
+                    DisplayContentType(value);
+                }
+                
             }
 
         }
-
-        private string DisplayCellName(int col, int row)
+        /// <summary>
+        /// Returns name of selected cell
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        private string GetCellName(int col, int row)
         {
             row += 1;
             col += 65;
@@ -73,6 +92,10 @@ namespace SpreadsheetGUI
             return s;
         }
 
+        /// <summary>
+        /// Displays content type depending on its type
+        /// </summary>
+        /// <param name="value"></param>
         private void DisplayContentType (string value)
         {
             double temp;
@@ -90,17 +113,31 @@ namespace SpreadsheetGUI
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Help message regarding changing cells
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changeSelectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("Change your selected cell by left clicking on a new box.");
         }
 
+        /// <summary>
+        /// Help message regarding changing cell contents
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changeCellContentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To change a cell's contents, select the desired cell and edit the contents box and then press enter.");
@@ -142,22 +179,28 @@ namespace SpreadsheetGUI
 
 
 
-                this.Cell_name_text.Text = DisplayCellName(col, row);      
+                this.Cell_name_text.Text = GetCellName(col, row);      
                 
                 
 
                 try
                 {
-                    Sheet.SetContentsOfCell(DisplayCellName(col, row), value);
-
-                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                    spreadsheetPanel1.GetValue(col, row, out value);
+                    Sheet.SetContentsOfCell(GetCellName(col, row), (sender as TextBox).Text);
+                    if ((sender as TextBox).Text.StartsWith("="))
+                    {
+                        spreadsheetPanel1.SetValue(col, row, Sheet.GetCellValue(GetCellName(col, row)).ToString());
+                    }
+                    else
+                    {
+                        spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
+                        //spreadsheetPanel1.GetValue(col, row, out value);
+                    }
                 }
                 catch (Exception excep)
                 {
                     System.Windows.Forms.MessageBox.Show(excep.Message);
                 }
-                this.Cell_Value_text.Text = value;
+                this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
                 
                 this.Cell_Contents_text.Text = "";
 
