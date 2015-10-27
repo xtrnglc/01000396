@@ -18,7 +18,7 @@ namespace SpreadsheetGUI
     {
         private bool SelectionChange = false;
         private Spreadsheet Sheet = new Spreadsheet();
-        SpreadsheetPanel ss = new SpreadsheetPanel();
+      
         public Form1()
         {
             
@@ -49,8 +49,8 @@ namespace SpreadsheetGUI
             
             if (value == "")
             {
-                //ss.SetValue(col, row, this.Cell_Contents_text.Text);
-                //ss.GetValue(col, row, out value);
+                ss.SetValue(col, row, this.Cell_Contents_text.Text);
+                ss.GetValue(col, row, out value);
                 this.Cell_Value_text.Text = value;
                 //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
                 this.Cell_Contents_text.Text = "";
@@ -60,6 +60,8 @@ namespace SpreadsheetGUI
                 this.Cell_Contents_text.Text = value;
                 this.Cell_Value_text.Text = value;
             }
+
+            Sheet.SetContentsOfCell(DisplayCellName(col, row), value);
         }
 
         private string DisplayCellName(int col, int row)
@@ -113,31 +115,34 @@ namespace SpreadsheetGUI
 
         private void Cell_Contents_text_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-            if (e.KeyChar == '6')
+            if (e.KeyChar == 13)
             {
                 int row, col;
                 String value;
-                ss.GetSelection(out col, out row);
-                ss.GetValue(col, row, out value);
+                spreadsheetPanel1.GetSelection(out col, out row);
+                spreadsheetPanel1.GetValue(col, row, out value);
 
                 //DisplayCellName(col, row).ToString()
 
                 this.Cell_name_text.Text = DisplayCellName(col, row);
 
-
+                
+                
                 if (value == "")
                 {
-                    ss.SetValue(col, row, this.Cell_Contents_text.Text);
-                    ss.GetValue(col, row, out value);
+                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
+                    spreadsheetPanel1.GetValue(col, row, out value);
                     this.Cell_Value_text.Text = value;
                     //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
                     this.Cell_Contents_text.Text = "";
                 }
                 else
                 {
+                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
                     this.Cell_Contents_text.Text = value;
                     this.Cell_Value_text.Text = value;
                 }
+                
             }
 
             
