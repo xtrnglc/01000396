@@ -42,17 +42,14 @@ namespace SpreadsheetGUI
             ss.GetSelection(out col, out row);
             ss.GetValue(col, row, out value);
 
-            //DisplayCellName(col, row).ToString()
-
             this.Cell_name_text.Text = DisplayCellName(col, row);
 
-            
             if (value == "")
             {
                 ss.SetValue(col, row, this.Cell_Contents_text.Text);
                 ss.GetValue(col, row, out value);
                 this.Cell_Value_text.Text = value;
-                //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
+                
                 this.Cell_Contents_text.Text = "";
             }
             else
@@ -61,12 +58,10 @@ namespace SpreadsheetGUI
                 this.Cell_Value_text.Text = value;
             }
 
-            Sheet.SetContentsOfCell(DisplayCellName(col, row), value);
         }
 
         private string DisplayCellName(int col, int row)
         {
-            
             row += 1;
             col += 65;
             char c = (char)col;
@@ -105,47 +100,42 @@ namespace SpreadsheetGUI
 
         private void Cell_name_text_TextChanged(object sender, EventArgs e)
         {
-            this.Cell_name_text.Text = "Hello";
+
         }
 
         private void Cell_Contents_text_KeyDown(object sender, KeyEventArgs e)
         {
 
         }
-
+        /// <summary>
+        /// Event handler for enter key press
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cell_Contents_text_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
+                double temp;
                 int row, col;
                 String value;
                 spreadsheetPanel1.GetSelection(out col, out row);
                 spreadsheetPanel1.GetValue(col, row, out value);
 
-                //DisplayCellName(col, row).ToString()
-
-                this.Cell_name_text.Text = DisplayCellName(col, row);
-
+                this.Cell_name_text.Text = DisplayCellName(col, row);      
                 
+                spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
+                spreadsheetPanel1.GetValue(col, row, out value);
+                this.Cell_Value_text.Text = value;
                 
-                if (value == "")
+                this.Cell_Contents_text.Text = "";
+
+                if(value.StartsWith("="))
                 {
-                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                    spreadsheetPanel1.GetValue(col, row, out value);
-                    this.Cell_Value_text.Text = value;
-                    //MessageBox.Show("Selection: column " + col + " row " + row + " value " + value);
-                    this.Cell_Contents_text.Text = "";
-                }
-                else
-                {
-                    spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                    this.Cell_Contents_text.Text = value;
-                    this.Cell_Value_text.Text = value;
+                    this.ce = "Formula";
                 }
                 
             }
-
-            
         }
     }
 }
