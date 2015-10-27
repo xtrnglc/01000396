@@ -158,10 +158,6 @@ namespace SpreadsheetGUI
 
         }
 
-        private void Cell_Contents_text_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
         /// <summary>
         /// Event handler for enter key press
         /// </summary>

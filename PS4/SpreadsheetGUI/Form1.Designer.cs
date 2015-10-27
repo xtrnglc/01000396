@@ -187,7 +187,6 @@
             this.Cell_Contents_text.Name = "Cell_Contents_text";
             this.Cell_Contents_text.Size = new System.Drawing.Size(100, 20);
             this.Cell_Contents_text.TabIndex = 9;
-            this.Cell_Contents_text.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Cell_Contents_text_KeyDown);
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
             // Form1
