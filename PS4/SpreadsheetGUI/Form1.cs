@@ -63,6 +63,7 @@ namespace SpreadsheetGUI
                     this.Cell_Contents_text.Text = temp;
                     this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
                     DisplayContentType(value);
+                    this.textBox3.Text = "Formula";
                 }
 
                 else
@@ -93,6 +94,30 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Returns the coordinates of a given cell
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns>int col, int row</returns>
+        private int[] GetCellCoordinates(string s)
+        {
+            char c = s[0];
+            int col = (int)c;
+            col -= 65;
+            int row;
+            
+
+            string temp = s.Substring(1);
+            int.TryParse(temp, out row);
+            row -= 1;
+
+            int[] coordinates = new int[2];
+            coordinates[0] = col;
+            coordinates[1] = row;
+
+            return coordinates;
+        }
+
+        /// <summary>
         /// Displays content type depending on its type
         /// </summary>
         /// <param name="value"></param>
@@ -109,7 +134,10 @@ namespace SpreadsheetGUI
                 this.textBox3.Text = "Double";
             }
             else
+            {
                 this.textBox3.Text = "String";
+            }
+                
         }
 
 
@@ -169,19 +197,16 @@ namespace SpreadsheetGUI
             {
                 
                 int row, col;
-                String value;
+                String value = (sender as TextBox).Text;
                 spreadsheetPanel1.GetSelection(out col, out row);
-                spreadsheetPanel1.GetValue(col, row, out value);
-
-
+                ISet<String> cellsToRecalculate = new HashSet<String>();
+                int[] coordinates = new int[2];
 
                 this.Cell_name_text.Text = GetCellName(col, row);      
                 
-                
-
                 try
                 {
-                    Sheet.SetContentsOfCell(GetCellName(col, row), (sender as TextBox).Text);
+                    cellsToRecalculate = Sheet.SetContentsOfCell(GetCellName(col, row), (sender as TextBox).Text);
                     if ((sender as TextBox).Text.StartsWith("="))
                     {
                         spreadsheetPanel1.SetValue(col, row, Sheet.GetCellValue(GetCellName(col, row)).ToString());
@@ -189,17 +214,21 @@ namespace SpreadsheetGUI
                     else
                     {
                         spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                        //spreadsheetPanel1.GetValue(col, row, out value);
                     }
+
+                    foreach (string entry in cellsToRecalculate)
+                    {
+                        coordinates = GetCellCoordinates(entry);
+
+                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                    }
+                    this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
+
                 }
                 catch (Exception excep)
                 {
                     System.Windows.Forms.MessageBox.Show(excep.Message);
                 }
-                this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
-                
-                this.Cell_Contents_text.Text = "";
-
                 DisplayContentType(value);
             }
         }
