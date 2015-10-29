@@ -115,7 +115,7 @@
             this.Close.Name = "Close";
             this.Close.Size = new System.Drawing.Size(152, 22);
             this.Close.Text = "Close";
-            //this.Close.Click += new System.EventHandler(this.Close_Click);
+            this.Close.Click += new System.EventHandler(this.Close_Click_1);
             // 
             // helpToolStripMenuItem
             // 

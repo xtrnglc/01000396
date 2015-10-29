@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 
 
+
 namespace SpreadsheetGUI
 {
     
@@ -26,14 +27,10 @@ namespace SpreadsheetGUI
       
         public Form1()
         {
-            
-
             InitializeComponent();
 
             spreadsheetPanel1.SelectionChanged += displaySelection;
-            spreadsheetPanel1.SetSelection(0, 0);
-
-            
+            spreadsheetPanel1.SetSelection(0, 0); 
         }
 
         /// <summary>
@@ -76,9 +73,7 @@ namespace SpreadsheetGUI
                     this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
                     DisplayContentType(value);
                 }
-                
             }
-
         }
         /// <summary>
         /// Returns name of selected cell
@@ -108,8 +103,6 @@ namespace SpreadsheetGUI
             int col = (int)c;
             col -= 65;
             int row;
-            
-
             string temp = s.Substring(1);
             int.TryParse(temp, out row);
             row -= 1;
@@ -140,8 +133,7 @@ namespace SpreadsheetGUI
             else
             {
                 this.textBox3.Text = "String";
-            }
-                
+            }   
         }
 
 
@@ -199,7 +191,6 @@ namespace SpreadsheetGUI
         {
             if (e.KeyChar == 13)
             {
-                
                 int row, col;
                 String value = (sender as TextBox).Text;
                 spreadsheetPanel1.GetSelection(out col, out row);
@@ -323,8 +314,9 @@ namespace SpreadsheetGUI
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             Stream myStream = null;
+            FileStream fileStream;
             openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "sprd files (*.sprd)|*.sprd|All files (*.*)|*.*";
+            openFileDialog1.Filter = "All files (*.*)|*.*|sprd files (*.sprd)|*.sprd";
             openFileDialog1.FilterIndex = 2;
             openFileDialog1.RestoreDirectory = true;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -333,9 +325,10 @@ namespace SpreadsheetGUI
                 {
                     if ((myStream = openFileDialog1.OpenFile()) != null)
                     {
-                        using (myStream)
+                        fileStream = myStream as FileStream;
+                        using (fileStream)
                         {
-                            //myStream.Read
+                            Spreadsheet newSpreadsheet = new Spreadsheet(fileStream.Name.ToString(), s => true, s => s, "PS6");
                         }
                     }
                 }
@@ -365,23 +358,7 @@ namespace SpreadsheetGUI
 
         private void Close_Click(object sender, EventArgs e)
         {
-            if (!Sheet.Changed)
-            {
-                this.Close();
-            }
-            else
-            {
-                if (MessageBox.Show("Do you want to save changes to your text?", "My Application",
-                   MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    // Cancel the Closing event from closing the form.
-                    e.Cancel = true;
-                    // Call method to save file...
-                }
-            }
-
-            
-            
+            this.Close();
         }
 
         private void New_Click(object sender, EventArgs e)
@@ -392,20 +369,26 @@ namespace SpreadsheetGUI
             //spreadsheetPanel1.SetSelection(0, 0);
         }
 
-        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        
+        /// <summary>
+        /// Method to close the spreadsheet. If the user wants to save, it will go to the
+        /// save method and ask for a file name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Close_Click_1(object sender, EventArgs e)
         {
-            // Determine if text has changed in the textbox by comparing to original text.
             if (Sheet.Changed)
             {
                 // Display a MsgBox asking the user to save changes or abort.
-                if (MessageBox.Show("Do you want to save changes to your text?", "My Application",
+                if (MessageBox.Show("Do you want to save changes to your spreadsheet?", "Spreadsheet",
                    MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    // Cancel the Closing event from closing the form.
-                    e.Cancel = true;
-                    // Call method to save file...
+                    //Call method to save file
+                    SaveAsOption_Click(sender, e);
                 }
             }
+            this.Close();
         }
     }
 }
