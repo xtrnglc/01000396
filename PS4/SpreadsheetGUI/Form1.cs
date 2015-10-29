@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SS;
 using SpreadsheetUtilities;
+using System.Text.RegularExpressions;
+using System.IO;
+
 
 namespace SpreadsheetGUI
 {
@@ -19,6 +22,7 @@ namespace SpreadsheetGUI
     {
         private bool SelectionChange = false;
         private Spreadsheet Sheet = new Spreadsheet();
+        string fileName = null;
       
         public Form1()
         {
@@ -230,6 +234,177 @@ namespace SpreadsheetGUI
                     System.Windows.Forms.MessageBox.Show(excep.Message);
                 }
                 DisplayContentType(value);
+            }
+        }
+
+        /// <summary>
+        /// Saves the current state of the file using an existing filename
+        /// If an existing filename does not exist then one is created
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Save_Click(object sender, EventArgs e)
+        {
+            if (fileName == null)
+            {
+                try
+                {
+                    fileName = Prompt.ShowDialog("Enter File Name", "");
+                }
+                catch(Exception excep)
+                {
+                    System.Windows.Forms.MessageBox.Show(excep.Message);
+                } 
+
+                if (!fileName.Contains(".sprd"))
+                {
+                    fileName += ".sprd";
+                }
+
+                Sheet.Save(fileName);
+            }
+            else
+            {
+                Sheet.Save(fileName);
+            }
+        }
+
+        /// <summary>
+        /// Saves the current state of the file with a new save name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveAsOption_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                fileName = Prompt.ShowDialog("Enter File Name", "");
+            }
+            catch (Exception excep)
+            {
+                System.Windows.Forms.MessageBox.Show(excep.Message);
+            }
+
+            if (!fileName.Contains(".sprd"))
+            {
+                fileName += ".sprd";
+            }
+            
+            Sheet.Save(fileName);
+        }
+
+        /// <summary>
+        /// Prompt box
+        /// </summary>
+        public static class Prompt
+        {
+            public static string ShowDialog(string text, string caption)
+            {
+                Form prompt = new Form();
+                prompt.Width = 300;
+                prompt.Height = 150;
+                prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
+                prompt.Text = caption;
+                prompt.StartPosition = FormStartPosition.CenterScreen;
+                Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+                TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 200 };
+                Button confirmation = new Button() { Text = "Ok", Left = 100, Width = 50, Top = 75, DialogResult = DialogResult.OK };
+                confirmation.Click += (sender, e) => { prompt.Close(); };
+                prompt.Controls.Add(textBox);
+                prompt.Controls.Add(confirmation);
+                prompt.Controls.Add(textLabel);
+                prompt.AcceptButton = confirmation;
+
+                return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+            }
+        }
+
+        private void Open_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            Stream myStream = null;
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "sprd files (*.sprd)|*.sprd|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (myStream)
+                        {
+                            //myStream.Read
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+
+
+
+
+
+
+
+
+
+
+                System.IO.StreamReader sr = new
+                   System.IO.StreamReader(openFileDialog1.FileName);
+                MessageBox.Show(sr.ReadToEnd());
+                sr.Close();
+
+
+
+            }
+        }
+
+        private void Close_Click(object sender, EventArgs e)
+        {
+            if (!Sheet.Changed)
+            {
+                this.Close();
+            }
+            else
+            {
+                if (MessageBox.Show("Do you want to save changes to your text?", "My Application",
+                   MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    // Cancel the Closing event from closing the form.
+                    e.Cancel = true;
+                    // Call method to save file...
+                }
+            }
+
+            
+            
+        }
+
+        private void New_Click(object sender, EventArgs e)
+        {
+            InitializeComponent();
+
+            //spreadsheetPanel1.SelectionChanged += displaySelection;
+            //spreadsheetPanel1.SetSelection(0, 0);
+        }
+
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Determine if text has changed in the textbox by comparing to original text.
+            if (Sheet.Changed)
+            {
+                // Display a MsgBox asking the user to save changes or abort.
+                if (MessageBox.Show("Do you want to save changes to your text?", "My Application",
+                   MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    // Cancel the Closing event from closing the form.
+                    e.Cancel = true;
+                    // Call method to save file...
+                }
             }
         }
     }
