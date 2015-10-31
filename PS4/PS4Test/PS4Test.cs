@@ -137,6 +137,17 @@ namespace PS4Test
             }
         }
 
+        [TestMethod]
+        public void test()
+        {
+            Spreadsheet s = new Spreadsheet();
+
+            s.GetCellContents("A1");
+            s.GetCellValue("A1");
+
+
+        }
+
         /// <summary>
         /// Test for constructors
         /// </summary>

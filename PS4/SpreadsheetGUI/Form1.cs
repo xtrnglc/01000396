@@ -12,25 +12,22 @@ using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
 using System.IO;
 
-
-
 namespace SpreadsheetGUI
 {
-    
-
 
     public partial class Form1 : Form
     {
-        private bool SelectionChange = false;
+        //private bool SelectionChange = false;
         private Spreadsheet Sheet = new Spreadsheet();
         string fileName = null;
+        
       
         public Form1()
         {
             InitializeComponent();
 
             spreadsheetPanel1.SelectionChanged += displaySelection;
-            spreadsheetPanel1.SetSelection(0, 0); 
+            spreadsheetPanel1.SetSelection(0, 0);
         }
 
         /// <summary>
@@ -236,7 +233,8 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void Save_Click(object sender, EventArgs e)
         {
-            if (fileName == null)
+
+            if (fileName == null || fileName == "")
             {
                 try
                 {
@@ -245,18 +243,27 @@ namespace SpreadsheetGUI
                 catch(Exception excep)
                 {
                     System.Windows.Forms.MessageBox.Show(excep.Message);
-                } 
-
-                if (!fileName.Contains(".sprd"))
-                {
-                    fileName += ".sprd";
                 }
 
-                Sheet.Save(fileName);
+                if (fileName != "")
+                {
+                    if (!fileName.Contains(".sprd"))
+                    {
+                        fileName += ".sprd";
+                    }
+                    Sheet.Save(fileName);
+                }
             }
             else
             {
-                Sheet.Save(fileName);
+                if (fileName != "")
+                {
+                    if (!fileName.Contains(".sprd"))
+                    {
+                        fileName += ".sprd";
+                    }
+                    Sheet.Save(fileName);
+                }
             }
         }
 
@@ -276,12 +283,16 @@ namespace SpreadsheetGUI
                 System.Windows.Forms.MessageBox.Show(excep.Message);
             }
 
-            if (!fileName.Contains(".sprd"))
+            if (fileName != "")
             {
-                fileName += ".sprd";
+                if (!fileName.Contains(".sprd"))
+                {
+                    fileName += ".sprd";
+                }
+                Sheet.Save(fileName);
             }
             
-            Sheet.Save(fileName);
+            
         }
 
         /// <summary>
@@ -312,6 +323,7 @@ namespace SpreadsheetGUI
 
         private void Open_Click(object sender, EventArgs e)
         {
+            int[] coordinates = new int[2];
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             Stream myStream = null;
             FileStream fileStream;
@@ -328,7 +340,50 @@ namespace SpreadsheetGUI
                         fileStream = myStream as FileStream;
                         using (fileStream)
                         {
-                            Spreadsheet newSpreadsheet = new Spreadsheet(fileStream.Name.ToString(), s => true, s => s, "PS6");
+                            Spreadsheet newSpreadsheet = new Spreadsheet(fileStream.Name.ToString(), s => true, s => s, "default");
+
+                            HashSet<String> data = new HashSet<string>(newSpreadsheet.GetNamesOfAllNonemptyCells());
+
+                            Form1 form = new Form1();
+
+                            form.Sheet = newSpreadsheet;
+
+                            form.Text = fileStream.Name.ToString();
+                            form.fileName = fileStream.Name.ToString().Substring(fileStream.Name.ToString().LastIndexOf("\\") + 1); ;
+                            form.Show();
+                            
+
+                            
+                            foreach (string entry in data)
+                            {
+                                coordinates = GetCellCoordinates(entry);
+
+                                form.spreadsheetPanel1.SetValue(coordinates[0], coordinates[1], newSpreadsheet.GetCellValue(entry).ToString());
+
+                                form.Cell_Value_text.Text = Sheet.GetCellValue(entry).ToString();
+                                form.Cell_Contents_text.Text = Sheet.GetCellContents(entry).ToString();
+                            }
+
+                            if (form.Sheet.GetCellValue("A1") != "")
+                            {
+                                form.Cell_name_text.Text = "A1";
+                                form.Cell_Contents_text.Text = form.Sheet.GetCellContents("A1").ToString();
+                                form.Cell_Value_text.Text = form.Sheet.GetCellValue("A1").ToString();
+                                double temp;
+
+                                if (form.Sheet.GetCellValue("A1") is double)
+                                {
+                                    form.textBox3.Text = "Double";
+                                }
+                                else if (form.Sheet.GetCellValue("A1") is string)
+                                {
+                                    form.textBox3.Text = "String";
+                                }
+                                else
+                                {
+                                    form.textBox3.Text = "Formula";
+                                }
+                            }
                         }
                     }
                 }
@@ -336,23 +391,6 @@ namespace SpreadsheetGUI
                 {
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
-
-
-
-
-
-
-
-
-
-
-                System.IO.StreamReader sr = new
-                   System.IO.StreamReader(openFileDialog1.FileName);
-                MessageBox.Show(sr.ReadToEnd());
-                sr.Close();
-
-
-
             }
         }
 
@@ -363,10 +401,8 @@ namespace SpreadsheetGUI
 
         private void New_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
-
-            //spreadsheetPanel1.SelectionChanged += displaySelection;
-            //spreadsheetPanel1.SetSelection(0, 0);
+            Form1 form = new Form1();            
+            form.Show();
         }
 
         
@@ -388,7 +424,7 @@ namespace SpreadsheetGUI
                     SaveAsOption_Click(sender, e);
                 }
             }
-            this.Close();
+            Close();
         }
     }
 }
