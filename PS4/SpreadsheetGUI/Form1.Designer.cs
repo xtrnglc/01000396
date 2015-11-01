@@ -47,6 +47,8 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
+            this.savingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,35 +87,35 @@
             // New
             // 
             this.New.Name = "New";
-            this.New.Size = new System.Drawing.Size(152, 22);
+            this.New.Size = new System.Drawing.Size(114, 22);
             this.New.Text = "New";
             this.New.Click += new System.EventHandler(this.New_Click);
             // 
             // Open
             // 
             this.Open.Name = "Open";
-            this.Open.Size = new System.Drawing.Size(152, 22);
+            this.Open.Size = new System.Drawing.Size(114, 22);
             this.Open.Text = "Open";
             this.Open.Click += new System.EventHandler(this.Open_Click);
             // 
             // Save
             // 
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(152, 22);
+            this.Save.Size = new System.Drawing.Size(114, 22);
             this.Save.Text = "Save";
             this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // SaveAsOption
             // 
             this.SaveAsOption.Name = "SaveAsOption";
-            this.SaveAsOption.Size = new System.Drawing.Size(152, 22);
+            this.SaveAsOption.Size = new System.Drawing.Size(114, 22);
             this.SaveAsOption.Text = "Save As";
             this.SaveAsOption.Click += new System.EventHandler(this.SaveAsOption_Click);
             // 
             // Close
             // 
             this.Close.Name = "Close";
-            this.Close.Size = new System.Drawing.Size(152, 22);
+            this.Close.Size = new System.Drawing.Size(114, 22);
             this.Close.Text = "Close";
             this.Close.Click += new System.EventHandler(this.Close_Click_1);
             // 
@@ -121,7 +123,9 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changeSelectionToolStripMenuItem,
-            this.changeCellContentsToolStripMenuItem});
+            this.changeCellContentsToolStripMenuItem,
+            this.savingASpreadsheetToolStripMenuItem,
+            this.openingASpreadsheetToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -210,6 +214,20 @@
             this.Cell_Contents_text.TabIndex = 9;
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
+            // savingASpreadsheetToolStripMenuItem
+            // 
+            this.savingASpreadsheetToolStripMenuItem.Name = "savingASpreadsheetToolStripMenuItem";
+            this.savingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.savingASpreadsheetToolStripMenuItem.Text = "Saving a Spreadsheet";
+            this.savingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.savingASpreadsheetToolStripMenuItem_Click);
+            // 
+            // openingASpreadsheetToolStripMenuItem
+            // 
+            this.openingASpreadsheetToolStripMenuItem.Name = "openingASpreadsheetToolStripMenuItem";
+            this.openingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.openingASpreadsheetToolStripMenuItem.Text = "Opening a Spreadsheet";
+            this.openingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.openingASpreadsheetToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -257,6 +275,8 @@
         private System.Windows.Forms.TextBox Cell_Contents_text;
         private System.Windows.Forms.ToolStripMenuItem SaveAsOption;
         private System.Windows.Forms.ToolStripMenuItem Close;
+        private System.Windows.Forms.ToolStripMenuItem savingASpreadsheetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openingASpreadsheetToolStripMenuItem;
     }
 }
 

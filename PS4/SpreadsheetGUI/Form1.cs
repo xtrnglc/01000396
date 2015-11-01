@@ -18,7 +18,7 @@ namespace SpreadsheetGUI
     public partial class Form1 : Form
     {
         //private bool SelectionChange = false;
-        private Spreadsheet Sheet = new Spreadsheet();
+        private Spreadsheet Sheet = new Spreadsheet(isValid, t => t.ToUpper(), "ps6");
         string fileName = null;
         
       
@@ -340,7 +340,7 @@ namespace SpreadsheetGUI
                         fileStream = myStream as FileStream;
                         using (fileStream)
                         {
-                            Spreadsheet newSpreadsheet = new Spreadsheet(fileStream.Name.ToString(), s => true, s => s, "default");
+                            Spreadsheet newSpreadsheet = new Spreadsheet(fileStream.Name.ToString(), isValid, s => s.ToUpper(), "ps6");
 
                             HashSet<String> data = new HashSet<string>(newSpreadsheet.GetNamesOfAllNonemptyCells());
 
@@ -425,6 +425,21 @@ namespace SpreadsheetGUI
                 }
             }
             Close();
+        }
+
+        private static bool isValid(String name)
+        {
+            return Regex.IsMatch(name, "^[a-zA-Z][1-9][0-9]?$");
+        }
+
+        private void savingASpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.");
+        }
+
+        private void openingASpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it");
         }
     }
 }
