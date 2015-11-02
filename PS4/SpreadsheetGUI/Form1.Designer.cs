@@ -39,6 +39,8 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeCellContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Cell = new System.Windows.Forms.Label();
             this.Cell_Contents = new System.Windows.Forms.Label();
             this.Cell_Content_Type = new System.Windows.Forms.Label();
@@ -47,16 +49,17 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
-            this.savingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // spreadsheetPanel1
             // 
+            this.spreadsheetPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.spreadsheetPanel1.Location = new System.Drawing.Point(1, 54);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1130, 483);
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(1341, 483);
             this.spreadsheetPanel1.TabIndex = 0;
             this.spreadsheetPanel1.Load += new System.EventHandler(this.spreadsheetPanel1_Load);
             // 
@@ -68,7 +71,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1131, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -133,16 +136,30 @@
             // changeSelectionToolStripMenuItem
             // 
             this.changeSelectionToolStripMenuItem.Name = "changeSelectionToolStripMenuItem";
-            this.changeSelectionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.changeSelectionToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.changeSelectionToolStripMenuItem.Text = "Change Selection";
             this.changeSelectionToolStripMenuItem.Click += new System.EventHandler(this.changeSelectionToolStripMenuItem_Click);
             // 
             // changeCellContentsToolStripMenuItem
             // 
             this.changeCellContentsToolStripMenuItem.Name = "changeCellContentsToolStripMenuItem";
-            this.changeCellContentsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.changeCellContentsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.changeCellContentsToolStripMenuItem.Text = "Change Cell Contents";
             this.changeCellContentsToolStripMenuItem.Click += new System.EventHandler(this.changeCellContentsToolStripMenuItem_Click);
+            // 
+            // savingASpreadsheetToolStripMenuItem
+            // 
+            this.savingASpreadsheetToolStripMenuItem.Name = "savingASpreadsheetToolStripMenuItem";
+            this.savingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.savingASpreadsheetToolStripMenuItem.Text = "Saving a Spreadsheet";
+            this.savingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.savingASpreadsheetToolStripMenuItem_Click);
+            // 
+            // openingASpreadsheetToolStripMenuItem
+            // 
+            this.openingASpreadsheetToolStripMenuItem.Name = "openingASpreadsheetToolStripMenuItem";
+            this.openingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.openingASpreadsheetToolStripMenuItem.Text = "Opening a Spreadsheet";
+            this.openingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.openingASpreadsheetToolStripMenuItem_Click);
             // 
             // Cell
             // 
@@ -214,25 +231,11 @@
             this.Cell_Contents_text.TabIndex = 9;
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
-            // savingASpreadsheetToolStripMenuItem
-            // 
-            this.savingASpreadsheetToolStripMenuItem.Name = "savingASpreadsheetToolStripMenuItem";
-            this.savingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.savingASpreadsheetToolStripMenuItem.Text = "Saving a Spreadsheet";
-            this.savingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.savingASpreadsheetToolStripMenuItem_Click);
-            // 
-            // openingASpreadsheetToolStripMenuItem
-            // 
-            this.openingASpreadsheetToolStripMenuItem.Name = "openingASpreadsheetToolStripMenuItem";
-            this.openingASpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.openingASpreadsheetToolStripMenuItem.Text = "Opening a Spreadsheet";
-            this.openingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.openingASpreadsheetToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1131, 537);
+            this.ClientSize = new System.Drawing.Size(1284, 537);
             this.Controls.Add(this.Cell_Contents_text);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.Cell_Value_text);
