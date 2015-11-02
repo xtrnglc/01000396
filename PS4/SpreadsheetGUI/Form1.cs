@@ -36,6 +36,7 @@ namespace SpreadsheetGUI
 
             spreadsheetPanel1.SelectionChanged += displaySelection;
             spreadsheetPanel1.SetSelection(0, 0);
+            this.Cell_name_text.Text = "A1";
         }
 
         /// <summary>
@@ -197,6 +198,7 @@ namespace SpreadsheetGUI
             if (e.KeyChar == 13)
             {
                 int row, col;
+                string temp = "=";
                 String value = (sender as TextBox).Text;
                 spreadsheetPanel1.GetSelection(out col, out row);
                 ISet<String> cellsToRecalculate = new HashSet<String>();
@@ -223,13 +225,14 @@ namespace SpreadsheetGUI
                         spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
                     }
                     this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
-
+                    DisplayContentType(value);
+                    this.Cell_Contents_text.Text = temp += Sheet.GetCellContents(GetCellName(col, row)).ToString();
                 }
                 catch (Exception excep)
                 {
                     System.Windows.Forms.MessageBox.Show(excep.Message);
                 }
-                DisplayContentType(value);
+                
             }
         }
 
