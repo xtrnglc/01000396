@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+Authors: Adam Sorensen, Trung Le
+Team Name: Blue Steel
+CS 3500
+11/01/2015
+Purpose: Spreadsheet GUI
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -321,6 +329,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Open file handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Open_Click(object sender, EventArgs e)
         {
             int[] coordinates = new int[2];
@@ -351,8 +364,6 @@ namespace SpreadsheetGUI
                             form.Text = fileStream.Name.ToString();
                             form.fileName = fileStream.Name.ToString().Substring(fileStream.Name.ToString().LastIndexOf("\\") + 1); ;
                             form.Show();
-                            
-
                             
                             foreach (string entry in data)
                             {
@@ -394,11 +405,21 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Close Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// New form handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void New_Click(object sender, EventArgs e)
         {
             Form1 form = new Form1();            
@@ -427,16 +448,31 @@ namespace SpreadsheetGUI
             Close();
         }
 
+        /// <summary>
+        /// Variable validator
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private static bool isValid(String name)
         {
             return Regex.IsMatch(name, "^[a-zA-Z][1-9][0-9]?$");
         }
 
+        /// <summary>
+        /// Help message regarding save
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void savingASpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.");
         }
 
+        /// <summary>
+        /// Help message regarding open
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openingASpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it");

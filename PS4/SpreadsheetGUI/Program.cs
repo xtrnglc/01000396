@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+Authors: Adam Sorensen, Trung Le
+Team Name: Blue Steel
+CS 3500
+11/01/2015
+Purpose: Spreadsheet GUI
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

@@ -59,7 +59,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.spreadsheetPanel1.Location = new System.Drawing.Point(1, 54);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1341, 483);
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(1023, 483);
             this.spreadsheetPanel1.TabIndex = 0;
             this.spreadsheetPanel1.Load += new System.EventHandler(this.spreadsheetPanel1_Load);
             // 
@@ -71,7 +71,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1024, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -227,7 +227,7 @@
             // 
             this.Cell_Contents_text.Location = new System.Drawing.Point(768, 25);
             this.Cell_Contents_text.Name = "Cell_Contents_text";
-            this.Cell_Contents_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_Contents_text.Size = new System.Drawing.Size(203, 20);
             this.Cell_Contents_text.TabIndex = 9;
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
@@ -235,7 +235,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 537);
+            this.ClientSize = new System.Drawing.Size(1024, 537);
             this.Controls.Add(this.Cell_Contents_text);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.Cell_Value_text);
