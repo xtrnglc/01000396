@@ -261,18 +261,21 @@
             this.averageToolStripMenuItem.Name = "averageToolStripMenuItem";
             this.averageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.averageToolStripMenuItem.Text = "Average";
+            this.averageToolStripMenuItem.Click += new System.EventHandler(this.averageToolStripMenuItem_Click);
             // 
             // maxToolStripMenuItem
             // 
             this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
             this.maxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.maxToolStripMenuItem.Text = "Maximum";
+            this.maxToolStripMenuItem.Click += new System.EventHandler(this.maxToolStripMenuItem_Click);
             // 
             // minimumToolStripMenuItem
             // 
             this.minimumToolStripMenuItem.Name = "minimumToolStripMenuItem";
             this.minimumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.minimumToolStripMenuItem.Text = "Minimum";
+            this.minimumToolStripMenuItem.Click += new System.EventHandler(this.minimumToolStripMenuItem_Click);
             // 
             // Form1
             // 

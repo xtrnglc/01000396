@@ -584,5 +584,236 @@ namespace SpreadsheetGUI
                 MessageBox.Show("There was a problem trying to sum the cells: " + excep.Message);
             }    
         }
+
+        /// <summary>
+        /// Returns the average of selected cells
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void averageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            List<string> listOfCellsToAdd_Name = new List<string>();
+            double sum = 0;
+            double count = 0;
+            double average = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            listOfCellsToAdd_Name.Add(cellSelection);
+
+            while (MessageBox.Show("Do you want to add another cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+                if (isValid(cellSelection))
+                    listOfCellsToAdd_Name.Add(cellSelection);
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }
+
+            try
+            {
+                foreach (string cell in listOfCellsToAdd_Name)
+                {
+                    if (double.TryParse((Sheet.GetCellValue(cell).ToString()), out temp))
+                    {
+                        sum += temp;
+                        count++;
+                    }
+                    else
+                    {
+                        throw new Exception("The cell " + cell + " cannot be parsed into a double");
+                    }
+                }
+
+                average = sum / count;
+
+                if (MessageBox.Show("The average of the cells is: " + average + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + sum + "to", "");
+
+                    try
+                    {
+                        ISet<String> cellsToRecalculate = new HashSet<String>();
+                        int[] coordinates = new int[2];
+                        coordinates = GetCellCoordinates(cellSelection);
+
+                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, average.ToString());
+                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                        foreach (string entry in cellsToRecalculate)
+                        {
+                            coordinates = GetCellCoordinates(entry);
+
+                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                        }
+                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
+                    }
+                    catch (Exception excep)
+                    {
+                        System.Windows.Forms.MessageBox.Show(excep.Message);
+                    }
+                }
+            }
+            catch (Exception excep)
+            {
+                MessageBox.Show("There was a problem trying to average the cells: " + excep.Message);
+            }
+        }
+
+        /// <summary>
+        /// Returns the maximum selected cells
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void maxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            List<string> listOfCellsToAdd_Name = new List<string>();
+            double max = 0;
+
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            listOfCellsToAdd_Name.Add(cellSelection);
+
+            while (MessageBox.Show("Do you want to add another cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+                if (isValid(cellSelection))
+                    listOfCellsToAdd_Name.Add(cellSelection);
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }
+
+            try
+            {
+                foreach (string cell in listOfCellsToAdd_Name)
+                {
+                    if (double.TryParse((Sheet.GetCellValue(cell).ToString()), out temp))
+                    {
+                        if (temp > max)
+                        {
+                            max = temp;
+                        }
+
+                    }
+                    else
+                    {
+                        throw new Exception("The cell " + cell + " cannot be parsed into a double");
+                    }
+                }
+
+                if (MessageBox.Show("The maximum  of the cells is: " + max + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + max + "to", "");
+
+                    try
+                    {
+                        ISet<String> cellsToRecalculate = new HashSet<String>();
+                        int[] coordinates = new int[2];
+                        coordinates = GetCellCoordinates(cellSelection);
+
+                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, max.ToString());
+                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                        foreach (string entry in cellsToRecalculate)
+                        {
+                            coordinates = GetCellCoordinates(entry);
+
+                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                        }
+                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
+                    }
+                    catch (Exception excep)
+                    {
+                        System.Windows.Forms.MessageBox.Show(excep.Message);
+                    }
+                }
+            }
+            catch (Exception excep)
+            {
+                MessageBox.Show("There was a problem trying to find the maximum of the cells: " + excep.Message);
+            }
+        }
+
+        private void minimumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            List<string> listOfCellsToAdd_Name = new List<string>();
+            double min = double.PositiveInfinity;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            listOfCellsToAdd_Name.Add(cellSelection);
+
+            while (MessageBox.Show("Do you want to add another cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+                if (isValid(cellSelection))
+                    listOfCellsToAdd_Name.Add(cellSelection);
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }
+
+            try
+            {
+                foreach (string cell in listOfCellsToAdd_Name)
+                {
+                    if (double.TryParse((Sheet.GetCellValue(cell).ToString()), out temp))
+                    {
+                        if (temp < min)
+                        {
+                            min = temp;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("The cell " + cell + " cannot be parsed into a double");
+                    }
+                }
+
+                if (MessageBox.Show("The maximum  of the cells is: " + min + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + min + "to", "");
+
+                    try
+                    {
+                        ISet<String> cellsToRecalculate = new HashSet<String>();
+                        int[] coordinates = new int[2];
+                        coordinates = GetCellCoordinates(cellSelection);
+
+                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, min.ToString());
+                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                        foreach (string entry in cellsToRecalculate)
+                        {
+                            coordinates = GetCellCoordinates(entry);
+
+                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                        }
+                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
+                    }
+                    catch (Exception excep)
+                    {
+                        System.Windows.Forms.MessageBox.Show(excep.Message);
+                    }
+                }
+            }
+            catch (Exception excep)
+            {
+                MessageBox.Show("There was a problem trying to find the maximum of the cells: " + excep.Message);
+            }
+        }
     }
+    
 }
