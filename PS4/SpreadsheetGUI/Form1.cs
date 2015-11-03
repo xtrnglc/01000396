@@ -1050,7 +1050,6 @@ namespace SpreadsheetGUI
                                     cellsToRecalculate = Sheet.SetContentsOfCell(cell, valueToReplace);
                                     spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
 
-
                                     foreach (string entry in cellsToRecalculate)
                                     {
                                         coordinates = GetCellCoordinates(entry);
@@ -1081,6 +1080,10 @@ namespace SpreadsheetGUI
                 System.Windows.Forms.MessageBox.Show("Please enter a valid number");
             }
         }
-    }
-    
+
+        private void howToFindAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find and replace, click on Edit then on Find and Replace. First enter the number to be replaced then enter the number to replace it with.");
+        }
+    }   
 }

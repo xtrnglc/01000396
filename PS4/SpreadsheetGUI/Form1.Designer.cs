@@ -65,7 +65,8 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.editHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToFindAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -199,8 +200,7 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findAndReplaceToolTip,
-            this.toolStripMenuItem1});
+            this.findAndReplaceToolTip});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -219,7 +219,8 @@
             this.changeCellContentsToolStripMenuItem,
             this.savingASpreadsheetToolStripMenuItem,
             this.openingASpreadsheetToolStripMenuItem,
-            this.mathHelpToolStripMenuItem});
+            this.mathHelpToolStripMenuItem,
+            this.editHelpToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -378,10 +379,20 @@
             this.Cell_Contents_text.TextChanged += new System.EventHandler(this.Cell_Contents_text_TextChanged);
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
-            // toolStripMenuItem1
+            // editHelpToolStripMenuItem
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
+            this.editHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.howToFindAndReplaceToolStripMenuItem});
+            this.editHelpToolStripMenuItem.Name = "editHelpToolStripMenuItem";
+            this.editHelpToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.editHelpToolStripMenuItem.Text = "Edit Help";
+            // 
+            // howToFindAndReplaceToolStripMenuItem
+            // 
+            this.howToFindAndReplaceToolStripMenuItem.Name = "howToFindAndReplaceToolStripMenuItem";
+            this.howToFindAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.howToFindAndReplaceToolStripMenuItem.Text = "How to Find and Replace";
+            this.howToFindAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.howToFindAndReplaceToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -449,6 +460,8 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findAndReplaceToolTip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem editHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem howToFindAndReplaceToolStripMenuItem;
     }
 }
 
