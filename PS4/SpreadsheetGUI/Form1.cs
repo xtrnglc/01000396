@@ -939,6 +939,66 @@ namespace SpreadsheetGUI
                 }
             }
         }
+
+        /// <summary>
+        /// Help message regarding finding the square
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findTheSquareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Help message regarding finding the sum
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void summingCellsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Help message regarding finding the average
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findingTheAverageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Help message regarding finding the maximum
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findingTheMaximumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Help message regarding finding the minimum
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findingTheMinimumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Help message regarding finding the square root
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findingTheSquareRootToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.");
+        }
     }
     
 }
