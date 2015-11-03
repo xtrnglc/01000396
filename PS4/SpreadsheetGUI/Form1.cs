@@ -332,6 +332,29 @@ namespace SpreadsheetGUI
             }
         }
 
+        public static class PromptForSelection
+        {
+            public static string ShowDialog(string text, string caption)
+            {
+                Form prompt = new Form();
+                prompt.Width = 300;
+                prompt.Height = 150;
+                prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
+                prompt.Text = caption;
+                prompt.StartPosition = FormStartPosition.CenterScreen;
+                Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+                TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 200 };
+                Button confirmation = new Button() { Text = "Done", Left = 100, Width = 50, Top = 75, DialogResult = DialogResult.OK };
+                confirmation.Click += (sender, e) => { prompt.Close(); };
+                prompt.Controls.Add(textBox);
+                prompt.Controls.Add(confirmation);
+                prompt.Controls.Add(textLabel);
+                prompt.AcceptButton = confirmation;
+
+                return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+            }
+        }
+
         /// <summary>
         /// Open file handler
         /// </summary>
@@ -479,6 +502,87 @@ namespace SpreadsheetGUI
         private void openingASpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it");
+        }
+
+        private void Cell_Contents_text_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Returns the sum of the cells selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void sumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            List<string> listOfCellsToAdd_Name = new List<string>();
+            double sum = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            listOfCellsToAdd_Name.Add(cellSelection);
+
+            while (MessageBox.Show("Do you want to add another cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+                if (isValid(cellSelection))
+                    listOfCellsToAdd_Name.Add(cellSelection);
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }      
+            
+            try
+            {
+                foreach (string cell in listOfCellsToAdd_Name)
+                {
+                    if (double.TryParse((Sheet.GetCellValue(cell).ToString()), out temp))
+                    {
+                        sum += temp;
+                    }
+                    else
+                    {
+                        throw new Exception("The cell " + cell + " cannot be parsed into a double"); 
+                    }
+                }
+
+                if (MessageBox.Show("The sum of the cells is: " + sum + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + sum + "to", "");
+
+                    try
+                    {
+                        int row, col;
+                        string temp1 = "=";
+                        ISet<String> cellsToRecalculate = new HashSet<String>();
+                        int[] coordinates = new int[2];
+                        coordinates = GetCellCoordinates(cellSelection);
+
+                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, sum.ToString());
+                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                        foreach (string entry in cellsToRecalculate)
+                        {
+                            coordinates = GetCellCoordinates(entry);
+
+                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                        }
+                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
+                    }
+                    catch (Exception excep)
+                    {
+                        System.Windows.Forms.MessageBox.Show(excep.Message);
+                    }
+                }
+            }
+            catch(Exception excep)
+            {
+                MessageBox.Show("There was a problem trying to sum the cells: " + excep.Message);
+            }    
         }
     }
 }

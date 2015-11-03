@@ -49,6 +49,11 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
+            this.mathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.averageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.maxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minimumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.spreadsheetPanel1.Location = new System.Drawing.Point(1, 54);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
-            this.spreadsheetPanel1.Size = new System.Drawing.Size(1023, 483);
+            this.spreadsheetPanel1.Size = new System.Drawing.Size(1189, 483);
             this.spreadsheetPanel1.TabIndex = 0;
             this.spreadsheetPanel1.Load += new System.EventHandler(this.spreadsheetPanel1_Load);
             // 
@@ -68,10 +73,11 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.mathToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1024, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1190, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -227,15 +233,52 @@
             // 
             this.Cell_Contents_text.Location = new System.Drawing.Point(768, 25);
             this.Cell_Contents_text.Name = "Cell_Contents_text";
-            this.Cell_Contents_text.Size = new System.Drawing.Size(203, 20);
+            this.Cell_Contents_text.Size = new System.Drawing.Size(174, 20);
             this.Cell_Contents_text.TabIndex = 9;
+            this.Cell_Contents_text.TextChanged += new System.EventHandler(this.Cell_Contents_text_TextChanged);
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
+            // 
+            // mathToolStripMenuItem
+            // 
+            this.mathToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sumToolStripMenuItem,
+            this.averageToolStripMenuItem,
+            this.maxToolStripMenuItem,
+            this.minimumToolStripMenuItem});
+            this.mathToolStripMenuItem.Name = "mathToolStripMenuItem";
+            this.mathToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.mathToolStripMenuItem.Text = "Math";
+            // 
+            // sumToolStripMenuItem
+            // 
+            this.sumToolStripMenuItem.Name = "sumToolStripMenuItem";
+            this.sumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sumToolStripMenuItem.Text = "Sum";
+            this.sumToolStripMenuItem.Click += new System.EventHandler(this.sumToolStripMenuItem_Click);
+            // 
+            // averageToolStripMenuItem
+            // 
+            this.averageToolStripMenuItem.Name = "averageToolStripMenuItem";
+            this.averageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.averageToolStripMenuItem.Text = "Average";
+            // 
+            // maxToolStripMenuItem
+            // 
+            this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
+            this.maxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.maxToolStripMenuItem.Text = "Maximum";
+            // 
+            // minimumToolStripMenuItem
+            // 
+            this.minimumToolStripMenuItem.Name = "minimumToolStripMenuItem";
+            this.minimumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.minimumToolStripMenuItem.Text = "Minimum";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 537);
+            this.ClientSize = new System.Drawing.Size(1190, 537);
             this.Controls.Add(this.Cell_Contents_text);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.Cell_Value_text);
@@ -280,6 +323,11 @@
         private System.Windows.Forms.ToolStripMenuItem Close;
         private System.Windows.Forms.ToolStripMenuItem savingASpreadsheetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openingASpreadsheetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sumToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem averageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem maxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minimumToolStripMenuItem;
     }
 }
 
