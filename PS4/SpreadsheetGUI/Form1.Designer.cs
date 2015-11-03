@@ -36,16 +36,27 @@
             this.Save = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAsOption = new System.Windows.Forms.ToolStripMenuItem();
             this.Close = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeCellContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.savingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.averageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.minimumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.squareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.squareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndReplaceToolTip = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeCellContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openingASpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mathHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.summingCellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findingTheAverageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findingTheMaximumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findingTheMinimumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findTheSquareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findingTheSquareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Cell = new System.Windows.Forms.Label();
             this.Cell_Contents = new System.Windows.Forms.Label();
             this.Cell_Content_Type = new System.Windows.Forms.Label();
@@ -54,15 +65,7 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
-            this.squareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.squareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mathHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.summingCellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findingTheMaximumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findingTheMinimumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findingTheAverageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findTheSquareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findingTheSquareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,6 +86,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.mathToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -137,6 +141,77 @@
             this.Close.Text = "Close";
             this.Close.Click += new System.EventHandler(this.Close_Click_1);
             // 
+            // mathToolStripMenuItem
+            // 
+            this.mathToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sumToolStripMenuItem,
+            this.averageToolStripMenuItem,
+            this.maxToolStripMenuItem,
+            this.minimumToolStripMenuItem,
+            this.squareToolStripMenuItem,
+            this.squareRootToolStripMenuItem});
+            this.mathToolStripMenuItem.Name = "mathToolStripMenuItem";
+            this.mathToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.mathToolStripMenuItem.Text = "Math";
+            // 
+            // sumToolStripMenuItem
+            // 
+            this.sumToolStripMenuItem.Name = "sumToolStripMenuItem";
+            this.sumToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.sumToolStripMenuItem.Text = "Sum";
+            this.sumToolStripMenuItem.Click += new System.EventHandler(this.sumToolStripMenuItem_Click);
+            // 
+            // averageToolStripMenuItem
+            // 
+            this.averageToolStripMenuItem.Name = "averageToolStripMenuItem";
+            this.averageToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.averageToolStripMenuItem.Text = "Average";
+            this.averageToolStripMenuItem.Click += new System.EventHandler(this.averageToolStripMenuItem_Click);
+            // 
+            // maxToolStripMenuItem
+            // 
+            this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
+            this.maxToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.maxToolStripMenuItem.Text = "Maximum";
+            this.maxToolStripMenuItem.Click += new System.EventHandler(this.maxToolStripMenuItem_Click);
+            // 
+            // minimumToolStripMenuItem
+            // 
+            this.minimumToolStripMenuItem.Name = "minimumToolStripMenuItem";
+            this.minimumToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.minimumToolStripMenuItem.Text = "Minimum";
+            this.minimumToolStripMenuItem.Click += new System.EventHandler(this.minimumToolStripMenuItem_Click);
+            // 
+            // squareToolStripMenuItem
+            // 
+            this.squareToolStripMenuItem.Name = "squareToolStripMenuItem";
+            this.squareToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.squareToolStripMenuItem.Text = "Square";
+            this.squareToolStripMenuItem.Click += new System.EventHandler(this.squareToolStripMenuItem_Click);
+            // 
+            // squareRootToolStripMenuItem
+            // 
+            this.squareRootToolStripMenuItem.Name = "squareRootToolStripMenuItem";
+            this.squareRootToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.squareRootToolStripMenuItem.Text = "Square Root";
+            this.squareRootToolStripMenuItem.Click += new System.EventHandler(this.squareRootToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findAndReplaceToolTip,
+            this.toolStripMenuItem1});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // findAndReplaceToolTip
+            // 
+            this.findAndReplaceToolTip.Name = "findAndReplaceToolTip";
+            this.findAndReplaceToolTip.Size = new System.Drawing.Size(164, 22);
+            this.findAndReplaceToolTip.Text = "Find and Replace";
+            this.findAndReplaceToolTip.Click += new System.EventHandler(this.findAndReplaceToolTip_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -177,46 +252,60 @@
             this.openingASpreadsheetToolStripMenuItem.Text = "Opening a Spreadsheet";
             this.openingASpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.openingASpreadsheetToolStripMenuItem_Click);
             // 
-            // mathToolStripMenuItem
+            // mathHelpToolStripMenuItem
             // 
-            this.mathToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sumToolStripMenuItem,
-            this.averageToolStripMenuItem,
-            this.maxToolStripMenuItem,
-            this.minimumToolStripMenuItem,
-            this.squareToolStripMenuItem,
-            this.squareRootToolStripMenuItem});
-            this.mathToolStripMenuItem.Name = "mathToolStripMenuItem";
-            this.mathToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.mathToolStripMenuItem.Text = "Math";
+            this.mathHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.summingCellsToolStripMenuItem,
+            this.findingTheAverageToolStripMenuItem,
+            this.findingTheMaximumToolStripMenuItem,
+            this.findingTheMinimumToolStripMenuItem,
+            this.findTheSquareToolStripMenuItem,
+            this.findingTheSquareRootToolStripMenuItem});
+            this.mathHelpToolStripMenuItem.Name = "mathHelpToolStripMenuItem";
+            this.mathHelpToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.mathHelpToolStripMenuItem.Text = "Math Help";
             // 
-            // sumToolStripMenuItem
+            // summingCellsToolStripMenuItem
             // 
-            this.sumToolStripMenuItem.Name = "sumToolStripMenuItem";
-            this.sumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sumToolStripMenuItem.Text = "Sum";
-            this.sumToolStripMenuItem.Click += new System.EventHandler(this.sumToolStripMenuItem_Click);
+            this.summingCellsToolStripMenuItem.Name = "summingCellsToolStripMenuItem";
+            this.summingCellsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.summingCellsToolStripMenuItem.Text = "Finding the Sum";
+            this.summingCellsToolStripMenuItem.Click += new System.EventHandler(this.summingCellsToolStripMenuItem_Click);
             // 
-            // averageToolStripMenuItem
+            // findingTheAverageToolStripMenuItem
             // 
-            this.averageToolStripMenuItem.Name = "averageToolStripMenuItem";
-            this.averageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.averageToolStripMenuItem.Text = "Average";
-            this.averageToolStripMenuItem.Click += new System.EventHandler(this.averageToolStripMenuItem_Click);
+            this.findingTheAverageToolStripMenuItem.Name = "findingTheAverageToolStripMenuItem";
+            this.findingTheAverageToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.findingTheAverageToolStripMenuItem.Text = "Finding the Average";
+            this.findingTheAverageToolStripMenuItem.Click += new System.EventHandler(this.findingTheAverageToolStripMenuItem_Click);
             // 
-            // maxToolStripMenuItem
+            // findingTheMaximumToolStripMenuItem
             // 
-            this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
-            this.maxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.maxToolStripMenuItem.Text = "Maximum";
-            this.maxToolStripMenuItem.Click += new System.EventHandler(this.maxToolStripMenuItem_Click);
+            this.findingTheMaximumToolStripMenuItem.Name = "findingTheMaximumToolStripMenuItem";
+            this.findingTheMaximumToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.findingTheMaximumToolStripMenuItem.Text = "Finding the Maximum";
+            this.findingTheMaximumToolStripMenuItem.Click += new System.EventHandler(this.findingTheMaximumToolStripMenuItem_Click);
             // 
-            // minimumToolStripMenuItem
+            // findingTheMinimumToolStripMenuItem
             // 
-            this.minimumToolStripMenuItem.Name = "minimumToolStripMenuItem";
-            this.minimumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.minimumToolStripMenuItem.Text = "Minimum";
-            this.minimumToolStripMenuItem.Click += new System.EventHandler(this.minimumToolStripMenuItem_Click);
+            this.findingTheMinimumToolStripMenuItem.Name = "findingTheMinimumToolStripMenuItem";
+            this.findingTheMinimumToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.findingTheMinimumToolStripMenuItem.Text = "Finding the Minimum";
+            this.findingTheMinimumToolStripMenuItem.Click += new System.EventHandler(this.findingTheMinimumToolStripMenuItem_Click);
+            // 
+            // findTheSquareToolStripMenuItem
+            // 
+            this.findTheSquareToolStripMenuItem.Name = "findTheSquareToolStripMenuItem";
+            this.findTheSquareToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.findTheSquareToolStripMenuItem.Text = "Finding the Square";
+            this.findTheSquareToolStripMenuItem.Click += new System.EventHandler(this.findTheSquareToolStripMenuItem_Click);
+            // 
+            // findingTheSquareRootToolStripMenuItem
+            // 
+            this.findingTheSquareRootToolStripMenuItem.Name = "findingTheSquareRootToolStripMenuItem";
+            this.findingTheSquareRootToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.findingTheSquareRootToolStripMenuItem.Text = "Finding the Square Root";
+            this.findingTheSquareRootToolStripMenuItem.Click += new System.EventHandler(this.findingTheSquareRootToolStripMenuItem_Click);
             // 
             // Cell
             // 
@@ -249,7 +338,7 @@
             // Cell_Value
             // 
             this.Cell_Value.AutoSize = true;
-            this.Cell_Value.Location = new System.Drawing.Point(213, 28);
+            this.Cell_Value.Location = new System.Drawing.Point(163, 28);
             this.Cell_Value.Name = "Cell_Value";
             this.Cell_Value.Size = new System.Drawing.Size(57, 13);
             this.Cell_Value.TabIndex = 5;
@@ -260,16 +349,16 @@
             this.Cell_name_text.Location = new System.Drawing.Point(78, 28);
             this.Cell_name_text.Name = "Cell_name_text";
             this.Cell_name_text.ReadOnly = true;
-            this.Cell_name_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_name_text.Size = new System.Drawing.Size(56, 20);
             this.Cell_name_text.TabIndex = 6;
             this.Cell_name_text.TextChanged += new System.EventHandler(this.spreadsheetPanel1_Load);
             // 
             // Cell_Value_text
             // 
-            this.Cell_Value_text.Location = new System.Drawing.Point(276, 25);
+            this.Cell_Value_text.Location = new System.Drawing.Point(226, 25);
             this.Cell_Value_text.Name = "Cell_Value_text";
             this.Cell_Value_text.ReadOnly = true;
-            this.Cell_Value_text.Size = new System.Drawing.Size(100, 20);
+            this.Cell_Value_text.Size = new System.Drawing.Size(154, 20);
             this.Cell_Value_text.TabIndex = 7;
             // 
             // textBox3
@@ -289,74 +378,10 @@
             this.Cell_Contents_text.TextChanged += new System.EventHandler(this.Cell_Contents_text_TextChanged);
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
-            // squareToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.squareToolStripMenuItem.Name = "squareToolStripMenuItem";
-            this.squareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.squareToolStripMenuItem.Text = "Square";
-            this.squareToolStripMenuItem.Click += new System.EventHandler(this.squareToolStripMenuItem_Click);
-            // 
-            // squareRootToolStripMenuItem
-            // 
-            this.squareRootToolStripMenuItem.Name = "squareRootToolStripMenuItem";
-            this.squareRootToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.squareRootToolStripMenuItem.Text = "Square Root";
-            this.squareRootToolStripMenuItem.Click += new System.EventHandler(this.squareRootToolStripMenuItem_Click);
-            // 
-            // mathHelpToolStripMenuItem
-            // 
-            this.mathHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.summingCellsToolStripMenuItem,
-            this.findingTheAverageToolStripMenuItem,
-            this.findingTheMaximumToolStripMenuItem,
-            this.findingTheMinimumToolStripMenuItem,
-            this.findTheSquareToolStripMenuItem,
-            this.findingTheSquareRootToolStripMenuItem});
-            this.mathHelpToolStripMenuItem.Name = "mathHelpToolStripMenuItem";
-            this.mathHelpToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.mathHelpToolStripMenuItem.Text = "Math Help";
-            // 
-            // summingCellsToolStripMenuItem
-            // 
-            this.summingCellsToolStripMenuItem.Name = "summingCellsToolStripMenuItem";
-            this.summingCellsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.summingCellsToolStripMenuItem.Text = "Finding the Sum";
-            this.summingCellsToolStripMenuItem.Click += new System.EventHandler(this.summingCellsToolStripMenuItem_Click);
-            // 
-            // findingTheMaximumToolStripMenuItem
-            // 
-            this.findingTheMaximumToolStripMenuItem.Name = "findingTheMaximumToolStripMenuItem";
-            this.findingTheMaximumToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.findingTheMaximumToolStripMenuItem.Text = "Finding the Maximum";
-            this.findingTheMaximumToolStripMenuItem.Click += new System.EventHandler(this.findingTheMaximumToolStripMenuItem_Click);
-            // 
-            // findingTheMinimumToolStripMenuItem
-            // 
-            this.findingTheMinimumToolStripMenuItem.Name = "findingTheMinimumToolStripMenuItem";
-            this.findingTheMinimumToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.findingTheMinimumToolStripMenuItem.Text = "Finding the Minimum";
-            this.findingTheMinimumToolStripMenuItem.Click += new System.EventHandler(this.findingTheMinimumToolStripMenuItem_Click);
-            // 
-            // findingTheAverageToolStripMenuItem
-            // 
-            this.findingTheAverageToolStripMenuItem.Name = "findingTheAverageToolStripMenuItem";
-            this.findingTheAverageToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.findingTheAverageToolStripMenuItem.Text = "Finding the Average";
-            this.findingTheAverageToolStripMenuItem.Click += new System.EventHandler(this.findingTheAverageToolStripMenuItem_Click);
-            // 
-            // findTheSquareToolStripMenuItem
-            // 
-            this.findTheSquareToolStripMenuItem.Name = "findTheSquareToolStripMenuItem";
-            this.findTheSquareToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.findTheSquareToolStripMenuItem.Text = "Finding the Square";
-            this.findTheSquareToolStripMenuItem.Click += new System.EventHandler(this.findTheSquareToolStripMenuItem_Click);
-            // 
-            // findingTheSquareRootToolStripMenuItem
-            // 
-            this.findingTheSquareRootToolStripMenuItem.Name = "findingTheSquareRootToolStripMenuItem";
-            this.findingTheSquareRootToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.findingTheSquareRootToolStripMenuItem.Text = "Finding the Square Root";
-            this.findingTheSquareRootToolStripMenuItem.Click += new System.EventHandler(this.findingTheSquareRootToolStripMenuItem_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
             // 
             // Form1
             // 
@@ -421,6 +446,9 @@
         private System.Windows.Forms.ToolStripMenuItem findingTheMinimumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findTheSquareToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findingTheSquareRootToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findAndReplaceToolTip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 

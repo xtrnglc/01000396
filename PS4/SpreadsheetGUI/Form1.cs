@@ -226,7 +226,19 @@ namespace SpreadsheetGUI
                     }
                     this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
                     DisplayContentType(value);
-                    this.Cell_Contents_text.Text = temp += Sheet.GetCellContents(GetCellName(col, row)).ToString();
+
+                    if (Sheet.GetCellContents(GetCellName(col, row)).ToString() is string)
+                    {
+                        this.Cell_Contents_text.Text = Sheet.GetCellContents(GetCellName(col, row)).ToString();
+                    }
+                    else if (Sheet.GetCellContents(GetCellName(col, row)).ToString() is double)
+                    {
+                        this.Cell_Contents_text.Text = Sheet.GetCellContents(GetCellName(col, row)).ToString();
+                    }
+                    else
+                    {
+                        this.Cell_Contents_text.Text = "=" + Sheet.GetCellContents(GetCellName(col, row)).ToString();
+                    }
                 }
                 catch (Exception excep)
                 {
@@ -332,6 +344,9 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Generate a prompt box that asks the user for input and returns a string
+        /// </summary>
         public static class PromptForSelection
         {
             public static string ShowDialog(string text, string caption)
@@ -452,7 +467,6 @@ namespace SpreadsheetGUI
             form.Show();
         }
 
-        
         /// <summary>
         /// Method to close the spreadsheet. If the user wants to save, it will go to the
         /// save method and ask for a file name
@@ -998,6 +1012,74 @@ namespace SpreadsheetGUI
         private void findingTheSquareRootToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.");
+        }
+
+        /// <summary>
+        /// Find and replace all cells with a specified value to a new value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findAndReplaceToolTip_Click(object sender, EventArgs e)
+        {
+            string value;
+            double doubleValue;
+            double temp;
+            string valueToReplace;
+            double valueToReplaceDouble;
+            HashSet<String> cellList = new HashSet<string>(Sheet.GetNamesOfAllNonemptyCells());
+
+            value = PromptForSelection.ShowDialog("Find", "");
+            valueToReplace = PromptForSelection.ShowDialog("Replace with", "");
+                        
+            try
+            {
+                if (double.TryParse(value, out doubleValue) && double.TryParse(valueToReplace, out valueToReplaceDouble))
+                {
+                    foreach (string cell in cellList)
+                    {
+                        if (double.TryParse(Sheet.GetCellValue(cell).ToString(), out temp))
+                        {
+                            if (temp == doubleValue)
+                            {
+                                try
+                                {
+                                    ISet<String> cellsToRecalculate = new HashSet<String>();
+                                    int[] coordinates = new int[2];
+                                    coordinates = GetCellCoordinates(cell);
+
+                                    cellsToRecalculate = Sheet.SetContentsOfCell(cell, valueToReplace);
+                                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                                    foreach (string entry in cellsToRecalculate)
+                                    {
+                                        coordinates = GetCellCoordinates(entry);
+
+                                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                                    }
+                                    this.Cell_Value_text.Text = Sheet.GetCellValue(cell).ToString();
+                                }
+                                catch (Exception excep)
+                                {
+                                    System.Windows.Forms.MessageBox.Show(excep.Message);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //do nothing
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception excep)
+            {
+                System.Windows.Forms.MessageBox.Show("Please enter a valid number");
+            }
         }
     }
     
