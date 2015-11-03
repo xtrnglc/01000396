@@ -212,6 +212,7 @@ namespace SpreadsheetGUI
                     if ((sender as TextBox).Text.StartsWith("="))
                     {
                         spreadsheetPanel1.SetValue(col, row, Sheet.GetCellValue(GetCellName(col, row)).ToString());
+                        this.Cell_Contents_text.Text = "=" + Sheet.GetCellContents(GetCellName(col, row)).ToString();
                     }
                     else
                     {
@@ -227,18 +228,7 @@ namespace SpreadsheetGUI
                     this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
                     DisplayContentType(value);
 
-                    if (Sheet.GetCellContents(GetCellName(col, row)).ToString() is string)
-                    {
-                        this.Cell_Contents_text.Text = Sheet.GetCellContents(GetCellName(col, row)).ToString();
-                    }
-                    else if (Sheet.GetCellContents(GetCellName(col, row)).ToString() is double)
-                    {
-                        this.Cell_Contents_text.Text = Sheet.GetCellContents(GetCellName(col, row)).ToString();
-                    }
-                    else
-                    {
-                        this.Cell_Contents_text.Text = "=" + Sheet.GetCellContents(GetCellName(col, row)).ToString();
-                    }
+                   
                 }
                 catch (Exception excep)
                 {

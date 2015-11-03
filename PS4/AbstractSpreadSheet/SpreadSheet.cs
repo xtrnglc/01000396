@@ -425,8 +425,10 @@ namespace SS
         protected override ISet<String> SetCellContents(String name, Formula formula)
         {
             IEnumerable<String> dependees = dependencies.GetDependees(name);
-
+            IEnumerable<String> dependents = dependencies.GetDependents(name);
+            HashSet<String> cellsToRecalculate = new HashSet<string>();
             dependencies.ReplaceDependents(name, formula.GetVariables());
+            
 
             if (formula == null)
             {
@@ -440,9 +442,16 @@ namespace SS
 
             try
             {
+                if (dependencies.HasDependees(name))
+                {
+               
+                    foreach (String s in GetCellsToRecalculate(name))
+                        cellsToRecalculate.Add(s);
+                }
+
                 if (cellList.ContainsKey(name))
                 {
-                    cellList[name] = new Cell(formula, LookupValue); ;
+                    cellList[name] = new Cell(formula, LookupValue); 
                 }
 
                 else
@@ -455,15 +464,7 @@ namespace SS
                     throw new ArgumentException("One of the variables is undefined");
                 }
 
-                if (dependencies.HasDependees(name))
-                {
-                    HashSet<String> cellsToRecalculate = new HashSet<string>();
-
-                    foreach (String s in GetCellsToRecalculate(name))
-                        cellsToRecalculate.Add(s);
-
-                    return cellsToRecalculate;
-                }
+                return cellsToRecalculate;
 
                 foreach (string s in formula.GetVariables())
                 {
@@ -475,7 +476,9 @@ namespace SS
             }
             catch (CircularException)
             {
-                dependencies.ReplaceDependees(name, dependees);
+                foreach (string s in formula.GetVariables())
+                    dependencies.RemoveDependency(name, s);
+                
                 throw new CircularException();
             }
 
