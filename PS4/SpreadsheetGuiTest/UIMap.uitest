@@ -4237,6 +4237,906 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
+    <LaunchApplicationAction UIObjectName="UIMap.UIForm1Window">
+      <ParameterName />
+      <FileName>C:\Users\adsorens\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</FileName>
+      <AlternateFileName>%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</AlternateFileName>
+    </LaunchApplicationAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">1000</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="154" Y="34" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">100</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="245" Y="42" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">400</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="307" Y="35" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIFileMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="17" Y="10" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIMathMenuItem.UIAverageMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="48" Y="7" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UICodeMeterCCWindow.UIItemWindow.UIItemEdit">
+      <ParameterName />
+      <Value Encoded="false">A1</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <MouseAction UIObjectName="UIMap.UIDoneWindow.UIDoneButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="30" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIYesWindow.UIYesButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="48" Y="18" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UICodeMeterCCWindow.UIItemWindow1.UIItemEdit">
+      <ParameterName />
+      <Value Encoded="false">B1</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <MouseAction UIObjectName="UIMap.UIDoneWindow.UIDoneButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="39" Y="14" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIYesWindow.UIYesButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="42" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UICodeMeterCCWindow.UIItemWindow2.UIItemEdit">
+      <ParameterName />
+      <Value Encoded="false">C1</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <MouseAction UIObjectName="UIMap.UIDoneWindow.UIDoneButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="29" Y="8" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UINOWindow.UINOButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="35" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIYesWindow.UIYesButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="45" Y="16" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UICodeMeterCCWindow.UIItemWindow3.UIItemEdit">
+      <ParameterName />
+      <Value Encoded="false">D1</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <MouseAction UIObjectName="UIMap.UIDoneWindow.UIDoneButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="39" Y="17" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AverageMethod1">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UIForm1Window.UICell_Value_textWindow.UICell_Value_textEdit">
+      <ParameterName />
+      <PropertyName>Text</PropertyName>
+      <ExpectedValue>500</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AverageAssert1">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <LaunchApplicationAction UIObjectName="UIMap.UIForm1Window">
+      <ParameterName />
+      <FileName>C:\Users\adsorens\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</FileName>
+      <AlternateFileName>%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</AlternateFileName>
+    </LaunchApplicationAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">1010</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="155" Y="41" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">=A1*2</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="229" Y="41" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="71" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <SetValueAction UIObjectName="UIMap.UICodeMeterCCWindow.UIItemWindow.UIItemEdit">
+      <ParameterName />
+      <Value Encoded="false">Adam</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow1.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="31" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="SavingMethod1">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <LaunchApplicationAction UIObjectName="UIMap.UIForm1Window">
+      <ParameterName />
+      <FileName>C:\Users\adsorens\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</FileName>
+      <AlternateFileName>%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</AlternateFileName>
+    </LaunchApplicationAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIChangeSelectionMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="45" Y="7" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod1">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UIChangeyourselectedceWindow.UIChangeyourselectedceText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>Change your selected cell by left clicking on a new box.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert1">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="60" Y="15" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIChangeCellContentsMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="59" Y="9" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod2">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITochangeacellscontenWindow.UITochangeacellscontenText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert2">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="22" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UISavingaSpreadsheetMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="67" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod3">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITosaveaSpreadsheetclWindow.UITosaveaSpreadsheetclText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert3">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="40" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIOpeningaSpreadsheetMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="85" Y="10" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod4">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UIToopenaSpreadsheetclWindow.UIToopenaSpreadsheetclText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert4">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="35" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSumMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="65" Y="13" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod5">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindthesumofalistoWindow.UITofindthesumofalistoText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert5">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="30" Y="7" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheAverageMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="83" Y="8" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod6">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindtheaverageofalWindow.UITofindtheaverageofalText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert6">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="16" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheMaximumMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="98" Y="10" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod7">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindthemaximumofalWindow.UITofindthemaximumofalText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert7">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="45" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheMinimumMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="133" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod8">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindthesumofalistoWindow1.UITofindthesumofalistoText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert8">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="20" Y="13" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSquareMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="130" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod9">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindthesquareofaceWindow.UITofindthesquareofaceText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert9">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="21" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSquareRootMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="152" Y="10" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod10">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindthesquarerootoWindow.UITofindthesquarerootoText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert10">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="47" Y="8" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIMathMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="37" Y="2" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="21" Y="5" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="280" Y="276" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UITrignometryHelpMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="116" Y="13" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod11">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UIClickonMaththenTrigoWindow.UIClickonMaththenTrigoText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert11">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="21" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIEditHelpMenuItem.UIHowtoFindandReplaceMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="61" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod12">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UITofindandreplaceclicWindow.UITofindandreplaceclicText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert12">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="24" Y="16" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIEditHelpMenuItem.UIHowtoClearMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="84" Y="14" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod13">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMap.UIToClearclickonEditthWindow.UIToClearclickonEditthText">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>To Clear, click on Edit then click on Clear</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpAssert13">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMap.UIOKWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="19" Y="11" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <MouseAction UIObjectName="UIMap.UIForm1Window.UIForm1TitleBar.UICloseButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="23" Y="8" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="HelpMethod14">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
   <OnErrorActions />
@@ -4698,7 +5598,295 @@
                       <SupportLevel>0</SupportLevel>
                       <Descendants />
                     </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UIAverageMenuItem" FriendlyName="Average" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Average</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
                   </Descendants>
+                </UIObject>
+                <UIObject ControlType="MenuItem" Id="UIHelpMenuItem" FriendlyName="Help" SpecialControlType="None">
+                  <TechnologyName>MSAA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Form1</WindowTitle>
+                  </WindowTitles>
+                  <SearchConfigurations>
+                    <SearchConfiguration>Expand</SearchConfiguration>
+                  </SearchConfigurations>
+                  <AndCondition Id="SearchCondition">
+                    <PropertyCondition Name="Name">Help</PropertyCondition>
+                    <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="MenuItem" Id="UIChangeSelectionMenuItem" FriendlyName="Change Selection" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Change Selection</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UIChangeCellContentsMenuItem" FriendlyName="Change Cell Contents" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Change Cell Contents</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UISavingaSpreadsheetMenuItem" FriendlyName="Saving a Spreadsheet" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Saving a Spreadsheet</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UIOpeningaSpreadsheetMenuItem" FriendlyName="Opening a Spreadsheet" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Opening a Spreadsheet</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UIMathHelpMenuItem" FriendlyName="Math Help" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Math Help</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheSumMenuItem" FriendlyName="Finding the Sum" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Sum</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheAverageMenuItem" FriendlyName="Finding the Average" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Average</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheMaximumMenuItem" FriendlyName="Finding the Maximum" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Maximum</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheMinimumMenuItem" FriendlyName="Finding the Minimum" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Minimum</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheSquareMenuItem" FriendlyName="Finding the Square" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Square</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIFindingtheSquareRootMenuItem" FriendlyName="Finding the Square Root" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Finding the Square Root</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UITrignometryHelpMenuItem" FriendlyName="Trignometry Help" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">Trignometry Help</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                      </Descendants>
+                    </UIObject>
+                    <UIObject ControlType="MenuItem" Id="UIEditHelpMenuItem" FriendlyName="Edit Help" SpecialControlType="None">
+                      <TechnologyName>MSAA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Form1</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>Expand</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition Id="SearchCondition">
+                        <PropertyCondition Name="Name">Edit Help</PropertyCondition>
+                        <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants>
+                        <UIObject ControlType="MenuItem" Id="UIHowtoFindandReplaceMenuItem" FriendlyName="How to Find and Replace" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">How to Find and Replace</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                        <UIObject ControlType="MenuItem" Id="UIHowtoClearMenuItem" FriendlyName="How to Clear" SpecialControlType="None">
+                          <TechnologyName>MSAA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Form1</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition Id="SearchCondition">
+                            <PropertyCondition Name="Name">How to Clear</PropertyCondition>
+                            <PropertyCondition Name="ControlType">MenuItem</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                      </Descendants>
+                    </UIObject>
+                  </Descendants>
+                </UIObject>
+              </Descendants>
+            </UIObject>
+            <UIObject ControlType="TitleBar" Id="UIForm1TitleBar" FriendlyName="Form1" SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Form1</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="ControlType">TitleBar</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Button" Id="UICloseButton" FriendlyName="Close" SpecialControlType="None">
+                  <TechnologyName>MSAA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Form1</WindowTitle>
+                  </WindowTitles>
+                  <SearchConfigurations>
+                    <SearchConfiguration>VisibleOnly</SearchConfiguration>
+                  </SearchConfigurations>
+                  <AndCondition Id="SearchCondition">
+                    <PropertyCondition Name="Name">Close</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Button</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
                 </UIObject>
               </Descendants>
             </UIObject>
@@ -6380,6 +7568,422 @@
                   </Descendants>
                 </UIObject>
               </Descendants>
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIChangeyourselectedceWindow" FriendlyName="Change your selected cell by left clicking on a ne..." SpecialControlType="None" SessionId="11732254">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>Change your selected cell by left clicking on a new box.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">Change your selected cell by left clicking on a new box.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UIChangeyourselectedceText" FriendlyName="Change your selected cell by left clicking on a ne..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Change your selected cell by left clicking on a new box.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">Change your selected cell by left clicking on a new box.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITochangeacellscontenWindow" FriendlyName="To change a cell's contents, select the desired ce..." SpecialControlType="None" SessionId="7013656">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITochangeacellscontenText" FriendlyName="To change a cell's contents, select the desired ce..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITosaveaSpreadsheetclWindow" FriendlyName="To save a Spreadsheet, click on File then Save As...." SpecialControlType="None" SessionId="24249540">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITosaveaSpreadsheetclText" FriendlyName="To save a Spreadsheet, click on File then Save As...." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIToopenaSpreadsheetclWindow" FriendlyName="To open a Spreadsheet, click on File then Open. Th..." SpecialControlType="None" SessionId="24249414">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UIToopenaSpreadsheetclText" FriendlyName="To open a Spreadsheet, click on File then Open. Th..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindthesumofalistoWindow" FriendlyName="To find the sum of a list of cells, click on Math ..." SpecialControlType="None" SessionId="19596682">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindthesumofalistoText" FriendlyName="To find the sum of a list of cells, click on Math ..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindtheaverageofalWindow" FriendlyName="To find the average of a list of cells, click on M..." SpecialControlType="None" SessionId="3539408">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindtheaverageofalText" FriendlyName="To find the average of a list of cells, click on M..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindthemaximumofalWindow" FriendlyName="To find the maximum of a list of cells, click on M..." SpecialControlType="None" SessionId="25429062">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindthemaximumofalText" FriendlyName="To find the maximum of a list of cells, click on M..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindthesumofalistoWindow1" FriendlyName="To find the sum of a list of cells, click on Math ..." SpecialControlType="None" SessionId="4456912">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindthesumofalistoText" FriendlyName="To find the sum of a list of cells, click on Math ..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindthesquareofaceWindow" FriendlyName="To find the square of a cell, click on Math then c..." SpecialControlType="None" SessionId="17302990">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindthesquareofaceText" FriendlyName="To find the square of a cell, click on Math then c..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindthesquarerootoWindow" FriendlyName="To find the square root of a cell, click on Math t..." SpecialControlType="None" SessionId="2228978">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindthesquarerootoText" FriendlyName="To find the square root of a cell, click on Math t..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIClickonMaththenTrigoWindow" FriendlyName="Click on Math then Trigonometry then click on the ..." SpecialControlType="None" SessionId="23463306">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UIClickonMaththenTrigoText" FriendlyName="Click on Math then Trigonometry then click on the ..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UITofindandreplaceclicWindow" FriendlyName="To find and replace, click on Edit then on Find an..." SpecialControlType="None" SessionId="5177880">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UITofindandreplaceclicText" FriendlyName="To find and replace, click on Edit then on Find an..." SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIToClearclickonEditthWindow" FriendlyName="To Clear, click on Edit then click on Clear" SpecialControlType="None" SessionId="30803140">
+          <TechnologyName>MSAA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>To Clear, click on Edit then click on Clear</WindowTitle>
+          </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>VisibleOnly</SearchConfiguration>
+          </SearchConfigurations>
+          <AndCondition Id="SearchCondition">
+            <PropertyCondition Name="Name">To Clear, click on Edit then click on Clear</PropertyCondition>
+            <PropertyCondition Name="ClassName">Static</PropertyCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>1</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Text" Id="UIToClearclickonEditthText" FriendlyName="To Clear, click on Edit then click on Clear" SpecialControlType="None">
+              <TechnologyName>MSAA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>To Clear, click on Edit then click on Clear</WindowTitle>
+              </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>VisibleOnly</SearchConfiguration>
+              </SearchConfigurations>
+              <AndCondition Id="SearchCondition">
+                <PropertyCondition Name="Name">To Clear, click on Edit then click on Clear</PropertyCondition>
+                <PropertyCondition Name="ControlType">Text</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>1</SupportLevel>
+              <Descendants />
             </UIObject>
           </Descendants>
         </TopLevelWindow>

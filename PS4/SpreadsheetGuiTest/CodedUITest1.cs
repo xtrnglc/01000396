@@ -199,6 +199,51 @@ namespace SpreadSheetGUITest
             this.UIMap.OpenAssert3();
         }
 
+        [TestMethod]
+        public void AverageTest1()
+        {
+            this.UIMap.AverageMethod1();
+            this.UIMap.AverageAssert1();
+        }
+
+        [TestMethod]
+        public void SavingTest4()
+        {
+            this.UIMap.SavingMethod1();
+        }
+
+        [TestMethod]
+        public void HelpMenuTest()
+        {
+            this.UIMap.HelpMethod1();
+            this.UIMap.HelpAssert1();
+            this.UIMap.HelpMethod2();
+            this.UIMap.HelpAssert2();
+            this.UIMap.HelpMethod3();
+            this.UIMap.HelpAssert3();
+            this.UIMap.HelpMethod4();
+            this.UIMap.HelpAssert4();
+            this.UIMap.HelpMethod5();
+            this.UIMap.HelpAssert5();
+            this.UIMap.HelpMethod6();
+            this.UIMap.HelpAssert6();
+            this.UIMap.HelpMethod7();
+            this.UIMap.HelpAssert7();
+            this.UIMap.HelpMethod8();
+            this.UIMap.HelpAssert8();
+            this.UIMap.HelpMethod9();
+            this.UIMap.HelpAssert9();
+            this.UIMap.HelpMethod10();
+            this.UIMap.HelpAssert10();
+            this.UIMap.HelpMethod11();
+            this.UIMap.HelpAssert11();
+            this.UIMap.HelpMethod12();
+            this.UIMap.HelpAssert12();
+            this.UIMap.HelpMethod13();
+            this.UIMap.HelpAssert13();
+            this.UIMap.HelpMethod14();
+        }
+
 
 
 

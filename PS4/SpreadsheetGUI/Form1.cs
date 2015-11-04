@@ -28,8 +28,11 @@ namespace SpreadsheetGUI
         //private bool SelectionChange = false;
         private Spreadsheet Sheet = new Spreadsheet(isValid, t => t.ToUpper(), "ps6");
         string fileName = null;
-        
-      
+        string CellName;
+        string Value;
+        ISet<String> CellsToRecalculate = new HashSet<String>();
+
+
         public Form1()
         {
             InitializeComponent();
@@ -949,6 +952,8 @@ namespace SpreadsheetGUI
                 int[] coordinates = new int[2];
                 coordinates = GetCellCoordinates(cellName);
 
+                //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
+
                 cellsToRecalculate = Sheet.SetContentsOfCell(cellName, value.ToString());
                 spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
 
@@ -960,6 +965,59 @@ namespace SpreadsheetGUI
                     spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
                 }
                 this.Cell_Value_text.Text = Sheet.GetCellValue(cellName).ToString();
+
+
+                /*
+                ISet<String> cellsToRecalculate = new HashSet<String>();
+                int[] coordinates = new int[2];
+                coordinates = GetCellCoordinates(cellName);
+
+                //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
+
+                cellsToRecalculate = Sheet.SetContentsOfCell(cellName, value.ToString());
+                spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                foreach (string entry in cellsToRecalculate)
+                {
+                    coordinates = GetCellCoordinates(entry);
+
+                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                }
+                this.Cell_Value_text.Text = Sheet.GetCellValue(cellName).ToString();
+
+
+
+
+
+
+
+
+
+
+                CellName = cellName;
+                if (value.ToString().StartsWith("="))
+                    Value = value.ToString().Substring(1);
+                else
+                {
+                    Value = value.ToString();
+                }
+
+                int[] coordinates = new int[2];
+                coordinates = GetCellCoordinates(cellName);
+
+                backgroundWorker1.RunWorkerAsync();
+                spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(cellName).ToString());
+                //spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+                foreach (string entry in CellsToRecalculate)
+                {
+                    coordinates = GetCellCoordinates(entry);
+
+                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                }
+                this.Cell_Value_text.Text = Sheet.GetCellValue(CellName).ToString();
+                */
             }
             catch (Exception excep)
             {
@@ -1162,6 +1220,19 @@ namespace SpreadsheetGUI
             {
                 System.Windows.Forms.MessageBox.Show("Please enter a valid string");
             }
+        }
+
+        // backgroundWorker1.RunAsync();
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+            //int[] coordinates = new int[2];
+            //coordinates = GetCellCoordinates(CellName);
+
+            //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
+
+            CellsToRecalculate = Sheet.SetContentsOfCell(CellName, Value.ToString());
+            
         }
     }     
 }

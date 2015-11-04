@@ -40,12 +40,7 @@ namespace SpreadSheetGUITest
             WinEdit uICell_Contents_textEdit = this.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit;
             #endregion
 
-            // Double-Click 'SpreadsheetGUI - Shortcut' list item
-            Mouse.DoubleClick(uISpreadsheetGUIShortcListItem, new Point(25, 37));
-
-            // Click '&Open' button
-            Mouse.Click(uIOpenButton, new Point(37, 12));
-
+            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
             // Type '10' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SetCellContent1Params.UICell_Contents_textEditText;
 
@@ -78,11 +73,7 @@ namespace SpreadSheetGUITest
             WinClient uISpreadsheetPanel1Client = this.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client;
             #endregion
 
-            // Double-Click 'SpreadsheetGUI - Shortcut' list item
-            Mouse.DoubleClick(uISpreadsheetGUIShortcListItem, new Point(28, 52));
-
-            // Click '&Open' button
-            Mouse.Click(uIOpenButton, new Point(24, 15));
+            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
 
             // Type 'hello' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SetCellContent2Params.UICell_Contents_textEditText;
@@ -2428,6 +2419,575 @@ namespace SpreadSheetGUITest
             Assert.AreEqual(this.OpenAssert3ExpectedValues.UICell_Value_textEditText, uICell_Value_textEdit.Text);
         }
         
+        /// <summary>
+        /// AverageMethod1 - Use 'AverageMethod1Params' to pass parameters into this method.
+        /// </summary>
+        public void AverageMethod1()
+        {
+            #region Variable Declarations
+            WinEdit uICell_Contents_textEdit = this.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit;
+            WinClient uISpreadsheetPanel1Client = this.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client;
+            WinMenuItem uIFileMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIFileMenuItem;
+            WinMenuItem uIAverageMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIMathMenuItem.UIAverageMenuItem;
+            WinEdit uIItemEdit = this.UICodeMeterCCWindow.UIItemWindow.UIItemEdit;
+            WinButton uIDoneButton = this.UIDoneWindow.UIDoneButton;
+            WinButton uIYesButton = this.UIYesWindow.UIYesButton;
+            WinEdit uIItemEdit1 = this.UICodeMeterCCWindow.UIItemWindow1.UIItemEdit;
+            WinEdit uIItemEdit2 = this.UICodeMeterCCWindow.UIItemWindow2.UIItemEdit;
+            WinButton uINOButton = this.UINOWindow.UINOButton;
+            WinEdit uIItemEdit3 = this.UICodeMeterCCWindow.UIItemWindow3.UIItemEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.AverageMethod1Params.UIForm1WindowExePath, this.AverageMethod1Params.UIForm1WindowAlternateExePath);
+
+            // Type '1000' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.AverageMethod1Params.UICell_Contents_textEditText;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.AverageMethod1Params.UICell_Contents_textEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(154, 34));
+
+            // Type '100' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.AverageMethod1Params.UICell_Contents_textEditText1;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.AverageMethod1Params.UICell_Contents_textEditSendKeys1, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(245, 42));
+
+            // Type '400' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.AverageMethod1Params.UICell_Contents_textEditText2;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.AverageMethod1Params.UICell_Contents_textEditSendKeys2, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(307, 35));
+
+            // Click 'File' menu item
+            Mouse.Click(uIFileMenuItem, new Point(17, 10));
+
+            // Click 'Math' -> 'Average' menu item
+            Mouse.Click(uIAverageMenuItem, new Point(48, 7));
+
+            // Type 'A1' in text box
+            uIItemEdit.Text = this.AverageMethod1Params.UIItemEditText;
+
+            // Click 'Done' button
+            Mouse.Click(uIDoneButton, new Point(30, 12));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(48, 18));
+
+            // Type 'B1' in text box
+            uIItemEdit1.Text = this.AverageMethod1Params.UIItemEditText1;
+
+            // Click 'Done' button
+            Mouse.Click(uIDoneButton, new Point(39, 14));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(42, 11));
+
+            // Type 'C1' in text box
+            uIItemEdit2.Text = this.AverageMethod1Params.UIItemEditText2;
+
+            // Click 'Done' button
+            Mouse.Click(uIDoneButton, new Point(29, 8));
+
+            // Click '&No' button
+            Mouse.Click(uINOButton, new Point(35, 12));
+
+            // Click '&Yes' button
+            Mouse.Click(uIYesButton, new Point(45, 16));
+
+            // Type 'D1' in text box
+            uIItemEdit3.Text = this.AverageMethod1Params.UIItemEditText3;
+
+            // Click 'Done' button
+            Mouse.Click(uIDoneButton, new Point(39, 17));
+        }
+        
+        /// <summary>
+        /// AverageAssert1 - Use 'AverageAssert1ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AverageAssert1()
+        {
+            #region Variable Declarations
+            WinEdit uICell_Value_textEdit = this.UIForm1Window.UICell_Value_textWindow.UICell_Value_textEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'Cell_Value_text' text box equals '500'
+            Assert.AreEqual(this.AverageAssert1ExpectedValues.UICell_Value_textEditText, uICell_Value_textEdit.Text);
+        }
+        
+        /// <summary>
+        /// SavingMethod1 - Use 'SavingMethod1Params' to pass parameters into this method.
+        /// </summary>
+        public void SavingMethod1()
+        {
+            #region Variable Declarations
+            WinEdit uICell_Contents_textEdit = this.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit;
+            WinClient uISpreadsheetPanel1Client = this.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client;
+            WinMenuItem uISaveMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIFileMenuItem.UISaveMenuItem;
+            WinEdit uIItemEdit = this.UICodeMeterCCWindow.UIItemWindow.UIItemEdit;
+            WinButton uIOKButton = this.UIOKWindow1.UIOKButton;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.SavingMethod1Params.UIForm1WindowExePath, this.SavingMethod1Params.UIForm1WindowAlternateExePath);
+
+            // Type '1010' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.SavingMethod1Params.UICell_Contents_textEditText;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.SavingMethod1Params.UICell_Contents_textEditSendKeys, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(155, 41));
+
+            // Type '=A1*2' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.SavingMethod1Params.UICell_Contents_textEditText1;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.SavingMethod1Params.UICell_Contents_textEditSendKeys1, ModifierKeys.None);
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(229, 41));
+
+            // Click 'File' -> 'Save' menu item
+            Mouse.Click(uISaveMenuItem, new Point(71, 12));
+
+            // Type 'Adam' in text box
+            uIItemEdit.Text = this.SavingMethod1Params.UIItemEditText;
+
+            // Click 'Ok' button
+            Mouse.Click(uIOKButton, new Point(31, 12));
+        }
+        
+        /// <summary>
+        /// HelpMethod1 - Use 'HelpMethod1Params' to pass parameters into this method.
+        /// </summary>
+        public void HelpMethod1()
+        {
+            #region Variable Declarations
+            WinMenuItem uIChangeSelectionMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIChangeSelectionMenuItem;
+            #endregion
+
+            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
+
+            // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            //ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.HelpMethod1Params.UIForm1WindowExePath, this.HelpMethod1Params.UIForm1WindowAlternateExePath);
+
+            // Click 'Help' -> 'Change Selection' menu item
+            Mouse.Click(uIChangeSelectionMenuItem, new Point(45, 7));
+        }
+        
+        /// <summary>
+        /// HelpAssert1 - Use 'HelpAssert1ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert1()
+        {
+            #region Variable Declarations
+            WinText uIChangeyourselectedceText = this.UIChangeyourselectedceWindow.UIChangeyourselectedceText;
+            #endregion
+
+            // Verify that the 'Name' property of 'Change your selected cell by left clicking on a ne...' label equals 'Change your selected cell by left clicking on a new box.'
+            Assert.AreEqual(this.HelpAssert1ExpectedValues.UIChangeyourselectedceTextName, uIChangeyourselectedceText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod2
+        /// </summary>
+        public void HelpMethod2()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIChangeCellContentsMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIChangeCellContentsMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(60, 15));
+
+            // Click 'Help' -> 'Change Cell Contents' menu item
+            Mouse.Click(uIChangeCellContentsMenuItem, new Point(59, 9));
+        }
+        
+        /// <summary>
+        /// HelpAssert2 - Use 'HelpAssert2ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert2()
+        {
+            #region Variable Declarations
+            WinText uITochangeacellscontenText = this.UITochangeacellscontenWindow.UITochangeacellscontenText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To change a cell's contents, select the desired ce...' label equals 'To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.'
+            Assert.AreEqual(this.HelpAssert2ExpectedValues.UITochangeacellscontenTextName, uITochangeacellscontenText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod3
+        /// </summary>
+        public void HelpMethod3()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uISavingaSpreadsheetMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UISavingaSpreadsheetMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(22, 11));
+
+            // Click 'Help' -> 'Saving a Spreadsheet' menu item
+            Mouse.Click(uISavingaSpreadsheetMenuItem, new Point(67, 11));
+        }
+        
+        /// <summary>
+        /// HelpAssert3 - Use 'HelpAssert3ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert3()
+        {
+            #region Variable Declarations
+            WinText uITosaveaSpreadsheetclText = this.UITosaveaSpreadsheetclWindow.UITosaveaSpreadsheetclText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To save a Spreadsheet, click on File then Save As....' label equals 'To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.'
+            Assert.AreEqual(this.HelpAssert3ExpectedValues.UITosaveaSpreadsheetclTextName, uITosaveaSpreadsheetclText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod4
+        /// </summary>
+        public void HelpMethod4()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIOpeningaSpreadsheetMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIOpeningaSpreadsheetMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(40, 11));
+
+            // Click 'Help' -> 'Opening a Spreadsheet' menu item
+            Mouse.Click(uIOpeningaSpreadsheetMenuItem, new Point(85, 10));
+        }
+        
+        /// <summary>
+        /// HelpAssert4 - Use 'HelpAssert4ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert4()
+        {
+            #region Variable Declarations
+            WinText uIToopenaSpreadsheetclText = this.UIToopenaSpreadsheetclWindow.UIToopenaSpreadsheetclText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To open a Spreadsheet, click on File then Open. Th...' label equals 'To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it'
+            Assert.AreEqual(this.HelpAssert4ExpectedValues.UIToopenaSpreadsheetclTextName, uIToopenaSpreadsheetclText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod5
+        /// </summary>
+        public void HelpMethod5()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheSumMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSumMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(35, 11));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Sum' menu item
+            Mouse.Click(uIFindingtheSumMenuItem, new Point(65, 13));
+        }
+        
+        /// <summary>
+        /// HelpAssert5 - Use 'HelpAssert5ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert5()
+        {
+            #region Variable Declarations
+            WinText uITofindthesumofalistoText = this.UITofindthesumofalistoWindow.UITofindthesumofalistoText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the sum of a list of cells, click on Math ...' label equals 'To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert5ExpectedValues.UITofindthesumofalistoTextName, uITofindthesumofalistoText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod6
+        /// </summary>
+        public void HelpMethod6()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheAverageMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheAverageMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(30, 7));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Average' menu item
+            Mouse.Click(uIFindingtheAverageMenuItem, new Point(83, 8));
+        }
+        
+        /// <summary>
+        /// HelpAssert6 - Use 'HelpAssert6ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert6()
+        {
+            #region Variable Declarations
+            WinText uITofindtheaverageofalText = this.UITofindtheaverageofalWindow.UITofindtheaverageofalText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the average of a list of cells, click on M...' label equals 'To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert6ExpectedValues.UITofindtheaverageofalTextName, uITofindtheaverageofalText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod7
+        /// </summary>
+        public void HelpMethod7()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheMaximumMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheMaximumMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(16, 11));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Maximum' menu item
+            Mouse.Click(uIFindingtheMaximumMenuItem, new Point(98, 10));
+        }
+        
+        /// <summary>
+        /// HelpAssert7 - Use 'HelpAssert7ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert7()
+        {
+            #region Variable Declarations
+            WinText uITofindthemaximumofalText = this.UITofindthemaximumofalWindow.UITofindthemaximumofalText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the maximum of a list of cells, click on M...' label equals 'To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert7ExpectedValues.UITofindthemaximumofalTextName, uITofindthemaximumofalText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod8
+        /// </summary>
+        public void HelpMethod8()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheMinimumMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheMinimumMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(45, 11));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Minimum' menu item
+            Mouse.Click(uIFindingtheMinimumMenuItem, new Point(133, 12));
+        }
+        
+        /// <summary>
+        /// HelpAssert8 - Use 'HelpAssert8ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert8()
+        {
+            #region Variable Declarations
+            WinText uITofindthesumofalistoText = this.UITofindthesumofalistoWindow1.UITofindthesumofalistoText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the sum of a list of cells, click on Math ...' label equals 'To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert8ExpectedValues.UITofindthesumofalistoTextName, uITofindthesumofalistoText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod9
+        /// </summary>
+        public void HelpMethod9()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheSquareMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSquareMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(20, 13));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Square' menu item
+            Mouse.Click(uIFindingtheSquareMenuItem, new Point(130, 11));
+        }
+        
+        /// <summary>
+        /// HelpAssert9 - Use 'HelpAssert9ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert9()
+        {
+            #region Variable Declarations
+            WinText uITofindthesquareofaceText = this.UITofindthesquareofaceWindow.UITofindthesquareofaceText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the square of a cell, click on Math then c...' label equals 'To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert9ExpectedValues.UITofindthesquareofaceTextName, uITofindthesquareofaceText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod10
+        /// </summary>
+        public void HelpMethod10()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIFindingtheSquareRootMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UIFindingtheSquareRootMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(21, 11));
+
+            // Click 'Help' -> 'Math Help' -> 'Finding the Square Root' menu item
+            Mouse.Click(uIFindingtheSquareRootMenuItem, new Point(152, 10));
+        }
+        
+        /// <summary>
+        /// HelpAssert10 - Use 'HelpAssert10ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert10()
+        {
+            #region Variable Declarations
+            WinText uITofindthesquarerootoText = this.UITofindthesquarerootoWindow.UITofindthesquarerootoText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find the square root of a cell, click on Math t...' label equals 'To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.'
+            Assert.AreEqual(this.HelpAssert10ExpectedValues.UITofindthesquarerootoTextName, uITofindthesquarerootoText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod11
+        /// </summary>
+        public void HelpMethod11()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIMathMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIMathMenuItem;
+            WinMenuItem uIHelpMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem;
+            WinClient uISpreadsheetPanel1Client = this.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client;
+            WinMenuItem uITrignometryHelpMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIMathHelpMenuItem.UITrignometryHelpMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(47, 8));
+
+            // Click 'Math' menu item
+            Mouse.Click(uIMathMenuItem, new Point(37, 2));
+
+            // Click 'Help' menu item
+            Mouse.Click(uIHelpMenuItem, new Point(21, 5));
+
+            // Click 'spreadsheetPanel1' client
+            Mouse.Click(uISpreadsheetPanel1Client, new Point(280, 276));
+
+            // Click 'Help' -> 'Math Help' -> 'Trignometry Help' menu item
+            Mouse.Click(uITrignometryHelpMenuItem, new Point(116, 13));
+        }
+        
+        /// <summary>
+        /// HelpAssert11 - Use 'HelpAssert11ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert11()
+        {
+            #region Variable Declarations
+            WinText uIClickonMaththenTrigoText = this.UIClickonMaththenTrigoWindow.UIClickonMaththenTrigoText;
+            #endregion
+
+            // Verify that the 'Name' property of 'Click on Math then Trigonometry then click on the ...' label equals 'Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed'
+            Assert.AreEqual(this.HelpAssert11ExpectedValues.UIClickonMaththenTrigoTextName, uIClickonMaththenTrigoText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod12
+        /// </summary>
+        public void HelpMethod12()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIHowtoFindandReplaceMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIEditHelpMenuItem.UIHowtoFindandReplaceMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(21, 11));
+
+            // Click 'Help' -> 'Edit Help' -> 'How to Find and Replace' menu item
+            Mouse.Click(uIHowtoFindandReplaceMenuItem, new Point(61, 12));
+        }
+        
+        /// <summary>
+        /// HelpAssert12 - Use 'HelpAssert12ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert12()
+        {
+            #region Variable Declarations
+            WinText uITofindandreplaceclicText = this.UITofindandreplaceclicWindow.UITofindandreplaceclicText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To find and replace, click on Edit then on Find an...' label equals 'To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.'
+            Assert.AreEqual(this.HelpAssert12ExpectedValues.UITofindandreplaceclicTextName, uITofindandreplaceclicText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod13
+        /// </summary>
+        public void HelpMethod13()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinMenuItem uIHowtoClearMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIEditHelpMenuItem.UIHowtoClearMenuItem;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(24, 16));
+
+            // Click 'Help' -> 'Edit Help' -> 'How to Clear' menu item
+            Mouse.Click(uIHowtoClearMenuItem, new Point(84, 14));
+        }
+        
+        /// <summary>
+        /// HelpAssert13 - Use 'HelpAssert13ExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void HelpAssert13()
+        {
+            #region Variable Declarations
+            WinText uIToClearclickonEditthText = this.UIToClearclickonEditthWindow.UIToClearclickonEditthText;
+            #endregion
+
+            // Verify that the 'Name' property of 'To Clear, click on Edit then click on Clear' label equals 'To Clear, click on Edit then click on Clear'
+            Assert.AreEqual(this.HelpAssert13ExpectedValues.UIToClearclickonEditthTextName, uIToClearclickonEditthText.Name);
+        }
+        
+        /// <summary>
+        /// HelpMethod14
+        /// </summary>
+        public void HelpMethod14()
+        {
+            #region Variable Declarations
+            WinButton uIOKButton = this.UIOKWindow.UIOKButton;
+            WinButton uICloseButton = this.UIForm1Window.UIForm1TitleBar.UICloseButton;
+            #endregion
+
+            // Click 'OK' button
+            Mouse.Click(uIOKButton, new Point(19, 11));
+
+            // Click 'Close' button
+            Mouse.Click(uICloseButton, new Point(23, 8));
+        }
+        
         #region Properties
         public virtual SetCellContent1Params SetCellContent1Params
         {
@@ -3341,6 +3901,210 @@ namespace SpreadSheetGUITest
             }
         }
         
+        public virtual AverageMethod1Params AverageMethod1Params
+        {
+            get
+            {
+                if ((this.mAverageMethod1Params == null))
+                {
+                    this.mAverageMethod1Params = new AverageMethod1Params();
+                }
+                return this.mAverageMethod1Params;
+            }
+        }
+        
+        public virtual AverageAssert1ExpectedValues AverageAssert1ExpectedValues
+        {
+            get
+            {
+                if ((this.mAverageAssert1ExpectedValues == null))
+                {
+                    this.mAverageAssert1ExpectedValues = new AverageAssert1ExpectedValues();
+                }
+                return this.mAverageAssert1ExpectedValues;
+            }
+        }
+        
+        public virtual SavingMethod1Params SavingMethod1Params
+        {
+            get
+            {
+                if ((this.mSavingMethod1Params == null))
+                {
+                    this.mSavingMethod1Params = new SavingMethod1Params();
+                }
+                return this.mSavingMethod1Params;
+            }
+        }
+        
+        public virtual HelpMethod1Params HelpMethod1Params
+        {
+            get
+            {
+                if ((this.mHelpMethod1Params == null))
+                {
+                    this.mHelpMethod1Params = new HelpMethod1Params();
+                }
+                return this.mHelpMethod1Params;
+            }
+        }
+        
+        public virtual HelpAssert1ExpectedValues HelpAssert1ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert1ExpectedValues == null))
+                {
+                    this.mHelpAssert1ExpectedValues = new HelpAssert1ExpectedValues();
+                }
+                return this.mHelpAssert1ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert2ExpectedValues HelpAssert2ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert2ExpectedValues == null))
+                {
+                    this.mHelpAssert2ExpectedValues = new HelpAssert2ExpectedValues();
+                }
+                return this.mHelpAssert2ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert3ExpectedValues HelpAssert3ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert3ExpectedValues == null))
+                {
+                    this.mHelpAssert3ExpectedValues = new HelpAssert3ExpectedValues();
+                }
+                return this.mHelpAssert3ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert4ExpectedValues HelpAssert4ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert4ExpectedValues == null))
+                {
+                    this.mHelpAssert4ExpectedValues = new HelpAssert4ExpectedValues();
+                }
+                return this.mHelpAssert4ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert5ExpectedValues HelpAssert5ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert5ExpectedValues == null))
+                {
+                    this.mHelpAssert5ExpectedValues = new HelpAssert5ExpectedValues();
+                }
+                return this.mHelpAssert5ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert6ExpectedValues HelpAssert6ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert6ExpectedValues == null))
+                {
+                    this.mHelpAssert6ExpectedValues = new HelpAssert6ExpectedValues();
+                }
+                return this.mHelpAssert6ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert7ExpectedValues HelpAssert7ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert7ExpectedValues == null))
+                {
+                    this.mHelpAssert7ExpectedValues = new HelpAssert7ExpectedValues();
+                }
+                return this.mHelpAssert7ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert8ExpectedValues HelpAssert8ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert8ExpectedValues == null))
+                {
+                    this.mHelpAssert8ExpectedValues = new HelpAssert8ExpectedValues();
+                }
+                return this.mHelpAssert8ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert9ExpectedValues HelpAssert9ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert9ExpectedValues == null))
+                {
+                    this.mHelpAssert9ExpectedValues = new HelpAssert9ExpectedValues();
+                }
+                return this.mHelpAssert9ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert10ExpectedValues HelpAssert10ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert10ExpectedValues == null))
+                {
+                    this.mHelpAssert10ExpectedValues = new HelpAssert10ExpectedValues();
+                }
+                return this.mHelpAssert10ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert11ExpectedValues HelpAssert11ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert11ExpectedValues == null))
+                {
+                    this.mHelpAssert11ExpectedValues = new HelpAssert11ExpectedValues();
+                }
+                return this.mHelpAssert11ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert12ExpectedValues HelpAssert12ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert12ExpectedValues == null))
+                {
+                    this.mHelpAssert12ExpectedValues = new HelpAssert12ExpectedValues();
+                }
+                return this.mHelpAssert12ExpectedValues;
+            }
+        }
+        
+        public virtual HelpAssert13ExpectedValues HelpAssert13ExpectedValues
+        {
+            get
+            {
+                if ((this.mHelpAssert13ExpectedValues == null))
+                {
+                    this.mHelpAssert13ExpectedValues = new HelpAssert13ExpectedValues();
+                }
+                return this.mHelpAssert13ExpectedValues;
+            }
+        }
+        
         public UIProgramManagerWindow UIProgramManagerWindow
         {
             get
@@ -3556,6 +4320,162 @@ namespace SpreadSheetGUITest
                 return this.mUICUsersadsorensSourceWindow1;
             }
         }
+        
+        public UIChangeyourselectedceWindow UIChangeyourselectedceWindow
+        {
+            get
+            {
+                if ((this.mUIChangeyourselectedceWindow == null))
+                {
+                    this.mUIChangeyourselectedceWindow = new UIChangeyourselectedceWindow();
+                }
+                return this.mUIChangeyourselectedceWindow;
+            }
+        }
+        
+        public UITochangeacellscontenWindow UITochangeacellscontenWindow
+        {
+            get
+            {
+                if ((this.mUITochangeacellscontenWindow == null))
+                {
+                    this.mUITochangeacellscontenWindow = new UITochangeacellscontenWindow();
+                }
+                return this.mUITochangeacellscontenWindow;
+            }
+        }
+        
+        public UITosaveaSpreadsheetclWindow UITosaveaSpreadsheetclWindow
+        {
+            get
+            {
+                if ((this.mUITosaveaSpreadsheetclWindow == null))
+                {
+                    this.mUITosaveaSpreadsheetclWindow = new UITosaveaSpreadsheetclWindow();
+                }
+                return this.mUITosaveaSpreadsheetclWindow;
+            }
+        }
+        
+        public UIToopenaSpreadsheetclWindow UIToopenaSpreadsheetclWindow
+        {
+            get
+            {
+                if ((this.mUIToopenaSpreadsheetclWindow == null))
+                {
+                    this.mUIToopenaSpreadsheetclWindow = new UIToopenaSpreadsheetclWindow();
+                }
+                return this.mUIToopenaSpreadsheetclWindow;
+            }
+        }
+        
+        public UITofindthesumofalistoWindow UITofindthesumofalistoWindow
+        {
+            get
+            {
+                if ((this.mUITofindthesumofalistoWindow == null))
+                {
+                    this.mUITofindthesumofalistoWindow = new UITofindthesumofalistoWindow();
+                }
+                return this.mUITofindthesumofalistoWindow;
+            }
+        }
+        
+        public UITofindtheaverageofalWindow UITofindtheaverageofalWindow
+        {
+            get
+            {
+                if ((this.mUITofindtheaverageofalWindow == null))
+                {
+                    this.mUITofindtheaverageofalWindow = new UITofindtheaverageofalWindow();
+                }
+                return this.mUITofindtheaverageofalWindow;
+            }
+        }
+        
+        public UITofindthemaximumofalWindow UITofindthemaximumofalWindow
+        {
+            get
+            {
+                if ((this.mUITofindthemaximumofalWindow == null))
+                {
+                    this.mUITofindthemaximumofalWindow = new UITofindthemaximumofalWindow();
+                }
+                return this.mUITofindthemaximumofalWindow;
+            }
+        }
+        
+        public UITofindthesumofalistoWindow1 UITofindthesumofalistoWindow1
+        {
+            get
+            {
+                if ((this.mUITofindthesumofalistoWindow1 == null))
+                {
+                    this.mUITofindthesumofalistoWindow1 = new UITofindthesumofalistoWindow1();
+                }
+                return this.mUITofindthesumofalistoWindow1;
+            }
+        }
+        
+        public UITofindthesquareofaceWindow UITofindthesquareofaceWindow
+        {
+            get
+            {
+                if ((this.mUITofindthesquareofaceWindow == null))
+                {
+                    this.mUITofindthesquareofaceWindow = new UITofindthesquareofaceWindow();
+                }
+                return this.mUITofindthesquareofaceWindow;
+            }
+        }
+        
+        public UITofindthesquarerootoWindow UITofindthesquarerootoWindow
+        {
+            get
+            {
+                if ((this.mUITofindthesquarerootoWindow == null))
+                {
+                    this.mUITofindthesquarerootoWindow = new UITofindthesquarerootoWindow();
+                }
+                return this.mUITofindthesquarerootoWindow;
+            }
+        }
+        
+        public UIClickonMaththenTrigoWindow UIClickonMaththenTrigoWindow
+        {
+            get
+            {
+                if ((this.mUIClickonMaththenTrigoWindow == null))
+                {
+                    this.mUIClickonMaththenTrigoWindow = new UIClickonMaththenTrigoWindow();
+                }
+                return this.mUIClickonMaththenTrigoWindow;
+            }
+        }
+        
+        public UITofindandreplaceclicWindow UITofindandreplaceclicWindow
+        {
+            get
+            {
+                if ((this.mUITofindandreplaceclicWindow == null))
+                {
+                    this.mUITofindandreplaceclicWindow = new UITofindandreplaceclicWindow();
+                }
+                return this.mUITofindandreplaceclicWindow;
+            }
+        }
+        
+        public UIToClearclickonEditthWindow UIToClearclickonEditthWindow
+        {
+            get
+            {
+                if ((this.mUIToClearclickonEditthWindow == null))
+                {
+                    this.mUIToClearclickonEditthWindow = new UIToClearclickonEditthWindow();
+                }
+                return this.mUIToClearclickonEditthWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -3711,6 +4631,40 @@ namespace SpreadSheetGUITest
         
         private OpenAssert3ExpectedValues mOpenAssert3ExpectedValues;
         
+        private AverageMethod1Params mAverageMethod1Params;
+        
+        private AverageAssert1ExpectedValues mAverageAssert1ExpectedValues;
+        
+        private SavingMethod1Params mSavingMethod1Params;
+        
+        private HelpMethod1Params mHelpMethod1Params;
+        
+        private HelpAssert1ExpectedValues mHelpAssert1ExpectedValues;
+        
+        private HelpAssert2ExpectedValues mHelpAssert2ExpectedValues;
+        
+        private HelpAssert3ExpectedValues mHelpAssert3ExpectedValues;
+        
+        private HelpAssert4ExpectedValues mHelpAssert4ExpectedValues;
+        
+        private HelpAssert5ExpectedValues mHelpAssert5ExpectedValues;
+        
+        private HelpAssert6ExpectedValues mHelpAssert6ExpectedValues;
+        
+        private HelpAssert7ExpectedValues mHelpAssert7ExpectedValues;
+        
+        private HelpAssert8ExpectedValues mHelpAssert8ExpectedValues;
+        
+        private HelpAssert9ExpectedValues mHelpAssert9ExpectedValues;
+        
+        private HelpAssert10ExpectedValues mHelpAssert10ExpectedValues;
+        
+        private HelpAssert11ExpectedValues mHelpAssert11ExpectedValues;
+        
+        private HelpAssert12ExpectedValues mHelpAssert12ExpectedValues;
+        
+        private HelpAssert13ExpectedValues mHelpAssert13ExpectedValues;
+        
         private UIProgramManagerWindow mUIProgramManagerWindow;
         
         private UIOpenFileSecurityWarnWindow mUIOpenFileSecurityWarnWindow;
@@ -3746,6 +4700,32 @@ namespace SpreadSheetGUITest
         private UICUsersadsorensSourceWindow mUICUsersadsorensSourceWindow;
         
         private UICUsersadsorensSourceWindow1 mUICUsersadsorensSourceWindow1;
+        
+        private UIChangeyourselectedceWindow mUIChangeyourselectedceWindow;
+        
+        private UITochangeacellscontenWindow mUITochangeacellscontenWindow;
+        
+        private UITosaveaSpreadsheetclWindow mUITosaveaSpreadsheetclWindow;
+        
+        private UIToopenaSpreadsheetclWindow mUIToopenaSpreadsheetclWindow;
+        
+        private UITofindthesumofalistoWindow mUITofindthesumofalistoWindow;
+        
+        private UITofindtheaverageofalWindow mUITofindtheaverageofalWindow;
+        
+        private UITofindthemaximumofalWindow mUITofindthemaximumofalWindow;
+        
+        private UITofindthesumofalistoWindow1 mUITofindthesumofalistoWindow1;
+        
+        private UITofindthesquareofaceWindow mUITofindthesquareofaceWindow;
+        
+        private UITofindthesquarerootoWindow mUITofindthesquarerootoWindow;
+        
+        private UIClickonMaththenTrigoWindow mUIClickonMaththenTrigoWindow;
+        
+        private UITofindandreplaceclicWindow mUITofindandreplaceclicWindow;
+        
+        private UIToClearclickonEditthWindow mUIToClearclickonEditthWindow;
         #endregion
     }
     
@@ -5701,6 +6681,379 @@ namespace SpreadSheetGUITest
         #endregion
     }
     
+    /// <summary>
+    /// Parameters to be passed into 'AverageMethod1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AverageMethod1Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowExePath = "C:\\Users\\adsorens\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetG" +
+            "UI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetGUI.e" +
+            "xe";
+        
+        /// <summary>
+        /// Type '1000' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText = "1000";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '100' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText1 = "100";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys1 = "{Enter}";
+        
+        /// <summary>
+        /// Type '400' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText2 = "400";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys2 = "{Enter}";
+        
+        /// <summary>
+        /// Type 'A1' in text box
+        /// </summary>
+        public string UIItemEditText = "A1";
+        
+        /// <summary>
+        /// Type 'B1' in text box
+        /// </summary>
+        public string UIItemEditText1 = "B1";
+        
+        /// <summary>
+        /// Type 'C1' in text box
+        /// </summary>
+        public string UIItemEditText2 = "C1";
+        
+        /// <summary>
+        /// Type 'D1' in text box
+        /// </summary>
+        public string UIItemEditText3 = "D1";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AverageAssert1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AverageAssert1ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'Cell_Value_text' text box equals '500'
+        /// </summary>
+        public string UICell_Value_textEditText = "500";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'SavingMethod1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class SavingMethod1Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowExePath = "C:\\Users\\adsorens\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetG" +
+            "UI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetGUI.e" +
+            "xe";
+        
+        /// <summary>
+        /// Type '1010' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText = "1010";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys = "{Enter}";
+        
+        /// <summary>
+        /// Type '=A1*2' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText1 = "=A1*2";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys1 = "{Enter}";
+        
+        /// <summary>
+        /// Type 'Adam' in text box
+        /// </summary>
+        public string UIItemEditText = "Adam";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpMethod1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpMethod1Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowExePath = "C:\\Users\\adsorens\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetG" +
+            "UI.exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetGUI.e" +
+            "xe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert1'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert1ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Change your selected cell by left clicking on a ne...' label equals 'Change your selected cell by left clicking on a new box.'
+        /// </summary>
+        public string UIChangeyourselectedceTextName = "Change your selected cell by left clicking on a new box.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert2'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert2ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To change a cell's contents, select the desired ce...' label equals 'To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.'
+        /// </summary>
+        public string UITochangeacellscontenTextName = "To change a cell\'s contents, select the desired cell and edit the contents box an" +
+            "d then press enter. Negative numbers are not accepted.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert3'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert3ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To save a Spreadsheet, click on File then Save As....' label equals 'To save a Spreadsheet, click on File then Save As. Then enter file name. If this process has already been done then simply click save.'
+        /// </summary>
+        public string UITosaveaSpreadsheetclTextName = "To save a Spreadsheet, click on File then Save As. Then enter file name. If this " +
+            "process has already been done then simply click save.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert4'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert4ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To open a Spreadsheet, click on File then Open. Th...' label equals 'To open a Spreadsheet, click on File then Open. Then enter browse to where the file is saved and then click on it'
+        /// </summary>
+        public string UIToopenaSpreadsheetclTextName = "To open a Spreadsheet, click on File then Open. Then enter browse to where the fi" +
+            "le is saved and then click on it";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert5'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert5ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the sum of a list of cells, click on Math ...' label equals 'To find the sum of a list of cells, click on Math then click on Sum. Then enter the name of the cells. Click on No when prompted to end the list. The sum of the cells will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindthesumofalistoTextName = "To find the sum of a list of cells, click on Math then click on Sum. Then enter t" +
+            "he name of the cells. Click on No when prompted to end the list. The sum of the " +
+            "cells will then be computed and then you can assign that value to a cell.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert6'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert6ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the average of a list of cells, click on M...' label equals 'To find the average of a list of cells, click on Math then click on Average. Then enter the name of the cells. Click on No when prompted to end the list. The average of the cells will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindtheaverageofalTextName = "To find the average of a list of cells, click on Math then click on Average. Then" +
+            " enter the name of the cells. Click on No when prompted to end the list. The ave" +
+            "rage of the cells will then be computed and then you can assign that value to a " +
+            "cell.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert7'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert7ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the maximum of a list of cells, click on M...' label equals 'To find the maximum of a list of cells, click on Math then click on Maximum. Then enter the name of the cells. Click on No when prompted to end the list. The maximum of the cells will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindthemaximumofalTextName = "To find the maximum of a list of cells, click on Math then click on Maximum. Then" +
+            " enter the name of the cells. Click on No when prompted to end the list. The max" +
+            "imum of the cells will then be computed and then you can assign that value to a " +
+            "cell.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert8'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert8ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the sum of a list of cells, click on Math ...' label equals 'To find the sum of a list of cells, click on Math then click on Minimum. Then enter the name of the cells. Click on No when prompted to end the list. The minimum of the cells will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindthesumofalistoTextName = "To find the sum of a list of cells, click on Math then click on Minimum. Then ent" +
+            "er the name of the cells. Click on No when prompted to end the list. The minimum" +
+            " of the cells will then be computed and then you can assign that value to a cell" +
+            ".";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert9'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert9ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the square of a cell, click on Math then c...' label equals 'To find the square of a cell, click on Math then click on Square. Then enter the name of the cell. The square of the cell will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindthesquareofaceTextName = "To find the square of a cell, click on Math then click on Square. Then enter the " +
+            "name of the cell. The square of the cell will then be computed and then you can " +
+            "assign that value to a cell.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert10'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert10ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find the square root of a cell, click on Math t...' label equals 'To find the square root of a cell, click on Math then click on Square Root. Then enter the name of the cells. Click on No when prompted to end the list. The square root of the cell will then be computed and then you can assign that value to a cell.'
+        /// </summary>
+        public string UITofindthesquarerootoTextName = "To find the square root of a cell, click on Math then click on Square Root. Then " +
+            "enter the name of the cells. Click on No when prompted to end the list. The squa" +
+            "re root of the cell will then be computed and then you can assign that value to " +
+            "a cell.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert11'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert11ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'Click on Math then Trigonometry then click on the ...' label equals 'Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed'
+        /// </summary>
+        public string UIClickonMaththenTrigoTextName = "Click on Math then Trigonometry then click on the function you want to compute. E" +
+            "nter a valid non empty cell name when prompted and its trigonometric function wi" +
+            "ll be computed";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert12'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert12ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To find and replace, click on Edit then on Find an...' label equals 'To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.'
+        /// </summary>
+        public string UITofindandreplaceclicTextName = "To find and replace, click on Edit then on Find and Replace. First enter the numb" +
+            "er/string to be replaced then enter the number/string to replace it with.";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'HelpAssert13'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class HelpAssert13ExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'To Clear, click on Edit then click on Clear' label equals 'To Clear, click on Edit then click on Clear'
+        /// </summary>
+        public string UIToClearclickonEditthTextName = "To Clear, click on Edit then click on Clear";
+        #endregion
+    }
+    
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
     public class UIProgramManagerWindow : WinWindow
     {
@@ -5934,6 +7287,18 @@ namespace SpreadSheetGUITest
                 return this.mUIMenuStrip1MenuBar;
             }
         }
+        
+        public UIForm1TitleBar UIForm1TitleBar
+        {
+            get
+            {
+                if ((this.mUIForm1TitleBar == null))
+                {
+                    this.mUIForm1TitleBar = new UIForm1TitleBar(this);
+                }
+                return this.mUIForm1TitleBar;
+            }
+        }
         #endregion
         
         #region Fields
@@ -5950,6 +7315,8 @@ namespace SpreadSheetGUITest
         private UIMenuStrip1Window mUIMenuStrip1Window;
         
         private UIMenuStrip1MenuBar mUIMenuStrip1MenuBar;
+        
+        private UIForm1TitleBar mUIForm1TitleBar;
         #endregion
     }
     
@@ -6203,12 +7570,26 @@ namespace SpreadSheetGUITest
                 return this.mUIMathMenuItem;
             }
         }
+        
+        public UIHelpMenuItem UIHelpMenuItem
+        {
+            get
+            {
+                if ((this.mUIHelpMenuItem == null))
+                {
+                    this.mUIHelpMenuItem = new UIHelpMenuItem(this);
+                }
+                return this.mUIHelpMenuItem;
+            }
+        }
         #endregion
         
         #region Fields
         private UIFileMenuItem mUIFileMenuItem;
         
         private UIMathMenuItem mUIMathMenuItem;
+        
+        private UIHelpMenuItem mUIHelpMenuItem;
         #endregion
     }
     
@@ -6389,6 +7770,23 @@ namespace SpreadSheetGUITest
                 return this.mUISquareRootMenuItem;
             }
         }
+        
+        public WinMenuItem UIAverageMenuItem
+        {
+            get
+            {
+                if ((this.mUIAverageMenuItem == null))
+                {
+                    this.mUIAverageMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIAverageMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Average";
+                    this.mUIAverageMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIAverageMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIAverageMenuItem;
+            }
+        }
         #endregion
         
         #region Fields
@@ -6397,6 +7795,374 @@ namespace SpreadSheetGUITest
         private WinMenuItem mUISquareMenuItem;
         
         private WinMenuItem mUISquareRootMenuItem;
+        
+        private WinMenuItem mUIAverageMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIHelpMenuItem : WinMenuItem
+    {
+        
+        public UIHelpMenuItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "Help";
+            this.WindowTitles.Add("Form1");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UIChangeSelectionMenuItem
+        {
+            get
+            {
+                if ((this.mUIChangeSelectionMenuItem == null))
+                {
+                    this.mUIChangeSelectionMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIChangeSelectionMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Change Selection";
+                    this.mUIChangeSelectionMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIChangeSelectionMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIChangeSelectionMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIChangeCellContentsMenuItem
+        {
+            get
+            {
+                if ((this.mUIChangeCellContentsMenuItem == null))
+                {
+                    this.mUIChangeCellContentsMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIChangeCellContentsMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Change Cell Contents";
+                    this.mUIChangeCellContentsMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIChangeCellContentsMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIChangeCellContentsMenuItem;
+            }
+        }
+        
+        public WinMenuItem UISavingaSpreadsheetMenuItem
+        {
+            get
+            {
+                if ((this.mUISavingaSpreadsheetMenuItem == null))
+                {
+                    this.mUISavingaSpreadsheetMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUISavingaSpreadsheetMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Saving a Spreadsheet";
+                    this.mUISavingaSpreadsheetMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUISavingaSpreadsheetMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUISavingaSpreadsheetMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIOpeningaSpreadsheetMenuItem
+        {
+            get
+            {
+                if ((this.mUIOpeningaSpreadsheetMenuItem == null))
+                {
+                    this.mUIOpeningaSpreadsheetMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIOpeningaSpreadsheetMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Opening a Spreadsheet";
+                    this.mUIOpeningaSpreadsheetMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIOpeningaSpreadsheetMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIOpeningaSpreadsheetMenuItem;
+            }
+        }
+        
+        public UIMathHelpMenuItem UIMathHelpMenuItem
+        {
+            get
+            {
+                if ((this.mUIMathHelpMenuItem == null))
+                {
+                    this.mUIMathHelpMenuItem = new UIMathHelpMenuItem(this);
+                }
+                return this.mUIMathHelpMenuItem;
+            }
+        }
+        
+        public UIEditHelpMenuItem UIEditHelpMenuItem
+        {
+            get
+            {
+                if ((this.mUIEditHelpMenuItem == null))
+                {
+                    this.mUIEditHelpMenuItem = new UIEditHelpMenuItem(this);
+                }
+                return this.mUIEditHelpMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUIChangeSelectionMenuItem;
+        
+        private WinMenuItem mUIChangeCellContentsMenuItem;
+        
+        private WinMenuItem mUISavingaSpreadsheetMenuItem;
+        
+        private WinMenuItem mUIOpeningaSpreadsheetMenuItem;
+        
+        private UIMathHelpMenuItem mUIMathHelpMenuItem;
+        
+        private UIEditHelpMenuItem mUIEditHelpMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIMathHelpMenuItem : WinMenuItem
+    {
+        
+        public UIMathHelpMenuItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "Math Help";
+            this.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+            this.WindowTitles.Add("Form1");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UIFindingtheSumMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheSumMenuItem == null))
+                {
+                    this.mUIFindingtheSumMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheSumMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Sum";
+                    this.mUIFindingtheSumMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheSumMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheSumMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIFindingtheAverageMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheAverageMenuItem == null))
+                {
+                    this.mUIFindingtheAverageMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheAverageMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Average";
+                    this.mUIFindingtheAverageMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheAverageMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheAverageMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIFindingtheMaximumMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheMaximumMenuItem == null))
+                {
+                    this.mUIFindingtheMaximumMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheMaximumMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Maximum";
+                    this.mUIFindingtheMaximumMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheMaximumMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheMaximumMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIFindingtheMinimumMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheMinimumMenuItem == null))
+                {
+                    this.mUIFindingtheMinimumMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheMinimumMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Minimum";
+                    this.mUIFindingtheMinimumMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheMinimumMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheMinimumMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIFindingtheSquareMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheSquareMenuItem == null))
+                {
+                    this.mUIFindingtheSquareMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheSquareMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Square";
+                    this.mUIFindingtheSquareMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheSquareMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheSquareMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIFindingtheSquareRootMenuItem
+        {
+            get
+            {
+                if ((this.mUIFindingtheSquareRootMenuItem == null))
+                {
+                    this.mUIFindingtheSquareRootMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIFindingtheSquareRootMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Finding the Square Root";
+                    this.mUIFindingtheSquareRootMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIFindingtheSquareRootMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIFindingtheSquareRootMenuItem;
+            }
+        }
+        
+        public WinMenuItem UITrignometryHelpMenuItem
+        {
+            get
+            {
+                if ((this.mUITrignometryHelpMenuItem == null))
+                {
+                    this.mUITrignometryHelpMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUITrignometryHelpMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "Trignometry Help";
+                    this.mUITrignometryHelpMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUITrignometryHelpMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUITrignometryHelpMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUIFindingtheSumMenuItem;
+        
+        private WinMenuItem mUIFindingtheAverageMenuItem;
+        
+        private WinMenuItem mUIFindingtheMaximumMenuItem;
+        
+        private WinMenuItem mUIFindingtheMinimumMenuItem;
+        
+        private WinMenuItem mUIFindingtheSquareMenuItem;
+        
+        private WinMenuItem mUIFindingtheSquareRootMenuItem;
+        
+        private WinMenuItem mUITrignometryHelpMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIEditHelpMenuItem : WinMenuItem
+    {
+        
+        public UIEditHelpMenuItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WinMenuItem.PropertyNames.Name] = "Edit Help";
+            this.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+            this.WindowTitles.Add("Form1");
+            #endregion
+        }
+        
+        #region Properties
+        public WinMenuItem UIHowtoFindandReplaceMenuItem
+        {
+            get
+            {
+                if ((this.mUIHowtoFindandReplaceMenuItem == null))
+                {
+                    this.mUIHowtoFindandReplaceMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIHowtoFindandReplaceMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "How to Find and Replace";
+                    this.mUIHowtoFindandReplaceMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIHowtoFindandReplaceMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIHowtoFindandReplaceMenuItem;
+            }
+        }
+        
+        public WinMenuItem UIHowtoClearMenuItem
+        {
+            get
+            {
+                if ((this.mUIHowtoClearMenuItem == null))
+                {
+                    this.mUIHowtoClearMenuItem = new WinMenuItem(this);
+                    #region Search Criteria
+                    this.mUIHowtoClearMenuItem.SearchProperties[WinMenuItem.PropertyNames.Name] = "How to Clear";
+                    this.mUIHowtoClearMenuItem.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIHowtoClearMenuItem.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUIHowtoClearMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinMenuItem mUIHowtoFindandReplaceMenuItem;
+        
+        private WinMenuItem mUIHowtoClearMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForm1TitleBar : WinTitleBar
+    {
+        
+        public UIForm1TitleBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.WindowTitles.Add("Form1");
+            #endregion
+        }
+        
+        #region Properties
+        public WinButton UICloseButton
+        {
+            get
+            {
+                if ((this.mUICloseButton == null))
+                {
+                    this.mUICloseButton = new WinButton(this);
+                    #region Search Criteria
+                    this.mUICloseButton.SearchProperties[WinButton.PropertyNames.Name] = "Close";
+                    this.mUICloseButton.WindowTitles.Add("Form1");
+                    #endregion
+                }
+                return this.mUICloseButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinButton mUICloseButton;
         #endregion
     }
     
@@ -9035,6 +10801,562 @@ namespace SpreadSheetGUITest
         private WinMenuItem mUISaveMenuItem;
         
         private WinMenuItem mUICloseMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIChangeyourselectedceWindow : WinWindow
+    {
+        
+        public UIChangeyourselectedceWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Change your selected cell by left clicking on a new box.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("Change your selected cell by left clicking on a new box.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UIChangeyourselectedceText
+        {
+            get
+            {
+                if ((this.mUIChangeyourselectedceText == null))
+                {
+                    this.mUIChangeyourselectedceText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIChangeyourselectedceText.SearchProperties[WinText.PropertyNames.Name] = "Change your selected cell by left clicking on a new box.";
+                    this.mUIChangeyourselectedceText.WindowTitles.Add("Change your selected cell by left clicking on a new box.");
+                    #endregion
+                }
+                return this.mUIChangeyourselectedceText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUIChangeyourselectedceText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITochangeacellscontenWindow : WinWindow
+    {
+        
+        public UITochangeacellscontenWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To change a cell\'s contents, select the desired cell and edit the contents box an" +
+                "d then press enter. Negative numbers are not accepted.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To change a cell\'s contents, select the desired cell and edit the contents box an" +
+                    "d then press enter. Negative numbers are not accepted.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITochangeacellscontenText
+        {
+            get
+            {
+                if ((this.mUITochangeacellscontenText == null))
+                {
+                    this.mUITochangeacellscontenText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITochangeacellscontenText.SearchProperties[WinText.PropertyNames.Name] = "To change a cell\'s contents, select the desired cell and edit the contents box an" +
+                        "d then press enter. Negative numbers are not accepted.";
+                    this.mUITochangeacellscontenText.WindowTitles.Add("To change a cell\'s contents, select the desired cell and edit the contents box an" +
+                            "d then press enter. Negative numbers are not accepted.");
+                    #endregion
+                }
+                return this.mUITochangeacellscontenText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITochangeacellscontenText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITosaveaSpreadsheetclWindow : WinWindow
+    {
+        
+        public UITosaveaSpreadsheetclWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To save a Spreadsheet, click on File then Save As. Then enter file name. If this " +
+                "process has already been done then simply click save.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To save a Spreadsheet, click on File then Save As. Then enter file name. If this " +
+                    "process has already been done then simply click save.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITosaveaSpreadsheetclText
+        {
+            get
+            {
+                if ((this.mUITosaveaSpreadsheetclText == null))
+                {
+                    this.mUITosaveaSpreadsheetclText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITosaveaSpreadsheetclText.SearchProperties[WinText.PropertyNames.Name] = "To save a Spreadsheet, click on File then Save As. Then enter file name. If this " +
+                        "process has already been done then simply click save.";
+                    this.mUITosaveaSpreadsheetclText.WindowTitles.Add("To save a Spreadsheet, click on File then Save As. Then enter file name. If this " +
+                            "process has already been done then simply click save.");
+                    #endregion
+                }
+                return this.mUITosaveaSpreadsheetclText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITosaveaSpreadsheetclText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIToopenaSpreadsheetclWindow : WinWindow
+    {
+        
+        public UIToopenaSpreadsheetclWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To open a Spreadsheet, click on File then Open. Then enter browse to where the fi" +
+                "le is saved and then click on it";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To open a Spreadsheet, click on File then Open. Then enter browse to where the fi" +
+                    "le is saved and then click on it");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UIToopenaSpreadsheetclText
+        {
+            get
+            {
+                if ((this.mUIToopenaSpreadsheetclText == null))
+                {
+                    this.mUIToopenaSpreadsheetclText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIToopenaSpreadsheetclText.SearchProperties[WinText.PropertyNames.Name] = "To open a Spreadsheet, click on File then Open. Then enter browse to where the fi" +
+                        "le is saved and then click on it";
+                    this.mUIToopenaSpreadsheetclText.WindowTitles.Add("To open a Spreadsheet, click on File then Open. Then enter browse to where the fi" +
+                            "le is saved and then click on it");
+                    #endregion
+                }
+                return this.mUIToopenaSpreadsheetclText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUIToopenaSpreadsheetclText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindthesumofalistoWindow : WinWindow
+    {
+        
+        public UITofindthesumofalistoWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the sum of a list of cells, click on Math then click on Sum. Then enter t" +
+                "he name of the cells. Click on No when prompted to end the list. The sum of the " +
+                "cells will then be computed and then you can assign that value to a cell.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the sum of a list of cells, click on Math then click on Sum. Then enter t" +
+                    "he name of the cells. Click on No when prompted to end the list. The sum of the " +
+                    "cells will then be computed and then you can assign that value to a cell.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindthesumofalistoText
+        {
+            get
+            {
+                if ((this.mUITofindthesumofalistoText == null))
+                {
+                    this.mUITofindthesumofalistoText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindthesumofalistoText.SearchProperties[WinText.PropertyNames.Name] = "To find the sum of a list of cells, click on Math then click on Sum. Then enter t" +
+                        "he name of the cells. Click on No when prompted to end the list. The sum of the " +
+                        "cells will then be computed and then you can assign that value to a cell.";
+                    this.mUITofindthesumofalistoText.WindowTitles.Add("To find the sum of a list of cells, click on Math then click on Sum. Then enter t" +
+                            "he name of the cells. Click on No when prompted to end the list. The sum of the " +
+                            "cells will then be computed and then you can assign that value to a cell.");
+                    #endregion
+                }
+                return this.mUITofindthesumofalistoText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindthesumofalistoText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindtheaverageofalWindow : WinWindow
+    {
+        
+        public UITofindtheaverageofalWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the average of a list of cells, click on Math then click on Average. Then" +
+                " enter the name of the cells. Click on No when prompted to end the list. The ave" +
+                "rage of the cells will then be computed and then you can assign that value to a " +
+                "cell.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the average of a list of cells, click on Math then click on Average. Then" +
+                    " enter the name of the cells. Click on No when prompted to end the list. The ave" +
+                    "rage of the cells will then be computed and then you can assign that value to a " +
+                    "cell.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindtheaverageofalText
+        {
+            get
+            {
+                if ((this.mUITofindtheaverageofalText == null))
+                {
+                    this.mUITofindtheaverageofalText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindtheaverageofalText.SearchProperties[WinText.PropertyNames.Name] = "To find the average of a list of cells, click on Math then click on Average. Then" +
+                        " enter the name of the cells. Click on No when prompted to end the list. The ave" +
+                        "rage of the cells will then be computed and then you can assign that value to a " +
+                        "cell.";
+                    this.mUITofindtheaverageofalText.WindowTitles.Add("To find the average of a list of cells, click on Math then click on Average. Then" +
+                            " enter the name of the cells. Click on No when prompted to end the list. The ave" +
+                            "rage of the cells will then be computed and then you can assign that value to a " +
+                            "cell.");
+                    #endregion
+                }
+                return this.mUITofindtheaverageofalText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindtheaverageofalText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindthemaximumofalWindow : WinWindow
+    {
+        
+        public UITofindthemaximumofalWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the maximum of a list of cells, click on Math then click on Maximum. Then" +
+                " enter the name of the cells. Click on No when prompted to end the list. The max" +
+                "imum of the cells will then be computed and then you can assign that value to a " +
+                "cell.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the maximum of a list of cells, click on Math then click on Maximum. Then" +
+                    " enter the name of the cells. Click on No when prompted to end the list. The max" +
+                    "imum of the cells will then be computed and then you can assign that value to a " +
+                    "cell.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindthemaximumofalText
+        {
+            get
+            {
+                if ((this.mUITofindthemaximumofalText == null))
+                {
+                    this.mUITofindthemaximumofalText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindthemaximumofalText.SearchProperties[WinText.PropertyNames.Name] = "To find the maximum of a list of cells, click on Math then click on Maximum. Then" +
+                        " enter the name of the cells. Click on No when prompted to end the list. The max" +
+                        "imum of the cells will then be computed and then you can assign that value to a " +
+                        "cell.";
+                    this.mUITofindthemaximumofalText.WindowTitles.Add("To find the maximum of a list of cells, click on Math then click on Maximum. Then" +
+                            " enter the name of the cells. Click on No when prompted to end the list. The max" +
+                            "imum of the cells will then be computed and then you can assign that value to a " +
+                            "cell.");
+                    #endregion
+                }
+                return this.mUITofindthemaximumofalText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindthemaximumofalText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindthesumofalistoWindow1 : WinWindow
+    {
+        
+        public UITofindthesumofalistoWindow1()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the sum of a list of cells, click on Math then click on Minimum. Then ent" +
+                "er the name of the cells. Click on No when prompted to end the list. The minimum" +
+                " of the cells will then be computed and then you can assign that value to a cell" +
+                ".";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the sum of a list of cells, click on Math then click on Minimum. Then ent" +
+                    "er the name of the cells. Click on No when prompted to end the list. The minimum" +
+                    " of the cells will then be computed and then you can assign that value to a cell" +
+                    ".");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindthesumofalistoText
+        {
+            get
+            {
+                if ((this.mUITofindthesumofalistoText == null))
+                {
+                    this.mUITofindthesumofalistoText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindthesumofalistoText.SearchProperties[WinText.PropertyNames.Name] = "To find the sum of a list of cells, click on Math then click on Minimum. Then ent" +
+                        "er the name of the cells. Click on No when prompted to end the list. The minimum" +
+                        " of the cells will then be computed and then you can assign that value to a cell" +
+                        ".";
+                    this.mUITofindthesumofalistoText.WindowTitles.Add("To find the sum of a list of cells, click on Math then click on Minimum. Then ent" +
+                            "er the name of the cells. Click on No when prompted to end the list. The minimum" +
+                            " of the cells will then be computed and then you can assign that value to a cell" +
+                            ".");
+                    #endregion
+                }
+                return this.mUITofindthesumofalistoText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindthesumofalistoText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindthesquareofaceWindow : WinWindow
+    {
+        
+        public UITofindthesquareofaceWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the square of a cell, click on Math then click on Square. Then enter the " +
+                "name of the cell. The square of the cell will then be computed and then you can " +
+                "assign that value to a cell.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the square of a cell, click on Math then click on Square. Then enter the " +
+                    "name of the cell. The square of the cell will then be computed and then you can " +
+                    "assign that value to a cell.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindthesquareofaceText
+        {
+            get
+            {
+                if ((this.mUITofindthesquareofaceText == null))
+                {
+                    this.mUITofindthesquareofaceText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindthesquareofaceText.SearchProperties[WinText.PropertyNames.Name] = "To find the square of a cell, click on Math then click on Square. Then enter the " +
+                        "name of the cell. The square of the cell will then be computed and then you can " +
+                        "assign that value to a cell.";
+                    this.mUITofindthesquareofaceText.WindowTitles.Add("To find the square of a cell, click on Math then click on Square. Then enter the " +
+                            "name of the cell. The square of the cell will then be computed and then you can " +
+                            "assign that value to a cell.");
+                    #endregion
+                }
+                return this.mUITofindthesquareofaceText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindthesquareofaceText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindthesquarerootoWindow : WinWindow
+    {
+        
+        public UITofindthesquarerootoWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find the square root of a cell, click on Math then click on Square Root. Then " +
+                "enter the name of the cells. Click on No when prompted to end the list. The squa" +
+                "re root of the cell will then be computed and then you can assign that value to " +
+                "a cell.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find the square root of a cell, click on Math then click on Square Root. Then " +
+                    "enter the name of the cells. Click on No when prompted to end the list. The squa" +
+                    "re root of the cell will then be computed and then you can assign that value to " +
+                    "a cell.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindthesquarerootoText
+        {
+            get
+            {
+                if ((this.mUITofindthesquarerootoText == null))
+                {
+                    this.mUITofindthesquarerootoText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindthesquarerootoText.SearchProperties[WinText.PropertyNames.Name] = "To find the square root of a cell, click on Math then click on Square Root. Then " +
+                        "enter the name of the cells. Click on No when prompted to end the list. The squa" +
+                        "re root of the cell will then be computed and then you can assign that value to " +
+                        "a cell.";
+                    this.mUITofindthesquarerootoText.WindowTitles.Add("To find the square root of a cell, click on Math then click on Square Root. Then " +
+                            "enter the name of the cells. Click on No when prompted to end the list. The squa" +
+                            "re root of the cell will then be computed and then you can assign that value to " +
+                            "a cell.");
+                    #endregion
+                }
+                return this.mUITofindthesquarerootoText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindthesquarerootoText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIClickonMaththenTrigoWindow : WinWindow
+    {
+        
+        public UIClickonMaththenTrigoWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "Click on Math then Trigonometry then click on the function you want to compute. E" +
+                "nter a valid non empty cell name when prompted and its trigonometric function wi" +
+                "ll be computed";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("Click on Math then Trigonometry then click on the function you want to compute. E" +
+                    "nter a valid non empty cell name when prompted and its trigonometric function wi" +
+                    "ll be computed");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UIClickonMaththenTrigoText
+        {
+            get
+            {
+                if ((this.mUIClickonMaththenTrigoText == null))
+                {
+                    this.mUIClickonMaththenTrigoText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIClickonMaththenTrigoText.SearchProperties[WinText.PropertyNames.Name] = "Click on Math then Trigonometry then click on the function you want to compute. E" +
+                        "nter a valid non empty cell name when prompted and its trigonometric function wi" +
+                        "ll be computed";
+                    this.mUIClickonMaththenTrigoText.WindowTitles.Add("Click on Math then Trigonometry then click on the function you want to compute. E" +
+                            "nter a valid non empty cell name when prompted and its trigonometric function wi" +
+                            "ll be computed");
+                    #endregion
+                }
+                return this.mUIClickonMaththenTrigoText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUIClickonMaththenTrigoText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITofindandreplaceclicWindow : WinWindow
+    {
+        
+        public UITofindandreplaceclicWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To find and replace, click on Edit then on Find and Replace. First enter the numb" +
+                "er/string to be replaced then enter the number/string to replace it with.";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To find and replace, click on Edit then on Find and Replace. First enter the numb" +
+                    "er/string to be replaced then enter the number/string to replace it with.");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UITofindandreplaceclicText
+        {
+            get
+            {
+                if ((this.mUITofindandreplaceclicText == null))
+                {
+                    this.mUITofindandreplaceclicText = new WinText(this);
+                    #region Search Criteria
+                    this.mUITofindandreplaceclicText.SearchProperties[WinText.PropertyNames.Name] = "To find and replace, click on Edit then on Find and Replace. First enter the numb" +
+                        "er/string to be replaced then enter the number/string to replace it with.";
+                    this.mUITofindandreplaceclicText.WindowTitles.Add("To find and replace, click on Edit then on Find and Replace. First enter the numb" +
+                            "er/string to be replaced then enter the number/string to replace it with.");
+                    #endregion
+                }
+                return this.mUITofindandreplaceclicText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUITofindandreplaceclicText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIToClearclickonEditthWindow : WinWindow
+    {
+        
+        public UIToClearclickonEditthWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WinWindow.PropertyNames.Name] = "To Clear, click on Edit then click on Clear";
+            this.SearchProperties[WinWindow.PropertyNames.ClassName] = "Static";
+            this.WindowTitles.Add("To Clear, click on Edit then click on Clear");
+            #endregion
+        }
+        
+        #region Properties
+        public WinText UIToClearclickonEditthText
+        {
+            get
+            {
+                if ((this.mUIToClearclickonEditthText == null))
+                {
+                    this.mUIToClearclickonEditthText = new WinText(this);
+                    #region Search Criteria
+                    this.mUIToClearclickonEditthText.SearchProperties[WinText.PropertyNames.Name] = "To Clear, click on Edit then click on Clear";
+                    this.mUIToClearclickonEditthText.WindowTitles.Add("To Clear, click on Edit then click on Clear");
+                    #endregion
+                }
+                return this.mUIToClearclickonEditthText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WinText mUIToClearclickonEditthText;
         #endregion
     }
 }
