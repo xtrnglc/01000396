@@ -1071,9 +1071,49 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Help message for find and replace
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void howToFindAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("To find and replace, click on Edit then on Find and Replace. First enter the number to be replaced then enter the number to replace it with.");
+        }
+
+        /// <summary>
+        /// Clears all entries in spreadsheet
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HashSet<String> cellList = new HashSet<string>(Sheet.GetNamesOfAllNonemptyCells());
+            int[] coordinates = new int[2];
+            foreach (string cell in cellList)
+            {
+                Sheet.SetContentsOfCell(cell, "");
+                try
+                {
+                    coordinates = GetCellCoordinates(cell);
+                    this.Cell_Value_text.Text = Sheet.GetCellValue(cell).ToString();
+                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), "");
+                }
+                catch (Exception excep)
+                {
+                    System.Windows.Forms.MessageBox.Show(excep.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Help message for clear
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void howToClearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("To Clear, click on Edit then click on Clear");
         }
     }   
 }

@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DC8F415C-990B-48E5-9B43-EF60C4259CA5}</ProjectGuid>
+    <ProjectGuid>{D42B7896-26DB-49DC-BD32-428BD4F4BC19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreadsheetGuiTest</RootNamespace>
-    <AssemblyName>SpreadsheetGuiTest</AssemblyName>
+    <RootNamespace>SpreadSheetGUITest</RootNamespace>
+    <AssemblyName>SpreadSheetGUITest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

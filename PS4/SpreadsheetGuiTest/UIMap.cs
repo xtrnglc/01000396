@@ -1,4 +1,4 @@
-﻿namespace SpreadsheetGuiTest
+﻿namespace SpreadSheetGUITest
 {
     using System;
     using System.Collections.Generic;
