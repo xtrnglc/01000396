@@ -45,6 +45,7 @@
             this.squareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAndReplaceToolTip = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeCellContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +60,7 @@
             this.findingTheSquareRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToFindAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToClearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Cell = new System.Windows.Forms.Label();
             this.Cell_Contents = new System.Windows.Forms.Label();
             this.Cell_Content_Type = new System.Windows.Forms.Label();
@@ -67,8 +69,11 @@
             this.Cell_Value_text = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
-            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToClearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trigonometryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cotangentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -152,7 +157,8 @@
             this.maxToolStripMenuItem,
             this.minimumToolStripMenuItem,
             this.squareToolStripMenuItem,
-            this.squareRootToolStripMenuItem});
+            this.squareRootToolStripMenuItem,
+            this.trigonometryToolStripMenuItem});
             this.mathToolStripMenuItem.Name = "mathToolStripMenuItem";
             this.mathToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.mathToolStripMenuItem.Text = "Math";
@@ -160,42 +166,42 @@
             // sumToolStripMenuItem
             // 
             this.sumToolStripMenuItem.Name = "sumToolStripMenuItem";
-            this.sumToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.sumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sumToolStripMenuItem.Text = "Sum";
             this.sumToolStripMenuItem.Click += new System.EventHandler(this.sumToolStripMenuItem_Click);
             // 
             // averageToolStripMenuItem
             // 
             this.averageToolStripMenuItem.Name = "averageToolStripMenuItem";
-            this.averageToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.averageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.averageToolStripMenuItem.Text = "Average";
             this.averageToolStripMenuItem.Click += new System.EventHandler(this.averageToolStripMenuItem_Click);
             // 
             // maxToolStripMenuItem
             // 
             this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
-            this.maxToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.maxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.maxToolStripMenuItem.Text = "Maximum";
             this.maxToolStripMenuItem.Click += new System.EventHandler(this.maxToolStripMenuItem_Click);
             // 
             // minimumToolStripMenuItem
             // 
             this.minimumToolStripMenuItem.Name = "minimumToolStripMenuItem";
-            this.minimumToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.minimumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.minimumToolStripMenuItem.Text = "Minimum";
             this.minimumToolStripMenuItem.Click += new System.EventHandler(this.minimumToolStripMenuItem_Click);
             // 
             // squareToolStripMenuItem
             // 
             this.squareToolStripMenuItem.Name = "squareToolStripMenuItem";
-            this.squareToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.squareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.squareToolStripMenuItem.Text = "Square";
             this.squareToolStripMenuItem.Click += new System.EventHandler(this.squareToolStripMenuItem_Click);
             // 
             // squareRootToolStripMenuItem
             // 
             this.squareRootToolStripMenuItem.Name = "squareRootToolStripMenuItem";
-            this.squareRootToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.squareRootToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.squareRootToolStripMenuItem.Text = "Square Root";
             this.squareRootToolStripMenuItem.Click += new System.EventHandler(this.squareRootToolStripMenuItem_Click);
             // 
@@ -214,6 +220,13 @@
             this.findAndReplaceToolTip.Size = new System.Drawing.Size(164, 22);
             this.findAndReplaceToolTip.Text = "Find and Replace";
             this.findAndReplaceToolTip.Click += new System.EventHandler(this.findAndReplaceToolTip_Click);
+            // 
+            // clearToolStripMenuItem
+            // 
+            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -327,6 +340,13 @@
             this.howToFindAndReplaceToolStripMenuItem.Text = "How to Find and Replace";
             this.howToFindAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.howToFindAndReplaceToolStripMenuItem_Click);
             // 
+            // howToClearToolStripMenuItem
+            // 
+            this.howToClearToolStripMenuItem.Name = "howToClearToolStripMenuItem";
+            this.howToClearToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.howToClearToolStripMenuItem.Text = "How to Clear";
+            this.howToClearToolStripMenuItem.Click += new System.EventHandler(this.howToClearToolStripMenuItem_Click);
+            // 
             // Cell
             // 
             this.Cell.AutoSize = true;
@@ -398,19 +418,44 @@
             this.Cell_Contents_text.TextChanged += new System.EventHandler(this.Cell_Contents_text_TextChanged);
             this.Cell_Contents_text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cell_Contents_text_KeyPress);
             // 
-            // clearToolStripMenuItem
+            // trigonometryToolStripMenuItem
             // 
-            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.clearToolStripMenuItem.Text = "Clear";
-            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            this.trigonometryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sinToolStripMenuItem,
+            this.cosToolStripMenuItem,
+            this.tanToolStripMenuItem,
+            this.cotangentToolStripMenuItem});
+            this.trigonometryToolStripMenuItem.Name = "trigonometryToolStripMenuItem";
+            this.trigonometryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.trigonometryToolStripMenuItem.Text = "Trigonometry";
             // 
-            // howToClearToolStripMenuItem
+            // sinToolStripMenuItem
             // 
-            this.howToClearToolStripMenuItem.Name = "howToClearToolStripMenuItem";
-            this.howToClearToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.howToClearToolStripMenuItem.Text = "How to Clear";
-            this.howToClearToolStripMenuItem.Click += new System.EventHandler(this.howToClearToolStripMenuItem_Click);
+            this.sinToolStripMenuItem.Name = "sinToolStripMenuItem";
+            this.sinToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sinToolStripMenuItem.Text = "Sine";
+            this.sinToolStripMenuItem.Click += new System.EventHandler(this.sinToolStripMenuItem_Click);
+            // 
+            // cosToolStripMenuItem
+            // 
+            this.cosToolStripMenuItem.Name = "cosToolStripMenuItem";
+            this.cosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cosToolStripMenuItem.Text = "Cosine";
+            this.cosToolStripMenuItem.Click += new System.EventHandler(this.cosToolStripMenuItem_Click);
+            // 
+            // tanToolStripMenuItem
+            // 
+            this.tanToolStripMenuItem.Name = "tanToolStripMenuItem";
+            this.tanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tanToolStripMenuItem.Text = "Tangent";
+            this.tanToolStripMenuItem.Click += new System.EventHandler(this.tanToolStripMenuItem_Click);
+            // 
+            // cotangentToolStripMenuItem
+            // 
+            this.cotangentToolStripMenuItem.Name = "cotangentToolStripMenuItem";
+            this.cotangentToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cotangentToolStripMenuItem.Text = "Cotangent";
+            this.cotangentToolStripMenuItem.Click += new System.EventHandler(this.cotangentToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -482,6 +527,11 @@
         private System.Windows.Forms.ToolStripMenuItem howToFindAndReplaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem howToClearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trigonometryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sinToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tanToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cotangentToolStripMenuItem;
     }
 }
 

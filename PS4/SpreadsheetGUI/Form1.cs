@@ -170,7 +170,7 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void changeCellContentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("To change a cell's contents, select the desired cell and edit the contents box and then press enter.");
+            System.Windows.Forms.MessageBox.Show("To change a cell's contents, select the desired cell and edit the contents box and then press enter. Negative numbers are not accepted.");
         }
 
         private void spreadsheetPanel1_Load(object sender, EventArgs e)
@@ -204,37 +204,8 @@ namespace SpreadsheetGUI
                 ISet<String> cellsToRecalculate = new HashSet<String>();
                 int[] coordinates = new int[2];
 
-                this.Cell_name_text.Text = GetCellName(col, row);      
-                
-                try
-                {
-                    cellsToRecalculate = Sheet.SetContentsOfCell(GetCellName(col, row), (sender as TextBox).Text);
-                    if ((sender as TextBox).Text.StartsWith("="))
-                    {
-                        spreadsheetPanel1.SetValue(col, row, Sheet.GetCellValue(GetCellName(col, row)).ToString());
-                        this.Cell_Contents_text.Text = "=" + Sheet.GetCellContents(GetCellName(col, row)).ToString();
-                    }
-                    else
-                    {
-                        spreadsheetPanel1.SetValue(col, row, this.Cell_Contents_text.Text);
-                    }
-
-                    foreach (string entry in cellsToRecalculate)
-                    {
-                        coordinates = GetCellCoordinates(entry);
-
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                    }
-                    this.Cell_Value_text.Text = Sheet.GetCellValue(GetCellName(col, row)).ToString();
-                    DisplayContentType(value);
-
-                   
-                }
-                catch (Exception excep)
-                {
-                    System.Windows.Forms.MessageBox.Show(excep.Message);
-                }
-                
+                this.Cell_name_text.Text = GetCellName(col, row);
+                updateCells(GetCellName(col, row), (sender as TextBox).Text);              
             }
         }
 
@@ -304,8 +275,6 @@ namespace SpreadsheetGUI
                 }
                 Sheet.Save(fileName);
             }
-            
-            
         }
 
         /// <summary>
@@ -556,31 +525,7 @@ namespace SpreadsheetGUI
                 if (MessageBox.Show("The sum of the cells is: " + sum + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + sum + "to", "");
-
-                    try
-                    {
-                        int row, col;
-                        string temp1 = "=";
-                        ISet<String> cellsToRecalculate = new HashSet<String>();
-                        int[] coordinates = new int[2];
-                        coordinates = GetCellCoordinates(cellSelection);
-
-                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, sum.ToString());
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                        foreach (string entry in cellsToRecalculate)
-                        {
-                            coordinates = GetCellCoordinates(entry);
-
-                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                        }
-                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                    }
-                    catch (Exception excep)
-                    {
-                        System.Windows.Forms.MessageBox.Show(excep.Message);
-                    }
+                    updateCells(cellSelection, sum);
                 }
             }
             catch(Exception excep)
@@ -638,28 +583,7 @@ namespace SpreadsheetGUI
                 {
                     cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + sum + "to", "");
 
-                    try
-                    {
-                        ISet<String> cellsToRecalculate = new HashSet<String>();
-                        int[] coordinates = new int[2];
-                        coordinates = GetCellCoordinates(cellSelection);
-
-                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, average.ToString());
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                        foreach (string entry in cellsToRecalculate)
-                        {
-                            coordinates = GetCellCoordinates(entry);
-
-                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                        }
-                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                    }
-                    catch (Exception excep)
-                    {
-                        System.Windows.Forms.MessageBox.Show(excep.Message);
-                    }
+                    updateCells(cellSelection, average);
                 }
             }
             catch (Exception excep)
@@ -717,28 +641,7 @@ namespace SpreadsheetGUI
                 {
                     cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + max + "to", "");
 
-                    try
-                    {
-                        ISet<String> cellsToRecalculate = new HashSet<String>();
-                        int[] coordinates = new int[2];
-                        coordinates = GetCellCoordinates(cellSelection);
-
-                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, max.ToString());
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                        foreach (string entry in cellsToRecalculate)
-                        {
-                            coordinates = GetCellCoordinates(entry);
-
-                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                        }
-                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                    }
-                    catch (Exception excep)
-                    {
-                        System.Windows.Forms.MessageBox.Show(excep.Message);
-                    }
+                    updateCells(cellSelection, max);
                 }
             }
             catch (Exception excep)
@@ -794,28 +697,7 @@ namespace SpreadsheetGUI
                 {
                     cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + min + "to", "");
 
-                    try
-                    {
-                        ISet<String> cellsToRecalculate = new HashSet<String>();
-                        int[] coordinates = new int[2];
-                        coordinates = GetCellCoordinates(cellSelection);
-
-                        cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, min.ToString());
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                        foreach (string entry in cellsToRecalculate)
-                        {
-                            coordinates = GetCellCoordinates(entry);
-
-                            spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                        }
-                        this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                    }
-                    catch (Exception excep)
-                    {
-                        System.Windows.Forms.MessageBox.Show(excep.Message);
-                    }
+                    updateCells(cellSelection, min);
                 }
             }
             catch (Exception excep)
@@ -859,28 +741,7 @@ namespace SpreadsheetGUI
             {
                 cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
 
-                try
-                {
-                    ISet<String> cellsToRecalculate = new HashSet<String>();
-                    int[] coordinates = new int[2];
-                    coordinates = GetCellCoordinates(cellSelection);
-
-                    cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, result.ToString());
-                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                    foreach (string entry in cellsToRecalculate)
-                    {
-                        coordinates = GetCellCoordinates(entry);
-
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                    }
-                    this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                }
-                catch (Exception excep)
-                {
-                    System.Windows.Forms.MessageBox.Show(excep.Message);
-                }
+                updateCells(cellSelection, result);
             }
         }
 
@@ -919,28 +780,7 @@ namespace SpreadsheetGUI
             {
                 cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
 
-                try
-                {
-                    ISet<String> cellsToRecalculate = new HashSet<String>();
-                    int[] coordinates = new int[2];
-                    coordinates = GetCellCoordinates(cellSelection);
-
-                    cellsToRecalculate = Sheet.SetContentsOfCell(cellSelection, result.ToString());
-                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                    foreach (string entry in cellsToRecalculate)
-                    {
-                        coordinates = GetCellCoordinates(entry);
-
-                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                    }
-                    this.Cell_Value_text.Text = Sheet.GetCellValue(cellSelection).ToString();
-                }
-                catch (Exception excep)
-                {
-                    System.Windows.Forms.MessageBox.Show(excep.Message);
-                }
+                updateCells(cellSelection, result);
             }
         }
 
@@ -1031,27 +871,7 @@ namespace SpreadsheetGUI
                         {
                             if (temp == doubleValue)
                             {
-                                try
-                                {
-                                    ISet<String> cellsToRecalculate = new HashSet<String>();
-                                    int[] coordinates = new int[2];
-                                    coordinates = GetCellCoordinates(cell);
-
-                                    cellsToRecalculate = Sheet.SetContentsOfCell(cell, valueToReplace);
-                                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-                                    foreach (string entry in cellsToRecalculate)
-                                    {
-                                        coordinates = GetCellCoordinates(entry);
-
-                                        spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                                    }
-                                    this.Cell_Value_text.Text = Sheet.GetCellValue(cell).ToString();
-                                }
-                                catch (Exception excep)
-                                {
-                                    System.Windows.Forms.MessageBox.Show(excep.Message);
-                                }
+                                updateCells(cell, valueToReplace);
                             }
                         }
                         else
@@ -1115,5 +935,193 @@ namespace SpreadsheetGUI
         {
             System.Windows.Forms.MessageBox.Show("To Clear, click on Edit then click on Clear");
         }
-    }   
+
+        /// <summary>
+        /// Helper method to update cells
+        /// </summary>
+        /// <param name="cellName"></param>
+        /// <param name="value"></param>
+        private void updateCells(string cellName, object value)
+        {
+            try
+            {
+                ISet<String> cellsToRecalculate = new HashSet<String>();
+                int[] coordinates = new int[2];
+                coordinates = GetCellCoordinates(cellName);
+
+                cellsToRecalculate = Sheet.SetContentsOfCell(cellName, value.ToString());
+                spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
+
+
+                foreach (string entry in cellsToRecalculate)
+                {
+                    coordinates = GetCellCoordinates(entry);
+
+                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
+                }
+                this.Cell_Value_text.Text = Sheet.GetCellValue(cellName).ToString();
+            }
+            catch (Exception excep)
+            {
+                System.Windows.Forms.MessageBox.Show(excep.Message);
+            }
+        }
+
+        /// <summary>
+        /// Returns the cosine of a cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            double result = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+
+            while (!isValid(cellSelection))
+            {
+                MessageBox.Show("Please enter a valid cell name");
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            }
+
+            try
+            {
+                if (double.TryParse(Sheet.GetCellValue(cellSelection).ToString(), out temp))
+                {
+                    result = Math.Cos(temp);
+                }
+            }
+            catch (Exception excep)
+            {
+                throw new Exception("The cell " + cellSelection + " cannot be parsed into a double");
+            }
+
+            if (MessageBox.Show("The cosine  of the cell is: " + result + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
+
+                updateCells(cellSelection, result);
+            }
+        }
+
+        /// <summary>
+        /// Returns the tangent of the cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            double result = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+
+            while (!isValid(cellSelection))
+            {
+                MessageBox.Show("Please enter a valid cell name");
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            }
+
+            try
+            {
+                if (double.TryParse(Sheet.GetCellValue(cellSelection).ToString(), out temp))
+                {
+                    result = Math.Tan(temp);
+                }
+            }
+            catch (Exception excep)
+            {
+                throw new Exception("The cell " + cellSelection + " cannot be parsed into a double");
+            }
+
+            if (MessageBox.Show("The tangent  of the cell is: " + result + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
+
+                updateCells(cellSelection, result);
+            }
+        }
+        
+        /// <summary>
+        /// Returns the sine of a cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void sinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            double result = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+
+            while (!isValid(cellSelection))
+            {
+                MessageBox.Show("Please enter a valid cell name");
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            }
+
+            try
+            {
+                if (double.TryParse(Sheet.GetCellValue(cellSelection).ToString(), out temp))
+                {
+                    result = Math.Sin(temp);
+                }
+            }
+            catch (Exception excep)
+            {
+                throw new Exception("The cell " + cellSelection + " cannot be parsed into a double");
+            }
+
+            if (MessageBox.Show("The sin of the cell is: " + result + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
+
+                updateCells(cellSelection, result);
+            }
+        }
+
+        /// <summary>
+        /// Returns the cotangent of a cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cotangentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            double temp;
+            double result = 0;
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+
+            while (!isValid(cellSelection))
+            {
+                MessageBox.Show("Please enter a valid cell name");
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            }
+
+            try
+            {
+                if (double.TryParse(Sheet.GetCellValue(cellSelection).ToString(), out temp))
+                {
+                    result = Math.Tan(temp);
+                    result = 1 / result;
+                }
+            }
+            catch (Exception excep)
+            {
+                throw new Exception("The cell " + cellSelection + " cannot be parsed into a double");
+            }
+
+            if (MessageBox.Show("The cotangent of the cell is: " + result + "\n Do you want to assign this to a cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
+
+                updateCells(cellSelection, result);
+            }
+        }
+    }     
 }

@@ -53,9 +53,11 @@ Still unsure on how to pass in a lookup method delegate for formula evaluate
 =================================================================READ ME FOR PS6=================================================================
 
 Got the spreadsheet GUI to work. However unsure about the Invoke() method discussed in class and Worker Thread. We got this implementation working without use of either.
-http://www.learning2.eng.utah.edu/mod/page/view.php?id=15705 Unsure about contents on this slide applying to the spreadsheet gui
+http://www.learning2.eng.utah.edu/mod/page/view.php?id=15705
 
 Our unique features come in the form of the math sub menu which can be used to calculate various methods such as Sum, Average and finding the max/min of a range of cells.
 We also have a find and replace method that does as its name suggests.
 Tried creating an installer using Visual Studio Installer Project and managed to get it working on my local machine but can't commit to github. When pulled from github the project 
 gets corrupted. 
+
+Also in getting the spreadsheet GUI to work how we want it, we modified PS5's spreadsheet which meant that some grading tests for PS5 failed.
