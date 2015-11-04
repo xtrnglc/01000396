@@ -162,6 +162,46 @@ namespace SpreadSheetGUITest
             this.UIMap.SaveTest1Step1_assert();
             this.UIMap.SaveTest1Step1_assert2();
         }
+
+        [TestMethod]
+        public void SquareRootTest2()
+        {
+            this.UIMap.SquareRootTest2();
+            this.UIMap.SquareRootAssert1();
+            this.UIMap.ClosingMethod1();
+        }
+
+        [TestMethod]
+        public void SavingTest2()
+        {
+            this.UIMap.Saving1();
+            this.UIMap.SavingAssertion1();
+            this.UIMap.Saving2();
+            this.UIMap.SavingAssertion2();
+            this.UIMap.Saving3();
+            this.UIMap.SavingAssertion3();
+            this.UIMap.ClosingMethod1();
+        }
+
+        [TestMethod]
+        public void SavingTest3()
+        {
+            this.UIMap.Saving5();
+        }
+
+        [TestMethod]
+        public void OpenTest1()
+        {
+            this.UIMap.OpenMethod1();
+            this.UIMap.OpenAssert1();
+            this.UIMap.OpenAssert2();
+            this.UIMap.OpenMethod2();
+            this.UIMap.OpenAssert3();
+        }
+
+
+
+
         #region Additional test attributes
 
         // You can use the following additional attributes as you write your tests:

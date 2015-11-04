@@ -61,3 +61,6 @@ Tried creating an installer using Visual Studio Installer Project and managed to
 gets corrupted. 
 
 Also in getting the spreadsheet GUI to work how we want it, we modified PS5's spreadsheet which meant that some grading tests for PS5 failed.
+
+***Unique features in the spreadsheet*** - We added the ability to call a handfull of math functions on multiple cells. We also have a find and replace option.
+To learn how to use these features, see the help menu.
