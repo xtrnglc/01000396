@@ -133,13 +133,6 @@ namespace SpreadSheetGUITest
             this.UIMap.SaveTestStep1();
             this.UIMap.SaveTestStep1Test1();
         }
-
-
-
-
-
-
-
         #region Additional test attributes
 
         // You can use the following additional attributes as you write your tests:

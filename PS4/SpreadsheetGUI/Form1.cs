@@ -898,7 +898,7 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void howToFindAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("To find and replace, click on Edit then on Find and Replace. First enter the number to be replaced then enter the number to replace it with.");
+            System.Windows.Forms.MessageBox.Show("To find and replace, click on Edit then on Find and Replace. First enter the number/string to be replaced then enter the number/string to replace it with.");
         }
 
         /// <summary>
@@ -1121,6 +1121,46 @@ namespace SpreadsheetGUI
                 cellSelection = PromptForSelection.ShowDialog("Please enter a cell to assign the number " + result + "to", "");
 
                 updateCells(cellSelection, result);
+            }
+        }
+
+        private void trignometryHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("Click on Math then Trigonometry then click on the function you want to compute. Enter a valid non empty cell name when prompted and its trigonometric function will be computed");
+        }
+
+        /// <summary>
+        /// Find and replace for strings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void findAndReplacestringsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string value;
+            string valueToReplace;
+            HashSet<String> cellList = new HashSet<string>(Sheet.GetNamesOfAllNonemptyCells());
+
+            value = PromptForSelection.ShowDialog("Find", "");
+            valueToReplace = PromptForSelection.ShowDialog("Replace with", "");
+
+            try
+            {
+                foreach (string cell in cellList)
+                {
+                    if (Sheet.GetCellValue(cell).ToString() == value)
+                    {
+                        updateCells(cell, valueToReplace);
+                    }
+                        
+                    else
+                    {
+                        //do nothing
+                    }
+                }
+            }
+            catch (Exception excep)
+            {
+                System.Windows.Forms.MessageBox.Show("Please enter a valid string");
             }
         }
     }     

@@ -74,6 +74,8 @@
             this.cosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cotangentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trignometryHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAndReplacestringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,7 +211,8 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findAndReplaceToolTip,
-            this.clearToolStripMenuItem});
+            this.clearToolStripMenuItem,
+            this.findAndReplacestringsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -217,8 +220,8 @@
             // findAndReplaceToolTip
             // 
             this.findAndReplaceToolTip.Name = "findAndReplaceToolTip";
-            this.findAndReplaceToolTip.Size = new System.Drawing.Size(164, 22);
-            this.findAndReplaceToolTip.Text = "Find and Replace";
+            this.findAndReplaceToolTip.Size = new System.Drawing.Size(222, 22);
+            this.findAndReplaceToolTip.Text = "Find and Replace (numbers)";
             this.findAndReplaceToolTip.Click += new System.EventHandler(this.findAndReplaceToolTip_Click);
             // 
             // clearToolStripMenuItem
@@ -277,7 +280,8 @@
             this.findingTheMaximumToolStripMenuItem,
             this.findingTheMinimumToolStripMenuItem,
             this.findTheSquareToolStripMenuItem,
-            this.findingTheSquareRootToolStripMenuItem});
+            this.findingTheSquareRootToolStripMenuItem,
+            this.trignometryHelpToolStripMenuItem});
             this.mathHelpToolStripMenuItem.Name = "mathHelpToolStripMenuItem";
             this.mathHelpToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.mathHelpToolStripMenuItem.Text = "Math Help";
@@ -457,6 +461,20 @@
             this.cotangentToolStripMenuItem.Text = "Cotangent";
             this.cotangentToolStripMenuItem.Click += new System.EventHandler(this.cotangentToolStripMenuItem_Click);
             // 
+            // trignometryHelpToolStripMenuItem
+            // 
+            this.trignometryHelpToolStripMenuItem.Name = "trignometryHelpToolStripMenuItem";
+            this.trignometryHelpToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.trignometryHelpToolStripMenuItem.Text = "Trignometry Help";
+            this.trignometryHelpToolStripMenuItem.Click += new System.EventHandler(this.trignometryHelpToolStripMenuItem_Click);
+            // 
+            // findAndReplacestringsToolStripMenuItem
+            // 
+            this.findAndReplacestringsToolStripMenuItem.Name = "findAndReplacestringsToolStripMenuItem";
+            this.findAndReplacestringsToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.findAndReplacestringsToolStripMenuItem.Text = "Find and Replace (strings)";
+            this.findAndReplacestringsToolStripMenuItem.Click += new System.EventHandler(this.findAndReplacestringsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,6 +550,8 @@
         private System.Windows.Forms.ToolStripMenuItem cosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tanToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cotangentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trignometryHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findAndReplacestringsToolStripMenuItem;
     }
 }
 
