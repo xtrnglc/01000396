@@ -56,3 +56,6 @@ Got the spreadsheet GUI to work. However unsure about the Invoke() method discus
 http://www.learning2.eng.utah.edu/mod/page/view.php?id=15705 Unsure about contents on this slide applying to the spreadsheet gui
 
 Our unique features come in the form of the math sub menu which can be used to calculate various methods such as Sum, Average and finding the max/min of a range of cells.
+We also have a find and replace method that does as its name suggests.
+Tried creating an installer using Visual Studio Installer Project and managed to get it working on my local machine but can't commit to github. When pulled from github the project 
+gets corrupted. 
