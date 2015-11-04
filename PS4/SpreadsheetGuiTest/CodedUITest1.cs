@@ -128,10 +128,39 @@ namespace SpreadSheetGUITest
         }
 
         [TestMethod]
+        public void SquareTest1()
+        {
+            this.UIMap.SquareTest1();
+            this.UIMap.SquareTest1_assert();
+        }
+
+        [TestMethod]
+        public void SquareRootTest1()
+        {
+            this.UIMap.SquareRootTest1();
+            this.UIMap.SquareRootTest1_assert();
+        }
+
+        [TestMethod]
+        public void SumTest4()
+        {
+            this.UIMap.SumTestMethod3();
+            this.UIMap.SumTestMethod3_assert();
+        }
+
+        [TestMethod]
         public void SaveTest2()
         {
             this.UIMap.SaveTestStep1();
             this.UIMap.SaveTestStep1Test1();
+        }
+
+        [TestMethod]
+        public void SaveTest3()
+        {
+            this.UIMap.SaveTest1Step1();
+            this.UIMap.SaveTest1Step1_assert();
+            this.UIMap.SaveTest1Step1_assert2();
         }
         #region Additional test attributes
 
