@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetGUI", "Spreadshe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadSheetGUITest", "SpreadSheetGUITest\SpreadSheetGUITest.csproj", "{D42B7896-26DB-49DC-BD32-428BD4F4BC19}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SpreadsheetSetUp", "SpreadsheetSetUp\SpreadsheetSetUp.vdproj", "{ADF219B7-ACCB-4C54-9C7C-B48E691663DF}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SpreadSheetInstall", "SpreadSheetInstall\SpreadSheetInstall.vdproj", "{E5733E64-D3D7-4274-8034-193BB3ECBB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,8 +46,8 @@ Global
 		{D42B7896-26DB-49DC-BD32-428BD4F4BC19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D42B7896-26DB-49DC-BD32-428BD4F4BC19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D42B7896-26DB-49DC-BD32-428BD4F4BC19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADF219B7-ACCB-4C54-9C7C-B48E691663DF}.Debug|Any CPU.ActiveCfg = Debug
-		{ADF219B7-ACCB-4C54-9C7C-B48E691663DF}.Release|Any CPU.ActiveCfg = Release
+		{E5733E64-D3D7-4274-8034-193BB3ECBB5E}.Debug|Any CPU.ActiveCfg = Debug
+		{E5733E64-D3D7-4274-8034-193BB3ECBB5E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

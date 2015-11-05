@@ -62,5 +62,15 @@ gets corrupted.
 
 Also in getting the spreadsheet GUI to work how we want it, we modified PS5's spreadsheet which meant that some grading tests for PS5 failed.
 
-***Unique features in the spreadsheet*** - We added the ability to call a handfull of math functions on multiple cells. We also have a find and replace option.
+***Unique features in the spreadsheet*** - We added the ability to call a handfull of math functions on multiple cells. We also have a find and replace option and a sort option
 To learn how to use these features, see the help menu.
+
+Link to setup.exe
+https://drive.google.com/file/d/0Bz4qVSKvxJdKQXF2cU82WEtENlU/view?usp=sharing
+
+Link to spreadsheetsetup.msi
+https://drive.google.com/file/d/0Bz4qVSKvxJdKUHNkbFpkbEtUcG8/view?usp=sharing
+
+These two links together will create an installer for the spreadsheet and should work on most machines.
+Github does not commit the visual studio installer projects to the cloud so I built the project on my local machine
+and uploaded the two files necessary to the cloud.
