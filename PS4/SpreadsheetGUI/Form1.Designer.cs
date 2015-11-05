@@ -77,6 +77,8 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Cell_Contents_text = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.sortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToSortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -252,7 +254,8 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findAndReplaceToolTip,
             this.clearToolStripMenuItem,
-            this.findAndReplacestringsToolStripMenuItem});
+            this.findAndReplacestringsToolStripMenuItem,
+            this.sortToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -386,7 +389,8 @@
             // 
             this.editHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.howToFindAndReplaceToolStripMenuItem,
-            this.howToClearToolStripMenuItem});
+            this.howToClearToolStripMenuItem,
+            this.howToSortToolStripMenuItem});
             this.editHelpToolStripMenuItem.Name = "editHelpToolStripMenuItem";
             this.editHelpToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.editHelpToolStripMenuItem.Text = "Edit Help";
@@ -480,6 +484,20 @@
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // sortToolStripMenuItem
+            // 
+            this.sortToolStripMenuItem.Name = "sortToolStripMenuItem";
+            this.sortToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.sortToolStripMenuItem.Text = "Sort";
+            this.sortToolStripMenuItem.Click += new System.EventHandler(this.sortToolStripMenuItem_Click);
+            // 
+            // howToSortToolStripMenuItem
+            // 
+            this.howToSortToolStripMenuItem.Name = "howToSortToolStripMenuItem";
+            this.howToSortToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.howToSortToolStripMenuItem.Text = "How to Sort";
+            this.howToSortToolStripMenuItem.Click += new System.EventHandler(this.howToSortToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -558,6 +576,8 @@
         private System.Windows.Forms.ToolStripMenuItem trignometryHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findAndReplacestringsToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripMenuItem sortToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem howToSortToolStripMenuItem;
     }
 }
 

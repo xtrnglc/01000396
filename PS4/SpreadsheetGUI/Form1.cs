@@ -1214,5 +1214,90 @@ namespace SpreadsheetGUI
         {
             CellsToRecalculate = Sheet.SetContentsOfCell(CellName, Value.ToString());
         }
+
+        /// <summary>
+        /// Sorts a range of cells and places it in a column
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void sortToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string cellSelection = "A1";
+            string startCell = "invalid";
+            string startCellFirstElement = "";
+            string startCellEndElements = "";
+            int startCellNumbers = 0;
+            double temp = 0;
+            List<string> listOfCellsToAdd_Name = new List<string>();
+            List<double> sortedData = new List<double>();
+
+            cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+            listOfCellsToAdd_Name.Add(cellSelection);
+
+            while (MessageBox.Show("Do you want to add another cell?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                cellSelection = PromptForSelection.ShowDialog("Enter Cell Name", "");
+                if (isValid(cellSelection))
+                    listOfCellsToAdd_Name.Add(cellSelection);
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }
+
+            while (!isValid(startCell))
+            {
+                startCell = PromptForSelection.ShowDialog("Please select start Cell to place sorted data", "");
+                if (isValid(startCell))
+                {
+                    //do nothing
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid cell name");
+                }
+            }
+
+            try
+            {
+                foreach (string cell in listOfCellsToAdd_Name)
+                {
+                    if (double.TryParse(Sheet.GetCellValue(cell).ToString(), out temp))
+                    {
+                        sortedData.Add(temp);
+                    }
+                    else
+                    {
+                        throw new Exception("The cell " + cell + " cannot be parsed into a double");
+                    }
+                }
+                sortedData.Sort();
+                startCellFirstElement = startCell.ElementAt(0).ToString();
+                startCellEndElements = startCell.Substring(1);
+                int.TryParse(startCellEndElements, out startCellNumbers);
+
+                foreach (double data in sortedData)
+                {
+                    updateCells(startCell, data);
+                    startCellNumbers++;
+                    startCellEndElements = startCellNumbers.ToString();
+                    startCell = startCellFirstElement + startCellEndElements;
+                }
+            }
+            catch (Exception excep)
+            {
+                MessageBox.Show("Something went wrong trying to sort the data: " + excep.Message);
+            }
+        }
+
+        /// <summary>
+        /// Help message for sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void howToSortToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To sort data, first have valid double entries in cells and then click on Edit then Sort. Then enter the names of the cells you want sorted at prompt. Click no when prompted to end the list. Then enter the name of the cell where you want the sorted data.");
+        }
     }     
 }
