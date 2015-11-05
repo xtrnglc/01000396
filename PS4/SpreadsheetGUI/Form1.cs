@@ -25,14 +25,30 @@ namespace SpreadsheetGUI
 
     public partial class Form1 : Form
     {
-        //private bool SelectionChange = false;
+        /// <summary>
+        /// Makes a new spreadsheet to keep track of cell values, contents and dependencies
+        /// </summary>
         private Spreadsheet Sheet = new Spreadsheet(isValid, t => t.ToUpper(), "ps6");
+        /// <summary>
+        /// Global string to keep track of file name
+        /// </summary>
         string fileName = null;
+        /// <summary>
+        /// Used for background worker that we couldn't get working
+        /// </summary>
         string CellName;
+        /// <summary>
+        /// Also used for background worker
+        /// </summary>
         string Value;
+        /// <summary>
+        /// used for background worker. Keeps track of the cells that need to be recalculated
+        /// </summary>
         ISet<String> CellsToRecalculate = new HashSet<String>();
 
-
+        /// <summary>
+        /// Makes the new spreadsheet GUI, iniziales the first selection to A1
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -952,8 +968,6 @@ namespace SpreadsheetGUI
                 int[] coordinates = new int[2];
                 coordinates = GetCellCoordinates(cellName);
 
-                //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
-
                 cellsToRecalculate = Sheet.SetContentsOfCell(cellName, value.ToString());
                 spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
 
@@ -968,33 +982,6 @@ namespace SpreadsheetGUI
 
 
                 /*
-                ISet<String> cellsToRecalculate = new HashSet<String>();
-                int[] coordinates = new int[2];
-                coordinates = GetCellCoordinates(cellName);
-
-                //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
-
-                cellsToRecalculate = Sheet.SetContentsOfCell(cellName, value.ToString());
-                spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), this.Cell_Contents_text.Text);
-
-
-                foreach (string entry in cellsToRecalculate)
-                {
-                    coordinates = GetCellCoordinates(entry);
-
-                    spreadsheetPanel1.SetValue(coordinates.ElementAt(0), coordinates.ElementAt(1), Sheet.GetCellValue(entry).ToString());
-                }
-                this.Cell_Value_text.Text = Sheet.GetCellValue(cellName).ToString();
-
-
-
-
-
-
-
-
-
-
                 CellName = cellName;
                 if (value.ToString().StartsWith("="))
                     Value = value.ToString().Substring(1);
@@ -1225,14 +1212,7 @@ namespace SpreadsheetGUI
         // backgroundWorker1.RunAsync();
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            
-            //int[] coordinates = new int[2];
-            //coordinates = GetCellCoordinates(CellName);
-
-            //cellsToRecalculate = backgroundWorker1.RunWorkerAsync();
-
             CellsToRecalculate = Sheet.SetContentsOfCell(CellName, Value.ToString());
-            
         }
     }     
 }

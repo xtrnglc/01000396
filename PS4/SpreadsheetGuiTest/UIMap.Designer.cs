@@ -2538,7 +2538,8 @@ namespace SpreadSheetGUITest
             #endregion
 
             // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
-            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.SavingMethod1Params.UIForm1WindowExePath, this.SavingMethod1Params.UIForm1WindowAlternateExePath);
+            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
+            //ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.SavingMethod1Params.UIForm1WindowExePath, this.SavingMethod1Params.UIForm1WindowAlternateExePath);
 
             // Type '1010' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SavingMethod1Params.UICell_Contents_textEditText;
