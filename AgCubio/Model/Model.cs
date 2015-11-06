@@ -31,6 +31,9 @@ namespace Model
 
         public int Mass { get; set; }
 
+        /// <summary>
+        /// Returns the X and Y coorindates of the cube
+        /// </summary>
         public int[] Coordinates
         {
             get
@@ -46,12 +49,18 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// Returns the width of the cube from the Mass
+        /// </summary>
         public int Width
         {
             get { return (int)Math.Sqrt(Mass); }
             private set { Mass = value * value; }
         }
 
+        /// <summary>
+        /// Constructor for the Cube class that has 0 arguements
+        /// </summary>
         public Cube()
         {
             Mass = 100;
@@ -71,6 +80,10 @@ namespace Model
             Console.WriteLine("in 2nd constructor");
         }
 
+        /// <summary>
+        /// Constructor for player cubes (non food cubes)
+        /// </summary>
+        /// <param name="name"></param>
         public Cube(string name)
         {
             this.Mass = 100;
@@ -84,9 +97,29 @@ namespace Model
     /// </summary>
     public class World
     {
-        private int Width;
-        private int Height;
+        public readonly int Width;
+        public readonly int Height;
+        private HashSet<Cube> WorldPopulation = new HashSet<Cube>();
 
+        /// <summary>
+        /// Return the Height of the World
+        /// </summary>
+        public int GetHeight
+        {
+            
+            get { return Height; }
+        }
 
+        /// <summary>
+        /// Constructor for the world
+        /// not sure if you set it to a fixed amount from the beginning or compute it from the cubes?
+        /// 
+        /// </summary>
+        public World()
+        {
+
+            Width = 1000;
+            Height = 1000;
+        }
     }
 }

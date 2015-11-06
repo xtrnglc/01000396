@@ -15,6 +15,13 @@ namespace View
         public Form1()
         {
             InitializeComponent();
+
+            this.ServerText.Text = "localhost";
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
