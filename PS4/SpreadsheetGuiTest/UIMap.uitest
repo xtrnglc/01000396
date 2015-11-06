@@ -5137,6 +5137,31 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
+    <LaunchApplicationAction UIObjectName="UIMap.UIForm1Window">
+      <ParameterName />
+      <FileName>C:\Users\Trung\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</FileName>
+      <AlternateFileName>%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe</AlternateFileName>
+    </LaunchApplicationAction>
+    <SetValueAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <Value Encoded="false">10</Value>
+      <Type>String</Type>
+    </SetValueAction>
+    <SendKeysAction UIObjectName="UIMap.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Text Encoded="false">{Enter}</Text>
+    </SendKeysAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="RecordedMethod5">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
   <OnErrorActions />

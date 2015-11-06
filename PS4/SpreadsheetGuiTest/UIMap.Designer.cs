@@ -40,7 +40,12 @@ namespace SpreadSheetGUITest
             WinEdit uICell_Contents_textEdit = this.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit;
             #endregion
 
-            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
+            // Double-Click 'SpreadsheetGUI - Shortcut' list item
+            Mouse.DoubleClick(uISpreadsheetGUIShortcListItem, new Point(25, 37));
+
+            // Click '&Open' button
+            Mouse.Click(uIOpenButton, new Point(37, 12));
+
             // Type '10' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SetCellContent1Params.UICell_Contents_textEditText;
 
@@ -73,7 +78,11 @@ namespace SpreadSheetGUITest
             WinClient uISpreadsheetPanel1Client = this.UIForm1Window.UIItemWindow.UISpreadsheetPanel1Client;
             #endregion
 
-            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
+            // Double-Click 'SpreadsheetGUI - Shortcut' list item
+            Mouse.DoubleClick(uISpreadsheetGUIShortcListItem, new Point(28, 52));
+
+            // Click '&Open' button
+            Mouse.Click(uIOpenButton, new Point(24, 15));
 
             // Type 'hello' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SetCellContent2Params.UICell_Contents_textEditText;
@@ -2538,8 +2547,7 @@ namespace SpreadSheetGUITest
             #endregion
 
             // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
-            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
-            //ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.SavingMethod1Params.UIForm1WindowExePath, this.SavingMethod1Params.UIForm1WindowAlternateExePath);
+            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.SavingMethod1Params.UIForm1WindowExePath, this.SavingMethod1Params.UIForm1WindowAlternateExePath);
 
             // Type '1010' in 'Cell_Contents_text' text box
             uICell_Contents_textEdit.Text = this.SavingMethod1Params.UICell_Contents_textEditText;
@@ -2578,10 +2586,8 @@ namespace SpreadSheetGUITest
             WinMenuItem uIChangeSelectionMenuItem = this.UIForm1Window.UIMenuStrip1MenuBar.UIHelpMenuItem.UIChangeSelectionMenuItem;
             #endregion
 
-            ApplicationUnderTest.Launch(@"..\..\..\SpreadsheetGUI\bin\debug\SpreadsheetGUI.exe");
-
             // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
-            //ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.HelpMethod1Params.UIForm1WindowExePath, this.HelpMethod1Params.UIForm1WindowAlternateExePath);
+            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.HelpMethod1Params.UIForm1WindowExePath, this.HelpMethod1Params.UIForm1WindowAlternateExePath);
 
             // Click 'Help' -> 'Change Selection' menu item
             Mouse.Click(uIChangeSelectionMenuItem, new Point(45, 7));
@@ -2987,6 +2993,25 @@ namespace SpreadSheetGUITest
 
             // Click 'Close' button
             Mouse.Click(uICloseButton, new Point(23, 8));
+        }
+        
+        /// <summary>
+        /// RecordedMethod5 - Use 'RecordedMethod5Params' to pass parameters into this method.
+        /// </summary>
+        public void RecordedMethod5()
+        {
+            #region Variable Declarations
+            WinEdit uICell_Contents_textEdit = this.UIForm1Window.UICell_Contents_textWindow.UICell_Contents_textEdit;
+            #endregion
+
+            // Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+            ApplicationUnderTest uIForm1Window = ApplicationUnderTest.Launch(this.RecordedMethod5Params.UIForm1WindowExePath, this.RecordedMethod5Params.UIForm1WindowAlternateExePath);
+
+            // Type '10' in 'Cell_Contents_text' text box
+            uICell_Contents_textEdit.Text = this.RecordedMethod5Params.UICell_Contents_textEditText;
+
+            // Type '{Enter}' in 'Cell_Contents_text' text box
+            Keyboard.SendKeys(uICell_Contents_textEdit, this.RecordedMethod5Params.UICell_Contents_textEditSendKeys, ModifierKeys.None);
         }
         
         #region Properties
@@ -4106,6 +4131,18 @@ namespace SpreadSheetGUITest
             }
         }
         
+        public virtual RecordedMethod5Params RecordedMethod5Params
+        {
+            get
+            {
+                if ((this.mRecordedMethod5Params == null))
+                {
+                    this.mRecordedMethod5Params = new RecordedMethod5Params();
+                }
+                return this.mRecordedMethod5Params;
+            }
+        }
+        
         public UIProgramManagerWindow UIProgramManagerWindow
         {
             get
@@ -4665,6 +4702,8 @@ namespace SpreadSheetGUITest
         private HelpAssert12ExpectedValues mHelpAssert12ExpectedValues;
         
         private HelpAssert13ExpectedValues mHelpAssert13ExpectedValues;
+        
+        private RecordedMethod5Params mRecordedMethod5Params;
         
         private UIProgramManagerWindow mUIProgramManagerWindow;
         
@@ -7052,6 +7091,38 @@ namespace SpreadSheetGUITest
         /// Verify that the 'Name' property of 'To Clear, click on Edit then click on Clear' label equals 'To Clear, click on Edit then click on Clear'
         /// </summary>
         public string UIToClearclickonEditthTextName = "To Clear, click on Edit then click on Clear";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'RecordedMethod5'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class RecordedMethod5Params
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowExePath = "C:\\Users\\Trung\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetGUI." +
+            "exe";
+        
+        /// <summary>
+        /// Launch '%USERPROFILE%\Source\Repos\01000396\PS4\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe'
+        /// </summary>
+        public string UIForm1WindowAlternateExePath = "%USERPROFILE%\\Source\\Repos\\01000396\\PS4\\SpreadsheetGUI\\bin\\Debug\\SpreadsheetGUI.e" +
+            "xe";
+        
+        /// <summary>
+        /// Type '10' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditText = "10";
+        
+        /// <summary>
+        /// Type '{Enter}' in 'Cell_Contents_text' text box
+        /// </summary>
+        public string UICell_Contents_textEditSendKeys = "{Enter}";
         #endregion
     }
     
