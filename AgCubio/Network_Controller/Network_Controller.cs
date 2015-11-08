@@ -37,13 +37,13 @@ namespace Network_Controller
     public static class Network
     {
 
-
+    /*
         private const int port = 11000;
 
         private static ManualResetEvent connectDone = new ManualResetEvent(false);
         private static ManualResetEvent sendDone = new ManualResetEvent(false);
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
-        Socket static Connect_To_Server(string hostname)
+        static Socket Connect_To_Server(string hostname)
         {
             try
             {
@@ -105,5 +105,7 @@ namespace Network_Controller
         {
 
         }
+
+        */
     }
 }
