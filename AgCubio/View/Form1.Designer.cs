@@ -40,6 +40,8 @@
             this.FoodText = new System.Windows.Forms.Label();
             this.MassText = new System.Windows.Forms.Label();
             this.WidthText = new System.Windows.Forms.Label();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayerNameText
@@ -49,6 +51,7 @@
             this.PlayerNameText.Name = "PlayerNameText";
             this.PlayerNameText.Size = new System.Drawing.Size(469, 38);
             this.PlayerNameText.TabIndex = 0;
+            this.PlayerNameText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PlayerNameText_KeyPress);
             // 
             // ServerText
             // 
@@ -150,6 +153,11 @@
             this.WidthText.TabIndex = 11;
             this.WidthText.Text = "Width";
             // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,6 +178,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,6 +198,7 @@
         private System.Windows.Forms.Label FoodText;
         private System.Windows.Forms.Label MassText;
         private System.Windows.Forms.Label WidthText;
+        private System.IO.FileSystemWatcher fileSystemWatcher1;
     }
 }
 

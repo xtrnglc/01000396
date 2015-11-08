@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using Newtonsoft.Json;
+
 
 namespace Network_Controller
 {
@@ -32,12 +34,14 @@ namespace Network_Controller
         /// data string
         /// </summary>
         public StringBuilder sb = new StringBuilder();
+
+        public Socket workSocket = null;
     }
 
     public static class Network
     {
-
-    /*
+        private static Socket t = null;
+        private static String response = String.Empty;
         private const int port = 11000;
 
         private static ManualResetEvent connectDone = new ManualResetEvent(false);
@@ -45,6 +49,7 @@ namespace Network_Controller
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         static Socket Connect_To_Server(string hostname)
         {
+            
             try
             {
                 // Establish the remote endpoint for the socket.
@@ -79,6 +84,7 @@ namespace Network_Controller
             {
                 Console.WriteLine(e.ToString());
             }
+            return t;
         }
 
         static void Connected_to_Server()
@@ -98,7 +104,12 @@ namespace Network_Controller
 
         static void Send (Socket socket, String data)
         {
+            // Convert the string data to byte data using ASCII encoding.
+            byte[] byteData = Encoding.ASCII.GetBytes(data);
 
+            // Begin sending the data to the remote device.
+            socket.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), socket);
         }
 
         static void SendCallBack()
@@ -106,6 +117,91 @@ namespace Network_Controller
 
         }
 
-        */
+        private static void ConnectCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.
+                Socket client = (Socket) ar.AsyncState;
+
+                // Complete the connection.
+                client.EndConnect(ar);
+
+                Console.WriteLine("Socket connected to {0}", client.RemoteEndPoint.ToString());
+
+                // Signal that the connection has been made.
+                connectDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void Receive(Socket client)
+        {
+            try
+            {
+                // Create the state object.
+                State state = new State();
+                state.workSocket = client;
+
+                // Begin receiving the data from the remote device.
+                client.BeginReceive( state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+    private static void ReceiveCallback( IAsyncResult ar ) {
+        try {
+            // Retrieve the state object and the client socket 
+            // from the asynchronous state object.
+            State state = (State) ar.AsyncState;
+            Socket client = state.workSocket;
+
+            // Read data from the remote device.
+            int bytesRead = client.EndReceive(ar);
+
+            if (bytesRead > 0) {
+                // There might be more data, so store the data received so far.
+            state.sb.Append(Encoding.ASCII.GetString(state.buffer,0,bytesRead));
+
+                // Get the rest of the data.
+                client.BeginReceive(state.buffer,0,State.BufferSize,0,
+                    new AsyncCallback(ReceiveCallback), state);
+            } else {
+                // All the data has arrived; put it in response.
+                if (state.sb.Length > 1) {
+                    response = state.sb.ToString();
+                }
+                // Signal that all bytes have been received.
+                receiveDone.Set();
+            }
+        } catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
+    
+
+    private static void SendCallback(IAsyncResult ar) {
+        try {
+            // Retrieve the socket from the state object.
+            Socket client = (Socket) ar.AsyncState;
+
+            // Complete sending the data to the remote device.
+            int bytesSent = client.EndSend(ar);
+            Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+
+            // Signal that all bytes have been sent.
+            sendDone.Set();
+        } catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
     }
 }
