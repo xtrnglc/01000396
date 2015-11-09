@@ -13,7 +13,7 @@ using System.Threading;
 using Newtonsoft.Json;
 
 
-namespace Network_Controller
+namespace AgCubio
 {
 
     public class State
@@ -155,53 +155,65 @@ namespace Network_Controller
             }
         }
 
-    private static void ReceiveCallback( IAsyncResult ar ) {
-        try {
-            // Retrieve the state object and the client socket 
-            // from the asynchronous state object.
-            State state = (State) ar.AsyncState;
-            Socket client = state.workSocket;
+        private static void ReceiveCallback( IAsyncResult ar )
+        {
+            try
+            {
 
-            // Read data from the remote device.
-            int bytesRead = client.EndReceive(ar);
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                State state = (State) ar.AsyncState;
+                Socket client = state.workSocket;
 
-            if (bytesRead > 0) {
-                // There might be more data, so store the data received so far.
-            state.sb.Append(Encoding.ASCII.GetString(state.buffer,0,bytesRead));
+                // Read data from the remote device.
+                int bytesRead = client.EndReceive(ar);
 
-                // Get the rest of the data.
-                client.BeginReceive(state.buffer,0,State.BufferSize,0,
-                    new AsyncCallback(ReceiveCallback), state);
-            } else {
-                // All the data has arrived; put it in response.
-                if (state.sb.Length > 1) {
-                    response = state.sb.ToString();
+                if (bytesRead > 0)
+                {
+                    // There might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer,0,bytesRead));
+
+                    // Get the rest of the data.
+                    client.BeginReceive(state.buffer,0,State.BufferSize,0, new AsyncCallback(ReceiveCallback), state);
                 }
-                // Signal that all bytes have been received.
-                receiveDone.Set();
+                else
+                {
+                    // All the data has arrived; put it in response.
+                    if (state.sb.Length > 1)
+                    {
+                        response = state.sb.ToString();
+                    }
+                    // Signal that all bytes have been received.
+                    receiveDone.Set();
+                }
             }
-        } catch (Exception e) {
-            Console.WriteLine(e.ToString());
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
-    }
 
     
 
-    private static void SendCallback(IAsyncResult ar) {
-        try {
-            // Retrieve the socket from the state object.
-            Socket client = (Socket) ar.AsyncState;
+        private static void SendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.
+                Socket client = (Socket) ar.AsyncState;
 
-            // Complete sending the data to the remote device.
-            int bytesSent = client.EndSend(ar);
-            Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                // Complete sending the data to the remote device.
+                int bytesSent = client.EndSend(ar);
+                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
-            // Signal that all bytes have been sent.
-            sendDone.Set();
-        } catch (Exception e) {
-            Console.WriteLine(e.ToString());
+                // Signal that all bytes have been sent.
+                sendDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
-    }
 
     }
 }

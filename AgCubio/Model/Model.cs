@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using Newtonsoft.Json;
 
-namespace Model
+namespace AgCubio
 {
     public class Model
     {
@@ -25,7 +25,7 @@ namespace Model
     {
         public int loc_x;
         public int loc_y;
-        public long argb_color;
+        public int argb_color;
         public int uid;
         public string Name;
         public bool Food;
@@ -35,7 +35,7 @@ namespace Model
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
-        public Cube(int x, int y, long color, int ID, bool food, string name, int mass)
+        public Cube(int x, int y, int color, int ID, bool food, string name, int mass)
         {
             this.loc_x = x;
             this.loc_y = y;
@@ -45,6 +45,32 @@ namespace Model
             this.Name = name;
             this.Mass = mass;
         }
+
+        public int GetColor()
+        {
+            return this.argb_color;
+        }
+
+        public int GetX()
+        {
+            return loc_x;
+        }
+
+        public int GetY()
+        {
+            return loc_y;
+        }
+
+        public string GetName()
+        {
+            return Name;
+        }
+        
+        public int GetMass()
+        {
+            return Mass;
+        }
+        
     }
 
     /// <summary>
