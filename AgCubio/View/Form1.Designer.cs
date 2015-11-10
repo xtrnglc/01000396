@@ -36,11 +36,11 @@
             this.FoodLabel = new System.Windows.Forms.Label();
             this.MassLabel = new System.Windows.Forms.Label();
             this.WidthLabel = new System.Windows.Forms.Label();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.FPStext = new System.Windows.Forms.Label();
-            this.FoodText = new System.Windows.Forms.Label();
             this.MassText = new System.Windows.Forms.Label();
             this.WidthText = new System.Windows.Forms.Label();
-            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            this.FoodText = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,6 +117,11 @@
             this.WidthLabel.TabIndex = 7;
             this.WidthLabel.Text = "Width";
             // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
             // FPStext
             // 
             this.FPStext.AutoSize = true;
@@ -125,15 +130,6 @@
             this.FPStext.Size = new System.Drawing.Size(27, 13);
             this.FPStext.TabIndex = 8;
             this.FPStext.Text = "FPS";
-            // 
-            // FoodText
-            // 
-            this.FoodText.AutoSize = true;
-            this.FoodText.Location = new System.Drawing.Point(899, 37);
-            this.FoodText.Name = "FoodText";
-            this.FoodText.Size = new System.Drawing.Size(31, 13);
-            this.FoodText.TabIndex = 9;
-            this.FoodText.Text = "none";
             // 
             // MassText
             // 
@@ -153,10 +149,14 @@
             this.WidthText.TabIndex = 11;
             this.WidthText.Text = "Width";
             // 
-            // fileSystemWatcher1
+            // FoodText
             // 
-            this.fileSystemWatcher1.EnableRaisingEvents = true;
-            this.fileSystemWatcher1.SynchronizingObject = this;
+            this.FoodText.AutoSize = true;
+            this.FoodText.Location = new System.Drawing.Point(899, 37);
+            this.FoodText.Name = "FoodText";
+            this.FoodText.Size = new System.Drawing.Size(31, 13);
+            this.FoodText.TabIndex = 9;
+            this.FoodText.Text = "none";
             // 
             // Form1
             // 
@@ -178,6 +178,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.MouseHover += new System.EventHandler(this.Form1_MouseHover);
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -194,11 +195,11 @@
         private System.Windows.Forms.Label FoodLabel;
         private System.Windows.Forms.Label MassLabel;
         private System.Windows.Forms.Label WidthLabel;
-        private System.Windows.Forms.Label FPStext;
-        private System.Windows.Forms.Label FoodText;
-        private System.Windows.Forms.Label MassText;
-        private System.Windows.Forms.Label WidthText;
         private System.IO.FileSystemWatcher fileSystemWatcher1;
+        private System.Windows.Forms.Label WidthText;
+        private System.Windows.Forms.Label MassText;
+        private System.Windows.Forms.Label FoodText;
+        private System.Windows.Forms.Label FPStext;
     }
 }
 

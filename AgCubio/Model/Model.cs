@@ -22,7 +22,7 @@ namespace AgCubio
         /// <summary>
         /// variabes for the cube class to keep track of position, color, ID, name and if it's food or not.
         /// </summary>
-        public int loc_x;
+        //public int loc_x;
         public int loc_y;
         public int argb_color;
         public int uid;
@@ -52,10 +52,8 @@ namespace AgCubio
         /// Returns the color of the cube
         /// </summary>
         /// <returns></returns>
-        public int GetColor()
-        {
-            return this.argb_color;
-        }
+        public int loc_x { get; set; }
+      
 
         /// <summary>
         /// returns the x coorindate of the cube
@@ -91,6 +89,11 @@ namespace AgCubio
         public int GetMass()
         {
             return Mass;
+        }
+
+        public int GetColor()
+        {
+            return argb_color;
         }
     }
 
