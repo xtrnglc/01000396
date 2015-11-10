@@ -51,10 +51,29 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Libraries\" />
     <Folder Include="Packages\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleTest\ConsoleTest.csproj">
+      <Project>{3e7b1d22-ed67-4d3c-894e-d85952d59bc9}</Project>
+      <Name>ConsoleTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{b5073a6b-c6fc-44d7-b176-f33bdd34478a}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Network_Controller\Network_Controller.csproj">
+      <Project>{aff17e0b-986d-4463-bf1a-41d5687f9ebc}</Project>
+      <Name>Network_Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\View\View.csproj">
+      <Project>{1f5a09e9-ab8d-4340-83c8-5acda9df52c9}</Project>
+      <Name>View</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

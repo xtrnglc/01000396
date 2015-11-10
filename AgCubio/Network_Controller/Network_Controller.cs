@@ -21,7 +21,7 @@ namespace AgCubio
         /// <summary>
         /// Client socket
         /// </summary>
-        public Socket s = null;
+        public Socket workSocket = null;
         /// <summary>
         /// Size of the buffer
         /// </summary>
@@ -34,13 +34,11 @@ namespace AgCubio
         /// data string
         /// </summary>
         public StringBuilder sb = new StringBuilder();
-
-        public Socket workSocket = null;
     }
 
     public static class Network
     {
-        private static Socket t = null;
+        private static Socket s = null;
         private static String response = String.Empty;
         private const int port = 11000;
 
@@ -49,7 +47,6 @@ namespace AgCubio
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         static Socket Connect_To_Server(string hostname)
         {
-            
             try
             {
                 // Establish the remote endpoint for the socket.
@@ -84,10 +81,10 @@ namespace AgCubio
             {
                 Console.WriteLine(e.ToString());
             }
-            return t;
+            return s;
         }
 
-        static void Connected_to_Server()
+        static void Connected_to_Server(IAsyncResult state_in_an_ar_object)
         {
 
         }
@@ -97,7 +94,7 @@ namespace AgCubio
 
         }
 
-        static void i_want_more_data()
+        static void i_want_more_data(State state)
         {
 
         }
@@ -214,6 +211,5 @@ namespace AgCubio
                 Console.WriteLine(e.ToString());
             }
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿//Adam Sorensen and Trung Le
 //CS 3500 PS7: AgCubio
 //Nov 5th 2015
+//Model class to keep track of the cube and world  classes
 
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,15 @@ using Newtonsoft.Json;
 
 namespace AgCubio
 {
-    public class Model
-    {
-        
-    }
-
     /// <summary>
     /// Cube class that will keep track of cube attributes
     /// 
     /// </summary>
     public class Cube
     {
+        /// <summary>
+        /// variabes for the cube class to keep track of position, color, ID, name and if it's food or not.
+        /// </summary>
         public int loc_x;
         public int loc_y;
         public int argb_color;
@@ -30,6 +29,9 @@ namespace AgCubio
         public string Name;
         public bool Food;
 
+        /// <summary>
+        /// Method that will get and set the mass of the Cube
+        /// </summary>
         public int Mass { get; set; }
 
         /// <summary>
@@ -46,31 +48,50 @@ namespace AgCubio
             this.Mass = mass;
         }
 
+        /// <summary>
+        /// Returns the color of the cube
+        /// </summary>
+        /// <returns></returns>
         public int GetColor()
         {
             return this.argb_color;
         }
 
+        /// <summary>
+        /// returns the x coorindate of the cube
+        /// </summary>
+        /// <returns></returns>
         public int GetX()
         {
             return loc_x;
         }
 
+        /// <summary>
+        /// Returns the y coorindate of the cube
+        /// </summary>
+        /// <returns></returns>
         public int GetY()
         {
             return loc_y;
         }
 
+        /// <summary>
+        /// Return the name of the cube if it has one
+        /// </summary>
+        /// <returns></returns>
         public string GetName()
         {
             return Name;
         }
         
+        /// <summary>
+        /// Returns the mass of the cube
+        /// </summary>
+        /// <returns></returns>
         public int GetMass()
         {
             return Mass;
         }
-        
     }
 
     /// <summary>
@@ -78,6 +99,9 @@ namespace AgCubio
     /// </summary>
     public class World
     {
+        /// <summary>
+        /// Data to hold information about the world, needs to keep track of width, height and how many cubes are there
+        /// </summary>
         public readonly int Width;
         public readonly int Height;
         private HashSet<Cube> WorldPopulation = new HashSet<Cube>();
@@ -91,6 +115,14 @@ namespace AgCubio
         }
 
         /// <summary>
+        /// Return the Width of the World
+        /// </summary>
+        public int GetWidth
+        {
+            get { return Width; }
+        }
+
+        /// <summary>
         /// Constructor for the world
         /// not sure if you set it to a fixed amount from the beginning or compute it from the cubes?
         /// 
@@ -100,7 +132,5 @@ namespace AgCubio
             Width = 1000;
             Height = 1000;
         }
-
-        
     }
 }

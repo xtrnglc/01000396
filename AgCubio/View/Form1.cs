@@ -1,4 +1,8 @@
-﻿using System;
+﻿//CS 3500 PS7
+//Adam Sorensen and Trung Le
+//This is the view class for the AgCubio game, holds the GUI
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,9 +18,6 @@ namespace View
 {
     public partial class Form1 : Form
     {
-        private System.Drawing.SolidBrush myBrush;
-        int count = 0;
-        
         public Form1()
         {
             InitializeComponent();
@@ -59,6 +60,7 @@ namespace View
             formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int) Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
             myBrush.Dispose();
             formGraphics.Dispose();
+            int colormain, color1, color2, color3, color4;
 
             for (int i = 0; i < 100; i++)
             {
@@ -66,7 +68,18 @@ namespace View
                 cubeColor = cube.GetColor();
                 cubeColor = Math.Abs(cubeColor);
                 formGraphics = this.CreateGraphics();
-                color = Color.FromArgb(cubeColor % 255, cubeColor % 255, cubeColor % 255);
+                colormain = cubeColor % 255;
+                color1 = colormain + 50;
+                color2 = (colormain - 50) * 2;
+                color3 = colormain / 2 + 50;
+                color4 = colormain * 2;
+                if (color1 > 255)
+                    color1 = 255;
+                if (color2 < 0 || color2 > 255)
+                    color2 = 125;
+                if (color4 > 255)
+                    color4 = 100;
+                color = Color.FromArgb(255, color2, color3, color4);
                 myBrush = new System.Drawing.SolidBrush(color);
                 formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
             }
