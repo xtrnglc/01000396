@@ -32,6 +32,7 @@
             this.PlayerNameTextBox = new System.Windows.Forms.TextBox();
             this.ServerLabel = new System.Windows.Forms.Label();
             this.ServerTextBox = new System.Windows.Forms.TextBox();
+            this.ConnectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // PlayerNameLabel
@@ -69,11 +70,22 @@
             this.ServerTextBox.Size = new System.Drawing.Size(241, 20);
             this.ServerTextBox.TabIndex = 3;
             // 
+            // ConnectButton
+            // 
+            this.ConnectButton.Location = new System.Drawing.Point(300, 219);
+            this.ConnectButton.Name = "ConnectButton";
+            this.ConnectButton.Size = new System.Drawing.Size(75, 23);
+            this.ConnectButton.TabIndex = 4;
+            this.ConnectButton.Text = "Connect";
+            this.ConnectButton.UseVisualStyleBackColor = true;
+            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(709, 479);
+            this.Controls.Add(this.ConnectButton);
             this.Controls.Add(this.ServerTextBox);
             this.Controls.Add(this.ServerLabel);
             this.Controls.Add(this.PlayerNameTextBox);
@@ -92,6 +104,7 @@
         private System.Windows.Forms.TextBox PlayerNameTextBox;
         private System.Windows.Forms.Label ServerLabel;
         private System.Windows.Forms.TextBox ServerTextBox;
+        private System.Windows.Forms.Button ConnectButton;
     }
 }
 

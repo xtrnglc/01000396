@@ -38,17 +38,29 @@ namespace AgCubioView
         {
             if (e.KeyChar == 13 && PlayerNameTextBox.Text != "")
             {
-                //check to see if the server connects with the given hostname
-                this.PlayerNameLabel.Hide();
-                this.PlayerNameTextBox.Visible = false;
-                this.ServerLabel.Visible = false;
-                this.ServerTextBox.Visible = false;
-
             }
         }
 
         public void callBack()
         {
+        }
+
+        private void ConnectButton_Click(object sender, EventArgs e)
+        {
+            this.PlayerNameLabel.Visible = false;
+            this.PlayerNameTextBox.Visible = false;
+            this.ServerLabel.Visible = false;
+            this.ServerTextBox.Visible = false;
+            this.ConnectButton.Visible = false;
+
+            try
+            {
+
+            }
+            catch(Exception excep)
+            {
+
+            }
         }
     }
 }
@@ -73,10 +85,10 @@ namespace AgCubioView
             if (e.KeyChar == 13 && PlayerNameText.Text != "")
             {
                 //check to see if the server connects with the given hostname
-                this.PlayerName.Visible = false;
-                this.PlayerNameText.Visible = false;
-                this.Server.Visible = false;
-                this.ServerText.Visible = false;
+                this.PlayerNameLabel.Visible = false;
+                this.PlayerNameTextBox.Visible = false;
+                this.ServerLabel.Visible = false;
+                this.ServerTextBox.Visible = false;
 
                 callback();
             }
