@@ -93,6 +93,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AgCubio\AgCubio.csproj">
+      <Project>{03281696-f54a-4833-b0b8-4a324b3140f8}</Project>
+      <Name>AgCubio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkController\NetworkController.csproj">
+      <Project>{03dd4c9e-4fa2-4230-bb33-903c5e04b287}</Project>
+      <Name>NetworkController</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

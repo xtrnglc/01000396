@@ -64,12 +64,8 @@ namespace NetworkController
                 TcpClient client = new TcpClient(hostname, port);
         
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                client.BeginConnect(remoteEP,
-               new AsyncCallback(ConnectCallback), client);
-                socket.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
-                socket.BeginSend(hostname + "\n", (e, p) => { }, null);
-                socket.BeginReceive(LineReceived, null);
+                
+                
             }
             return null;
         }
