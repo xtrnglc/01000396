@@ -12,6 +12,7 @@ using System.Net;
 using System.Threading;
 using Newtonsoft.Json;
 using CustomNetworking;
+
 namespace AgCubio
 {
 
@@ -33,13 +34,18 @@ namespace AgCubio
         /// data string
         /// </summary>
         public StringBuilder sb = new StringBuilder();
+
+        public delegate void CallBack();
     }
 
     public static class Network
     {
         // The socket used to communicate with the server.  If no connection has been
         // made yet, this is null.
-        private static StringSocket socket = null;
+        private static Socket socket = null;
+        private static string response = string.Empty;
+        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
+
 
         /// <summary>
         /// tries to connect to a server with a given hostname
@@ -48,15 +54,19 @@ namespace AgCubio
         /// <param name=""></param>
         /// <param name="hostname"></param>
         /// <returns></returns>
-        public static Socket Connect_to_Server(Delegate callback function, string hostname)
+        public static Socket Connect_to_Server(string hostname)
         {
+            int port = 11000;
             if (socket == null)
             {
                 TcpClient client = new TcpClient(hostname, port);
-                socket = new StringSocket(client.Client, UTF8Encoding.Default);
+                //socket = new StringSocket(client.Client, UTF8Encoding.Default);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
                 socket.BeginSend(hostname + "\n", (e, p) => { }, null);
                 socket.BeginReceive(LineReceived, null);
             }
+            return null;
         }
 
         /// <summary>
@@ -74,8 +84,33 @@ namespace AgCubio
         /// <param name="state_in_an_ar_object"></param>
         public static void ReceiveCallback(IAsyncResult state_in_an_ar_object)
         {
+            try
+            {
+                State state = (State)state_in_an_ar_object;
+                Socket s = state.workSocket;
 
+                int bytes = s.EndReceive(state_in_an_ar_object);
+
+                if (bytes > 0)
+                {
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytes));
+                }
+
+                else
+                {
+                    if (state.sb.Length > 1)
+                    {
+                        response = state.sb.ToString();
+                    }
+                    receiveDone.Set();
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
         }
+            
 
         /// <summary>
         /// helper method that will be called by the view to request new data 
@@ -93,7 +128,27 @@ namespace AgCubio
         /// <param name="data"></param>
         public static void Send (Socket socket, String data)
         {
+            byte[] byteData = Encoding.ASCII.GetBytes(data);
 
+            socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+        }
+
+        /// <summary>
+        /// Helper method for the Send method
+        /// </summary>
+        /// <param name="state_in_an_ar_object"></param>
+        public static void SendCallBack(IAsyncResult state_in_an_ar_object)
+        {
+            try
+            {
+                Socket s = (Socket)state_in_an_ar_object;
+
+                int bytesSent = s.EndSend(state_in_an_ar_object);
+            }
+            catch(Exception)
+            {
+
+            }
         }
 
         /// <summary>

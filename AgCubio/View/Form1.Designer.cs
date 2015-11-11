@@ -77,9 +77,9 @@
             this.Server.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Server.Location = new System.Drawing.Point(150, 273);
             this.Server.Name = "Server";
-            this.Server.Size = new System.Drawing.Size(85, 31);
+            this.Server.Size = new System.Drawing.Size(94, 31);
             this.Server.TabIndex = 3;
-            this.Server.Text = "Sever";
+            this.Server.Text = "Server";
             // 
             // FPSlabel
             // 

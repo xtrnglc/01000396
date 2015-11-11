@@ -39,19 +39,26 @@ namespace View
         {
             if (e.KeyChar == 13 && PlayerNameText.Text != "")
             {
-                //check to see if the server text also works
+                //check to see if the server connects with the given hostname
                 this.PlayerName.Visible = false;
                 this.PlayerNameText.Visible = false;
                 this.Server.Visible = false;
                 this.ServerText.Visible = false;
 
-                
+                callback();
             }
         }
 
+        /// <summary>
+        /// Method needs to attempt to connect to the server with the given hostname
+        /// </summary>
         private void callback()
         {
+            
+
             string hostname = this.ServerText.Text;
+
+
         }
 
         private void Draw()
