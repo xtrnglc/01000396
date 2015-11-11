@@ -49,6 +49,8 @@
             this.PlayerNameTextBox.Name = "PlayerNameTextBox";
             this.PlayerNameTextBox.Size = new System.Drawing.Size(241, 20);
             this.PlayerNameTextBox.TabIndex = 1;
+            this.PlayerNameTextBox.TextChanged += new System.EventHandler(this.PlayerNameTextBox_TextChanged);
+            this.PlayerNameTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PlayerNameTextBox_KeyPress_1);
             // 
             // ServerLabel
             // 

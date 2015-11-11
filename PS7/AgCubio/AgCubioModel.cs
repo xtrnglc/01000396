@@ -24,17 +24,14 @@ namespace AgCubio
         /// <summary>
         /// variabes for the cube class to keep track of position, color, ID, name and if it's food or not.
         /// </summary>
-        //public int loc_x;
-        public int loc_y;
-        public int argb_color;
-        public int uid;
-        public string Name;
-        public bool Food;
-
-        /// <summary>
-        /// Method that will get and set the mass of the Cube
-        /// </summary>
+        private int loc_x;
+        private int loc_y;
+        private int argb_color;
+        private int uid;
+        private string Name;
+        private bool Food;
         public int Mass { get; set; }
+        private int team_id;
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
@@ -48,14 +45,8 @@ namespace AgCubio
             this.Food = food;
             this.Name = name;
             this.Mass = mass;
+            this.team_id = ID;
         }
-
-        /// <summary>
-        /// Returns the color of the cube
-        /// </summary>
-        /// <returns></returns>
-        public int loc_x { get; set; }
-
 
         /// <summary>
         /// returns the x coorindate of the cube
