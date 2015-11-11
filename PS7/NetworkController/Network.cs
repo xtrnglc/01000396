@@ -11,37 +11,37 @@ using CustomNetworking;
 
 namespace NetworkController
 {
+
+    public class State
+    {
+        /// <summary>
+        /// Client socket
+        /// </summary>
+        public Socket workSocket = null;
+        /// <summary>
+        /// Size of the buffer
+        /// </summary>
+        public const int BufferSize = 256;
+        /// <summary>
+        /// for the buffer
+        /// </summary>
+        public byte[] buffer = new byte[BufferSize];
+        /// <summary>
+        /// data string
+        /// </summary>
+        public StringBuilder sb = new StringBuilder();
+
+        public delegate void CallBackFunction();
+    }
     public static class Network
     {
-
-
-        public class State
-        {
-            /// <summary>
-            /// Client socket
-            /// </summary>
-            public Socket workSocket = null;
-            /// <summary>
-            /// Size of the buffer
-            /// </summary>
-            public const int BufferSize = 256;
-            /// <summary>
-            /// for the buffer
-            /// </summary>
-            public byte[] buffer = new byte[BufferSize];
-            /// <summary>
-            /// data string
-            /// </summary>
-            public StringBuilder sb = new StringBuilder();
-
-            public delegate void CallBack();
-        }
-
-
-
         // The socket used to communicate with the server.  If no connection has been
         // made yet, this is null.
         private static Socket socket;
+        //text that has been recieved from the client but not yet dealt with
+        private static string incoming;
+        //text that needs to be sent to the client but has not yet gone
+        private static string outgoing;
         private static string response = string.Empty;
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -51,26 +51,25 @@ namespace NetworkController
         /// </summary>
         public const int BufferSize = 256;
         /// <summary>
-        /// for the buffer
+        /// or the buffer
         /// </summary>
         public static byte[] buffer = new byte[BufferSize];
         /// <summary>
         /// data string
         /// </summary>
 
-        public static Socket Connect_to_Server(Delegate callback, String hostname)
+        public static Socket Connect_to_Server(Action<State> callback, String hostname)
         {
-
+            State state = new State();
+            //state.CallBackFunction = callback;
             int port = 11000;
-            if (socket == null)
-            {
-                TcpClient client = new TcpClient(hostname, port);
+            
+            TcpClient client = new TcpClient(hostname, port);
         
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), socket);
                 
-                
-            }
-            return null;
+            return socket;
         }
 
         public static void Connected_to_Server(IAsyncResult state_in_an_ar_object)

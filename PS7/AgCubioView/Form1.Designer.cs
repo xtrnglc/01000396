@@ -33,6 +33,14 @@
             this.ServerLabel = new System.Windows.Forms.Label();
             this.ServerTextBox = new System.Windows.Forms.TextBox();
             this.ConnectButton = new System.Windows.Forms.Button();
+            this.FPSlabel = new System.Windows.Forms.Label();
+            this.Foodlabel = new System.Windows.Forms.Label();
+            this.Mass = new System.Windows.Forms.Label();
+            this.Widthlabel = new System.Windows.Forms.Label();
+            this.Widthtext = new System.Windows.Forms.Label();
+            this.Masstext = new System.Windows.Forms.Label();
+            this.foodtext = new System.Windows.Forms.Label();
+            this.FPStext = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // PlayerNameLabel
@@ -85,11 +93,92 @@
             this.ConnectButton.UseVisualStyleBackColor = true;
             this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
+            // FPSlabel
+            // 
+            this.FPSlabel.AutoSize = true;
+            this.FPSlabel.Location = new System.Drawing.Point(575, 13);
+            this.FPSlabel.Name = "FPSlabel";
+            this.FPSlabel.Size = new System.Drawing.Size(27, 13);
+            this.FPSlabel.TabIndex = 5;
+            this.FPSlabel.Text = "FPS";
+            // 
+            // Foodlabel
+            // 
+            this.Foodlabel.AutoSize = true;
+            this.Foodlabel.Location = new System.Drawing.Point(575, 42);
+            this.Foodlabel.Name = "Foodlabel";
+            this.Foodlabel.Size = new System.Drawing.Size(31, 13);
+            this.Foodlabel.TabIndex = 6;
+            this.Foodlabel.Text = "Food";
+            // 
+            // Mass
+            // 
+            this.Mass.AutoSize = true;
+            this.Mass.Location = new System.Drawing.Point(575, 65);
+            this.Mass.Name = "Mass";
+            this.Mass.Size = new System.Drawing.Size(32, 13);
+            this.Mass.TabIndex = 7;
+            this.Mass.Text = "Mass";
+            // 
+            // Widthlabel
+            // 
+            this.Widthlabel.AutoSize = true;
+            this.Widthlabel.Location = new System.Drawing.Point(575, 93);
+            this.Widthlabel.Name = "Widthlabel";
+            this.Widthlabel.Size = new System.Drawing.Size(35, 13);
+            this.Widthlabel.TabIndex = 8;
+            this.Widthlabel.Text = "Width";
+            // 
+            // Widthtext
+            // 
+            this.Widthtext.AutoSize = true;
+            this.Widthtext.Location = new System.Drawing.Point(633, 93);
+            this.Widthtext.Name = "Widthtext";
+            this.Widthtext.Size = new System.Drawing.Size(13, 13);
+            this.Widthtext.TabIndex = 12;
+            this.Widthtext.Text = "0";
+            this.Widthtext.UseWaitCursor = true;
+            // 
+            // Masstext
+            // 
+            this.Masstext.AutoSize = true;
+            this.Masstext.Location = new System.Drawing.Point(633, 65);
+            this.Masstext.Name = "Masstext";
+            this.Masstext.Size = new System.Drawing.Size(13, 13);
+            this.Masstext.TabIndex = 11;
+            this.Masstext.Text = "0";
+            // 
+            // foodtext
+            // 
+            this.foodtext.AutoSize = true;
+            this.foodtext.Location = new System.Drawing.Point(633, 42);
+            this.foodtext.Name = "foodtext";
+            this.foodtext.Size = new System.Drawing.Size(29, 13);
+            this.foodtext.TabIndex = 10;
+            this.foodtext.Text = "false";
+            // 
+            // FPStext
+            // 
+            this.FPStext.AutoSize = true;
+            this.FPStext.Location = new System.Drawing.Point(633, 13);
+            this.FPStext.Name = "FPStext";
+            this.FPStext.Size = new System.Drawing.Size(13, 13);
+            this.FPStext.TabIndex = 9;
+            this.FPStext.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(709, 479);
+            this.Controls.Add(this.Widthtext);
+            this.Controls.Add(this.Masstext);
+            this.Controls.Add(this.foodtext);
+            this.Controls.Add(this.FPStext);
+            this.Controls.Add(this.Widthlabel);
+            this.Controls.Add(this.Mass);
+            this.Controls.Add(this.Foodlabel);
+            this.Controls.Add(this.FPSlabel);
             this.Controls.Add(this.ConnectButton);
             this.Controls.Add(this.ServerTextBox);
             this.Controls.Add(this.ServerLabel);
@@ -110,6 +199,14 @@
         private System.Windows.Forms.Label ServerLabel;
         private System.Windows.Forms.TextBox ServerTextBox;
         private System.Windows.Forms.Button ConnectButton;
+        private System.Windows.Forms.Label FPSlabel;
+        private System.Windows.Forms.Label Foodlabel;
+        private System.Windows.Forms.Label Mass;
+        private System.Windows.Forms.Label Widthlabel;
+        private System.Windows.Forms.Label Widthtext;
+        private System.Windows.Forms.Label Masstext;
+        private System.Windows.Forms.Label foodtext;
+        private System.Windows.Forms.Label FPStext;
     }
 }
 

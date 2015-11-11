@@ -125,8 +125,8 @@ namespace AgCubio
         /// </summary>
         public World()
         {
-            Width = 1000;
-            Height = 1000;
+            Width = 10000;
+            Height = 10000;
         }
     }
 }

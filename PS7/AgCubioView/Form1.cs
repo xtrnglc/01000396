@@ -8,16 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AgCubio;
+using NetworkController;
+using System.Net.Sockets;
+
 
 namespace AgCubioView
 {
     public partial class Form1 : Form
     {
+        private World world = new World();
+
         public Form1()
         {
             InitializeComponent();
             DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,14 +45,16 @@ namespace AgCubioView
         {
             if (e.KeyChar == 13 && PlayerNameTextBox.Text != "")
             {
+                ConnectMethod();
             }
         }
 
-        public void callBack()
+        private void ConnectButton_Click(object sender, EventArgs e)
         {
+            ConnectMethod();
         }
 
-        private void ConnectButton_Click(object sender, EventArgs e)
+        private void ConnectMethod()
         {
             this.PlayerNameLabel.Visible = false;
             this.PlayerNameTextBox.Visible = false;
@@ -56,14 +64,44 @@ namespace AgCubioView
 
             Draw();
 
+            Connect();
             try
             {
 
             }
-            catch(Exception excep)
+            catch (Exception excep)
             {
 
             }
+        }
+
+        private void Connect()
+        {
+            string name = this.PlayerNameTextBox.Text;
+            string server = this.ServerTextBox.Text;
+            Socket socket;
+            try
+            {
+                socket = Network.Connect_to_Server(CallBack(), server);
+            }
+            catch(Exception e)
+            {
+
+            }
+
+        }
+
+        private void CallBack()
+        {
+            State client = new State();
+
+            Network.Send(client.workSocket, this.PlayerNameTextBox.Text + "\n");
+            MessageBox.Show("Connected");
+        }
+
+        private void newDraw()
+        {
+
         }
 
         private void Draw()
@@ -103,6 +141,11 @@ namespace AgCubioView
                 formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
             }
 
+        }
+
+        private void data_arrived()
+        {
+            //add cubes to the world
         }
     }
 }
