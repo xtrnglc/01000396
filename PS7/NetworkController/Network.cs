@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Author: Trung Le and Adam Sorensen
+11/11/2015
+CS 3500
+PS7 - AgCubio
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,8 +36,8 @@ namespace NetworkController
         /// data string
         /// </summary>
         public StringBuilder sb = new StringBuilder();
-
-        public delegate void CallBackFunction();
+        
+        public Action<State> connectionCallback;
     }
     public static class Network
     {
@@ -61,20 +67,25 @@ namespace NetworkController
         public static Socket Connect_to_Server(Action<State> callback, String hostname)
         {
             State state = new State();
-            //state.CallBackFunction = callback;
+            state.connectionCallback = callback;
             int port = 11000;
             
             TcpClient client = new TcpClient(hostname, port);
         
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), socket);
+            state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
                 
             return socket;
         }
 
         public static void Connected_to_Server(IAsyncResult state_in_an_ar_object)
         {
-
+            State state = (State)state_in_an_ar_object.AsyncState;
+            state.connectionCallback(state);
+            
+            state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
+            
+            //call receivecallback
         }
 
         public static void ReceiveCallback(IAsyncResult state_in_an_ar_object)

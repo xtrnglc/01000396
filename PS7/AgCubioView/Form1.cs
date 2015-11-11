@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Author: Trung Le and Adam Sorensen
+11/11/2015
+CS 3500
+PS7 - AgCubio
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +16,6 @@ using System.Windows.Forms;
 using AgCubio;
 using NetworkController;
 using System.Net.Sockets;
-
 
 namespace AgCubioView
 {
@@ -62,16 +67,20 @@ namespace AgCubioView
             this.ServerTextBox.Visible = false;
             this.ConnectButton.Visible = false;
 
-            Draw();
-
-            Connect();
+            
             try
             {
-
+                Connect();
             }
+
             catch (Exception excep)
             {
-
+                MessageBox.Show("Failed to connect");
+                this.PlayerNameLabel.Visible = true;
+                this.PlayerNameTextBox.Visible = true;
+                this.ServerLabel.Visible = true;
+                this.ServerTextBox.Visible = true;
+                this.ConnectButton.Visible = true;
             }
         }
 
@@ -79,24 +88,21 @@ namespace AgCubioView
         {
             string name = this.PlayerNameTextBox.Text;
             string server = this.ServerTextBox.Text;
+            State state = new State();
             Socket socket;
-            try
-            {
-                socket = Network.Connect_to_Server(CallBack(), server);
-            }
-            catch(Exception e)
-            {
-
-            }
+          
+            socket = Network.Connect_to_Server(CallBack, server);
+            
 
         }
 
-        private void CallBack()
+        private void CallBack(State state)
         {
             State client = new State();
 
-            Network.Send(client.workSocket, this.PlayerNameTextBox.Text + "\n");
+            Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
             MessageBox.Show("Connected");
+
         }
 
         private void newDraw()
