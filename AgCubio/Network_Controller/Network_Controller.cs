@@ -45,6 +45,7 @@ namespace AgCubio
         private static Socket socket = null;
         private static string response = string.Empty;
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
+        private static ManualResetEvent sendDone = new ManualResetEvent(false);
 
 
         /// <summary>
@@ -144,6 +145,7 @@ namespace AgCubio
                 Socket s = (Socket)state_in_an_ar_object;
 
                 int bytesSent = s.EndSend(state_in_an_ar_object);
+                sendDone.Set();
             }
             catch(Exception)
             {

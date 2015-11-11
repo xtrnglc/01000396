@@ -61,6 +61,11 @@ namespace View
 
         }
 
+        private void GetMoreData()
+        {
+            //calls the i_want_more_data method in the network
+        }
+
         private void Draw()
         {
             Cube cube = new Cube(30, 40, -79840260, 57, true, "test", 1000);
