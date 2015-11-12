@@ -20,7 +20,7 @@ namespace AgCubio
     public class Cube
     {
         /// <summary>
-        /// variabes for the cube class to keep track of position, color, ID, name and if it's food or not.
+        /// variabes for the cube class to keep track of position, color, ID, team ID, name and if it's food or not.
         /// </summary>
         public double loc_x { get; set; }
         public double loc_y { get; set; }
@@ -82,7 +82,10 @@ namespace AgCubio
         {
             return (int)Mass;
         }
-
+        /// <summary>
+        /// Returns the color of the cube
+        /// </summary>
+        /// <returns></returns>
         public double GetColor()
         {
             return argb_color;

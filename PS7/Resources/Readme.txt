@@ -16,3 +16,8 @@ PS7 - AgCubio
 	Tried to deserialize it into a cube object but failed to get it to parse properly. It only parses the name and the mass.
 	The DrawCube method also does not work with the new 8 parameter cube class. 
 
+11/12/2015
+	Fixed the issues with the json serialize/deserialize not parsing correctly. Added {get, set} for all member variables of the cube class. 
+	We were able to send in the player name and then receive back JSON string data from the server. The data string usually sends enough data for at least 2 cube objects.
+	Able to cut the data string so that it isolates the first cube with the player name. 
+	Able to deserialize the data string into a cube object and send it into the local drawCube method which draws the cube.

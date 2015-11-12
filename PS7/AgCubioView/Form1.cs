@@ -74,6 +74,9 @@ namespace AgCubioView
 
         }
 
+        /// <summary>
+        /// Initial connect to server
+        /// </summary>
         private void ConnectMethod()
         {
             this.PlayerNameLabel.Visible = false;
@@ -103,6 +106,12 @@ namespace AgCubioView
             }
         }
 
+        /// <summary>
+        /// CallBack function for the initial connect to server
+        /// Initiially it will send the player name to the server and then prints a message box if connection is succesful
+        /// When called a second time it will attempt to draw the player cube
+        /// </summary>
+        /// <param name="state"></param>
         private void CallBack(State state)
         {
             if (firstConnection == true)
