@@ -36,8 +36,9 @@ namespace NetworkController
         /// data string
         /// </summary>
         public StringBuilder sb = new StringBuilder();
-        
+
         public Action<State> connectionCallback;
+
     }
     public static class Network
     {
@@ -51,6 +52,7 @@ namespace NetworkController
         private static string response = string.Empty;
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent sendDone = new ManualResetEvent(false);
+        
 
         /// <summary>
         /// Size of the buffer
@@ -69,57 +71,61 @@ namespace NetworkController
             State state = new State();
             state.connectionCallback = callback;
             int port = 11000;
-            
+
             TcpClient client = new TcpClient(hostname, port);
-        
+
             state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
-                
+
             return socket;
         }
 
         public static void Connected_to_Server(IAsyncResult state_in_an_ar_object)
         {
             State state = (State)state_in_an_ar_object.AsyncState;
-            state.connectionCallback(state);
-            
+            state.connectionCallback(state);                //Calls the callback method from View and sends player name
+
+
             state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
-            
-            //call receivecallback
+
         }
 
         public static void ReceiveCallback(IAsyncResult state_in_an_ar_object)
         {
             try
             {
-                State state = (State)state_in_an_ar_object;
-                Socket s = state.workSocket;
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                State state = (State)state_in_an_ar_object.AsyncState;
+                Socket client = state.workSocket;
 
-                int bytes = s.EndReceive(state_in_an_ar_object);
+                // Read data from the remote device.
+                int bytesRead = client.EndReceive(state_in_an_ar_object);
 
-                if (bytes > 0)
+                if (bytesRead > 0)
                 {
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytes));
-                }
+                    // There might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
+                    /*
+                    // Get the rest of the data.
+                    client.BeginReceive(state.buffer, 0, State.BufferSize, 0,
+                        new AsyncCallback(ReceiveCallback), state);*/
+                }
                 else
                 {
-                    if (state.sb.Length > 1)
-                    {
-                        response = state.sb.ToString();
-                    }
-                    receiveDone.Set();
+                    i_want_more_data(state);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine(e.ToString());
             }
         }
 
         public static void i_want_more_data(State s)
         {
-
+            s.workSocket.BeginReceive(s.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), s);
         }
 
         public static void Send(Socket socket, String data)
@@ -149,3 +155,91 @@ namespace NetworkController
         }
     }
 }
+
+
+/*
+
+
+/*
+try
+            {
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                State state = (State)state_in_an_ar_object.AsyncState;
+                Socket client = state.workSocket;
+
+                // Read data from the remote device.
+                int bytesRead = client.EndReceive(state_in_an_ar_object);
+
+                if (bytesRead > 0)
+                {
+                    // There might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+
+                    // Get the rest of the data.
+                    client.BeginReceive(state.buffer, 0, State.BufferSize, 0,
+                        new AsyncCallback(ReceiveCallback), state);
+                }
+                else
+                {
+                    // All the data has arrived; put it in response.
+                    if (state.sb.Length > 1)
+                    {
+                        response = state.sb.ToString();
+                    }
+                    // Signal that all bytes have been received.
+                    receiveDone.Set();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+ try
+        {
+            State state = (State)state_in_an_ar_object.AsyncState;
+            Socket s = state.workSocket;
+
+            int bytes = s.EndReceive(state_in_an_ar_object);
+
+            if (bytes > 0)
+            {
+                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytes));
+
+                Console.Write(state.sb.ToString());
+            }
+
+            else
+            {
+                if (state.sb.Length > 1)
+                {
+                    response = state.sb.ToString();
+                    Console.Write(response);
+                }
+                receiveDone.Set();
+            }
+        }
+        catch (Exception)
+        {
+
+        }
+*/

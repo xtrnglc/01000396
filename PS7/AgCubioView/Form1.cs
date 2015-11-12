@@ -22,6 +22,7 @@ namespace AgCubioView
     public partial class Form1 : Form
     {
         private World world = new World();
+        private State currentState = new State();
 
         public Form1()
         {
@@ -46,6 +47,11 @@ namespace AgCubioView
 
         }
 
+        /// <summary>
+        /// Connect handler for enter key press
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlayerNameTextBox_KeyPress_1(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13 && PlayerNameTextBox.Text != "")
@@ -54,6 +60,11 @@ namespace AgCubioView
             }
         }
 
+        /// <summary>
+        /// Connect handler for connect button press
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
             ConnectMethod();
@@ -67,10 +78,14 @@ namespace AgCubioView
             this.ServerTextBox.Visible = false;
             this.ConnectButton.Visible = false;
 
-            
             try
             {
-                Connect();
+                string name = this.PlayerNameTextBox.Text;
+                string server = this.ServerTextBox.Text;
+                State state = new State();
+                Socket socket;
+
+                socket = Network.Connect_to_Server(CallBack, server);
             }
 
             catch (Exception excep)
@@ -84,19 +99,16 @@ namespace AgCubioView
             }
         }
 
-        private void Connect()
+        private void CallBack(State state)
         {
-            string name = this.PlayerNameTextBox.Text;
-            string server = this.ServerTextBox.Text;
-            State state = new State();
-            Socket socket;
-          
-            socket = Network.Connect_to_Server(CallBack, server);
             
+            Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
+
+            MessageBox.Show("Connected");
 
         }
 
-        private void CallBack(State state)
+        private void CallBackToDraw(State state)
         {
             State client = new State();
 
@@ -146,7 +158,6 @@ namespace AgCubioView
                 myBrush = new System.Drawing.SolidBrush(color);
                 formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
             }
-
         }
 
         private void data_arrived()
