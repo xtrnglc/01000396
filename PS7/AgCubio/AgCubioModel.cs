@@ -78,9 +78,9 @@ namespace AgCubio
         /// Returns the mass of the cube
         /// </summary>
         /// <returns></returns>
-        public double GetMass()
+        public int GetMass()
         {
-            return Mass;
+            return (int)Mass;
         }
 
         public int GetColor()

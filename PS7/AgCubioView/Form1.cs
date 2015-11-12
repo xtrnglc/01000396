@@ -70,7 +70,12 @@ namespace AgCubioView
         /// <param name="e"></param>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            ConnectMethod();
+            //ConnectMethod();
+            //firstCube = "{\"loc_x\":689.0,\"loc_y\":498.0,\"argb_color\":-16777216,\"uid\":5656,\"team_id\":0,\"food\":false,\"Name\":\"cow\",\"Mass\":1000.0}";
+            Cube cube1 = new Cube(689, 498, -16777216, 5656, 0, false, "cow", 1000);
+            firstCube = JsonConvert.SerializeObject(cube1);
+            Cube cube = JsonConvert.DeserializeObject<Cube>(firstCube);
+            DrawCube(cube);
         }
 
         private void ConnectMethod()
@@ -130,7 +135,7 @@ namespace AgCubioView
 
         }
 
-        private void CallBackToDraw(State state)df
+        private void CallBackToDraw(State state)
         {
             State client = new State();
 
