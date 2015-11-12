@@ -44,8 +44,8 @@ namespace View
                 this.PlayerNameText.Visible = false;
                 this.Server.Visible = false;
                 this.ServerText.Visible = false;
-
-                callback();
+                Draw();
+                //callback();
             }
         }
 
@@ -68,7 +68,15 @@ namespace View
 
         private void Draw()
         {
+
             Cube cube = new Cube(30, 40, -79840260, 57, true, "test", 1000);
+
+            string message = JsonConvert.SerializeObject(cube);
+            Cube rebuilt = JsonConvert.DeserializeObject<Cube>(message);
+
+
+
+
             int cubeColor = cube.GetColor();
             cubeColor = Math.Abs(cubeColor);
             Random rnd = new Random();
@@ -82,6 +90,7 @@ namespace View
             formGraphics.Dispose();
             int colormain, color1, color2, color3, color4;
 
+            /*
             for (int i = 0; i < 100; i++)
             {
                 cube = new Cube(rnd.Next(1, 1000), rnd.Next(1, 1000), rnd.Next(1, 1000000), 57, true, "test", 100);
@@ -103,6 +112,7 @@ namespace View
                 myBrush = new System.Drawing.SolidBrush(color);
                 formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
             }
+            */
 
         }
 

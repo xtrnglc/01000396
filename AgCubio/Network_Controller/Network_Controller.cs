@@ -11,7 +11,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using Newtonsoft.Json;
-using CustomNetworking;
+//using CustomNetworking;
 
 namespace AgCubio
 {
@@ -37,7 +37,7 @@ namespace AgCubio
 
         public delegate void CallBack();
     }
-
+    /*
     public static class Network
     {
         // The socket used to communicate with the server.  If no connection has been
@@ -210,4 +210,5 @@ namespace AgCubio
             
         }        
     }
+    */
 }
