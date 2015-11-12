@@ -22,19 +22,19 @@ namespace AgCubio
         /// <summary>
         /// variabes for the cube class to keep track of position, color, ID, name and if it's food or not.
         /// </summary>
-        private int loc_x;
-        private int loc_y;
-        private int argb_color;
-        private int uid;
-        private string Name;
-        private bool Food;
+        public double loc_x { get; set; }
+        public double loc_y { get; set; }
+        public double argb_color { get; set; }
+        public double uid { get; set; }
+        public string Name { get; set; }
+        public bool Food { get; set; }
         public double Mass { get; set; }
-        private int team_id;
+        public double team_id { get; set; }
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
-        public Cube(int x, int y, int color, int ID, int teamID, bool food, string name, double mass)
+        public Cube(double x, double y, double color, double ID, double teamID, bool food, string name, double mass)
         {
             //{"loc_x":689.0,"loc_y":498.0,"argb_color":-16777216,"uid":5656,"team_id":0,"food":false,"Name":"cow","Mass":1000.0}
             this.loc_x = x;
@@ -51,7 +51,7 @@ namespace AgCubio
         /// returns the x coorindate of the cube
         /// </summary>
         /// <returns></returns>
-        public int GetX()
+        public double GetX()
         {
             return loc_x;
         }
@@ -60,7 +60,7 @@ namespace AgCubio
         /// Returns the y coorindate of the cube
         /// </summary>
         /// <returns></returns>
-        public int GetY()
+        public double GetY()
         {
             return loc_y;
         }
@@ -83,7 +83,7 @@ namespace AgCubio
             return (int)Mass;
         }
 
-        public int GetColor()
+        public double GetColor()
         {
             return argb_color;
         }

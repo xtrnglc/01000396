@@ -70,12 +70,8 @@ namespace AgCubioView
         /// <param name="e"></param>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            //ConnectMethod();
-            //firstCube = "{\"loc_x\":689.0,\"loc_y\":498.0,\"argb_color\":-16777216,\"uid\":5656,\"team_id\":0,\"food\":false,\"Name\":\"cow\",\"Mass\":1000.0}";
-            Cube cube1 = new Cube(689, 498, -16777216, 5656, 0, false, "cow", 1000);
-            firstCube = JsonConvert.SerializeObject(cube1);
-            Cube cube = JsonConvert.DeserializeObject<Cube>(firstCube);
-            DrawCube(cube);
+            ConnectMethod();
+
         }
 
         private void ConnectMethod()
@@ -105,14 +101,6 @@ namespace AgCubioView
                 this.ServerTextBox.Visible = true;
                 this.ConnectButton.Visible = true;
             }
-
-
-
-
-
-
-
-
         }
 
         private void CallBack(State state)
@@ -126,8 +114,8 @@ namespace AgCubioView
             else
             {
                 firstCube = state.sb.ToString();
-                string[] substrings = Regex.Split(firstCube, "}");
-                firstCube = substrings[0] + "}";
+                string[] substrings = Regex.Split(firstCube, "\n");
+                firstCube = substrings[0];
                 Console.Write(firstCube);
                 Cube cube = JsonConvert.DeserializeObject<Cube>(firstCube);
                 DrawCube(cube);
@@ -146,16 +134,19 @@ namespace AgCubioView
 
         private void DrawCube(Cube cube)
         {
-            int cubeColor = cube.GetColor();
+            int cubeColor = (int)cube.GetColor();
             cubeColor = Math.Abs(cubeColor);
             Random rnd = new Random();
-            Color color = Color.FromArgb(cubeColor % 255, cubeColor % 255, cubeColor % 255);
+            Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
             System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
             System.Drawing.Graphics formGraphics;
             formGraphics = this.CreateGraphics();
+           
+            
+            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, (int)Math.Sqrt(cube.Mass), (int)Math.Sqrt(cube.Mass)));
             myBrush.Dispose();
             formGraphics.Dispose();
-            formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
+            
         }
 
        
