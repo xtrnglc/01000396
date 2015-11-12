@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using System.Drawing;
 using Newtonsoft.Json;
 
-
-
 namespace AgCubio
 {
     /// <summary>
@@ -30,14 +28,15 @@ namespace AgCubio
         private int uid;
         private string Name;
         private bool Food;
-        public int Mass { get; set; }
+        public double Mass { get; set; }
         private int team_id;
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
-        public Cube(int x, int y, int color, int ID, bool food, string name, int mass)
+        public Cube(int x, int y, int color, int ID, int teamID, bool food, string name, double mass)
         {
+            //{"loc_x":689.0,"loc_y":498.0,"argb_color":-16777216,"uid":5656,"team_id":0,"food":false,"Name":"cow","Mass":1000.0}
             this.loc_x = x;
             this.loc_y = y;
             this.argb_color = color;
@@ -79,7 +78,7 @@ namespace AgCubio
         /// Returns the mass of the cube
         /// </summary>
         /// <returns></returns>
-        public int GetMass()
+        public double GetMass()
         {
             return Mass;
         }

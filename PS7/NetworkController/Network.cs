@@ -87,7 +87,6 @@ namespace NetworkController
 
 
             state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
-
         }
 
         public static void ReceiveCallback(IAsyncResult state_in_an_ar_object)
@@ -106,7 +105,8 @@ namespace NetworkController
                 {
                     // There might be more data, so store the data received so far.
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
+                    state.connectionCallback(state);
+                    Console.Write(state.sb.ToString());
                     /*
                     // Get the rest of the data.
                     client.BeginReceive(state.buffer, 0, State.BufferSize, 0,
@@ -114,7 +114,7 @@ namespace NetworkController
                 }
                 else
                 {
-                    i_want_more_data(state);
+                    //i_want_more_data(state);
                 }
             }
             catch (Exception e)
