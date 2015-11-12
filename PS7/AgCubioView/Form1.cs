@@ -119,15 +119,15 @@ namespace AgCubioView
                 Console.Write(firstCube);
                 Cube cube = JsonConvert.DeserializeObject<Cube>(firstCube);
                 DrawCube(cube);
+                state.sb = null;
             }
 
         }
 
-        private void CallBackToDraw(State state)
+        private void CallBackSecond(State state)
         {
             State client = new State();
 
-            Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
             MessageBox.Show("Connected");
 
         }
