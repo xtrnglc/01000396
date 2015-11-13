@@ -57,6 +57,15 @@ namespace AgCubio
         }
 
         /// <summary>
+        /// Returns the square root of the mass
+        /// </summary>
+        /// <returns></returns>
+        public int GetWidth()
+        {
+            return (int)Math.Sqrt(Mass);
+        }
+
+        /// <summary>
         /// Returns the y coorindate of the cube
         /// </summary>
         /// <returns></returns>

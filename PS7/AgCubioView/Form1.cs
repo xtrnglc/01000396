@@ -36,6 +36,7 @@ namespace AgCubioView
             InitializeComponent();
             DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
+            this.PlayerNameTextBox.Text = "Adam";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -210,6 +211,35 @@ namespace AgCubioView
         /// <param name="cube"></param>
         private void DrawCube(Cube cube)
         {
+            int cubeColor = (int)cube.GetColor();
+            cubeColor = Math.Abs(cubeColor);
+            Random rnd = new Random();
+            //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+            Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
+            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+            System.Drawing.Graphics formGraphics;
+            formGraphics = this.CreateGraphics();
+            if (cube.Food == false)
+            {
+                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
+                System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
+                string drawString = cube.GetName();
+                System.Drawing.Font drawFont = new System.Drawing.Font("Arial", cube.GetWidth() / 4);
+                System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Yellow);
+                float x = (float)cube.GetX();
+                float y = (float)cube.GetY() + (cube.GetWidth() / 3);
+                System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
+                formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
+                
+            }
+            else
+            {
+                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
+            }
+            //myBrush.Dispose();
+            //formGraphics.Dispose();
+
+            /*
             if (cube.Food == false)
             {
                 int cubeColor = (int)cube.GetColor();
@@ -238,8 +268,22 @@ namespace AgCubioView
                 //myBrush.Dispose();
                 //formGraphics.Dispose();
             }
+
+            System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
+            string drawString = "Sample Text";
+            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 16);
+            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            float x = 150.0F;
+            float y = 50.0F;
+            System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
+            formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
+            drawFont.Dispose();
+            drawBrush.Dispose();
+            formGraphics2.Dispose();
             //myBrush.Dispose();
             //formGraphics.Dispose();
+
+    */
         }
 
         private void label1_Click(object sender, EventArgs e)
