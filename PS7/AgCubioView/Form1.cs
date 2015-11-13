@@ -29,6 +29,8 @@ namespace AgCubioView
         private string firstCube;
         private int FoodCount = 0;
         private bool Connected = false;
+        private int MouseX;
+        private int MouseY;
         //string[] substrings = new string[1000000];
 
         public Form1()
@@ -149,24 +151,7 @@ namespace AgCubioView
             Network.i_want_more_data(currentState);
         }
 
-        /// <summary>
-        /// Constantly receives state from server
-        /// Adds cubes to world population and draws cubes
-        /// </summary>
-        /// <param name="state"></param>
-        private void ThirdCallBack(State state)
-        {
-            firstCube = state.sb.ToString();
-            string [] substrings = Regex.Split(firstCube, "\n");
-            string temp = substrings[2];
-            substrings[2] = null;
-            AddCubes(substrings);
-            DrawCubes();
-            currentState.sb.Clear();
-            currentState.sb.Append(temp);
-            currentState.connectionCallback = ThirdCallBack;
-            Network.i_want_more_data(currentState);
-        }
+        
 
         /// <summary>
         /// Adds cubes to the world
@@ -298,6 +283,16 @@ namespace AgCubioView
                 MessageBox.Show("Hello");
             }
         }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            MouseX = e.X;
+            MouseY = e.Y;
+            this.masstextright.Text = MouseX.ToString();
+        }
+
+       
     }
 }
 

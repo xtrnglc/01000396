@@ -43,6 +43,10 @@
             this.FPStext = new System.Windows.Forms.Label();
             this.food = new System.Windows.Forms.Label();
             this.foodtextbox = new System.Windows.Forms.Label();
+            this.MassLabel = new System.Windows.Forms.Label();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            this.masstextright = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayerNameLabel
@@ -187,11 +191,36 @@
             this.foodtextbox.TabIndex = 14;
             this.foodtextbox.Text = "0";
             // 
+            // MassLabel
+            // 
+            this.MassLabel.AutoSize = true;
+            this.MassLabel.Location = new System.Drawing.Point(733, 55);
+            this.MassLabel.Name = "MassLabel";
+            this.MassLabel.Size = new System.Drawing.Size(32, 13);
+            this.MassLabel.TabIndex = 15;
+            this.MassLabel.Text = "Mass";
+            // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
+            // masstextright
+            // 
+            this.masstextright.AutoSize = true;
+            this.masstextright.Location = new System.Drawing.Point(786, 55);
+            this.masstextright.Name = "masstextright";
+            this.masstextright.Size = new System.Drawing.Size(13, 13);
+            this.masstextright.TabIndex = 16;
+            this.masstextright.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(853, 562);
+            this.Controls.Add(this.masstextright);
+            this.Controls.Add(this.MassLabel);
             this.Controls.Add(this.foodtextbox);
             this.Controls.Add(this.food);
             this.Controls.Add(this.Widthtext);
@@ -211,6 +240,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,6 +263,9 @@
         private System.Windows.Forms.Label FPStext;
         private System.Windows.Forms.Label food;
         private System.Windows.Forms.Label foodtextbox;
+        private System.Windows.Forms.Label MassLabel;
+        private System.IO.FileSystemWatcher fileSystemWatcher1;
+        private System.Windows.Forms.Label masstextright;
     }
 }
 
