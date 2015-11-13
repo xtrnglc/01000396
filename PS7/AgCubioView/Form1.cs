@@ -214,28 +214,31 @@ namespace AgCubioView
                 int cubeColor = (int)cube.GetColor();
                 cubeColor = Math.Abs(cubeColor);
                 Random rnd = new Random();
-                Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-                //Color color = Color.FromArgb(255, cubeColor, cubeColor, cubeColor);
+                //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                Color color = Color.FromArgb(255, 200, 150, 255);
                 System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
                 System.Drawing.Graphics formGraphics;
                 formGraphics = this.CreateGraphics();
                 formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass), (int)Math.Sqrt(cube.Mass)));
-                myBrush.Dispose();
-                formGraphics.Dispose();
+                //myBrush.Dispose();
+                //formGraphics.Dispose();
             }
             else
             {
                 int cubeColor = (int)cube.GetColor();
                 cubeColor = Math.Abs(cubeColor);
                 Random rnd = new Random();
-                Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                Color color = Color.FromArgb(255, 255, 50, 100);
                 System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
                 System.Drawing.Graphics formGraphics;
                 formGraphics = this.CreateGraphics();
                 formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass)+5, (int)Math.Sqrt(cube.Mass)+5));
-                myBrush.Dispose();
-                formGraphics.Dispose();
+                //myBrush.Dispose();
+                //formGraphics.Dispose();
             }
+            //myBrush.Dispose();
+            //formGraphics.Dispose();
         }
 
         private void label1_Click(object sender, EventArgs e)
