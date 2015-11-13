@@ -147,6 +147,8 @@ namespace AgCubioView
             currentState.sb.Clear();
             
             currentState.sb.Append(partialCube);
+            //([move], x, y)
+            Network.Send(state.workSocket, "([move], " + MouseX.ToString() + ", " + MouseY.ToString() + ")");
             //currentState.connectionCallback = ThirdCallBack;
             Network.i_want_more_data(currentState);
         }
