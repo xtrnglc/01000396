@@ -105,7 +105,7 @@ namespace NetworkController
                 {
                     // There might be more data, so store the data received so far.
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-                    state.connectionCallback(state);
+                    state.connectionCallback(state);                //Draws player cube
                     /*
                     // Get the rest of the data.
                     client.BeginReceive(state.buffer, 0, State.BufferSize, 0,
@@ -113,7 +113,7 @@ namespace NetworkController
                 }
                 else
                 {
-                    //i_want_more_data(state);
+                    i_want_more_data(state);
                 }
             }
             catch (Exception e)
@@ -121,6 +121,8 @@ namespace NetworkController
                 Console.WriteLine(e.ToString());
             }
         }
+
+        
 
         public static void i_want_more_data(State s)
         {

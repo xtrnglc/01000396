@@ -27,6 +27,7 @@ namespace AgCubioView
         private State currentState = new State();
         private bool firstConnection = true;
         private string firstCube;
+        string[] substrings = new string[1000000];
 
         public Form1()
         {
@@ -71,7 +72,6 @@ namespace AgCubioView
         private void ConnectButton_Click(object sender, EventArgs e)
         {
             ConnectMethod();
-
         }
 
         /// <summary>
@@ -89,10 +89,10 @@ namespace AgCubioView
             {
                 string name = this.PlayerNameTextBox.Text;
                 string server = this.ServerTextBox.Text;
-                State state = new State();
+                
                 Socket socket;
 
-                socket = Network.Connect_to_Server(CallBack, server);
+                socket = Network.Connect_to_Server(FirstCallBack, server);
             }
 
             catch (Exception excep)
@@ -109,60 +109,108 @@ namespace AgCubioView
         /// <summary>
         /// CallBack function for the initial connect to server
         /// Initiially it will send the player name to the server and then prints a message box if connection is succesful
-        /// When called a second time it will attempt to draw the player cube
         /// </summary>
         /// <param name="state"></param>
-        private void CallBack(State state)
+        private void FirstCallBack(State state)
         {
-            if (firstConnection == true)
-            {
-                Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
-                firstConnection = false;
-                MessageBox.Show("Connected");
-            }
-            else
-            {
-                firstCube = state.sb.ToString();
-                string[] substrings = Regex.Split(firstCube, "\n");
-                firstCube = substrings[0];
-                Console.Write(firstCube);
-                Cube cube = JsonConvert.DeserializeObject<Cube>(firstCube);
-                DrawCube(cube);
-                state.sb = null;
-            }
-
+            currentState = state;
+            state.connectionCallback = SecondCallBack;
+            Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
+            
+            MessageBox.Show("Connected");
         }
 
-        private void CallBackSecond(State state)
+        /// <summary>
+        /// Second callback to receive data containing player information 
+        /// Draws player cube and most likely first food cube
+        /// </summary>
+        /// <param name="state"></param>
+        private void SecondCallBack(State state)
         {
-            State client = new State();
+            currentState = state;
+            firstCube = state.sb.ToString();
+            substrings = Regex.Split(firstCube, "\n");
+            Cube playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
+            //DrawCube(playerCube);
+            string temp = substrings[2];
+            substrings[2] = null;
+            AddCubes(substrings);
+            DrawCubes();
+            currentState.sb.Clear();
+            currentState.sb.Append(temp);
+            currentState.connectionCallback = ThirdCallBack;
+            Network.i_want_more_data(currentState);
+        }
 
-            MessageBox.Show("Connected");
+        /// <summary>
+        /// Constantly receives state from server
+        /// Adds cubes to world population and draws cubes
+        /// </summary>
+        /// <param name="state"></param>
+        private void ThirdCallBack(State state)
+        {
+            firstCube = state.sb.ToString();
+            substrings = Regex.Split(firstCube, "\n");
+            string temp = substrings[2];
+            substrings[2] = null;
+            AddCubes(substrings);
+            DrawCubes();
+            currentState.sb.Clear();
+            currentState.sb.Append(temp);
+            currentState.connectionCallback = ThirdCallBack;
+            Network.i_want_more_data(currentState);
+        }
 
+        public void AddCubes(string [] JSON)
+        {
+            foreach (string entry in JSON)
+            {
+                if (entry != null)
+                {
+                    Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
+                    world.Add(cube);
+                }
+            }
+        }
+
+        private void DrawCubes()
+        {
+            {
+                foreach (Cube cube in world.WorldPopulation)
+                {
+                    DrawCube(cube);
+                }
+            }
         }
 
         private void DrawCube(Cube cube)
         {
-            int cubeColor = (int)cube.GetColor();
-            cubeColor = Math.Abs(cubeColor);
-            Random rnd = new Random();
-            Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-            System.Drawing.Graphics formGraphics;
-            formGraphics = this.CreateGraphics();
-           
-            
-            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, (int)Math.Sqrt(cube.Mass), (int)Math.Sqrt(cube.Mass)));
-            myBrush.Dispose();
-            formGraphics.Dispose();
-            
-        }
-
-       
-
-        private void data_arrived()
-        {
-            //add cubes to the world
+            if (cube.Food == false)
+            {
+                int cubeColor = (int)cube.GetColor();
+                cubeColor = Math.Abs(cubeColor);
+                Random rnd = new Random();
+                Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+                System.Drawing.Graphics formGraphics;
+                formGraphics = this.CreateGraphics();
+                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass), (int)Math.Sqrt(cube.Mass)));
+                myBrush.Dispose();
+                formGraphics.Dispose();
+            }
+            else
+            {
+                int cubeColor = (int)cube.GetColor();
+                cubeColor = Math.Abs(cubeColor);
+                Random rnd = new Random();
+                Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+                System.Drawing.Graphics formGraphics;
+                formGraphics = this.CreateGraphics();
+                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass)+5, (int)Math.Sqrt(cube.Mass)+5));
+                myBrush.Dispose();
+                formGraphics.Dispose();
+            }
         }
     }
 }

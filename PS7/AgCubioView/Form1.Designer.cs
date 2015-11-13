@@ -96,7 +96,7 @@
             // FPSlabel
             // 
             this.FPSlabel.AutoSize = true;
-            this.FPSlabel.Location = new System.Drawing.Point(575, 13);
+            this.FPSlabel.Location = new System.Drawing.Point(1118, 20);
             this.FPSlabel.Name = "FPSlabel";
             this.FPSlabel.Size = new System.Drawing.Size(27, 13);
             this.FPSlabel.TabIndex = 5;
@@ -105,7 +105,7 @@
             // Foodlabel
             // 
             this.Foodlabel.AutoSize = true;
-            this.Foodlabel.Location = new System.Drawing.Point(575, 42);
+            this.Foodlabel.Location = new System.Drawing.Point(1118, 49);
             this.Foodlabel.Name = "Foodlabel";
             this.Foodlabel.Size = new System.Drawing.Size(31, 13);
             this.Foodlabel.TabIndex = 6;
@@ -114,7 +114,7 @@
             // Mass
             // 
             this.Mass.AutoSize = true;
-            this.Mass.Location = new System.Drawing.Point(575, 65);
+            this.Mass.Location = new System.Drawing.Point(1118, 72);
             this.Mass.Name = "Mass";
             this.Mass.Size = new System.Drawing.Size(32, 13);
             this.Mass.TabIndex = 7;
@@ -123,7 +123,7 @@
             // Widthlabel
             // 
             this.Widthlabel.AutoSize = true;
-            this.Widthlabel.Location = new System.Drawing.Point(575, 93);
+            this.Widthlabel.Location = new System.Drawing.Point(1118, 100);
             this.Widthlabel.Name = "Widthlabel";
             this.Widthlabel.Size = new System.Drawing.Size(35, 13);
             this.Widthlabel.TabIndex = 8;
@@ -132,7 +132,7 @@
             // Widthtext
             // 
             this.Widthtext.AutoSize = true;
-            this.Widthtext.Location = new System.Drawing.Point(633, 93);
+            this.Widthtext.Location = new System.Drawing.Point(1176, 100);
             this.Widthtext.Name = "Widthtext";
             this.Widthtext.Size = new System.Drawing.Size(13, 13);
             this.Widthtext.TabIndex = 12;
@@ -142,7 +142,7 @@
             // Masstext
             // 
             this.Masstext.AutoSize = true;
-            this.Masstext.Location = new System.Drawing.Point(633, 65);
+            this.Masstext.Location = new System.Drawing.Point(1176, 72);
             this.Masstext.Name = "Masstext";
             this.Masstext.Size = new System.Drawing.Size(13, 13);
             this.Masstext.TabIndex = 11;
@@ -151,7 +151,7 @@
             // foodtext
             // 
             this.foodtext.AutoSize = true;
-            this.foodtext.Location = new System.Drawing.Point(633, 42);
+            this.foodtext.Location = new System.Drawing.Point(1176, 49);
             this.foodtext.Name = "foodtext";
             this.foodtext.Size = new System.Drawing.Size(29, 13);
             this.foodtext.TabIndex = 10;
@@ -160,7 +160,7 @@
             // FPStext
             // 
             this.FPStext.AutoSize = true;
-            this.FPStext.Location = new System.Drawing.Point(633, 13);
+            this.FPStext.Location = new System.Drawing.Point(1176, 20);
             this.FPStext.Name = "FPStext";
             this.FPStext.Size = new System.Drawing.Size(13, 13);
             this.FPStext.TabIndex = 9;
@@ -170,7 +170,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 479);
+            this.ClientSize = new System.Drawing.Size(1272, 562);
             this.Controls.Add(this.Widthtext);
             this.Controls.Add(this.Masstext);
             this.Controls.Add(this.foodtext);

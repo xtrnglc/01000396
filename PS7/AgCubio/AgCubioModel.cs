@@ -102,7 +102,7 @@ namespace AgCubio
         /// </summary>
         public readonly int Width;
         public readonly int Height;
-        private HashSet<Cube> WorldPopulation = new HashSet<Cube>();
+        public HashSet<Cube> WorldPopulation;
 
         /// <summary>
         /// Return the Height of the World
@@ -120,6 +120,11 @@ namespace AgCubio
             get { return Width; }
         }
 
+        public void Add(Cube c)
+        {
+            WorldPopulation.Add(c);
+        }
+
         /// <summary>
         /// Constructor for the world
         /// not sure if you set it to a fixed amount from the beginning or compute it from the cubes?
@@ -127,8 +132,9 @@ namespace AgCubio
         /// </summary>
         public World()
         {
-            Width = 10000;
-            Height = 10000;
+            Width = 1000;
+            Height = 1000;
+            WorldPopulation = new HashSet<Cube>();
         }
     }
 }
