@@ -27,7 +27,8 @@ namespace AgCubioView
         private State currentState = new State();
         private bool firstConnection = true;
         private string firstCube;
-        string[] substrings = new string[1000000];
+        private int FoodCount = 0;
+        //string[] substrings = new string[1000000];
 
         public Form1()
         {
@@ -129,16 +130,20 @@ namespace AgCubioView
         {
             currentState = state;
             firstCube = state.sb.ToString();
-            substrings = Regex.Split(firstCube, "\n");
-            Cube playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
+            string [] substrings = Regex.Split(firstCube, "\n");
+            //Cube playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
             //DrawCube(playerCube);
-            string temp = substrings[2];
-            substrings[2] = null;
+            
+            int count = substrings.Count() - 1;
+            //MessageBox.Show(substrings[count]);
+            string partialCube = substrings.Last();
+            substrings[count] = null;
             AddCubes(substrings);
             DrawCubes();
             currentState.sb.Clear();
-            currentState.sb.Append(temp);
-            currentState.connectionCallback = ThirdCallBack;
+            
+            currentState.sb.Append(partialCube);
+            //currentState.connectionCallback = ThirdCallBack;
             Network.i_want_more_data(currentState);
         }
 
@@ -150,7 +155,7 @@ namespace AgCubioView
         private void ThirdCallBack(State state)
         {
             firstCube = state.sb.ToString();
-            substrings = Regex.Split(firstCube, "\n");
+            string [] substrings = Regex.Split(firstCube, "\n");
             string temp = substrings[2];
             substrings[2] = null;
             AddCubes(substrings);
@@ -167,6 +172,7 @@ namespace AgCubioView
         /// <param name="JSON"></param>
         public void AddCubes(string [] JSON)
         {
+            lock (world)
             foreach (string entry in JSON)
             {
                 if (entry != null)
@@ -182,11 +188,18 @@ namespace AgCubioView
         /// </summary>
         private void DrawCubes()
         {
+            
+            lock (world)
             {
                 foreach (Cube cube in world.WorldPopulation)
                 {
                     DrawCube(cube);
+                    if (cube.GetFood())
+                    {
+                        FoodCount += 1;
+                    }
                 }
+                //this.foodtextbox.Text = FoodCount.ToString();
             }
         }
 
@@ -202,6 +215,7 @@ namespace AgCubioView
                 cubeColor = Math.Abs(cubeColor);
                 Random rnd = new Random();
                 Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
+                //Color color = Color.FromArgb(255, cubeColor, cubeColor, cubeColor);
                 System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
                 System.Drawing.Graphics formGraphics;
                 formGraphics = this.CreateGraphics();
@@ -222,6 +236,11 @@ namespace AgCubioView
                 myBrush.Dispose();
                 formGraphics.Dispose();
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

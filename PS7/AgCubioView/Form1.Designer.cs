@@ -41,6 +41,8 @@
             this.Masstext = new System.Windows.Forms.Label();
             this.foodtext = new System.Windows.Forms.Label();
             this.FPStext = new System.Windows.Forms.Label();
+            this.food = new System.Windows.Forms.Label();
+            this.foodtextbox = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // PlayerNameLabel
@@ -166,11 +168,32 @@
             this.FPStext.TabIndex = 9;
             this.FPStext.Text = "0";
             // 
+            // food
+            // 
+            this.food.AutoSize = true;
+            this.food.Location = new System.Drawing.Point(733, 28);
+            this.food.Name = "food";
+            this.food.Size = new System.Drawing.Size(31, 13);
+            this.food.TabIndex = 13;
+            this.food.Text = "Food";
+            this.food.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // foodtextbox
+            // 
+            this.foodtextbox.AutoSize = true;
+            this.foodtextbox.Location = new System.Drawing.Point(786, 28);
+            this.foodtextbox.Name = "foodtextbox";
+            this.foodtextbox.Size = new System.Drawing.Size(13, 13);
+            this.foodtextbox.TabIndex = 14;
+            this.foodtextbox.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 562);
+            this.ClientSize = new System.Drawing.Size(853, 562);
+            this.Controls.Add(this.foodtextbox);
+            this.Controls.Add(this.food);
             this.Controls.Add(this.Widthtext);
             this.Controls.Add(this.Masstext);
             this.Controls.Add(this.foodtext);
@@ -207,6 +230,8 @@
         private System.Windows.Forms.Label Masstext;
         private System.Windows.Forms.Label foodtext;
         private System.Windows.Forms.Label FPStext;
+        private System.Windows.Forms.Label food;
+        private System.Windows.Forms.Label foodtextbox;
     }
 }
 

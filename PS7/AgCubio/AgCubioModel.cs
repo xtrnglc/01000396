@@ -90,6 +90,11 @@ namespace AgCubio
         {
             return argb_color;
         }
+
+        public bool GetFood()
+        {
+            return Food;
+        }
     }
 
     /// <summary>
@@ -132,8 +137,8 @@ namespace AgCubio
         /// </summary>
         public World()
         {
-            Width = 1000;
-            Height = 1000;
+            Width = 5000;
+            Height = 5000;
             WorldPopulation = new HashSet<Cube>();
         }
     }
