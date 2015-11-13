@@ -27,3 +27,10 @@ PS7 - AgCubio
 	It will also add the uncompleted json string to the state string builder and send that state into the i_want_more_data network method along with the third callback.
 	The third callback will attempt to continuously receive cubes from the server and draw them.
 	The third callback currently does not continuuosly update and only a maximum of 6 food cubes can be drawn. 
+
+11/13/15
+	Now displaying all the food coming from the server. Also displays the player name, trying to find out how to center it better.
+	Problem with the food cubes being drawn was that we were assuming that the 3rd JSON string being sent (substring[2]) was always going
+	to be a partial cube. I fixed this by instead of setting substrings[2] always to null, found the last string in the array and appended it 
+	to the string builder and handled it. Now it's always going to find all the full strings that can make a cube and deal with them. Going to 
+	work on the move aspect and hopefully get it working.
