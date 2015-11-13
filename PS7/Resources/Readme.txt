@@ -21,3 +21,9 @@ PS7 - AgCubio
 	We were able to send in the player name and then receive back JSON string data from the server. The data string usually sends enough data for at least 2 cube objects.
 	Able to cut the data string so that it isolates the first cube with the player name. 
 	Able to deserialize the data string into a cube object and send it into the local drawCube method which draws the cube.
+	Changed the callback method so now there are three call back methods
+	First callback method is called when a succesful connection is made, it will send the server the player's name
+	Second callback is called when a cube representing the player is received from the server. It will then draw the cube along with a food cube.
+	It will also add the uncompleted json string to the state string builder and send that state into the i_want_more_data network method along with the third callback.
+	The third callback will attempt to continuously receive cubes from the server and draw them.
+	The third callback currently does not continuuosly update and only a maximum of 6 food cubes can be drawn. 

@@ -161,6 +161,10 @@ namespace AgCubioView
             Network.i_want_more_data(currentState);
         }
 
+        /// <summary>
+        /// Adds cubes to the world
+        /// </summary>
+        /// <param name="JSON"></param>
         public void AddCubes(string [] JSON)
         {
             foreach (string entry in JSON)
@@ -173,6 +177,9 @@ namespace AgCubioView
             }
         }
 
+        /// <summary>
+        /// Draw all the cubes that are part of the world
+        /// </summary>
         private void DrawCubes()
         {
             {
@@ -183,6 +190,10 @@ namespace AgCubioView
             }
         }
 
+        /// <summary>
+        /// Draw a cube
+        /// </summary>
+        /// <param name="cube"></param>
         private void DrawCube(Cube cube)
         {
             if (cube.Food == false)
