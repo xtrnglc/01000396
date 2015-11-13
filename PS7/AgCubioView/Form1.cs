@@ -28,6 +28,7 @@ namespace AgCubioView
         private bool firstConnection = true;
         private string firstCube;
         private int FoodCount = 0;
+        private bool Connected = false;
         //string[] substrings = new string[1000000];
 
         public Form1()
@@ -117,8 +118,8 @@ namespace AgCubioView
             currentState = state;
             state.connectionCallback = SecondCallBack;
             Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
-            
-            MessageBox.Show("Connected");
+            Connected = true;
+            //MessageBox.Show("Connected");
         }
 
         /// <summary>
@@ -215,7 +216,7 @@ namespace AgCubioView
                 cubeColor = Math.Abs(cubeColor);
                 Random rnd = new Random();
                 //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-                Color color = Color.FromArgb(255, 200, 150, 255);
+                Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2 ) % 255, Math.Abs(cubeColor - 50) % 255);
                 System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
                 System.Drawing.Graphics formGraphics;
                 formGraphics = this.CreateGraphics();
@@ -229,11 +230,11 @@ namespace AgCubioView
                 cubeColor = Math.Abs(cubeColor);
                 Random rnd = new Random();
                 //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-                Color color = Color.FromArgb(255, 255, 50, 100);
+                Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
                 System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
                 System.Drawing.Graphics formGraphics;
                 formGraphics = this.CreateGraphics();
-                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass)+5, (int)Math.Sqrt(cube.Mass)+5));
+                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, (int)Math.Sqrt(cube.Mass) + 2, (int)Math.Sqrt(cube.Mass)+2));
                 //myBrush.Dispose();
                 //formGraphics.Dispose();
             }
@@ -244,6 +245,14 @@ namespace AgCubioView
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar == 32))
+            {
+                MessageBox.Show("Hello");
+            }
         }
     }
 }
