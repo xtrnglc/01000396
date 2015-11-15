@@ -34,3 +34,8 @@ PS7 - AgCubio
 	to be a partial cube. I fixed this by instead of setting substrings[2] always to null, found the last string in the array and appended it 
 	to the string builder and handled it. Now it's always going to find all the full strings that can make a cube and deal with them. Going to 
 	work on the move aspect and hopefully get it working.
+
+11/15/15
+	Trying to get move working. Unsure about the syntax the protocol expects. Trying to make a move request whenever the mouse moves.
+	Tried sending variations of Network.Send(currentState.workSocket, "(move, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
+	Not sure how the server gets the player cube to move. The player cube loc_x and loc_y do not change after sending the move request
