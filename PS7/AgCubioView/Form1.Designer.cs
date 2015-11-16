@@ -180,7 +180,6 @@
             this.food.Size = new System.Drawing.Size(31, 13);
             this.food.TabIndex = 13;
             this.food.Text = "Food";
-            this.food.Click += new System.EventHandler(this.label1_Click);
             // 
             // foodtextbox
             // 
@@ -239,7 +238,9 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

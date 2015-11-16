@@ -146,8 +146,8 @@ namespace AgCubio
         /// </summary>
         public World()
         {
-            Width = 5000;
-            Height = 5000;
+            Width = 1000;
+            Height = 1000;
             WorldPopulation = new HashSet<Cube>();
         }
     }

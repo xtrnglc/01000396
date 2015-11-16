@@ -27,6 +27,7 @@ namespace AgCubioView
         private State currentState = new State();
         private bool firstConnection = true;
         private string firstCube;
+        private string playerName;
         private int FoodCount = 0;
         private bool Connected = false;
         private int MouseX;
@@ -60,6 +61,38 @@ namespace AgCubioView
         }
 
         /// <summary>
+        /// Initial connect to server
+        /// </summary>
+        private void ConnectMethod()
+        {
+            this.PlayerNameLabel.Visible = false;
+            this.PlayerNameTextBox.Visible = false;
+            this.ServerLabel.Visible = false;
+            this.ServerTextBox.Visible = false;
+            this.ConnectButton.Visible = false;
+
+            try
+            {
+                string name = this.PlayerNameTextBox.Text;
+                string server = this.ServerTextBox.Text;
+
+                Socket socket;
+
+                socket = Network.Connect_to_Server(FirstCallBack, server);
+            }
+
+            catch (Exception excep)
+            {
+                MessageBox.Show("Failed to connect");
+                this.PlayerNameLabel.Visible = true;
+                this.PlayerNameTextBox.Visible = true;
+                this.ServerLabel.Visible = true;
+                this.ServerTextBox.Visible = true;
+                this.ConnectButton.Visible = true;
+            }
+        }
+
+        /// <summary>
         /// Connect handler for enter key press
         /// </summary>
         /// <param name="sender"></param>
@@ -83,38 +116,6 @@ namespace AgCubioView
         }
 
         /// <summary>
-        /// Initial connect to server
-        /// </summary>
-        private void ConnectMethod()
-        {
-            this.PlayerNameLabel.Visible = false;
-            this.PlayerNameTextBox.Visible = false;
-            this.ServerLabel.Visible = false;
-            this.ServerTextBox.Visible = false;
-            this.ConnectButton.Visible = false;
-
-            try
-            {
-                string name = this.PlayerNameTextBox.Text;
-                string server = this.ServerTextBox.Text;
-                
-                Socket socket;
-
-                socket = Network.Connect_to_Server(FirstCallBack, server);
-            }
-
-            catch (Exception excep)
-            {
-                MessageBox.Show("Failed to connect");
-                this.PlayerNameLabel.Visible = true;
-                this.PlayerNameTextBox.Visible = true;
-                this.ServerLabel.Visible = true;
-                this.ServerTextBox.Visible = true;
-                this.ConnectButton.Visible = true;
-            }
-        }
-
-        /// <summary>
         /// CallBack function for the initial connect to server
         /// Initiially it will send the player name to the server and then prints a message box if connection is succesful
         /// </summary>
@@ -124,10 +125,9 @@ namespace AgCubioView
             currentState = state;
             state.connectionCallback = SecondCallBack;
             Network.Send(state.workSocket, this.PlayerNameTextBox.Text + "\n");
+            playerName = PlayerNameTextBox.Text;
             Connected = true;
             gameStarted = true;
-            playerDrawn = true;
-            //MessageBox.Show("Connected");
         }
 
         /// <summary>
@@ -138,10 +138,9 @@ namespace AgCubioView
         private void SecondCallBack(State state)
         {
             currentState = state;
-            counter++;
             firstCube = state.sb.ToString();
             string [] substrings = Regex.Split(firstCube, "\n");
-            
+            playerDrawn = true;
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
             substrings[count] = null;
@@ -149,15 +148,8 @@ namespace AgCubioView
             DrawCubes();
             currentState.sb.Clear();
             currentState.sb.Append(partialCube);
-
-            Network.i_want_more_data(currentState);
-
-            
-
-            Console.WriteLine(counter);
+            Network.i_want_more_data(currentState);          
         }
-
-        
 
         /// <summary>
         /// Adds cubes to the world
@@ -191,7 +183,6 @@ namespace AgCubioView
                         FoodCount += 1;
                     }
                 }
-                //this.foodtextbox.Text = FoodCount.ToString();
             }
         }
 
@@ -209,6 +200,7 @@ namespace AgCubioView
             System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
             System.Drawing.Graphics formGraphics;
             formGraphics = this.CreateGraphics();
+            
             if (cube.Food == false)
             {
                 formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
@@ -219,249 +211,84 @@ namespace AgCubioView
                 float x = (float)cube.GetX();
                 float y = (float)cube.GetY() + (cube.GetWidth() / 3);
                 System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
-                formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
-                
+                formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat); 
             }
             else
             {
                 formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
             }
-            
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((e.KeyChar == 32))
             {
-                MessageBox.Show("Hello");
+                Network.Send(currentState.workSocket, "(split, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
             }
         }
 
         
-        protected override void OnMouseMove(MouseEventArgs e)
+        protected void OnMouseMove(object sender, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
             MouseX = e.X;
             MouseY = e.Y;
             if (playerDrawn && gameStarted)
             {
                 Network.Send(currentState.workSocket, "(move, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
+                Network.i_want_more_data(currentState);
+                lock(world)
+                foreach (Cube cube in world.WorldPopulation)
+                {
+                    if (cube.Name == playerName)
+                    {
+                        cube.loc_x = MouseX;
+                        cube.loc_y = MouseY;
+                    }    
+                }
                 moveSent = true;
-                //DrawCubes();
+                DrawCubes();
             }
         }
 
-       
+        protected void OnPaint(object sender, PaintEventArgs e)
+        {
+            //base.OnPaint(e);
+
+            
+            //if (Connected)
+            {
+                //lock (world)
+                //{
+                //    foreach (Cube cube in world.WorldPopulation)
+                //    {
+                //        int cubeColor = (int)cube.GetColor();
+                //        cubeColor = Math.Abs(cubeColor);
+                //        Random rnd = new Random();
+                //        Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
+                //        System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+                //        System.Drawing.Graphics formGraphics;
+                //        formGraphics = this.CreateGraphics();
+                //        if (cube.Food == false)
+                //        {
+                //            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
+                //            System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
+                //            string drawString = cube.GetName();
+                //            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", cube.GetWidth() / 4);
+                //            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Yellow);
+                //            float x = (float)cube.GetX();
+                //            float y = (float)cube.GetY() + (cube.GetWidth() / 3);
+                //            System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
+                //            formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
+                //        }
+                //        else
+                //        {
+                //            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
+                //        }
+                //    }
+                //} 
+            }
+        }
     }
 }
 
-/*
- public Form1()
-        {
-            InitializeComponent();
-            DoubleBuffered = true;
-            this.ServerText.Text = "localhost";
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.Text = "AgCubio";
-        }
-
-        
-
-        private void PlayerNameText_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13 && PlayerNameText.Text != "")
-            {
-                //check to see if the server connects with the given hostname
-                this.PlayerNameLabel.Visible = false;
-                this.PlayerNameTextBox.Visible = false;
-                this.ServerLabel.Visible = false;
-                this.ServerTextBox.Visible = false;
-
-                callback();
-            }
-        }
-
-        /// <summary>
-        /// Method needs to attempt to connect to the server with the given hostname
-        /// </summary>
-        private void callback()
-        {
-            
-
-            string hostname = this.ServerText.Text;
-
-
-        }
-
-        private void GetMoreData()
-        {
-            //calls the i_want_more_data method in the network
-        }
-
-        private void Draw()
-        {
-            Cube cube = new Cube(30, 40, -79840260, 57, true, "test", 1000);
-            int cubeColor = cube.GetColor();
-            cubeColor = Math.Abs(cubeColor);
-            Random rnd = new Random();
-            Color color = Color.FromArgb(cubeColor % 255, cubeColor % 255, cubeColor % 255);
-            
-            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-            System.Drawing.Graphics formGraphics;
-            formGraphics = this.CreateGraphics();
-            formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int) Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
-            myBrush.Dispose();
-            formGraphics.Dispose();
-            int colormain, color1, color2, color3, color4;
-
-            for (int i = 0; i < 100; i++)
-            {
-                cube = new Cube(rnd.Next(1, 1000), rnd.Next(1, 1000), rnd.Next(1, 1000000), 57, true, "test", 100);
-                cubeColor = cube.GetColor();
-                cubeColor = Math.Abs(cubeColor);
-                formGraphics = this.CreateGraphics();
-                colormain = cubeColor % 255;
-                color1 = colormain + 50;
-                color2 = (colormain - 50) * 2;
-                color3 = colormain / 2 + 50;
-                color4 = colormain * 2;
-                if (color1 > 255)
-                    color1 = 255;
-                if (color2 < 0 || color2 > 255)
-                    color2 = 125;
-                if (color4 > 255)
-                    color4 = 100;
-                color = Color.FromArgb(255, color2, color3, color4);
-                myBrush = new System.Drawing.SolidBrush(color);
-                formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
-            }
-
-        }
-
-        private void You_MouseDown(object sender, MouseEventArgs e)
-        {
-            this.Cursor = new Cursor(Cursor.Current.Handle);
-            Cursor.Position = new Point(Cursor.Position.X - 50, Cursor.Position.Y - 50);
-            Cursor.Clip = new Rectangle(this.Location, this.Size);
-        }
-
-        private void Form1_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void MoveCursor()
-        {
-            // Set the Current cursor, move the cursor's Position,
-            // and set its clipping rectangle to the form. 
-
-            this.Cursor = new Cursor(Cursor.Current.Handle);
-            Cursor.Position = new Point(Cursor.Position.X - 50, Cursor.Position.Y - 50);
-            Cursor.Clip = new Rectangle(this.Location, this.Size);
-        }
-
-
-    }
-}
-
-
-
-     private void Draw()
-        {
-            
-            Cube cube = new Cube(30, 40, -79840260, 57, true, "test", 1000);
-            int cubeColor = cube.GetColor();
-            cubeColor = Math.Abs(cubeColor);
-            Random rnd = new Random();
-            Color color = Color.FromArgb(cubeColor % 255, cubeColor % 255, cubeColor % 255);
-
-
-            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-            System.Drawing.Graphics formGraphics;
-            formGraphics = this.CreateGraphics();
-            myBrush.Dispose();
-            formGraphics.Dispose();
-            int colormain, color1, color2, color3, color4;
-
-            for (int i = 0; i < 100; i++)
-            {
-                cube = new Cube(rnd.Next(1, 1000), rnd.Next(1, 1000), rnd.Next(1, 1000000), 57, true, "test", 100);
-                cubeColor = cube.GetColor();
-                cubeColor = Math.Abs(cubeColor);
-                formGraphics = this.CreateGraphics();
-                colormain = cubeColor % 255;
-                color1 = colormain + 50;
-                color2 = (colormain - 50) * 2;
-                color3 = colormain / 2 + 50;
-                color4 = colormain * 2;
-                if (color1 > 255)
-                    color1 = 255;
-                if (color2 < 0 || color2 > 255)
-                    color2 = 125;
-                if (color4 > 255)
-                    color4 = 100;
-                color = Color.FromArgb(255, color2, color3, color4);
-                myBrush = new System.Drawing.SolidBrush(color);
-                formGraphics.FillRectangle(myBrush, new Rectangle(cube.GetX(), cube.GetY(), (int)Math.Sqrt(cube.GetMass()), (int)Math.Sqrt(cube.GetMass())));
-            }
-        }
-
-*/
-
-
-//myBrush.Dispose();
-//formGraphics.Dispose();
-
-/*
-if (cube.Food == false)
-{
-    int cubeColor = (int)cube.GetColor();
-    cubeColor = Math.Abs(cubeColor);
-    Random rnd = new Random();
-    //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-    Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2 ) % 255, Math.Abs(cubeColor - 50) % 255);
-    System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-    System.Drawing.Graphics formGraphics;
-    formGraphics = this.CreateGraphics();
-    formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x / 2, (int)cube.loc_y / 2, (int)Math.Sqrt(cube.Mass), (int)Math.Sqrt(cube.Mass)));
-    //myBrush.Dispose();
-    //formGraphics.Dispose();
-}
-else
-{
-    int cubeColor = (int)cube.GetColor();
-    cubeColor = Math.Abs(cubeColor);
-    Random rnd = new Random();
-    //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-    Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
-    System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-    System.Drawing.Graphics formGraphics;
-    formGraphics = this.CreateGraphics();
-    formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, (int)Math.Sqrt(cube.Mass) + 2, (int)Math.Sqrt(cube.Mass)+2));
-    //myBrush.Dispose();
-    //formGraphics.Dispose();
-}
-
-System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
-string drawString = "Sample Text";
-System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 16);
-System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-float x = 150.0F;
-float y = 50.0F;
-System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
-formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
-drawFont.Dispose();
-drawBrush.Dispose();
-formGraphics2.Dispose();
-//myBrush.Dispose();
-//formGraphics.Dispose();
-
-*/
