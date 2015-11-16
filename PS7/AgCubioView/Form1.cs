@@ -217,6 +217,7 @@ namespace AgCubioView
             {
                 formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
             }
+            Invalidate()
         }
 
 
@@ -233,30 +234,34 @@ namespace AgCubioView
         {
             MouseX = e.X;
             MouseY = e.Y;
+            int i = 0;
             if (playerDrawn && gameStarted)
             {
-                Network.Send(currentState.workSocket, "(move, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
-                Network.i_want_more_data(currentState);
-                lock(world)
-                foreach (Cube cube in world.WorldPopulation)
+                lock (world)
                 {
-                    if (cube.Name == playerName)
+                    for (int x = 0; x < world.WorldPopulation.Count; x++)
                     {
-                        cube.loc_x = MouseX;
-                        cube.loc_y = MouseY;
-                    }    
+                        Cube cube = world.WorldPopulation.ElementAt(x);
+
+                        if (cube.GetName() == playerName)
+                        {
+                            world.WorldPopulation.Remove(cube);
+                        }
+                        x++;
+                    }
                 }
+                
+                Network.Send(currentState.workSocket, "(move, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
+                
+                
                 moveSent = true;
                 DrawCubes();
             }
         }
 
         protected void OnPaint(object sender, PaintEventArgs e)
-        {
-            //base.OnPaint(e);
-
-            
-            //if (Connected)
+        {   
+            if (Connected)
             {
                 //lock (world)
                 //{
@@ -286,7 +291,7 @@ namespace AgCubioView
                 //            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
                 //        }
                 //    }
-                //} 
+                //}
             }
         }
     }
