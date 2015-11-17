@@ -39,3 +39,10 @@ PS7 - AgCubio
 	Trying to get move working. Unsure about the syntax the protocol expects. Trying to make a move request whenever the mouse moves.
 	Tried sending variations of Network.Send(currentState.workSocket, "(move, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
 	Not sure how the server gets the player cube to move. The player cube loc_x and loc_y do not change after sending the move request
+
+11/16/15
+	Tried to get OnPaint method working which runs in the background and does not need to be called by any callback method. Similar to the AgCubio function call map posted
+	on the forums. However the OnPaint does not work correctly. It only starts drawing when the form is resized. Then it would draw for one second and stop. Resizing
+	sometimes redraws but it is inconsistent. It also does not remove where the cube has previously been. It looks like the request to move makes the server send new information
+	for the player cube. This is a problem with our implementation because it keeps adding on the same cube but only changes loc_x and loc_y and mass. 
+	Very stuck.
