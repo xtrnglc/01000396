@@ -105,7 +105,10 @@ namespace NetworkController
                 {
                     // There might be more data, so store the data received so far.
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-                   
+                   if (state.sb.ToString().Contains("false"))
+                   {
+                        Console.WriteLine("HERE: " + state.sb.ToString());
+                   }
                     state.connectionCallback(state);                //Draws player cube
                     /*
                     // Get the rest of the data.
@@ -114,7 +117,7 @@ namespace NetworkController
                 }
                 else
                 {
-                    i_want_more_data(state);
+                    //i_want_more_data(state);
                 }
             }
             catch (Exception e)
@@ -131,8 +134,9 @@ namespace NetworkController
         public static void Send(Socket socket, String data)
         {
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-
+            
             socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+            
         }
 
         /// <summary>
@@ -145,6 +149,12 @@ namespace NetworkController
             {
                 Socket s = (Socket)state_in_an_ar_object.AsyncState;
                 int bytesSent = s.EndSend(state_in_an_ar_object);
+                if (bytesSent == 0)
+                {
+                    s.Shutdown(SocketShutdown.Send);
+
+                    s.Disconnect(true);
+                }
                 sendDone.Set();
             }
             catch (Exception)
