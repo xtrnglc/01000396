@@ -28,6 +28,7 @@ namespace AgCubioView
         private State currentState = new State();
         private string firstCube;
         private string playerName;
+        private Cube playerCube;
         private Stopwatch timer = new Stopwatch();
         private bool Connected = false;
         private bool playerAlive;
@@ -48,7 +49,7 @@ namespace AgCubioView
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
-            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -56,10 +57,6 @@ namespace AgCubioView
             this.Text = "AgCubio";
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void PlayerNameTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -135,7 +132,7 @@ namespace AgCubioView
 
         /// <summary>
         /// CallBack function for the initial connect to server
-        /// Initiially it will send the player name to the server and then prints a message box if connection is succesful
+        /// Initiially it will send the player name to the server
         /// </summary>
         /// <param name="state"></param>
         private void FirstCallBack(State state)
@@ -152,7 +149,7 @@ namespace AgCubioView
 
         /// <summary>
         /// Second callback to receive data containing player information 
-        /// Draws player cube and most likely first food cube
+        /// 
         /// </summary>
         /// <param name="state"></param>
         private void SecondCallBack(State state)
@@ -160,6 +157,7 @@ namespace AgCubioView
             currentState = state;
             firstCube = currentState.sb.ToString();
             string [] substrings = Regex.Split(firstCube, "\n");
+            playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
             playerDrawn = true;
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
@@ -170,11 +168,15 @@ namespace AgCubioView
             Network.i_want_more_data(currentState);          
         }
 
+        /// <summary>
+        /// Callback function to deal with the rest of the data
+        /// Stores cubes into dictionaries
+        /// </summary>
+        /// <param name="state"></param>
         private void ThirdCallBack(State state)
         {
             currentState = state;
             string dataString = state.sb.ToString();
-            //Console.WriteLine(dataString);
             string[] substrings = Regex.Split(dataString, "\n");
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
@@ -187,100 +189,95 @@ namespace AgCubioView
             {
                 Network.Send(currentState.workSocket, "(move, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
             }
-
-            lock (world)
+            if (playerAlive)
             {
-                foreach (string entry in substrings)
+                lock (world)
                 {
-                    if (entry != null)
+                    foreach (string entry in substrings)
                     {
-                        Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
+                        if (entry != null)
                         {
-
-                            if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
+                            Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
                             {
-                                if (cube.Mass == 0)
+
+                                if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
                                 {
-                                    world.ListOfPlayers.Remove(cube.GetID);
-                                    playersEaten++;
+                                    if (cube.Mass == 0)
+                                    {
+                                        if (cube.GetID == playerCube.GetID)
+                                        {
+                                            playerAlive = false;
+                                        }
+                                        world.ListOfPlayers.Remove(cube.GetID);
+                                        playersEaten++;
+                                    }
+                                    else
+                                    {
+                                        world.ListOfPlayers.Remove(cube.GetID);
+                                        world.ListOfPlayers[cube.GetID] = cube;
+                                    }
+
+                                }
+                                else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID))
+                                {
+                                    if (cube.Mass == 0)
+                                    {
+                                        world.ListOfFood.Remove(cube.GetID);
+                                        foodEaten++;
+                                    }
+                                    else
+                                    {
+                                        world.ListOfFood.Remove(cube.GetID);
+                                        world.ListOfFood[cube.GetID] = cube;
+                                    }
                                 }
                                 else
                                 {
-                                    world.ListOfPlayers.Remove(cube.GetID);
-                                    world.ListOfPlayers[cube.GetID] = cube;
+                                    world.Add(cube);
                                 }
-
-                            }
-                            else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID))
-                            {
-                                if (cube.Mass == 0)
-                                {
-                                    world.ListOfFood.Remove(cube.GetID);
-                                    foodEaten++;
-                                }
-                                else
-                                {
-                                    world.ListOfFood.Remove(cube.GetID);
-                                    world.ListOfFood[cube.GetID] = cube;
-                                }                                
-                            }
-                            else
-                            {
-                                world.Add(cube);
                             }
                         }
                     }
                 }
-            
             }
+            
             Network.i_want_more_data(currentState);
         }
 
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            //
-              //      MessageBox.Show("space pressed");
-
-
-            //{
-            //    Network.Send(currentState.workSocket, "(split, " + (MouseX).ToString() + ", " + (MouseY).ToString() + ")\n");
-            //}
-        }
-
-
+        /// <summary>
+        /// Constantly updates x and y coordinates of mouse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void OnMouseMove(object sender, MouseEventArgs e)
         {
             MouseX = e.X;
             MouseY = e.Y;
         }
 
-        private void foodtextbox_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// When space is pressed sends split request to server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
             {
-                
+                Network.Send(currentState.workSocket, "(split, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
             }
         }
 
-        private void food_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Paints the world and cube
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void OnPaint(object sender, PaintEventArgs e)
         {
-            if (Connected)
+            if (Connected && playerAlive)
             {
+                //base.Update();
                 lock (world)
                 {
                     foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
@@ -294,7 +291,7 @@ namespace AgCubioView
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
                     {
                         Cube cube = c.Value;
-                        if (cube.GetName() == playerName)
+                        if (cube.GetID == playerCube.GetID)
                         {
                             playerMass = cube.GetMass();
                             if (playerMass == 0)
@@ -342,6 +339,9 @@ namespace AgCubioView
 
                     }
                 }
+            }
+            else
+            {
             }
         }
     }

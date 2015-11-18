@@ -82,7 +82,6 @@
             this.ServerLabel.Size = new System.Drawing.Size(102, 31);
             this.ServerLabel.TabIndex = 2;
             this.ServerLabel.Text = "Server:";
-            this.ServerLabel.Click += new System.EventHandler(this.label2_Click);
             // 
             // ServerTextBox
             // 
@@ -184,7 +183,6 @@
             this.food.Size = new System.Drawing.Size(62, 13);
             this.food.TabIndex = 13;
             this.food.Text = "Food Eaten";
-            this.food.Click += new System.EventHandler(this.food_Click);
             // 
             // foodtextbox
             // 
@@ -194,7 +192,6 @@
             this.foodtextbox.Size = new System.Drawing.Size(13, 13);
             this.foodtextbox.TabIndex = 14;
             this.foodtextbox.Text = "0";
-            this.foodtextbox.Click += new System.EventHandler(this.foodtextbox_Click);
             // 
             // MassLabel
             // 
@@ -227,7 +224,6 @@
             this.playerseatenlabel.Size = new System.Drawing.Size(72, 13);
             this.playerseatenlabel.TabIndex = 17;
             this.playerseatenlabel.Text = "Players Eaten";
-            this.playerseatenlabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // playerseatentextbox
             // 
