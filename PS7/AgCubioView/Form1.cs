@@ -18,6 +18,7 @@ using NetworkController;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace AgCubioView
 {
@@ -27,8 +28,9 @@ namespace AgCubioView
         private State currentState = new State();
         private string firstCube;
         private string playerName;
-        private int FoodCount = 0;
+        private Stopwatch timer = new Stopwatch();
         private bool Connected = false;
+        private bool playerAlive;
         private int MouseX;
         private int MouseY;
         private int foodEaten = 0;
@@ -144,6 +146,8 @@ namespace AgCubioView
             playerName = PlayerNameTextBox.Text;
             Connected = true;
             gameStarted = true;
+            playerAlive = true;
+            timer.Start();
         }
 
         /// <summary>
@@ -195,7 +199,6 @@ namespace AgCubioView
 
                             if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
                             {
-
                                 if (cube.Mass == 0)
                                 {
                                     world.ListOfPlayers.Remove(cube.GetID);
@@ -225,7 +228,6 @@ namespace AgCubioView
                             {
                                 world.Add(cube);
                             }
-
                         }
                     }
                 }
@@ -250,7 +252,6 @@ namespace AgCubioView
         {
             MouseX = e.X;
             MouseY = e.Y;
-            
         }
 
         private void foodtextbox_Click(object sender, EventArgs e)
@@ -282,16 +283,28 @@ namespace AgCubioView
             {
                 lock (world)
                 {
+                    foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
+                    {
+                        Cube cube = c.Value;
+                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
+                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
+                        base.Invalidate();
+                    }
 
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
                     {
                         Cube cube = c.Value;
-                        if(cube.GetName() == playerName)
+                        if (cube.GetName() == playerName)
                         {
                             playerMass = cube.GetMass();
+                            if (playerMass == 0)
+                            {
+                                playerAlive = false;
+                                timer.Stop();
+                            }
                         }
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
-                        RectangleF rectangle = new RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() *3, cube.GetWidth()*3);
+                        RectangleF rectangle = new RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
                         e.Graphics.FillRectangle(brush, rectangle);
 
                         Font font = new Font("Arial", cube.GetWidth() / 4);
@@ -299,14 +312,6 @@ namespace AgCubioView
                         stringFormat.Alignment = StringAlignment.Center;
                         stringFormat.LineAlignment = StringAlignment.Center;
                         e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
-                    }
-
-                    foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
-                    {
-                        Cube cube = c.Value;
-                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
-                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
-                        base.Invalidate();
                     }
 
                     try
@@ -322,6 +327,15 @@ namespace AgCubioView
                         this.playerseatentextbox.Text = playersEaten.ToString();
                         this.playerseatentextbox.Invalidate();
                         this.playerseatentextbox.Update();
+
+                        int minutes = (int)timer.Elapsed.Minutes;
+                        int totalSeconds = (int)timer.Elapsed.Seconds;
+                        int seconds = totalSeconds % 60;
+                        string time = minutes + ":" + seconds;
+
+                        this.timealivetext.Text = time;
+                        this.timealivetext.Invalidate();
+                        this.timealivetext.Update();
                     }
                     catch(Exception excep)
                     {

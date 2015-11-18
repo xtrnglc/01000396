@@ -48,6 +48,8 @@
             this.masstextright = new System.Windows.Forms.Label();
             this.playerseatenlabel = new System.Windows.Forms.Label();
             this.playerseatentextbox = new System.Windows.Forms.Label();
+            this.TimeAliveLabel = new System.Windows.Forms.Label();
+            this.timealivetext = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -236,11 +238,31 @@
             this.playerseatentextbox.TabIndex = 18;
             this.playerseatentextbox.Text = "0";
             // 
+            // TimeAliveLabel
+            // 
+            this.TimeAliveLabel.AutoSize = true;
+            this.TimeAliveLabel.Location = new System.Drawing.Point(703, 101);
+            this.TimeAliveLabel.Name = "TimeAliveLabel";
+            this.TimeAliveLabel.Size = new System.Drawing.Size(56, 13);
+            this.TimeAliveLabel.TabIndex = 19;
+            this.TimeAliveLabel.Text = "Time Alive";
+            // 
+            // timealivetext
+            // 
+            this.timealivetext.AutoSize = true;
+            this.timealivetext.Location = new System.Drawing.Point(786, 101);
+            this.timealivetext.Name = "timealivetext";
+            this.timealivetext.Size = new System.Drawing.Size(13, 13);
+            this.timealivetext.TabIndex = 20;
+            this.timealivetext.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(853, 562);
+            this.Controls.Add(this.timealivetext);
+            this.Controls.Add(this.TimeAliveLabel);
             this.Controls.Add(this.playerseatentextbox);
             this.Controls.Add(this.playerseatenlabel);
             this.Controls.Add(this.masstextright);
@@ -295,6 +317,8 @@
         private System.Windows.Forms.Label masstextright;
         private System.Windows.Forms.Label playerseatenlabel;
         private System.Windows.Forms.Label playerseatentextbox;
+        private System.Windows.Forms.Label timealivetext;
+        private System.Windows.Forms.Label TimeAliveLabel;
     }
 }
 
