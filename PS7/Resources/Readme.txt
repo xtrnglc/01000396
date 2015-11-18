@@ -11,7 +11,21 @@ TO START GAME,
 	RESIZE THE FORM BY DRAGGING THE RIGHT BORDER TO THE RIGHT (MAKING IT BIGGER)
 	GAME WILL NOT START OTHERWISE???
 
+	Currently unfinished :(
+
 	Shout out to Sahana, thanks for helping through the struggle
+	
+
+TO DO LIST:
+-PROPERLY IMPLEMENT SPLIT
+-FIX RESIZE BUG
+-FIX EXCEPTION WHEN TRYING TO CONNECT TO NO SERVER
+-IMPLEMENT VIEWPORT
+-IMPLEMENT ENDGAME SCREEN
+
+KNOWN PROBLEMS:
+-FORM DOES NOT REGISTER KEYPRESS EVENT
+-LAGS WHEN SPACE BAR IS PRESSED, SOMETIMES NEW CUBES ARE CREATED
 
 
 11/11/2015
@@ -61,6 +75,7 @@ TO START GAME,
 11/17/15
 	Had to scrap a lot of things. Modified the world class to have two dictionaries that keep track of players and food respectively. Both use ID as keys.
 	Modified the onPaint method to have two different foreach loops iterating over the two dictionaries seperately.
+	Had to add a third callback method which updates the cubes into the dictionaries.
 	There is an small issue with the player cube where the cube is not exactly what is drawn by the onPaint method. There is a small border around the cube close to the top left
 	that is part of the cube but is not filled in with color.
 	There is also a error where to get onPaint to start drawing and the game to correctly start, user must resize the form by dragging the right border to the right
@@ -77,4 +92,3 @@ TO START GAME,
 	Split works correctly on both clients.
 	Does not work otherwise
 
-	

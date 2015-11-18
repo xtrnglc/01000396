@@ -77,6 +77,7 @@ namespace NetworkController
             state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
 
+
             return socket;
         }
 
@@ -151,3 +152,50 @@ namespace NetworkController
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+ try
+        {
+            State state = (State)state_in_an_ar_object.AsyncState;
+            Socket s = state.workSocket;
+
+            int bytes = s.EndReceive(state_in_an_ar_object);
+
+            if (bytes > 0)
+            {
+                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytes));
+
+                Console.Write(state.sb.ToString());
+            }
+
+            else
+            {
+                if (state.sb.Length > 1)
+                {
+                    response = state.sb.ToString();
+                    Console.Write(response);
+                }
+                receiveDone.Set();
+            }
+        }
+        catch (Exception)
+        {
+
+        }
+*/

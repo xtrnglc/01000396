@@ -45,6 +45,7 @@ namespace AgCubioView
             InitializeComponent();
             this.DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
+            this.KeyPreview = true;
             this.PlayerNameTextBox.Text = "Adam";
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
