@@ -72,7 +72,7 @@ namespace NetworkController
             state.connectionCallback = callback;
             int port = 11000;
 
-            TcpClient client = new TcpClient(hostname, port);
+            //TcpClient client = new TcpClient(hostname, port);
 
             state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
@@ -105,10 +105,6 @@ namespace NetworkController
                     // There might be more data, so store the data received so far.
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
                     state.connectionCallback(state);                //Draws player cube
-                    /*
-                    // Get the rest of the data.
-                    client.BeginReceive(state.buffer, 0, State.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);*/
                 }
                 else
                 {
@@ -143,14 +139,13 @@ namespace NetworkController
         {
             try
             {
-                Socket s = (Socket)state_in_an_ar_object;
+                Socket s = (Socket)state_in_an_ar_object.AsyncState;
 
                 int bytesSent = s.EndSend(state_in_an_ar_object);
                 sendDone.Set();
             }
             catch (Exception)
             {
-
             }
         }
     }
