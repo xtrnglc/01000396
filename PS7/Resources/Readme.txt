@@ -3,6 +3,15 @@
 CS 3500
 PS7 - AgCubio
 
+TO START GAME, 
+	START SERVER
+	START CLIENT
+	ENTER PLAYER NAME
+	CLICK CONNECT
+	RESIZE THE FORM BY DRAGGING THE RIGHT BORDER TO THE RIGHT (MAKING IT BIGGER)
+	GAME WILL NOT START OTHERWISE???
+
+
 11/11/2015
 	Program that creates a client that connects to a server to simulate a game similar to Agario.
 	The AgCubio model contains the cube and world classes. So far have not dealt with the world class. 
@@ -46,3 +55,22 @@ PS7 - AgCubio
 	sometimes redraws but it is inconsistent. It also does not remove where the cube has previously been. It looks like the request to move makes the server send new information
 	for the player cube. This is a problem with our implementation because it keeps adding on the same cube but only changes loc_x and loc_y and mass. 
 	Very stuck.
+
+11/17/15
+	Had to scrap a lot of things. Modified the world class to have two dictionaries that keep track of players and food respectively. Both use ID as keys.
+	Modified the onPaint method to have two different foreach loops iterating over the two dictionaries seperately.
+	There is an small issue with the player cube where the cube is not exactly what is drawn by the onPaint method. There is a small border around the cube close to the top left
+	that is part of the cube but is not filled in with color.
+	There is also a error where to get onPaint to start drawing and the game to correctly start, user must resize the form by dragging the right border to the right
+
+	THERE ARE INCONSISTENCIES WITH THE SPLIT REQUEST
+
+	Debugging the code and placing a break point on the Form1_KeyDown method which checks for space bar keypress and sends the split request to the server
+	However the code does not even reach the method. It does not even check or stop at the break point. 
+	To get split working do the following:
+	Start server
+	Start our client from visual studios and connect
+	Start jim's sample client and connect
+	Press spacebar to send split request on our client
+	Split works correctly on both clients.
+	Does not work otherwise
