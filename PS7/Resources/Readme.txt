@@ -11,6 +11,8 @@ TO START GAME,
 	RESIZE THE FORM BY DRAGGING THE RIGHT BORDER TO THE RIGHT (MAKING IT BIGGER)
 	GAME WILL NOT START OTHERWISE???
 
+	Shout out to Sahana, thanks for helping through the struggle
+
 
 11/11/2015
 	Program that creates a client that connects to a server to simulate a game similar to Agario.
@@ -74,3 +76,5 @@ TO START GAME,
 	Press spacebar to send split request on our client
 	Split works correctly on both clients.
 	Does not work otherwise
+
+	
