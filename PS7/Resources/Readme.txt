@@ -13,7 +13,7 @@ TO START GAME,
 
 	Currently unfinished :(
 
-	Shout out to Sahana, thanks for helping through the struggle
+	Shout out to the TAs, Yash, Sahana, Matthew, Christyn thanks for helping through the struggle
 	
 
 TO DO LIST:
@@ -24,7 +24,7 @@ TO DO LIST:
 -IMPLEMENT ENDGAME SCREEN
 
 KNOWN PROBLEMS:
--FORM DOES NOT REGISTER KEYPRESS EVENT
+-NEEDS BREAKPOINT IN ORDER TO SPLIT CORRECTLY
 -LAGS WHEN SPACE BAR IS PRESSED, SOMETIMES NEW CUBES ARE CREATED
 
 
