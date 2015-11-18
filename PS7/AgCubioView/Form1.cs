@@ -35,7 +35,7 @@ namespace AgCubioView
         int counter = 0;
         private bool gameStarted, playerDrawn = false;
         private bool moveSent = false;
-        //string[] substrings = new string[1000000];
+        
 
         public Form1()
         {
@@ -43,6 +43,10 @@ namespace AgCubioView
             this.DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
             this.PlayerNameTextBox.Text = "Adam";
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.DoubleBuffer, true);
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -150,71 +154,97 @@ namespace AgCubioView
         private void SecondCallBack(State state)
         {
             currentState = state;
-            firstCube = state.sb.ToString();
+            firstCube = currentState.sb.ToString();
             string [] substrings = Regex.Split(firstCube, "\n");
             playerDrawn = true;
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
             substrings[count] = null;
-            AddCubes(substrings);
-            DrawCubes();
+            currentState.connectionCallback = ThirdCallBack;
             currentState.sb.Clear();
             currentState.sb.Append(partialCube);
             Network.i_want_more_data(currentState);          
         }
 
-        /// <summary>
-        /// Adds cubes to the world
-        /// </summary>
-        /// <param name="JSON"></param>
-        public void AddCubes(string [] JSON)
+        private void ThirdCallBack(State state)
         {
-            lock (world)
-            foreach (string entry in JSON)
+            currentState = state;
+            string dataString = state.sb.ToString();
+            string[] substrings = Regex.Split(firstCube, "\n");
+
+            foreach (string entry in substrings)
             {
                 if (entry != null)
                 {
                     Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
-
-                        lock (world)
+                    {
+                        world.Add(cube);
+                        if (cube.GetFood() == true)
                         {
-                            //for (int x = 0; x < world.WorldPopulation.Count; x++)
-                            //{
-                            //    if (world.WorldPopulation.ElementAt(x).GetName() == playerName)
-                            //    {
-                            //        Cube c = world.WorldPopulation.ElementAt(x);
-                            //        world.WorldPopulation.Remove(c);
-                            //        x = world.WorldPopulation.Count + 1;
-                            //    }
-                                
-                            //}
-                            world.Add(cube);
-                        }  
+                            if (world.ListOfFood.Count == 0)
+                            {
+                                world.Add(cube);
+                            }
+                        }
+                        if (cube.GetFood() == false)
+                        {
+                            if (world.ListOfPlayers.Count == 0)
+                            {
+                                world.Add(cube);
+                            }
+                        }
+
+                        if (cube.GetFood() == false)
+                        {
+                            foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
+                            {
+                                if (c.Key == cube.GetID)
+                                {
+                                    world.ListOfPlayers.Remove(c.Key);
+                                }
+                                world.Add(cube);
+                            }
+                        }
+                        else
+                        {
+                            foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
+                            {
+                                if (c.Key == cube.GetID)
+                                {
+                                    world.ListOfFood.Remove(c.Key);
+                                }
+                                world.Add(cube);
+                            }
+                        }
                     }
+                }
             }
+            Network.i_want_more_data(currentState);
         }
+
+        
 
         /// <summary>
         /// Draw all the cubes that are part of the world
         /// </summary>
         private void DrawCubes()
         {
-            lock (world)
-            {
-                foreach (Cube cube in world.WorldPopulation)
-                {
+            //lock (world)
+            //{
+            //    foreach (Cube cube in world.List)
+            //    {
                     
-                    DrawCube(cube);
-                    if (cube.GetFood())
-                    {
-                        FoodCount += 1;
-                    }
-                    else
-                    {
-                        //Console.WriteLine("HERE: X = " + cube.GetX().ToString() + ", Y = " + cube.GetY().ToString());
-                    }
-                }
-            }
+            //        DrawCube(cube);
+            //        if (cube.GetFood())
+            //        {
+            //            FoodCount += 1;
+            //        }
+            //        else
+            //        {
+            //            //Console.WriteLine("HERE: X = " + cube.GetX().ToString() + ", Y = " + cube.GetY().ToString());
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>
@@ -256,7 +286,7 @@ namespace AgCubioView
         {
             if (Connected && e.KeyChar == 32)
             {
-                Network.Send(currentState.workSocket, "(split, " + ((int)MouseX).ToString() + ", " + ((int)MouseY).ToString() + ")\n");
+                Network.Send(currentState.workSocket, "(split, " + (MouseX).ToString() + ", " + (MouseY).ToString() + ")\n");
             }
         }
 
@@ -269,47 +299,64 @@ namespace AgCubioView
             {  
                 Network.Send(currentState.workSocket, "(move, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n"); 
                 moveSent = true;
-                DrawCubes();
+                //DrawCubes();
             }
         }
 
+        private void foodtextbox_Click(object sender, EventArgs e)
+        {
+
+        }
 
         protected void OnPaint(object sender, PaintEventArgs e)
         {
-            //if (Connected)
-            //{
-            //    lock (world)
-            //    {
-            //        foreach (Cube cube in world.WorldPopulation)
-            //        {
-            //            int cubeColor = (int)cube.GetColor();
-            //            cubeColor = Math.Abs(cubeColor);
-            //            Random rnd = new Random();
-            //            Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
-            //            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-            //            System.Drawing.Graphics formGraphics;
-            //            formGraphics = this.CreateGraphics();
+            if (Connected)
+            {
+                lock (world)
+                {
+                    foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
+                    {
+                        Cube cube = c.Value;
+                        int cubeColor = (int)cube.GetColor();
+                        cubeColor = Math.Abs(cubeColor);
+                        Random rnd = new Random();
+                        Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
+                        System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+                        System.Drawing.Graphics formGraphics;
+                        formGraphics = this.CreateGraphics();
+                        this.foodtextbox.Text = FoodCount.ToString();
+                        if (cube.Food == false)
+                        {
+                            formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
+                            System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
+                            string drawString = cube.GetName();
+                            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", cube.GetWidth() / 4);
+                            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Yellow);
+                            float x = (float)cube.GetX();
+                            float y = (float)cube.GetY() + (cube.GetWidth() / 3);
+                            System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
+                            formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
+                        }
+                        
+                    }
 
-            //            if (cube.Food == false)
-            //            {
-            //                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
-            //                System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
-            //                string drawString = cube.GetName();
-            //                System.Drawing.Font drawFont = new System.Drawing.Font("Arial", cube.GetWidth() / 4);
-            //                System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Yellow);
-            //                float x = (float)cube.GetX();
-            //                float y = (float)cube.GetY() + (cube.GetWidth() / 3);
-            //                System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
-            //                formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat);
-            //            }
-            //            else
-            //            {
-            //                formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
-            //            }
-            //        }
-            //    }
-            //    Invalidate();
-            //}
+                    foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
+                    {
+                        Cube cube = c.Value;
+                        int cubeColor = (int)cube.GetColor();
+                        cubeColor = Math.Abs(cubeColor);
+                        Random rnd = new Random();
+                        Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
+                        System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
+                        System.Drawing.Graphics formGraphics;
+                        formGraphics = this.CreateGraphics();
+                        this.foodtextbox.Text = FoodCount.ToString();
+                        
+                        formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
+                    }
+                }
+                Invalidate();
+            }
         }
     }
 }

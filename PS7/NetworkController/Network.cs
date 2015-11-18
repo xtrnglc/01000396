@@ -72,7 +72,7 @@ namespace NetworkController
             state.connectionCallback = callback;
             int port = 11000;
 
-            //TcpClient client = new TcpClient(hostname, port);
+            TcpClient client = new TcpClient(hostname, port);
 
             state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
@@ -84,7 +84,6 @@ namespace NetworkController
         {
             State state = (State)state_in_an_ar_object.AsyncState;
             state.connectionCallback(state);                //Calls the callback method from View and sends player name
-
 
             state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
         }
@@ -105,10 +104,6 @@ namespace NetworkController
                 {
                     // There might be more data, so store the data received so far.
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-                   if (state.sb.ToString().Contains("false"))
-                   {
-                        Console.WriteLine("HERE: " + state.sb.ToString());
-                   }
                     state.connectionCallback(state);                //Draws player cube
                     /*
                     // Get the rest of the data.
@@ -117,7 +112,7 @@ namespace NetworkController
                 }
                 else
                 {
-                    //i_want_more_data(state);
+                    i_want_more_data(state);
                 }
             }
             catch (Exception e)
@@ -125,6 +120,8 @@ namespace NetworkController
                 Console.WriteLine(e.ToString());
             }
         }
+
+        
 
         public static void i_want_more_data(State s)
         {
@@ -134,9 +131,8 @@ namespace NetworkController
         public static void Send(Socket socket, String data)
         {
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-            
+
             socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
-            
         }
 
         /// <summary>
@@ -147,14 +143,9 @@ namespace NetworkController
         {
             try
             {
-                Socket s = (Socket)state_in_an_ar_object.AsyncState;
-                int bytesSent = s.EndSend(state_in_an_ar_object);
-                if (bytesSent == 0)
-                {
-                    s.Shutdown(SocketShutdown.Send);
+                Socket s = (Socket)state_in_an_ar_object;
 
-                    s.Disconnect(true);
-                }
+                int bytesSent = s.EndSend(state_in_an_ar_object);
                 sendDone.Set();
             }
             catch (Exception)

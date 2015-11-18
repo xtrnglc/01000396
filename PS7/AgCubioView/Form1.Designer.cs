@@ -189,6 +189,7 @@
             this.foodtextbox.Size = new System.Drawing.Size(13, 13);
             this.foodtextbox.TabIndex = 14;
             this.foodtextbox.Text = "0";
+            this.foodtextbox.Click += new System.EventHandler(this.foodtextbox_Click);
             // 
             // MassLabel
             // 

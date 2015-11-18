@@ -104,6 +104,10 @@ namespace AgCubio
         {
             return Food;
         }
+        public int GetID
+        {
+            get { return (int)uid; }
+        }
     }
 
     /// <summary>
@@ -116,7 +120,8 @@ namespace AgCubio
         /// </summary>
         public readonly int Width;
         public readonly int Height;
-        public HashSet<Cube> WorldPopulation;
+        public Dictionary<int, Cube> ListOfPlayers;
+        public Dictionary<int, Cube> ListOfFood;
 
         /// <summary>
         /// Return the Height of the World
@@ -134,9 +139,19 @@ namespace AgCubio
             get { return Width; }
         }
 
+        
+
         public void Add(Cube c)
         {
-            WorldPopulation.Add(c);
+            if (c.GetFood() == true)
+            {
+                ListOfFood.Add(c.GetID, c);
+            }
+            else
+            {
+                ListOfPlayers.Add(c.GetID, c);
+            }
+            
         }
 
         /// <summary>
@@ -148,7 +163,8 @@ namespace AgCubio
         {
             Width = 1000;
             Height = 1000;
-            WorldPopulation = new HashSet<Cube>();
+            ListOfPlayers = new Dictionary<int, Cube>();
+            ListOfFood = new Dictionary<int, Cube>();
         }
     }
 }
