@@ -191,15 +191,28 @@ namespace AgCubioView
                             if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
                             {
 
-                                world.ListOfPlayers.Remove(cube.GetID);
-                                world.ListOfPlayers[cube.GetID] = cube;
+                                if (cube.Mass == 0)
+                                {
+                                    world.ListOfPlayers.Remove(cube.GetID);
+                                }
+                                else
+                                {
+                                    world.ListOfPlayers.Remove(cube.GetID);
+                                    world.ListOfPlayers[cube.GetID] = cube;
+                                }
 
                             }
                             else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID))
                             {
-
-                                world.ListOfFood.Remove(cube.GetID);  
-                                world.ListOfFood[cube.GetID] = cube;
+                                if (cube.Mass == 0)
+                                {
+                                    world.ListOfFood.Remove(cube.GetID);
+                                }
+                                else
+                                {
+                                    world.ListOfFood.Remove(cube.GetID);
+                                    world.ListOfFood[cube.GetID] = cube;
+                                }                                
                             }
                             else
                             {
@@ -213,66 +226,6 @@ namespace AgCubioView
             }
             Network.i_want_more_data(currentState);
         }
-
-        
-
-        /// <summary>
-        /// Draw all the cubes that are part of the world
-        /// </summary>
-        private void DrawCubes()
-        {
-            //lock (world)
-            //{
-            //    foreach (Cube cube in world.List)
-            //    {
-                    
-            //        DrawCube(cube);
-            //        if (cube.GetFood())
-            //        {
-            //            FoodCount += 1;
-            //        }
-            //        else
-            //        {
-            //            //Console.WriteLine("HERE: X = " + cube.GetX().ToString() + ", Y = " + cube.GetY().ToString());
-            //        }
-            //    }
-            //}
-        }
-
-        /// <summary>
-        /// Draw a cube
-        /// </summary>
-        /// <param name="cube"></param>
-        //private void DrawCube(Cube cube)
-        //{
-        //    int cubeColor = (int)cube.GetColor();
-        //    cubeColor = Math.Abs(cubeColor);
-        //    Random rnd = new Random();
-        //    //Color color = Color.FromArgb(255, Math.Abs((cubeColor * rnd.Next()) % 255), Math.Abs((cubeColor + rnd.Next()) % 255), (Math.Abs(cubeColor - rnd.Next())) % 255);
-        //    Color color = Color.FromArgb(255, (cubeColor + 100) % 255, (cubeColor / 2) % 255, Math.Abs(cubeColor - 50) % 255);
-        //    System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(color);
-        //    System.Drawing.Graphics formGraphics;
-        //    formGraphics = this.CreateGraphics();
-            
-        //    if (cube.Food == false)
-        //    {
-        //        formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth(), cube.GetWidth()));
-        //        System.Drawing.Graphics formGraphics2 = this.CreateGraphics();
-        //        string drawString = cube.GetName();
-        //        System.Drawing.Font drawFont = new System.Drawing.Font("Arial", cube.GetWidth() / 4);
-        //        System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Yellow);
-        //        float x = (float)cube.GetX();
-        //        float y = (float)cube.GetY() + (cube.GetWidth() / 3);
-        //        System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat();
-        //        formGraphics2.DrawString(drawString, drawFont, drawBrush, x, y, drawFormat); 
-        //    }
-        //    else
-        //    {
-        //        formGraphics.FillRectangle(myBrush, new Rectangle((int)cube.loc_x, (int)cube.loc_y, cube.GetWidth() + 2, cube.GetWidth() + 2));
-        //    }
-            
-        //}
-
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -291,7 +244,6 @@ namespace AgCubioView
             {  
                 Network.Send(currentState.workSocket, "(move, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n"); 
                 moveSent = true;
-                //DrawCubes();
             }
         }
 
@@ -308,30 +260,27 @@ namespace AgCubioView
                 {
 
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
-                        
                     {
                         Cube cube = c.Value;
-                        // Draws the actual cube
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
                         RectangleF rectangle = new RectangleF((float)cube.loc_x, (float)cube.loc_y, cube.GetWidth(), cube.GetWidth());
+                        Console.WriteLine(cube.loc_x + "    " + cube.loc_y);
                         e.Graphics.FillRectangle(brush, rectangle);
 
-                        // Deals with name on cube
                         Font font = new Font("Arial", cube.GetWidth() / 4);
                         StringFormat stringFormat = new StringFormat();
                         stringFormat.Alignment = StringAlignment.Center;
                         stringFormat.LineAlignment = StringAlignment.Center;
                         e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
                     }
-                    // Draw food cubes
+
                     foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
                     {
                         Cube cube = c.Value;
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
-                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 5, 5);
+                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
                         base.Invalidate();
                     }
-
                 }
             }
         }
