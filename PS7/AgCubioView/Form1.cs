@@ -309,6 +309,7 @@ namespace AgCubioView
         {
             if (e.KeyCode == Keys.Space)
             {
+                //Grader, place a break point here then try and hit space. After stepping through once then possible to remove breakpoint to make game run smoothly
                 Network.Send(currentState.workSocket, "(split, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
             }
         }
