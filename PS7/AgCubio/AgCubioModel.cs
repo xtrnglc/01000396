@@ -100,10 +100,17 @@ namespace AgCubio
             return argb_color;
         }
 
+        /// <summary>
+        /// Returns status, food or not food
+        /// </summary>
+        /// <returns></returns>
         public bool GetFood()
         {
             return Food;
         }
+        /// <summary>
+        /// Returns unique id
+        /// </summary>
         public int GetID
         {
             get { return (int)uid; }
@@ -140,7 +147,10 @@ namespace AgCubio
         }
 
         
-
+        /// <summary>
+        /// Adds cube to respective world
+        /// </summary>
+        /// <param name="c"></param>
         public void Add(Cube c)
         {
             if (c.GetFood() == true)

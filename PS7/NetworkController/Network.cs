@@ -81,6 +81,10 @@ namespace NetworkController
             return socket;
         }
 
+        /// <summary>
+        /// Network code that begins receiving data and calls call back to send player name
+        /// </summary>
+        /// <param name="state_in_an_ar_object"></param>
         public static void Connected_to_Server(IAsyncResult state_in_an_ar_object)
         {
             State state = (State)state_in_an_ar_object.AsyncState;
@@ -89,6 +93,10 @@ namespace NetworkController
             state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
         }
 
+        /// <summary>
+        /// Network code to receive data and call callback method to add cubes to world
+        /// </summary>
+        /// <param name="state_in_an_ar_object"></param>
         public static void ReceiveCallback(IAsyncResult state_in_an_ar_object)
         {
             try
@@ -119,12 +127,20 @@ namespace NetworkController
         }
 
         
-
+        /// <summary>
+        /// Network code to request more data from server
+        /// </summary>
+        /// <param name="s"></param>
         public static void i_want_more_data(State s)
         {
             s.workSocket.BeginReceive(s.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), s);
         }
 
+        /// <summary>
+        /// Network code to send data to server
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="data"></param>
         public static void Send(Socket socket, String data)
         {
             byte[] byteData = Encoding.ASCII.GetBytes(data);

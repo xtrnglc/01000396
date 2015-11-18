@@ -24,22 +24,66 @@ namespace AgCubioView
 {
     public partial class Form1 : Form
     {
+        /// <summary>
+        /// World to keep track of cubes
+        /// </summary>
         private World world = new World();
+        /// <summary>
+        /// Current state to keep track of sockets and callback methods
+        /// </summary>
         private State currentState = new State();
+        /// <summary>
+        /// Not really needed but too lazy to fix
+        /// </summary>
         private string firstCube;
+        /// <summary>
+        /// Player'sname
+        /// </summary>
         private string playerName;
+        /// <summary>
+        /// Player's cube
+        /// </summary>
         private Cube playerCube;
+        /// <summary>
+        /// Timer 
+        /// </summary>
         private Stopwatch timer = new Stopwatch();
+        /// <summary>
+        /// Connection status
+        /// </summary>
         private bool Connected = false;
+        /// <summary>
+        /// Alive status
+        /// </summary>
         private bool playerAlive;
+        /// <summary>
+        /// X location of mouse ppinter
+        /// </summary>
         private int MouseX;
+        /// <summary>
+        /// Y location of mouse pointer
+        /// </summary>
         private int MouseY;
+        /// <summary>
+        /// Number of food eaten
+        /// </summary>
         private int foodEaten = 0;
+        /// <summary>
+        /// Bools for game start
+        /// </summary>
         private bool gameStarted, playerDrawn = false;
+        /// <summary>
+        /// Number of other players eaten
+        /// </summary>
         private int playersEaten = 0;
+        /// <summary>
+        /// Current player mass
+        /// </summary>
         private int playerMass;
         
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -53,27 +97,27 @@ namespace AgCubioView
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
+        /// <summary>
+        /// Initial load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "AgCubio";
         }
 
-
-        private void PlayerNameTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        /// <summary>
+        /// Disconnects from server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if(Connected)
             {
-                Network.Send(currentState.workSocket, string.Empty);
+                this.currentState.workSocket.Disconnect(false);
             }
-        }
-
-        private void Form1_Closed(object sender, System.EventArgs e)
-        {
-            MessageBox.Show("hey");
         }
 
         /// <summary>
