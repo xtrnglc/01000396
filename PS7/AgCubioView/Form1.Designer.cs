@@ -46,6 +46,8 @@
             this.MassLabel = new System.Windows.Forms.Label();
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.masstextright = new System.Windows.Forms.Label();
+            this.playerseatenlabel = new System.Windows.Forms.Label();
+            this.playerseatentextbox = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -175,11 +177,12 @@
             // food
             // 
             this.food.AutoSize = true;
-            this.food.Location = new System.Drawing.Point(733, 28);
+            this.food.Location = new System.Drawing.Point(703, 28);
             this.food.Name = "food";
-            this.food.Size = new System.Drawing.Size(31, 13);
+            this.food.Size = new System.Drawing.Size(62, 13);
             this.food.TabIndex = 13;
-            this.food.Text = "Food";
+            this.food.Text = "Food Eaten";
+            this.food.Click += new System.EventHandler(this.food_Click);
             // 
             // foodtextbox
             // 
@@ -214,11 +217,32 @@
             this.masstextright.TabIndex = 16;
             this.masstextright.Text = "0";
             // 
+            // playerseatenlabel
+            // 
+            this.playerseatenlabel.AutoSize = true;
+            this.playerseatenlabel.Location = new System.Drawing.Point(703, 79);
+            this.playerseatenlabel.Name = "playerseatenlabel";
+            this.playerseatenlabel.Size = new System.Drawing.Size(72, 13);
+            this.playerseatenlabel.TabIndex = 17;
+            this.playerseatenlabel.Text = "Players Eaten";
+            this.playerseatenlabel.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // playerseatentextbox
+            // 
+            this.playerseatentextbox.AutoSize = true;
+            this.playerseatentextbox.Location = new System.Drawing.Point(786, 79);
+            this.playerseatentextbox.Name = "playerseatentextbox";
+            this.playerseatentextbox.Size = new System.Drawing.Size(13, 13);
+            this.playerseatentextbox.TabIndex = 18;
+            this.playerseatentextbox.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(853, 562);
+            this.Controls.Add(this.playerseatentextbox);
+            this.Controls.Add(this.playerseatenlabel);
             this.Controls.Add(this.masstextright);
             this.Controls.Add(this.MassLabel);
             this.Controls.Add(this.foodtextbox);
@@ -241,7 +265,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
@@ -269,6 +293,8 @@
         private System.Windows.Forms.Label MassLabel;
         private System.IO.FileSystemWatcher fileSystemWatcher1;
         private System.Windows.Forms.Label masstextright;
+        private System.Windows.Forms.Label playerseatenlabel;
+        private System.Windows.Forms.Label playerseatentextbox;
     }
 }
 

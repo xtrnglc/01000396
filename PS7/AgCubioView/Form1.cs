@@ -25,16 +25,16 @@ namespace AgCubioView
     {
         private World world = new World();
         private State currentState = new State();
-        private bool firstConnection = true;
         private string firstCube;
         private string playerName;
         private int FoodCount = 0;
         private bool Connected = false;
         private int MouseX;
         private int MouseY;
-        int counter = 0;
+        private int foodEaten = 0;
         private bool gameStarted, playerDrawn = false;
-        private bool moveSent = false;
+        private int playersEaten = 0;
+        private int playerMass;
         
 
         public Form1()
@@ -182,7 +182,6 @@ namespace AgCubioView
             if (playerDrawn && gameStarted)
             {
                 Network.Send(currentState.workSocket, "(move, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
-                moveSent = true;
             }
 
             lock (world)
@@ -200,6 +199,7 @@ namespace AgCubioView
                                 if (cube.Mass == 0)
                                 {
                                     world.ListOfPlayers.Remove(cube.GetID);
+                                    playersEaten++;
                                 }
                                 else
                                 {
@@ -213,6 +213,7 @@ namespace AgCubioView
                                 if (cube.Mass == 0)
                                 {
                                     world.ListOfFood.Remove(cube.GetID);
+                                    foodEaten++;
                                 }
                                 else
                                 {
@@ -235,10 +236,13 @@ namespace AgCubioView
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (Connected && e.KeyChar == 32)
-            {
-                Network.Send(currentState.workSocket, "(split, " + (MouseX).ToString() + ", " + (MouseY).ToString() + ")\n");
-            }
+            //
+              //      MessageBox.Show("space pressed");
+
+
+            //{
+            //    Network.Send(currentState.workSocket, "(split, " + (MouseX).ToString() + ", " + (MouseY).ToString() + ")\n");
+            //}
         }
 
 
@@ -254,6 +258,24 @@ namespace AgCubioView
 
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                
+            }
+        }
+
+        private void food_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         protected void OnPaint(object sender, PaintEventArgs e)
         {
             if (Connected)
@@ -264,9 +286,12 @@ namespace AgCubioView
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
                     {
                         Cube cube = c.Value;
+                        if(cube.GetName() == playerName)
+                        {
+                            playerMass = cube.GetMass();
+                        }
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
                         RectangleF rectangle = new RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() *3, cube.GetWidth()*3);
-                        Console.WriteLine(cube.loc_x + "    " + cube.loc_y);
                         e.Graphics.FillRectangle(brush, rectangle);
 
                         Font font = new Font("Arial", cube.GetWidth() / 4);
@@ -282,6 +307,25 @@ namespace AgCubioView
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
                         e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
                         base.Invalidate();
+                    }
+
+                    try
+                    {
+                        this.masstextright.Text = playerMass.ToString();
+                        this.masstextright.Invalidate();
+                        this.masstextright.Update();
+
+                        this.foodtextbox.Text = foodEaten.ToString();
+                        this.foodtextbox.Invalidate();
+                        this.foodtextbox.Update();
+
+                        this.playerseatentextbox.Text = playersEaten.ToString();
+                        this.playerseatentextbox.Invalidate();
+                        this.playerseatentextbox.Update();
+                    }
+                    catch(Exception excep)
+                    {
+
                     }
                 }
             }
