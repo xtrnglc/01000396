@@ -325,6 +325,7 @@ namespace AgCubioView
                 //base.Update();
                 lock (world)
                 {
+                    
                     foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
                     {
                         Cube cube = c.Value;
@@ -385,8 +386,9 @@ namespace AgCubioView
                     }
                 }
             }
-            else
+            else if(Connected && !playerAlive)
             {
+                MessageBox.Show("You have died");
             }
         }
     }
