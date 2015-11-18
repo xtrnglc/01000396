@@ -90,5 +90,9 @@ KNOWN PROBLEMS:
 	Start jim's sample client and connect
 	Press spacebar to send split request on our client
 	Split works correctly on both clients.
-	Does not work otherwise
+	
+	or
+
+	Place a breakpoint at Form1_KeyDown method
+	anywhere between lines 308 and 314, step through with f10 and the split works fine
 
