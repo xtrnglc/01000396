@@ -3,8 +3,6 @@
 CS 3500
 PS7 - AgCubio
 
-test
-
 TO START GAME, 
 	START SERVER
 	START CLIENT

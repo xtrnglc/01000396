@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Reso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgCubioView", "AgCubioView\AgCubioView.csproj", "{17FCAFD1-2758-4446-9BC8-AE5DEDE27621}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{5E517C3A-9397-4EA3-B5A9-44B64D50C724}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{17FCAFD1-2758-4446-9BC8-AE5DEDE27621}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17FCAFD1-2758-4446-9BC8-AE5DEDE27621}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17FCAFD1-2758-4446-9BC8-AE5DEDE27621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E517C3A-9397-4EA3-B5A9-44B64D50C724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E517C3A-9397-4EA3-B5A9-44B64D50C724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E517C3A-9397-4EA3-B5A9-44B64D50C724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E517C3A-9397-4EA3-B5A9-44B64D50C724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
