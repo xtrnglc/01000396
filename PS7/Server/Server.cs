@@ -15,6 +15,9 @@ namespace Server
 {
     class Server
     {
+        private Dictionary<int, Cube> WorldPlayerCubes = new Dictionary<int, Cube>();
+        private int UID = 5000;
+        
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -65,7 +68,21 @@ namespace Server
         /// </summary>
         private void ReceivePlayer(string data, State state)
         {
-            Cube playerCube = new Cube(50, 50, 34875, 5000, 0, false, data, 1000);
+            UID += 1;       //Makes sure there is a unique ID for all players
+            if (UID > 10000)
+            {
+                UID = 1;
+            }
+            Cube playerCube = new Cube(50, 50, 34875, UID, 0, false, data, 1000);
+            //if the dictionary is empty or if 
+            if (WorldPlayerCubes.Count == 0)
+            {
+                WorldPlayerCubes.Add(UID, playerCube);
+            }
+            else if(WorldPlayerCubes.ContainsKey(UID))
+            {
+                UID = GenerateUID();
+            }
             string message = JsonConvert.SerializeObject(playerCube);
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
@@ -112,6 +129,17 @@ namespace Server
         private void Update ()
         {
 
+        }
+
+        private int GenerateUID()
+        {
+            Random rnd = new Random();
+            int uid = rnd.Next(10000);
+            while (WorldPlayerCubes.ContainsKey(uid))
+            {
+                uid = rnd.Next(10000);
+            }
+            return uid;
         }
     }
 }
