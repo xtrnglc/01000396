@@ -9,6 +9,7 @@ using System.Threading;
 using NetworkController;
 using AgCubio;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Server
 {
@@ -53,7 +54,7 @@ namespace Server
             Console.WriteLine("A new client has connected to the server.");
             string playerName = state.sb.ToString();
             ReceivePlayer(playerName, state);
-            state.connectionCallback = DataFromClient;
+            //state.connectionCallback = DataFromClient;
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Server
         {
             Cube playerCube = new Cube(50, 50, 34875, 5000, 0, false, data, 1000);
             string message = JsonConvert.SerializeObject(playerCube);
+            state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
             
             
@@ -77,6 +79,26 @@ namespace Server
         private void DataFromClient(State state)
         {
 
+            string commands = state.sb.ToString();
+            string[] substrings = Regex.Split(commands, "\n");
+            int count = substrings.Count();
+            state.sb.Clear();
+            state.sb.Append(substrings[count - 1]);
+            substrings[count - 1] = null;
+            foreach (string command in substrings)
+            {
+                if(command != null)
+                {
+                    if(command.StartsWith("(split"))
+                    {
+                        //split the cube
+                    }
+                    else
+                    {
+                        //move the cube
+                    }
+                }
+            }
         }
 
         /// <summary>
