@@ -52,7 +52,7 @@ namespace Server
         {
             Console.WriteLine("A new client has connected to the server.");
             string playerName = state.sb.ToString();
-            ReceivePlayer(playerName);
+            ReceivePlayer(playerName, state);
             state.connectionCallback = DataFromClient;
         }
 
@@ -62,10 +62,13 @@ namespace Server
         /// Sets up the callback for handling move/split requests and request new data from the socket
         /// sends the current state of the world to the player
         /// </summary>
-        private void ReceivePlayer(string data)
+        private void ReceivePlayer(string data, State state)
         {
             Cube playerCube = new Cube(50, 50, 34875, 5000, 0, false, data, 1000);
             string message = JsonConvert.SerializeObject(playerCube);
+            Network.Send(state.workSocket, message);
+            
+            
         }
 
         /// <summary>

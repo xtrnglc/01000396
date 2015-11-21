@@ -238,7 +238,7 @@ namespace NetworkController
 
         public static void ReadCallback(IAsyncResult ar)
         {
-            Console.WriteLine("here");
+            //Console.WriteLine("here");
             String content = String.Empty;
 
             // Retrieve the state object and the handler socket
