@@ -23,8 +23,8 @@ namespace ConsoleTest
             f.Create("text", "duck2", "cdrive\\folder1");
             f.WriteToFile("cdrive\\folder1\\duck2", "YES1");;
             
-            f.Create("text", "duck3", "cdrive");
-            f.WriteToFile("cdrive\\duck3", "1234567890");
+            f.Create("text", "duck4", "cdrive");
+            f.WriteToFile("cdrive\\duck4", "1234567890");
 
             f.Create("text", "duck3", "cdrive\\folder1\\folder2");
             f.WriteToFile("cdrive\\folder1\\folder2\\duck3", "HORSES ARE COOl123");
@@ -40,7 +40,7 @@ namespace ConsoleTest
             f.printSize("cdrive\\folder1");
             Console.Write("cdrive ");
             f.printSize("cdrive");
-            f.Move("cdrive\\folder1\\folder2\\duck3", "cdrive");
+            f.Move("cdrive\\folder1\\folder2\\duck3", "cdrive\\folder1");
             Console.WriteLine("after move \n");
             Console.Write("folder2: ");
             f.printSize("cdrive\\folder1\\folder2");
