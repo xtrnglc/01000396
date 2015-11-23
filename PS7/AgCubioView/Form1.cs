@@ -112,7 +112,7 @@ namespace AgCubioView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)                             
         {
             if(Connected)
             {
@@ -218,7 +218,7 @@ namespace AgCubioView
         /// Stores cubes into dictionaries
         /// </summary>
         /// <param name="state"></param>
-        private void ThirdCallBack(State state)
+        private void ThirdCallBack(State state)                             //THREE CALLBACKS?
         {
             currentState = state;
             string dataString = state.sb.ToString();

@@ -37,7 +37,7 @@ namespace NetworkController
         /// </summary>
         public StringBuilder sb = new StringBuilder();
 
-        public Action<State> connectionCallback;
+        public Action<State> connectionCallback;                             //OH action states. Very interesting.
 
     }
     public static class Network
@@ -57,7 +57,7 @@ namespace NetworkController
         private static TcpListener server;
 
         // One StringSocket per connected client
-        private static List<StringSocket> allSockets;
+        private static List<StringSocket> allSockets;                              //We did not include this here. We put this in server and used socket.
 
         // the name associated with the socket
         private static List<string> user_names;
@@ -83,7 +83,7 @@ namespace NetworkController
 
             //TcpClient client = new TcpClient(hostname, port);
 
-            state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);                             //What happens if you can't connect?
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
 
 
@@ -99,7 +99,7 @@ namespace NetworkController
             State state = (State)state_in_an_ar_object.AsyncState;
             state.connectionCallback(state);                //Calls the callback method from View and sends player name
 
-            state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
+            state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);                              //What happens if the connection gets closed?
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace NetworkController
                 if (bytesRead > 0)
                 {
                     // There might be more data, so store the data received so far.
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));                             //You may get a data overload?
                     state.connectionCallback(state);                //Draws player cube
                 }
                 else

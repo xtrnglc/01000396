@@ -22,14 +22,14 @@ namespace AgCubio
         /// <summary>
         /// variabes for the cube class to keep track of position, color, ID, team ID, name and if it's food or not.
         /// </summary>
-        public double loc_x { get; set; }
+        public double loc_x { get; set; }                               //JSON PROPERTY?
         public double loc_y { get; set; }
         public double argb_color { get; set; }
         public double uid { get; set; }
         public string Name { get; set; }
         public bool Food { get; set; }
         public double Mass { get; set; }
-        public double team_id { get; set; }
+        public double team_id { get; set; }                             //JSON PROPERTY?????
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
@@ -51,7 +51,7 @@ namespace AgCubio
         /// returns the x coorindate of the cube
         /// </summary>
         /// <returns></returns>
-        public double GetX()
+        public double GetX()                             //Could you just use the getter?
         {
             return loc_x;
         }
@@ -127,8 +127,8 @@ namespace AgCubio
         /// </summary>
         public readonly int Width;
         public readonly int Height;
-        public Dictionary<int, Cube> ListOfPlayers;
-        public Dictionary<int, Cube> ListOfFood;
+        public Dictionary<int, Cube> ListOfPlayers;                             //PUBLIC VARIABLES???? WHAAAT.
+        public Dictionary<int, Cube> ListOfFood;                             //Good idea for the food list though.
 
         /// <summary>
         /// Return the Height of the World
