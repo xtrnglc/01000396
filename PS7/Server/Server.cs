@@ -32,7 +32,7 @@ namespace Server
             //build new world
             //start the server
         }
-
+        //comm
         /// <summary>
         /// Populate initial world (with food)
         /// Set up heartbeat of program (use a timer)
