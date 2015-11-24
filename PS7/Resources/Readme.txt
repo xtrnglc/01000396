@@ -3,6 +3,8 @@
 CS 3500
 PS7 - AgCubio
 
+README FOR PS8 AGCUBIO SERVER BELOW HORIZONTAL LINE
+
 TO START GAME, 
 	START SERVER
 	START CLIENT
@@ -96,3 +98,12 @@ KNOWN PROBLEMS:
 	Place a breakpoint at Form1_KeyDown method
 	anywhere between lines 308 and 314, step through with f10 and the split works fine
 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+Readme for PS8 AgCubio server
+
+11/23/2015
+	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
+	We were able to get the server and our client that we wrote to contact each other. We were able to send the player name to the server and the server is able to use it
+	in a callback method in server.cs to create a cube object and serialize it with Json and send it back to the client. However after sending the initial player cube Json string
+	we are having trouble sending the rest of the cubes over.
