@@ -125,10 +125,32 @@ namespace AgCubio
         /// <summary>
         /// Data to hold information about the world, needs to keep track of width, height and how many cubes are there
         /// </summary>
-        public readonly int Width;
-        public readonly int Height;
+        private readonly int Width;
+        private readonly int Height;
         public Dictionary<int, Cube> ListOfPlayers;                             //PUBLIC VARIABLES???? WHAAAT.
         public Dictionary<int, Cube> ListOfFood;                             //Good idea for the food list though.
+        private readonly double topSpeed;
+        private readonly double lowSpeed;
+        private readonly double attritionRate;
+        private readonly double foodValue;
+        private readonly int maxFood;
+        private readonly double minimumSplitMass;
+        private readonly double maximumSplitDistance;
+        private readonly int maximumSplits;
+        private readonly double absorbDistanceDelta;
+
+//Width, Height - the game size of the world
+//Heartbeats per second - how many updates the server should attempt to execute per second. Note: adequate work will simply update the world as fast as possible.
+//Top speed - how fast cubes can move when small
+//Low speed - how fast the biggest cubes move
+//Attrition rate - how fast cubes lose mass
+//Food value - the default mass of food
+//Player start mass - the default starting mass of the player.
+//Max food - how many food to maintain in the world. Server should update one food per heartbeat if below this.
+//Minimum split mass - players are not allowed to split if below this mass
+//Maximum split distance - how far a cube can be "thrown" when split
+//Maximum splits - how many total cubes a single player is allowed. Note: our test server does not implement this. Try setting it to around 10-20.
+//Absorb distance delta - how close cubes have to be in order for the larger to eat the smaller
 
         /// <summary>
         /// Return the Height of the World

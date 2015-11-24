@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using CustomNetworking;
 
 namespace NetworkController
@@ -197,19 +198,14 @@ namespace NetworkController
             Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //state.connectionCallback(state);
             state.connectionCallback = callback;
+            state.workSocket = listener;
             try
             {
                 listener.Bind(localEndPoint);
                 listener.Listen(100);
 
-                while(true)
-                {
-                    allDone.Reset();
-                    Console.WriteLine("Waiting for a connection...");
-                    listener.BeginAccept(new AsyncCallback(Accept_a_New_Client), listener);
-                    allDone.WaitOne();
-                }
-                
+                Console.WriteLine("Waiting for a connection...");
+                listener.BeginAccept(new AsyncCallback(Accept_a_New_Client), state);
             }
             catch (Exception e)
             {
@@ -226,14 +222,20 @@ namespace NetworkController
         public static void Accept_a_New_Client(IAsyncResult ar)
         {
             //Console.WriteLine("here");
-            Socket listener = (Socket)ar.AsyncState;
+            State state = (State)ar.AsyncState;
+            Socket listener = state.workSocket;
             Socket handler = listener.EndAccept(ar);
 
             //listener.BeginAccept(Accept_a_New_Client, listener);
 
-            State state = new State();
-            state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+            State stateHandler = new State();
+            stateHandler.workSocket = handler;
+
+            //state.connectionCallback(state);
+
+            listener.BeginAccept(new AsyncCallback(Accept_a_New_Client), listener);                     //Listens for new clients
+            handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), stateHandler);
+            state.connectionCallback(stateHandler);
         }
 
         public static void ReadCallback(IAsyncResult ar)
