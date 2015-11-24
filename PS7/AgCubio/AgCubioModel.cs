@@ -26,10 +26,11 @@ namespace AgCubio
         public double loc_y { get; set; }
         public double argb_color { get; set; }
         public double uid { get; set; }
-        public string Name { get; set; }
+        public double team_id { get; set; }
         public bool Food { get; set; }
+        public string Name { get; set; }
         public double Mass { get; set; }
-        public double team_id { get; set; }                             //JSON PROPERTY?????
+                                     //JSON PROPERTY?????
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
@@ -42,9 +43,9 @@ namespace AgCubio
             this.argb_color = color;
             this.uid = ID;
             this.Food = food;
+            this.team_id = ID;
             this.Name = name;
             this.Mass = mass;
-            this.team_id = ID;
         }
 
         /// <summary>
@@ -111,9 +112,9 @@ namespace AgCubio
         /// <summary>
         /// Returns unique id
         /// </summary>
-        public int GetID
+        public int GetID()
         {
-            get { return (int)uid; }
+            return (int)uid;
         }
     }
 
@@ -155,11 +156,11 @@ namespace AgCubio
         {
             if (c.GetFood() == true)
             {
-                ListOfFood.Add(c.GetID, c);
+                ListOfFood.Add(c.GetID(), c);
             }
             else
             {
-                ListOfPlayers.Add(c.GetID, c);
+                ListOfPlayers.Add(c.GetID(), c);
             }
             
         }

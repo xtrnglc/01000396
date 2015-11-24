@@ -105,6 +105,7 @@ namespace AgCubioView
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "AgCubio";
+            this.PlayerNameLabel.Visible = true;
         }
 
         /// <summary>
@@ -125,6 +126,7 @@ namespace AgCubioView
         /// </summary>
         private void ConnectMethod()
         {
+            base.Invalidate();
             this.PlayerNameLabel.Visible = false;
             this.PlayerNameTextBox.Visible = false;
             this.ServerLabel.Visible = false;
@@ -245,35 +247,35 @@ namespace AgCubioView
                             Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
                             {
 
-                                if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
+                                if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID()))
                                 {
                                     if (cube.Mass == 0)
                                     {
-                                        if (cube.GetID == playerCube.GetID)
+                                        if (cube.GetID() == playerCube.GetID())
                                         {
                                             playerAlive = false;
                                         }
-                                        world.ListOfPlayers.Remove(cube.GetID);
+                                        world.ListOfPlayers.Remove(cube.GetID());
                                         playersEaten++;
                                     }
                                     else
                                     {
-                                        world.ListOfPlayers.Remove(cube.GetID);
-                                        world.ListOfPlayers[cube.GetID] = cube;
+                                        world.ListOfPlayers.Remove(cube.GetID());
+                                        world.ListOfPlayers[cube.GetID()] = cube;
                                     }
 
                                 }
-                                else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID))
+                                else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID()))
                                 {
                                     if (cube.Mass == 0)
                                     {
-                                        world.ListOfFood.Remove(cube.GetID);
+                                        world.ListOfFood.Remove(cube.GetID());
                                         foodEaten++;
                                     }
                                     else
                                     {
-                                        world.ListOfFood.Remove(cube.GetID);
-                                        world.ListOfFood[cube.GetID] = cube;
+                                        world.ListOfFood.Remove(cube.GetID());
+                                        world.ListOfFood[cube.GetID()] = cube;
                                     }
                                 }
                                 else
@@ -321,8 +323,11 @@ namespace AgCubioView
         /// <param name="e"></param>
         protected void OnPaint(object sender, PaintEventArgs e)
         {
+            //Focus();
+            base.Invalidate();
             if (Connected && playerAlive)
             {
+                
                 //base.Update();
                 lock (world)
                 {
@@ -338,7 +343,7 @@ namespace AgCubioView
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
                     {
                         Cube cube = c.Value;
-                        if (cube.GetID == playerCube.GetID)
+                        if (cube.GetID() == playerCube.GetID())
                         {
                             playerMass = cube.GetMass();
                             if (playerMass == 0)

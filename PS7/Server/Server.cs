@@ -10,13 +10,16 @@ using NetworkController;
 using AgCubio;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace Server
 {
     class Server
     {
         private Dictionary<int, Cube> WorldPlayerCubes = new Dictionary<int, Cube>();
-        private int UID = 5000;
+        private Dictionary<int, Cube> FoodCubes = new Dictionary<int, Cube>();
+        private double UID = 5000.0;
+        private const int MaxFood = 2000;
         
         /// <summary>
         /// Main function, will build new world and start the server
@@ -40,9 +43,7 @@ namespace Server
         /// </summary>
         private void Start()
         {
-            //populate initial world (with food)
-            //set up heartbeat of program (use a timer)
-            //await network client connections
+            System.Timers.Timer aTimer = new System.Timers.Timer();         //gets a timer for the heartbeat, not sure what to do with it
             Network.Server_Awaiting_Client_Loop(HandleConnections);
             Console.WriteLine("here");
         }
@@ -56,8 +57,12 @@ namespace Server
         {
             Console.WriteLine("A new client has connected to the server.");
             string playerName = state.sb.ToString();
+            if (playerName.EndsWith("\n"))
+            {
+                playerName = playerName.Remove(playerName.Length - 1);
+            }
             ReceivePlayer(playerName, state);
-            //state.connectionCallback = DataFromClient;
+            state.connectionCallback = DataFromClient;
         }
 
         /// <summary>
@@ -77,13 +82,13 @@ namespace Server
             //if the dictionary is empty or if 
             if (WorldPlayerCubes.Count == 0)
             {
-                WorldPlayerCubes.Add(UID, playerCube);
+                WorldPlayerCubes.Add((int)UID, playerCube);
             }
-            else if(WorldPlayerCubes.ContainsKey(UID))
+            else if(WorldPlayerCubes.ContainsKey((int)UID))
             {
                 UID = GenerateUID();
             }
-            string message = JsonConvert.SerializeObject(playerCube);
+            string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
             
@@ -128,7 +133,12 @@ namespace Server
         /// </summary>
         private void Update ()
         {
+            //grow new food
+            if (FoodCubes.Count < MaxFood)
+            {
 
+            }
+            
         }
 
         private int GenerateUID()
