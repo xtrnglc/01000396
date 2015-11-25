@@ -25,6 +25,7 @@ namespace Server
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
         private Random R = new Random();
         private World w = new World();
+        private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -168,6 +169,7 @@ namespace Server
             int y;
             int xold;
             int yold;
+            Tuple<int, int> pair;
             Cube temp;
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
@@ -198,21 +200,28 @@ namespace Server
                             sockets.TryGetValue(state.workSocket, out temp);
                             xold = (int)temp.GetX();
                             yold = (int)temp.GetY();
-                            w.ListOfPlayers.Remove(temp.GetID());
+                            
+                            pair = new Tuple<int, int>(x, y);
 
+                                //if (x > xold)
+                                //    temp.loc_x = xold + 1;
+                                //else
+                                //    temp.loc_x = xold - 1;
+                                //if (y > yold)
+                                //    temp.loc_y = yold + 1;
+                                //else
+                                //    temp.loc_y = yold - 1;
+                            if (Destination.ContainsKey(state.workSocket))
+                            {
+                                Destination[state.workSocket] = pair;
+                            }
+                            else
+                            {
+                                Destination.Add(state.workSocket, pair);
+                            }
 
-                            //if (x > xold)
-                            //    temp.loc_x = xold + 1;
-                            //else
-                            //    temp.loc_x = xold - 1;
-                            //if (y > yold)
-                            //    temp.loc_y = yold + 1;
-                            //else
-                            //    temp.loc_y = yold - 1;
-                            temp.loc_x = x;
-                            temp.loc_y = y;
-
-                            w.ListOfPlayers.Add(temp.GetID(), temp);
+                                
+                            
 
                             string msg = JsonConvert.SerializeObject(temp);
                             Network.Send(state.workSocket, msg + "\n");
@@ -235,6 +244,10 @@ namespace Server
         private void Update(Object o, ElapsedEventArgs e)
         {
             string message;
+            int xold;
+            int yold;
+            Cube temp;
+            Tuple<int, int> pair;
 
             //grow new food
             lock (w)
@@ -254,9 +267,34 @@ namespace Server
                         }
                     }
                 }
+
+                
+
                 message = "";
                 if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
                 {
+                    foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
+                    {
+
+                        sockets.TryGetValue(s.Key, out temp);
+
+                        xold = (int)temp.GetX();
+                        yold = (int)temp.GetY();
+                        w.ListOfPlayers.Remove(temp.GetID());
+                        pair = s.Value;
+
+                        if (pair.Item1 > xold)
+                            temp.loc_x = xold + 1;
+                        else
+                            temp.loc_x = xold - 1;
+                        if (pair.Item2 > yold)
+                            temp.loc_y = yold + 1;
+                        else
+                            temp.loc_y = yold - 1;
+
+                        sockets[s.Key] = temp;
+                        w.ListOfPlayers.Add(temp.GetID(), temp);
+                    }
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
                         message += JsonConvert.SerializeObject(c) + "\n";
@@ -267,8 +305,12 @@ namespace Server
                         Network.Send(s, message);
                     }
                 }
-            }
-            
+
+
+
+
+
+            }  
         }
 
         private void generateIntitialFood()
