@@ -364,7 +364,7 @@ namespace AgCubioView
                         StringFormat stringFormat = new StringFormat();
                         stringFormat.Alignment = StringAlignment.Center;
                         stringFormat.LineAlignment = StringAlignment.Center;
-                        e.Graphics.DrawString(cube.Name, font, Brushes.Black, rectangle, stringFormat);
+                        e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
                     }
 
                     try

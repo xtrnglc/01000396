@@ -191,28 +191,15 @@ namespace NetworkController
         /// </summary>
         public static void Server_Awaiting_Client_Loop(Action<State> callback)
         {
-            //byte[] bytes = new Byte[1024];
-            //IPHostEntry ipHostInfo = Dns.Resolve("localhost");
-            //IPAddress ipAddress = ipHostInfo.AddressList[0];
-            //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
             TcpListener listener = new TcpListener(IPAddress.Any, 11000);
             State state = new State();
             connectionCallbackTemp = callback;
-            //server = new TcpListener(IPAddress.Any, 11000);
-            //allSockets = new List<StringSocket>();
-            //user_names = new List<string>();
-            //server.Start();
-            //server.BeginAcceptSocket(Accept_a_New_Client, null);
 
-            //Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //state.connectionCallback(state);
             state.connectionCallback = callback;
             try
             {
                 listener.Start();
-                //listener.Bind(localEndPoint);
-                //listener.Listen(100);
-
+                
                 while(true)
                 {
                     allDone.Reset();
@@ -220,7 +207,6 @@ namespace NetworkController
                     listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
                     allDone.WaitOne();
                 }
-                
             }
             catch (Exception e)
             {
@@ -236,16 +222,24 @@ namespace NetworkController
         /// </summary>
         public static void Accept_a_New_Client(IAsyncResult ar)
         {
-            //Console.WriteLine("here");
-            Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
+            try
+            {
+                //Console.WriteLine("here");
+                Socket listener = (Socket)ar.AsyncState;
+                Socket handler = listener.EndAccept(ar);
 
-            //listener.BeginAccept(Accept_a_New_Client, listener);
+                listener.BeginAccept(Accept_a_New_Client, listener);
 
-            State state = new State();
-            state.workSocket = handler;
-            state.connectionCallback = connectionCallbackTemp;
-            handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+                State state = new State();
+                state.workSocket = handler;
+                state.connectionCallback = connectionCallbackTemp;
+                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         public static void ReadCallback(IAsyncResult ar)

@@ -27,7 +27,7 @@ namespace AgCubio
         public double argb_color { get; set; }
         public double uid { get; set; }
         public double team_id { get; set; }
-        public bool Food { get; set; }
+        public bool food { get; set; }
         public string Name { get; set; }
         public double Mass { get; set; }
                                      //JSON PROPERTY?????
@@ -35,15 +35,15 @@ namespace AgCubio
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
-        public Cube(double x, double y, double color, double ID, double teamID, bool food, string name, double mass)
+        public Cube(double x, double y, double color, double ID, double teamID, bool foodtemp, string name, double mass)
         {
             //{"loc_x":689.0,"loc_y":498.0,"argb_color":-16777216,"uid":5656,"team_id":0,"food":false,"Name":"cow","Mass":1000.0}
             this.loc_x = x;
             this.loc_y = y;
             this.argb_color = color;
             this.uid = ID;
-            this.Food = food;
-            this.team_id = ID;
+            this.food = foodtemp;
+            this.team_id = teamID;
             this.Name = name;
             this.Mass = mass;
         }
@@ -107,7 +107,7 @@ namespace AgCubio
         /// <returns></returns>
         public bool GetFood()
         {
-            return Food;
+            return food;
         }
         /// <summary>
         /// Returns unique id
