@@ -17,16 +17,14 @@ namespace Server
 {
     class Server
     {
-        private Dictionary<int, Cube> PlayerCubes = new Dictionary<int, Cube>();
-        private Dictionary<int, Cube> FoodCubes = new Dictionary<int, Cube>();
         private double UID = 5000.0;
         private const int MaxFood = 2000;
         private List<Socket> playerSockets = new List<Socket>();
-        private World world;
+        
         private Cube Player;
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
         private Random R = new Random();
-
+        private World w = new World();
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -35,10 +33,10 @@ namespace Server
         {
             Server temp = new Server();
             temp.Start();
-
-
-
-
+           
+            
+            
+            
             //build new world
             //start the server
         }
@@ -51,13 +49,12 @@ namespace Server
         private void Start()
         {
             System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
-            
+           
             aTimer.Elapsed += Update;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
             generateIntitialFood();
             Network.Server_Awaiting_Client_Loop(HandleConnections);
-            //Console.WriteLine("here");
         }
 
         /// <summary>
@@ -68,16 +65,22 @@ namespace Server
         private void HandleConnections(State state)
         {
             playerSockets.Add(state.workSocket);
+            string message = "";
             state.connectionCallback = DataFromClient;
             string playerName = state.sb.ToString();
             Console.WriteLine("A new client has connected to the server: ");
             state.sb.Clear();
-
-            if (playerName.EndsWith("\n"))
+            lock (w)
             {
-                playerName = playerName.Remove(playerName.Length - 1);
+                if (playerName.EndsWith("\n"))
+                {
+                    playerName = playerName.Remove(playerName.Length - 1);
+                }
+                
+
+                ReceivePlayer(playerName, state);
             }
-            ReceivePlayer(playerName, state);
+            
 
         }
 
@@ -100,32 +103,58 @@ namespace Server
             Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, 0, false, data, 1000);
             Player = playerCube;
             //if the dictionary is empty or if 
-            if (PlayerCubes.Count == 0)
+            lock (w)
             {
-                PlayerCubes.Add((int)UID, playerCube);
+                if (w.ListOfPlayers.Count == 0)
+                {
+                    w.ListOfPlayers.Add((int)UID, playerCube);
+                }
+                else if (w.ListOfPlayers.ContainsKey((int)UID))
+                {
+                    UID = GenerateUID();
+                    w.ListOfPlayers.Add((int)UID, playerCube);
+                }
+                else
+                {
+                    w.ListOfPlayers.Add((int)UID, playerCube);
+                }
             }
-            else if (PlayerCubes.ContainsKey((int)UID))
-            {
-                UID = GenerateUID();
-                PlayerCubes.Add((int)UID, playerCube);
-            }
+            
 
             sockets.Add(state.workSocket, playerCube);
 
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
-            Console.WriteLine("done");
+            Console.WriteLine("Player add: " + data);
             //Cube randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
             //string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
             //randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
             //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
             //Network.Send(state.workSocket, message2);
 
-            foreach (Cube c in FoodCubes.Values)
+            lock(w)
+            if (sockets.Count > 0 && w.ListOfFood.Count > 0)
             {
-                string msg = JsonConvert.SerializeObject(c) + "\n";
-                Network.Send(state.workSocket, msg);
+                foreach (Socket s in sockets.Keys)
+                {
+                    if (w.ListOfPlayers.Count > 0)
+                    {
+                        foreach (Cube t in w.ListOfPlayers.Values)
+                        {
+                            message += JsonConvert.SerializeObject(t) + "\n";
+                        }
+                        Network.Send(s, message);
+                    }
+                    message = "";
+
+                    foreach (Cube c in w.ListOfFood.Values)
+                    {
+                        message += JsonConvert.SerializeObject(c) + "\n";
+                    }
+
+                    Network.Send(s, message);
+                }
             }
         }
 
@@ -147,6 +176,7 @@ namespace Server
             state.sb.Clear();
             state.sb.Append(substrings[count - 1]);
             substrings[count - 1] = null;
+            if (substrings.Count() > 0)
             foreach (string command in substrings)
             {
                 if (command != null)
@@ -157,27 +187,38 @@ namespace Server
                     }
                     else
                     {
-                        string[] location = command.Split(',');
-                        location[2] = location[2].Substring(0, location[2].Length - 1);
+                        lock (w)
+                        {
+                            string[] location = command.Split(',');
+                            location[2] = location[2].Substring(0, location[2].Length - 1);
+
+                            int.TryParse(location[1], out x);
+                            int.TryParse(location[2], out y);
+
+                            sockets.TryGetValue(state.workSocket, out temp);
+                            xold = (int)temp.GetX();
+                            yold = (int)temp.GetY();
+                            w.ListOfPlayers.Remove(temp.GetID());
+
+
+                            //if (x > xold)
+                            //    temp.loc_x = xold + 1;
+                            //else
+                            //    temp.loc_x = xold - 1;
+                            //if (y > yold)
+                            //    temp.loc_y = yold + 1;
+                            //else
+                            //    temp.loc_y = yold - 1;
+                            temp.loc_x = x;
+                            temp.loc_y = y;
+
+                            w.ListOfPlayers.Add(temp.GetID(), temp);
+
+                            string msg = JsonConvert.SerializeObject(temp);
+                            Network.Send(state.workSocket, msg + "\n");
+                            
+                        }
                         
-                        int.TryParse(location[1], out x);
-                        int.TryParse(location[2], out y);
-
-                        sockets.TryGetValue(state.workSocket, out temp);
-                        PlayerCubes.Remove(temp.GetID());
-
-                        xold = (int)temp.GetX();
-                        yold = (int)temp.GetY();
-
-                        if (x < xold)
-
-                        temp.loc_x = x;
-                        temp.loc_y = y;
-
-                        PlayerCubes.Add(temp.GetID(), temp);
-
-                        string msg = JsonConvert.SerializeObject(temp);
-                        Network.Send(state.workSocket, msg + "\n");
                     }
                 }
             }
@@ -193,31 +234,54 @@ namespace Server
         /// </summary>
         private void Update(Object o, ElapsedEventArgs e)
         {
-            
-            
-            //grow new food
+            string message;
 
-            if (FoodCubes.Count < MaxFood)
+            //grow new food
+            lock (w)
             {
-                Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
-                FoodCubes.Add(randomFood.GetID(), randomFood);
-                string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
-                //Network.Send(state.workSocket, message2);
-                foreach (Socket s in sockets.Keys)
+                if (w.ListOfFood.Count < MaxFood)
                 {
-                    Network.Send(s, message2);
+                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    w.ListOfFood.Add(randomFood.GetID(), randomFood);
+                    message = JsonConvert.SerializeObject(randomFood) + "\n";
+                    
+                    //Network.Send(state.workSocket, message2);
+                    if (sockets.Count > 0)
+                    {
+                        foreach (Socket s in sockets.Keys)
+                        {
+                            Network.Send(s, message);
+                        }
+                    }
+                }
+                message = "";
+                if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
+                {
+                    foreach (Cube c in w.ListOfPlayers.Values)
+                    {
+                        message += JsonConvert.SerializeObject(c) + "\n";
+                    }
+
+                    foreach (Socket s in sockets.Keys)
+                    {
+                        Network.Send(s, message);
+                    }
                 }
             }
+            
         }
 
         private void generateIntitialFood()
         {
-            
-            for (int i = 0; i < 100; i++)
+            lock (w)
             {
-                Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
-                FoodCubes.Add(randomFood.GetID(), randomFood);
+                for (int i = 0; i < 100; i++)
+                {
+                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    w.ListOfFood.Add(randomFood.GetID(), randomFood);
+                }
             }
+            
         }
 
         private int RandomColor(Random r)
@@ -236,7 +300,7 @@ namespace Server
         {
             Random rnd = new Random();
             int uid = rnd.Next(10000);
-            while (PlayerCubes.ContainsKey(uid))
+            while (w.ListOfPlayers.ContainsKey(uid))
             {
                 uid = rnd.Next(10000);
             }
