@@ -45,7 +45,7 @@ namespace Server
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();         //gets a timer for the heartbeat, not sure what to do with it
             Network.Server_Awaiting_Client_Loop(HandleConnections);
-            Console.WriteLine("here");
+            //Console.WriteLine("here");
         }
 
         /// <summary>
@@ -55,8 +55,9 @@ namespace Server
         /// </summary>
         private void HandleConnections (State state)
         {
-            Console.WriteLine("A new client has connected to the server.");
             string playerName = state.sb.ToString();
+            Console.WriteLine("A new client has connected to the server: " + playerName);
+            
             if (playerName.EndsWith("\n"))
             {
                 playerName = playerName.Remove(playerName.Length - 1);
@@ -73,6 +74,7 @@ namespace Server
         /// </summary>
         private void ReceivePlayer(string data, State state)
         {
+            int location = 50;
             UID += 1;       //Makes sure there is a unique ID for all players
             if (UID > 10000)
             {
@@ -87,12 +89,18 @@ namespace Server
             else if(WorldPlayerCubes.ContainsKey((int)UID))
             {
                 UID = GenerateUID();
+                WorldPlayerCubes.Add((int)UID, playerCube);
             }
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
-            
-            
+            //Cube randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
+            //string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
+            //randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
+            //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
+            //Network.Send(state.workSocket, message2);
+            Update(state);
+
         }
 
         /// <summary>
@@ -131,14 +139,18 @@ namespace Server
         /// Handle sending the current state of the world to EVERY client (new food, player changes)
         /// if a client disconects, should clean up
         /// </summary>
-        private void Update ()
+        private void Update (State state)
         {
             //grow new food
             if (FoodCubes.Count < MaxFood)
             {
-
+                //Cube randomFood = new Cube(100, 100, 34875, UID += 1, 0, true, "", 20);
+                //string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
+                //randomFood = new Cube(150, 150, 34875, UID += 1, 0, true, "", 20);
+                //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
+                //Network.Send(state.workSocket, message2);
             }
-            
+
         }
 
         private int GenerateUID()

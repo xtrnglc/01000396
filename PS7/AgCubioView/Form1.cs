@@ -205,6 +205,10 @@ namespace AgCubioView
             firstCube = currentState.sb.ToString();
             string [] substrings = Regex.Split(firstCube, "\n");
             playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
+            if (world.ListOfPlayers.Count == 0)
+            {
+                world.ListOfPlayers.Add(playerCube.GetID(), playerCube);
+            }
             playerDrawn = true;
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
@@ -325,6 +329,7 @@ namespace AgCubioView
         {
             //Focus();
             base.Invalidate();
+            
             if (Connected && playerAlive)
             {
                 
@@ -360,7 +365,7 @@ namespace AgCubioView
                         StringFormat stringFormat = new StringFormat();
                         stringFormat.Alignment = StringAlignment.Center;
                         stringFormat.LineAlignment = StringAlignment.Center;
-                        e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
+                        e.Graphics.DrawString(cube.Name, font, Brushes.Black, rectangle, stringFormat);
                     }
 
                     try
