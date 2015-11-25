@@ -239,12 +239,14 @@ namespace Server
         /// </summary>
         private void Update(Object o, ElapsedEventArgs e)
         {
-            string message;
+            string message = "";
+            string message2 = "";
             int xold;
             int yold;
-            Cube temp;
+            Cube temp, temp2;
             Tuple<int, int> pair;
             int speed;
+            int offset;
 
             //grow new food
             lock (w)
@@ -253,8 +255,10 @@ namespace Server
                 {
                     Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
-                    message = JsonConvert.SerializeObject(randomFood) + "\n";
-                    
+                    message += JsonConvert.SerializeObject(randomFood) + "\n";
+                    randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    w.ListOfFood.Add(randomFood.GetID(), randomFood);
+                    message += JsonConvert.SerializeObject(randomFood) + "\n";
                     //Network.Send(state.workSocket, message2);
                     if (sockets.Count > 0)
                     {
@@ -275,18 +279,19 @@ namespace Server
 
                         sockets.TryGetValue(s.Key, out temp);
                         speed = (temp.GetMass() / 300);
+                        offset = temp.GetWidth();
                         xold = (int)temp.GetX();
                         yold = (int)temp.GetY();
                         w.ListOfPlayers.Remove(temp.GetID());
                         pair = s.Value;
-                        if (xold < pair.Item1 + 5 && xold > pair.Item1 - 5)
+                        if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
                         { }
                         else if (pair.Item1 > xold)
                             temp.loc_x = xold + speed;
                         else
                             temp.loc_x = xold - speed;
 
-                        if (yold < pair.Item2 + 5 && yold > pair.Item2 - 5)
+                        if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
                         { }
                         else if (pair.Item2 > yold)
                             temp.loc_y = yold + speed;
@@ -295,15 +300,27 @@ namespace Server
 
                         sockets[s.Key] = temp;
                         w.ListOfPlayers.Add(temp.GetID(), temp);
+                        
                     }
+                    message = "";
+                    //sends player cubes to each client
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
+                        if (foodEaten(c) != null)
+                        {
+                            temp2 = foodEaten(c);
+                            w.ListOfFood.Remove(temp2.GetID());
+                            c.Mass += temp2.Mass;
+                            temp2.Mass = 0.0;
+                            message2 += JsonConvert.SerializeObject(temp2) + "\n";
+                        }
                         message += JsonConvert.SerializeObject(c) + "\n";
                     }
 
                     foreach (Socket s in sockets.Keys)
                     {
                         Network.Send(s, message);
+                        Network.Send(s, message2);
                     }
                 }
             }  
@@ -316,7 +333,7 @@ namespace Server
         {
             lock (w)
             {
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
@@ -352,6 +369,25 @@ namespace Server
                 uid = rnd.Next(10000);
             }
             return uid;
+        }
+
+        private Cube foodEaten(Cube playerCube)
+        {
+            double offset = 1.5;
+            foreach (Cube c in w.ListOfFood.Values)
+            {
+                if (playerCube.GetX() > (int)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)c.GetX() + (playerCube.GetWidth() * offset))
+                {
+                    if (playerCube.GetY() > (int)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)c.GetY() + (playerCube.GetWidth() * offset))
+                    {
+                        return c;
+                    }
+                        
+                }
+            }
+
+            return null;
+            
         }
     }
 }
