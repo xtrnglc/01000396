@@ -248,6 +248,7 @@ namespace Server
             int yold;
             Cube temp;
             Tuple<int, int> pair;
+            int speed;
 
             //grow new food
             lock (w)
@@ -277,20 +278,24 @@ namespace Server
                     {
 
                         sockets.TryGetValue(s.Key, out temp);
-
+                        speed = (temp.GetMass() / 300);
                         xold = (int)temp.GetX();
                         yold = (int)temp.GetY();
                         w.ListOfPlayers.Remove(temp.GetID());
                         pair = s.Value;
+                        if (xold < pair.Item1 + 5 && xold > pair.Item1 - 5)
+                        { }
+                        else if (pair.Item1 > xold)
+                            temp.loc_x = xold + speed;
+                        else
+                            temp.loc_x = xold - speed;
 
-                        if (pair.Item1 > xold)
-                            temp.loc_x = xold + 1;
+                        if (yold < pair.Item2 + 5 && yold > pair.Item2 - 5)
+                        { }
+                        else if (pair.Item2 > yold)
+                            temp.loc_y = yold + speed;
                         else
-                            temp.loc_x = xold - 1;
-                        if (pair.Item2 > yold)
-                            temp.loc_y = yold + 1;
-                        else
-                            temp.loc_y = yold - 1;
+                            temp.loc_y = yold - speed;
 
                         sockets[s.Key] = temp;
                         w.ListOfPlayers.Add(temp.GetID(), temp);
