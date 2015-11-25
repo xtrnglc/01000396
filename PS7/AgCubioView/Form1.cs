@@ -336,7 +336,6 @@ namespace AgCubioView
                 //base.Update();
                 lock (world)
                 {
-                    
                     foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
                     {
                         Cube cube = c.Value;
@@ -406,3 +405,23 @@ namespace AgCubioView
 }
 
 
+//foreach (Cube cube in world.ListOfPlayers.Values)
+//                    {
+//                        // Draws the actual cube
+//                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.GetColor()));
+//RectangleF rectangle = new RectangleF((float)cube.loc_x, (float)cube.loc_y, (float)cube.GetWidth(), (float)cube.GetWidth());
+//e.Graphics.FillRectangle(brush, rectangle);
+
+//                        // Deals with name on cube
+//                        Font font = new Font("Arial", 16F);
+//StringFormat stringFormat = new StringFormat();
+//stringFormat.Alignment = StringAlignment.Center;
+//                        stringFormat.LineAlignment = StringAlignment.Center;
+//                        e.Graphics.DrawString(cube.Name, font, Brushes.Black, rectangle, stringFormat);
+//                    }
+//                    // Draw food cubes
+//                    foreach (AgCubio.Cube food in world.ListOfFood.Values)
+//                    {
+//                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)food.GetColor()));
+//e.Graphics.FillRectangle(brush, (float)food.loc_x, (float)food.loc_y, 5, 5);
+//                    }
