@@ -56,7 +56,7 @@ namespace Server
         private void HandleConnections (State state)
         {
             string playerName = state.sb.ToString();
-            Console.WriteLine("A new client has connected to the server: " + playerName);
+            Console.WriteLine("A new client has connected to the server: ");
             
             if (playerName.EndsWith("\n"))
             {
@@ -144,11 +144,11 @@ namespace Server
             //grow new food
             if (FoodCubes.Count < MaxFood)
             {
-                //Cube randomFood = new Cube(100, 100, 34875, UID += 1, 0, true, "", 20);
-                //string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
-                //randomFood = new Cube(150, 150, 34875, UID += 1, 0, true, "", 20);
-                //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
-                //Network.Send(state.workSocket, message2);
+                Cube randomFood = new Cube(100, 100, 34875, UID += 1, 0, true, "", 20);
+                string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
+                randomFood = new Cube(150, 150, 34875, UID += 1, 0, true, "", 20);
+                message2 += JsonConvert.SerializeObject(randomFood) + "\n";
+                Network.Send(state.workSocket, message2);
             }
 
         }
