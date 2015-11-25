@@ -3,6 +3,9 @@
 CS 3500
 PS7 - AgCubio
 
+
+README FOR PS8 AGCUBIO SERVER BELOW HORIZONTAL LINE
+
 TO START GAME, 
 	START SERVER
 	START CLIENT
@@ -96,3 +99,24 @@ KNOWN PROBLEMS:
 	Place a breakpoint at Form1_KeyDown method
 	anywhere between lines 308 and 314, step through with f10 and the split works fine
 
+	--------------------------------------------------------------------------------------------------------
+
+	Readme for PS8 AgCubio server
+
+11/23/2015
+	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
+	We were able to get the server and our client that we wrote to contact each other. We were able to send the player name to the server and the server is able to use it
+	in a callback method in server.cs to create a cube object and serialize it with Json and send it back to the client. However after sending the initial player cube Json string
+	we are having trouble sending the rest of the cubes over.
+
+11/24/2015
+	We have a dictionary keeping track of sockets and cubes where each socket correspond to a unique player cube
+	We have a dictionary keeping track of a player cube and its destination
+	We are able to send over the player cube and the intitial start up cubes from the server to the client.
+	Able to have multiple clients connect to the server
+	Able to draw players from other client on seperate clients
+	Able to move the player cube
+	We did this by have a dictionary of sockets and a tuple representing the destination of where the cube wants to go. 
+	In the heartbeat method update, we update the location of the player cube so it eventually reaches its destination.
+	The speed is proporionate to the mass of the cube, right now speed is mass / 300 but should be able to get it cleaner.
+	And any time the current location of the cube is within 5 units of the destiniation, the cube stays still

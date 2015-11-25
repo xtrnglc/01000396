@@ -220,12 +220,8 @@ namespace Server
                                 Destination.Add(state.workSocket, pair);
                             }
 
-                                
-                            
-
                             string msg = JsonConvert.SerializeObject(temp);
-                            Network.Send(state.workSocket, msg + "\n");
-                            
+                            Network.Send(state.workSocket, msg + "\n");   
                         }
                         
                     }
@@ -310,14 +306,12 @@ namespace Server
                         Network.Send(s, message);
                     }
                 }
-
-
-
-
-
             }  
         }
 
+        /// <summary>
+        /// Draw initial start up cubes
+        /// </summary>
         private void generateIntitialFood()
         {
             lock (w)
@@ -331,6 +325,11 @@ namespace Server
             
         }
 
+        /// <summary>
+        /// Generate random color
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         private int RandomColor(Random r)
         {
             
@@ -340,9 +339,10 @@ namespace Server
             return colorCode;
         }
 
-        
-       
-
+        /// <summary>
+        /// Generate random ID
+        /// </summary>
+        /// <returns></returns>
         private int GenerateUID()
         {
             Random rnd = new Random();
