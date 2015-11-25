@@ -341,7 +341,7 @@ namespace AgCubioView
                     {
                         Cube cube = c.Value;
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
-                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
+                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, cube.GetWidth(), cube.GetWidth());
                         base.Invalidate();
                     }
 

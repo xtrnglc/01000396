@@ -19,7 +19,7 @@ namespace Server
         private Dictionary<int, Cube> WorldPlayerCubes = new Dictionary<int, Cube>();
         private Dictionary<int, Cube> FoodCubes = new Dictionary<int, Cube>();
         private double UID = 5000.0;
-        private const int MaxFood = 2000;
+        private const int MaxFood = 1000;
         
         /// <summary>
         /// Main function, will build new world and start the server
@@ -29,6 +29,7 @@ namespace Server
         {
             Server temp = new Server();
             temp.Start();
+           
 
 
             
@@ -44,6 +45,7 @@ namespace Server
         private void Start()
         {
             System.Timers.Timer aTimer = new System.Timers.Timer();         //gets a timer for the heartbeat, not sure what to do with it
+            generateIntitialFood();
             Network.Server_Awaiting_Client_Loop(HandleConnections);
             //Console.WriteLine("here");
         }
@@ -55,15 +57,17 @@ namespace Server
         /// </summary>
         private void HandleConnections (State state)
         {
+            state.connectionCallback = DataFromClient;
             string playerName = state.sb.ToString();
             Console.WriteLine("A new client has connected to the server: ");
+            state.sb.Clear();
             
             if (playerName.EndsWith("\n"))
             {
                 playerName = playerName.Remove(playerName.Length - 1);
             }
             ReceivePlayer(playerName, state);
-            state.connectionCallback = DataFromClient;
+            
         }
 
         /// <summary>
@@ -99,8 +103,12 @@ namespace Server
             //randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
             //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
             //Network.Send(state.workSocket, message2);
-            Update(state);
-
+            
+            foreach (Cube c in FoodCubes.Values)
+            {
+                string msg = JsonConvert.SerializeObject(c) + "\n";
+                Network.Send(state.workSocket, msg);
+            }
         }
 
         /// <summary>
@@ -108,7 +116,7 @@ namespace Server
         /// </summary>
         private void DataFromClient(State state)
         {
-
+            //Update(state);
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
             int count = substrings.Count();
@@ -144,13 +152,24 @@ namespace Server
             //grow new food
             if (FoodCubes.Count < MaxFood)
             {
-                Cube randomFood = new Cube(100, 100, 34875, UID += 1, 0, true, "", 20);
+                Cube randomFood = new Cube(500, 500, 34875, UID += 1, 0, true, "", 20);
+                FoodCubes.Add(randomFood.GetID(), randomFood);
                 string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
-                randomFood = new Cube(150, 150, 34875, UID += 1, 0, true, "", 20);
+                randomFood = new Cube(700, 150, 34875, UID += 1, 0, true, "", 20);
+                FoodCubes.Add(randomFood.GetID(), randomFood);
                 message2 += JsonConvert.SerializeObject(randomFood) + "\n";
                 Network.Send(state.workSocket, message2);
             }
+        }
 
+        private void generateIntitialFood()
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                Cube randomFood = new Cube(rnd.Next(0,1000), rnd.Next(0, 1000), rnd.Next(10000), UID += 1, 0, true, "", 20);
+                FoodCubes.Add(randomFood.GetID(), randomFood);
+            }
         }
 
         private int GenerateUID()

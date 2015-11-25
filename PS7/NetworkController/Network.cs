@@ -191,10 +191,11 @@ namespace NetworkController
         /// </summary>
         public static void Server_Awaiting_Client_Loop(Action<State> callback)
         {
-            byte[] bytes = new Byte[1024];
-            IPHostEntry ipHostInfo = Dns.Resolve("localhost");
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+            //byte[] bytes = new Byte[1024];
+            //IPHostEntry ipHostInfo = Dns.Resolve("localhost");
+            //IPAddress ipAddress = ipHostInfo.AddressList[0];
+            //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+            TcpListener listener = new TcpListener(IPAddress.Any, 11000);
             State state = new State();
             connectionCallbackTemp = callback;
             //server = new TcpListener(IPAddress.Any, 11000);
@@ -203,19 +204,20 @@ namespace NetworkController
             //server.Start();
             //server.BeginAcceptSocket(Accept_a_New_Client, null);
 
-            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //state.connectionCallback(state);
             state.connectionCallback = callback;
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(100);
+                listener.Start();
+                //listener.Bind(localEndPoint);
+                //listener.Listen(100);
 
                 while(true)
                 {
                     allDone.Reset();
                     Console.WriteLine("Waiting for a connection...");
-                    listener.BeginAccept(new AsyncCallback(Accept_a_New_Client), listener);
+                    listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
                     allDone.WaitOne();
                 }
                 
@@ -242,6 +244,7 @@ namespace NetworkController
 
             State state = new State();
             state.workSocket = handler;
+            state.connectionCallback = connectionCallbackTemp;
             handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
         }
 
@@ -255,7 +258,7 @@ namespace NetworkController
                 // from the asynchronous state object.
                 State state = (State)ar.AsyncState;
                 Socket handler = state.workSocket;
-                state.connectionCallback = connectionCallbackTemp;
+                //state.connectionCallback = connectionCallbackTemp;
                 // Read data from the client socket. 
                 int bytesRead = handler.EndReceive(ar);
 
