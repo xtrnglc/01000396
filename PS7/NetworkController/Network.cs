@@ -315,7 +315,7 @@ namespace NetworkController
             // from the asynchronous state object.
             State state = (State)ar.AsyncState;
             Socket handler = state.workSocket;
-            state.connectionCallback = connectionCallbackTemp;
+            
             // Read data from the client socket. 
             int bytesRead = handler.EndReceive(ar);
 
