@@ -306,11 +306,11 @@ namespace Server
                     //sends player cubes to each client
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
-                        if (foodEaten(c) != null)
+                        while (foodEaten(c) != null)
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
-                            c.Mass += temp2.Mass;
+                            c.Mass += 1;
                             temp2.Mass = 0.0;
                             message2 += JsonConvert.SerializeObject(temp2) + "\n";
                         }
