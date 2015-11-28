@@ -130,7 +130,14 @@ namespace AgCubio
         public readonly int Height;
         public Dictionary<int, Cube> ListOfPlayers;                             //PUBLIC VARIABLES???? WHAAAT.
         public Dictionary<int, Cube> ListOfFood;                             //Good idea for the food list though.
-
+        public int maxFood;
+        public int topSpeed;
+        public int attritionRate;
+        public int foodValue;
+        public int startMass;
+        public int minimumSplitMass;
+        public int maximumSplitDistance;
+        public int maximumSplits;
         /// <summary>
         /// Return the Height of the World
         /// </summary>
@@ -176,6 +183,30 @@ namespace AgCubio
             Height = 1000;
             ListOfPlayers = new Dictionary<int, Cube>();
             ListOfFood = new Dictionary<int, Cube>();
+            maxFood = 2000;
+            topSpeed = 500;
+            attritionRate = 10;
+            foodValue = 1;
+            startMass = 1000;
+            minimumSplitMass = 100;
+            //maximumSplitDistance;
+            maximumSplits = 10;
+        }
+
+        public World(int width, int height, int maxfood, int topspeed, int attrition, int foodvalue, int startmass, int minsplitmass, int maxsplits)
+        {
+            Width = width;
+            Height = height;
+            ListOfPlayers = new Dictionary<int, Cube>();
+            ListOfFood = new Dictionary<int, Cube>();
+            maxFood = maxfood;
+            topSpeed = topspeed;
+            attritionRate = attrition;
+            foodValue = foodvalue;
+            startMass = startmass;
+            minimumSplitMass = minsplitmass;
+            //maximumSplitDistance;
+            maximumSplits = maxsplits;
         }
     }
 }

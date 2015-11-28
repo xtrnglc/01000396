@@ -86,7 +86,6 @@ namespace NetworkController
             state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);                             //What happens if you can't connect?
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
 
-
             return socket;
         }
 

@@ -12,15 +12,17 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Drawing;
+using System.Xml;
+using System.IO;
 
 namespace Server
 {
     class Server
     {
         private double UID = 5000.0;
-        private const int MaxFood = 2000;
+        private int MaxFood;
         private List<Socket> playerSockets = new List<Socket>();
-        
+        private string pathToFile = "gameState";
         private Cube Player;
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
         private Random R = new Random();
@@ -32,11 +34,12 @@ namespace Server
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Console.WriteLine("Welcome to the AgCubio server");
+            
             Server temp = new Server();
             temp.Start();
+            
            
-            
-            
             
             //build new world
             //start the server
@@ -49,8 +52,46 @@ namespace Server
         /// </summary>
         private void Start()
         {
+            Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
+            string choice = Console.ReadLine();
+
+            if (choice == "Y" || choice == "y")
+            {
+                try
+                {
+                    using (XmlReader reader = XmlReader.Create(pathToFile))
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.IsStartElement())
+                            {
+                                switch (reader.Name)
+                                {
+                                    
+                                }
+                            }
+                            else
+                            {
+                                if (reader.Name == "cell")
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Invalid name encountered");
+                }
+            }
+
+            else
+            {
+                w = new World();
+            }
             System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
-           
+            
             aTimer.Elapsed += Update;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -81,8 +122,6 @@ namespace Server
 
                 ReceivePlayer(playerName, state);
             }
-            
-
         }
 
         /// <summary>
@@ -93,7 +132,6 @@ namespace Server
         /// </summary>
         private void ReceivePlayer(string data, State state)
         {
-            
             int locationx = R.Next(1, 1000);
             int locationy = R.Next(1, 1000);
             UID += 1;       //Makes sure there is a unique ID for all players
@@ -121,7 +159,6 @@ namespace Server
                 }
             }
             
-
             sockets.Add(state.workSocket, playerCube);
 
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
@@ -203,14 +240,6 @@ namespace Server
                             
                             pair = new Tuple<int, int>(x, y);
 
-                                //if (x > xold)
-                                //    temp.loc_x = xold + 1;
-                                //else
-                                //    temp.loc_x = xold - 1;
-                                //if (y > yold)
-                                //    temp.loc_y = yold + 1;
-                                //else
-                                //    temp.loc_y = yold - 1;
                             if (Destination.ContainsKey(state.workSocket))
                             {
                                 Destination[state.workSocket] = pair;
@@ -247,6 +276,7 @@ namespace Server
             Tuple<int, int> pair;
             int speed;
             int offset;
+            int attritionRate = 5;
 
             //grow new food
             lock (w)
@@ -268,8 +298,6 @@ namespace Server
                         }
                     }
                 }
-
-                
 
                 message = "";
                 if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
