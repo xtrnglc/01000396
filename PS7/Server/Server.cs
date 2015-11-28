@@ -22,7 +22,7 @@ namespace Server
         private double UID = 5000.0;
         private int MaxFood;
         private List<Socket> playerSockets = new List<Socket>();
-        private string pathToFile = "gameState";
+        private string pathToFile = "gamestate.txt";
         private Cube Player;
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
         private Random R = new Random();
@@ -52,6 +52,18 @@ namespace Server
         /// </summary>
         private void Start()
         {
+            string element = "";
+            int Width = 0;
+            int Height = 0;
+            int maxFood = 0;
+            int topSpeed = 0;
+            int attritionRate = 0;
+            int foodValue = 0;
+            int startMass = 0;
+            int minimumSplitMass = 0;
+            int maximumSplitDistance = 0;
+            int maximumSplits = 0;
+            string content;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
@@ -67,23 +79,107 @@ namespace Server
                             {
                                 switch (reader.Name)
                                 {
-                                    
+                                    case "width":
+                                        element = reader.Name;                                       
+                                        break;
+
+                                    case "height":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "maxfood":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "topspeed":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "attrition":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "foodvalue":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "startmass":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "minsplitmass":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "maxsplits":
+                                        element = reader.Name;
+                                        break;
                                 }
                             }
                             else
                             {
-                                if (reader.Name == "cell")
+                                switch (element)
                                 {
+                                    case "width":
+                                        int.TryParse(reader.Value, out Width);
+                                        element = "";
+                                        break;
 
+                                    case "height":
+                                        int.TryParse(reader.Value, out Height);
+                                        element = "";
+                                        break;
+
+                                    case "maxfood":
+                                        int.TryParse(reader.Value, out maxFood);
+                                        element = "";
+                                        break;
+
+                                    case "topspeed":
+                                        int.TryParse(reader.Value, out topSpeed);
+                                        element = "";
+                                        break;
+
+                                    case "attrition":
+                                        int.TryParse(reader.Value, out attritionRate);
+                                        element = "";
+                                        break;
+
+                                    case "foodvalue":
+                                        int.TryParse(reader.Value, out foodValue);
+                                        element = "";
+                                        break;
+
+                                    case "startmass":
+                                        int.TryParse(reader.Value, out startMass);
+                                        element = "";
+                                        break;
+
+                                    case "minsplitmass":
+                                        int.TryParse(reader.Value, out minimumSplitMass);
+                                        element = "";
+                                        break;
+
+                                    case "maxsplits":
+                                        int.TryParse(reader.Value, out maximumSplits);
+                                        element = "";
+                                        break;
+
+                                    case "":
+                                        break;
                                 }
                             }
                         }
+
                     }
+
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("Invalid name encountered");
                 }
+                Console.WriteLine("Game state XML parsed successfully");
+                w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits);
             }
 
             else
@@ -139,7 +235,7 @@ namespace Server
             {
                 UID = 1.0;
             }
-            Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, 0, false, data, 1000);
+            Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, 0, false, data, w.startMass);
             Player = playerCube;
             //if the dictionary is empty or if 
             lock (w)
@@ -283,10 +379,10 @@ namespace Server
             {
                 if (w.ListOfFood.Count < MaxFood)
                 {
-                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
-                    randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
                     //Network.Send(state.workSocket, message2);
@@ -363,7 +459,7 @@ namespace Server
             {
                 for (int i = 0; i < 1000; i++)
                 {
-                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", 20);
+                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                 }
             }

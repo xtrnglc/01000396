@@ -120,3 +120,22 @@ KNOWN PROBLEMS:
 	In the heartbeat method update, we update the location of the player cube so it eventually reaches its destination.
 	The speed is proporionate to the mass of the cube, right now speed is mass / 300 but should be able to get it cleaner.
 	And any time the current location of the cube is within 5 units of the destiniation, the cube stays still
+
+11/28/2015
+	We got the server to be able to accept and parse an XML file describing the game state of the world.
+	If no gamestate is used, then the default values are used.
+	The gamestate file must be a .txt file named "gamestate"
+	It must be in 01000396/PS7/Server/bin/Debug
+	It must be formatted as follows
+	The user can edit the values between the elements to edit the game state of the world.
+	<gamestate>
+	<width>1000</width>
+	<height>1000</height>
+	<maxfood>2000</maxfood>
+	<topspeed>500</topspeed>
+	<attrition>10</attrition>
+	<foodvalue>20</foodvalue>
+	<startmass>1000</startmass>
+	<minsplitmass>100</minsplitmass>
+	<maxsplits>10</maxsplits>
+	</gamestate>
