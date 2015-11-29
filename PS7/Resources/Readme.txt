@@ -126,8 +126,9 @@ KNOWN PROBLEMS:
 	If no gamestate is used, then the default values are used.
 	The gamestate file must be a .txt file named "gamestate"
 	It must be in 01000396/PS7/Server/bin/Debug
-	It must be formatted as follows
 	The user can edit the values between the elements to edit the game state of the world.
+	It must be formatted as follows
+
 	<gamestate>
 	<width>1000</width>
 	<height>1000</height>
@@ -139,3 +140,5 @@ KNOWN PROBLEMS:
 	<minsplitmass>100</minsplitmass>
 	<maxsplits>10</maxsplits>
 	</gamestate>
+
+	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.

@@ -39,8 +39,6 @@ namespace Server
             Server temp = new Server();
             temp.Start();
             
-           
-            
             //build new world
             //start the server
         }
@@ -67,6 +65,7 @@ namespace Server
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
+            //Try and parse the game state xml file
             if (choice == "Y" || choice == "y")
             {
                 try
@@ -182,6 +181,7 @@ namespace Server
                 w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits);
             }
 
+            //If no game state file present, use default constructor
             else
             {
                 w = new World();
@@ -228,8 +228,8 @@ namespace Server
         /// </summary>
         private void ReceivePlayer(string data, State state)
         {
-            int locationx = R.Next(1, 1000);
-            int locationy = R.Next(1, 1000);
+            int locationx = R.Next(1, w.GetWidth);
+            int locationy = R.Next(1, w.GetHeight);
             UID += 1;       //Makes sure there is a unique ID for all players
             if (UID > 10000.0)
             {
@@ -330,6 +330,14 @@ namespace Server
                             int.TryParse(location[1], out x);
                             int.TryParse(location[2], out y);
 
+                            if(x > w.GetWidth)
+                            {
+                                x = w.GetWidth;
+                            }
+                            if(y > w.GetHeight)
+                            {
+                                y = w.GetHeight;
+                            }
                             sockets.TryGetValue(state.workSocket, out temp);
                             xold = (int)temp.GetX();
                             yold = (int)temp.GetY();
@@ -372,17 +380,16 @@ namespace Server
             Tuple<int, int> pair;
             int speed;
             int offset;
-            int attritionRate = 5;
 
             //grow new food
             lock (w)
             {
-                if (w.ListOfFood.Count < MaxFood)
+                if (w.ListOfFood.Count < w.maxFood)
                 {
-                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
+                    Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
-                    randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
+                    randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
                     //Network.Send(state.workSocket, message2);
@@ -459,11 +466,10 @@ namespace Server
             {
                 for (int i = 0; i < 1000; i++)
                 {
-                    Cube randomFood = new Cube(R.Next(1, 1000), R.Next(1, 1000), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
+                    Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                 }
             }
-            
         }
 
         /// <summary>
@@ -473,7 +479,6 @@ namespace Server
         /// <returns></returns>
         private int RandomColor(Random r)
         {
-            
             KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
             KnownColor randColor = colors[r.Next(0, colors.Length)];
             int colorCode = Color.FromKnownColor(randColor).ToArgb();
@@ -495,6 +500,11 @@ namespace Server
             return uid;
         }
 
+        /// <summary>
+        /// Determines if a food is overlapping a player cube
+        /// </summary>
+        /// <param name="playerCube"></param>
+        /// <returns></returns>
         private Cube foodEaten(Cube playerCube)
         {
             double offset = 1.5;
