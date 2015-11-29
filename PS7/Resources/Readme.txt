@@ -103,6 +103,10 @@ KNOWN PROBLEMS:
 
 	Readme for PS8 AgCubio server
 
+Design decisions
+	Attrition rate decreases mass by the attrition rate given in the gamestate every 2 seconds.
+	The attrition rate is a percentage. So <attrition>10</attrition> means a cube loses 10% of its mass every 2 seconds
+
 11/23/2015
 	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
 	We were able to get the server and our client that we wrote to contact each other. We were able to send the player name to the server and the server is able to use it
@@ -142,3 +146,4 @@ KNOWN PROBLEMS:
 	</gamestate>
 
 	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.
+	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger

@@ -182,7 +182,11 @@ namespace Server
                 w = new World();
             }
             System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
-            
+            System.Timers.Timer attritionTimer = new System.Timers.Timer(2000);
+
+            attritionTimer.Elapsed += attritionUpdate;
+            attritionTimer.AutoReset = true;
+            attritionTimer.Enabled = true;
             aTimer.Elapsed += Update;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -254,11 +258,6 @@ namespace Server
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
             Console.WriteLine("Player add: " + data);
-            //Cube randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
-            //string message2 = JsonConvert.SerializeObject(randomFood) + "\n";
-            //randomFood = new Cube(location += 20, location += 20, 34875, UID += 1, 0, true, "", 20);
-            //message2 += JsonConvert.SerializeObject(randomFood) + "\n";
-            //Network.Send(state.workSocket, message2);
 
             lock(w)
             if (sockets.Count > 0 && w.ListOfFood.Count > 0)
@@ -370,6 +369,7 @@ namespace Server
             int yold;
             Cube temp, temp2;
             Tuple<int, int> pair;
+            Tuple<int, int> coordinates;
             int speed;
             int offset;
 
@@ -377,14 +377,13 @@ namespace Server
             lock (w)
             {
                 if (w.ListOfFood.Count < w.maxFood)
-                {
+                {    
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
                     randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
-                    //Network.Send(state.workSocket, message2);
                     if (sockets.Count > 0)
                     {
                         foreach (Socket s in sockets.Keys)
@@ -400,12 +399,20 @@ namespace Server
                     foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
                     {
                         sockets.TryGetValue(s.Key, out temp);
-                        speed = (temp.GetMass() / 300);
+                        //Speed is inversely related to the mass
+                        speed = (10000 / temp.GetMass());
+                        //If speed exceeds topspeed, then reassign the topspeed as the speed
+                        if(speed > w.topSpeed)
+                        {
+                            speed = w.topSpeed;
+                        }
                         offset = temp.GetWidth();
                         xold = (int)temp.GetX();
                         yold = (int)temp.GetY();
                         w.ListOfPlayers.Remove(temp.GetID());
+                        //pair is target destination
                         pair = s.Value;
+                        //move toward target destination
                         if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
                         { }
                         else if (pair.Item1 > xold)
@@ -424,7 +431,7 @@ namespace Server
                         w.ListOfPlayers.Add(temp.GetID(), temp);                       
                     }
                     message = "";
-                    //sends player cubes to each client
+                    //sends player cubes to each client and deals with eating food
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
                         while (foodEaten(c) != null)
@@ -435,9 +442,11 @@ namespace Server
                             temp2.Mass = 0.0;
                             message2 += JsonConvert.SerializeObject(temp2) + "\n";
                         }
+                        
                         message += JsonConvert.SerializeObject(c) + "\n";
                     }
 
+                    //send information to every client
                     foreach (Socket s in sockets.Keys)
                     {
                         Network.Send(s, message);
@@ -445,6 +454,33 @@ namespace Server
                     }
                 }
             }  
+        }
+
+        /// <summary>
+        /// Updates the attrition timer
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="e"></param>
+        private void attritionUpdate(Object o, ElapsedEventArgs e)
+        {
+            string message = "";
+            lock (w)
+            {
+                foreach (Cube c in w.ListOfPlayers.Values)
+                {
+                    if (c.Mass >= w.startMass)
+                    {
+                        c.Mass -= w.attritionRate * c.Mass / 100;
+                    }
+
+                    message += JsonConvert.SerializeObject(c) + "\n";
+                }
+                foreach (Socket s in sockets.Keys)
+                {
+                    Network.Send(s, message);
+                }
+            }
+            
         }
 
         /// <summary>
@@ -505,13 +541,42 @@ namespace Server
                     if (playerCube.GetY() > (int)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)c.GetY() + (playerCube.GetWidth() * offset))
                     {
                         return c;
-                    }
-                        
+                    }  
                 }
             }
-
             return null;
+        }
+
+        /// <summary>
+        /// Generates coordinates that do not overlap player cubes
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<int,int> generateCoordinates()
+        {
+            Boolean valid = false;
+            Tuple<int, int> coordinates;
+            int x = 0;
+            int y = 0;
             
+            double offset = 1.5;
+            while (!valid)
+            {
+                x = R.Next(1, w.GetWidth);
+                y = R.Next(1, w.GetHeight);
+                foreach (Cube c in w.ListOfPlayers.Values)
+                {
+                    if (c.GetX() > x - (c.GetWidth() * offset) && c.GetX() < x + (c.GetWidth() * offset))
+                    {
+                        if (c.GetY() > y - (c.GetWidth() * offset) && c.GetY() < y + (c.GetWidth() * offset))
+                        {
+                            valid = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            coordinates = new Tuple<int, int>(x, y);
+            return coordinates;
         }
     }
 }
