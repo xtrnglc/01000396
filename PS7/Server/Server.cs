@@ -20,7 +20,6 @@ namespace Server
     class Server
     {
         private double UID = 5000.0;
-        private int MaxFood;
         private List<Socket> playerSockets = new List<Socket>();
         private string pathToFile = "gamestate.txt";
         private Cube Player;
@@ -59,9 +58,7 @@ namespace Server
             int foodValue = 0;
             int startMass = 0;
             int minimumSplitMass = 0;
-            int maximumSplitDistance = 0;
             int maximumSplits = 0;
-            string content;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
@@ -169,9 +166,7 @@ namespace Server
                                 }
                             }
                         }
-
                     }
-
                 }
                 catch (Exception)
                 {
@@ -214,8 +209,6 @@ namespace Server
                 {
                     playerName = playerName.Remove(playerName.Length - 1);
                 }
-                
-
                 ReceivePlayer(playerName, state);
             }
         }
@@ -355,8 +348,7 @@ namespace Server
 
                             string msg = JsonConvert.SerializeObject(temp);
                             Network.Send(state.workSocket, msg + "\n");   
-                        }
-                        
+                        }    
                     }
                 }
             }
@@ -407,7 +399,6 @@ namespace Server
                 {
                     foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
                     {
-
                         sockets.TryGetValue(s.Key, out temp);
                         speed = (temp.GetMass() / 300);
                         offset = temp.GetWidth();
@@ -430,8 +421,7 @@ namespace Server
                             temp.loc_y = yold - speed;
 
                         sockets[s.Key] = temp;
-                        w.ListOfPlayers.Add(temp.GetID(), temp);
-                        
+                        w.ListOfPlayers.Add(temp.GetID(), temp);                       
                     }
                     message = "";
                     //sends player cubes to each client

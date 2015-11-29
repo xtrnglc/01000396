@@ -193,6 +193,18 @@ namespace AgCubio
             maximumSplits = 10;
         }
 
+        /// <summary>
+        /// explicit value constructor
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="maxfood"></param>
+        /// <param name="topspeed"></param>
+        /// <param name="attrition"></param>
+        /// <param name="foodvalue"></param>
+        /// <param name="startmass"></param>
+        /// <param name="minsplitmass"></param>
+        /// <param name="maxsplits"></param>
         public World(int width, int height, int maxfood, int topspeed, int attrition, int foodvalue, int startmass, int minsplitmass, int maxsplits)
         {
             Width = width;
