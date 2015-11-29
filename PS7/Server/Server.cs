@@ -490,7 +490,7 @@ namespace Server
         {
             lock (w)
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < w.maxFood / 4; i++)
                 {
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);

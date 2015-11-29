@@ -147,3 +147,5 @@ Design decisions
 
 	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.
 	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger
+
+	Created unit testing for model class
