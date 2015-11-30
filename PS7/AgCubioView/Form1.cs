@@ -399,6 +399,7 @@ namespace AgCubioView
             else if(Connected && !playerAlive)
             {
                 MessageBox.Show("You have died");
+                this.currentState.workSocket.Disconnect(false);
             }
         }
     }
