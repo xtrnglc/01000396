@@ -388,7 +388,7 @@ namespace Server
             Tuple<int, int> coordinates;
             int speed;
             int offset;
-            Socket tempsocket;
+            Socket tempsocket, tempsocket2;
 
             //grow new food
             lock (w)
@@ -471,28 +471,8 @@ namespace Server
                         
                         //Send the predator cube with updated mass
                         message += JsonConvert.SerializeObject(c) + "\n";
-                    }
 
-                    foreach (Cube c in w.ListOfPlayers.Values.ToList())
-                    {
-                        while (playerEaten(c) != null)
-                        {
-                            temp2 = playerEaten(c);                          
-                            cubetosockets.TryGetValue(temp2, out tempsocket);
-                            c.Mass += temp2.Mass; 
-                            temp2.Mass = 0.0;
-                            //Tell the player that his cube is dead and remove references to the client
-                            string deathMessage = JsonConvert.SerializeObject(temp2) + "\n";
-                            message2 += deathMessage;
-                            Network.Send(tempsocket, message);
-                            Network.Send(tempsocket, deathMessage);
-                            w.ListOfPlayers.Remove(temp2.GetID());
-                            cubetosockets.Remove(temp2);
-                            sockets.Remove(tempsocket);
-                            Destination.Remove(tempsocket);
-                            playerSockets.Remove(tempsocket);
-                        }
-                        message += JsonConvert.SerializeObject(c) + "\n";
+
                     }
 
                     //send information to every client
@@ -501,6 +481,44 @@ namespace Server
                         Network.Send(s, message);
                         Network.Send(s, message2);
                     }
+
+                    foreach (Cube c in w.ListOfPlayers.Values.ToList())
+                    {
+                        while (playerEaten(c) != null)
+                        {
+                            //temp2 = eaten
+                            //c = eater
+                            temp2 = playerEaten(c);                          
+                            c.Mass += temp2.Mass; 
+                            temp2.Mass = 0.0;
+
+                            //Tell the player that his cube is dead and remove references to the client
+                            string deathMessage = JsonConvert.SerializeObject(temp2) + "\n";
+                            message2 += deathMessage;
+                            cubetosockets.TryGetValue(temp2, out tempsocket);
+                            cubetosockets.TryGetValue(c, out tempsocket2);
+                            message += JsonConvert.SerializeObject(c) + "\n";
+
+                            Network.Send(tempsocket2, message);
+                            Network.Send(tempsocket2, message2);
+                            Network.Send(tempsocket, message);
+                            Network.Send(tempsocket, deathMessage);
+
+                            w.ListOfPlayers.Remove(temp2.GetID());
+                            cubetosockets.Remove(temp2);
+                            sockets.Remove(tempsocket);
+                            Destination.Remove(tempsocket);
+                            playerSockets.Remove(tempsocket);
+                        }
+                    }
+
+                    foreach(Socket s in sockets.Keys)
+                    {
+                        Network.Send(s, message);
+                        Network.Send(s, message2);
+                    }
+
+
                 }
             }  
         }
@@ -628,22 +646,6 @@ namespace Server
         /// <returns></returns>
         private Cube foodEaten(Cube playerCube)
         {
-
-            //foreach (Cube c in w.ListOfPlayers.Values)
-            //{
-            //    while (foodEaten(c) != null)
-            //    {
-            //        temp2 = foodEaten(c);
-            //        w.ListOfFood.Remove(temp2.GetID());
-            //        c.Mass += 1;
-            //        temp2.Mass = 0.0;
-            //        //Send the dead cube
-            //        message2 += JsonConvert.SerializeObject(temp2) + "\n";
-            //    }
-
-            //    //Send the predator cube with updated mass
-            //    message += JsonConvert.SerializeObject(c) + "\n";
-            //}
             double offset = 1.5;
             foreach (Cube c in w.ListOfFood.Values)
             {
