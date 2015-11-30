@@ -27,7 +27,9 @@ namespace Server
         private Dictionary<Cube, Socket> cubetosockets = new Dictionary<Cube, Socket>();
         private Random R = new Random();
         private World w = new World();
+        private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
+        private int teamid = 0;
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -197,6 +199,7 @@ namespace Server
             }
             System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
             System.Timers.Timer attritionTimer = new System.Timers.Timer(3000);
+            System.Timers.Timer splitTimer = new System.Timers.Timer(5000);
 
             attritionTimer.Elapsed += attritionUpdate;
             attritionTimer.AutoReset = true;
@@ -293,11 +296,9 @@ namespace Server
                     {
                         message += JsonConvert.SerializeObject(c) + "\n";
                     }
-
                     Network.Send(s, message);
                 }
             }
-            
         }
 
         /// <summary>
@@ -326,7 +327,25 @@ namespace Server
                 {
                     if (command.StartsWith("(split"))
                     {
-                        //split the cube
+                        //Deal with split
+                        lock (w)
+                        {
+                                sockets.TryGetValue(state.workSocket, out temp);
+
+                                Cube split1 = new Cube(temp.loc_x + temp.Mass, temp.loc_y + temp.Mass, temp.argb_color, temp.uid, teamid++, false, temp.Name, temp.Mass / 2);
+                                Cube split2 = new Cube(temp.loc_x - temp.Mass, temp.loc_y - temp.Mass, temp.argb_color, temp.uid, teamid, false, temp.Name, temp.Mass / 2);
+
+
+
+
+
+
+
+
+
+
+                            }
+
                     }
                     else
                     {

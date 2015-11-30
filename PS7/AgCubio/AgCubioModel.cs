@@ -30,7 +30,7 @@ namespace AgCubio
         public bool food { get; set; }
         public string Name { get; set; }
         public double Mass { get; set; }
-                                     //JSON PROPERTY?????
+        public int numberOfSplits { get; set; }
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
