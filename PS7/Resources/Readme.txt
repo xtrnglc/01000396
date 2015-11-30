@@ -149,3 +149,32 @@ Design decisions
 	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger
 
 	Created unit testing for model class
+
+11/29/2015
+	Able to get player cubes being absorbed kinda working. The client we have might be the issue as there are inconsistencies when a player is being eaten.
+	Sometimes it works correctly and other times we get the big red X and following error:
+
+	See the end of this message for details on invoking 
+	just-in-time (JIT) debugging instead of this dialog box.
+
+	************** Exception Text **************
+	System.ArgumentException: Value of '0' is not valid for 'emSize'. 'emSize' should be greater than 0 and less than or equal to System.Single.MaxValue.
+	Parameter name: emSize
+	at System.Drawing.Font.Initialize(FontFamily family, Single emSize, FontStyle style, GraphicsUnit unit, Byte gdiCharSet, Boolean gdiVerticalFont)
+	at System.Drawing.Font.Initialize(String familyName, Single emSize, FontStyle style, GraphicsUnit unit, Byte gdiCharSet, Boolean gdiVerticalFont)
+	at System.Drawing.Font..ctor(String familyName, Single emSize)
+	at AgCubioView.Form1.OnPaint(Object sender, PaintEventArgs e) in C:\Users\trungl\Source\Repos\01000396\PS7\AgCubioView\Form1.cs:line 363
+	at System.Windows.Forms.Control.OnPaint(PaintEventArgs e)
+	at System.Windows.Forms.Form.OnPaint(PaintEventArgs e)
+	at System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+	at System.Windows.Forms.Control.WmPaint(Message& m)
+	at System.Windows.Forms.Control.WndProc(Message& m)
+	at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+	at System.Windows.Forms.Form.WndProc(Message& m)
+	at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+	at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+	at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+
+	Also added a new parameter: number of viruses.
+
+

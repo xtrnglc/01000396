@@ -219,7 +219,7 @@ namespace Server
             string message = "";
             state.connectionCallback = DataFromClient;
             string playerName = state.sb.ToString();
-            Console.WriteLine("A new client has connected to the server: ");
+            Console.WriteLine("A new client has connected to the server");
             state.sb.Clear();
             lock (w)
             {
@@ -272,7 +272,7 @@ namespace Server
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
-            Console.WriteLine("Player add: " + data);
+            Console.WriteLine("Player " + data + "has joined the game");
 
             lock(w)
             if (sockets.Count > 0 && w.ListOfFood.Count > 0)
