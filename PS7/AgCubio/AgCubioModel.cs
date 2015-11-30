@@ -138,6 +138,7 @@ namespace AgCubio
         public int minimumSplitMass;
         public int maximumSplitDistance;
         public int maximumSplits;
+        public int numberOfVirus;
         /// <summary>
         /// Return the Height of the World
         /// </summary>
@@ -189,6 +190,7 @@ namespace AgCubio
             foodValue = 1;
             startMass = 1000;
             minimumSplitMass = 100;
+            numberOfVirus = 0;
             //maximumSplitDistance;
             maximumSplits = 10;
         }
@@ -205,7 +207,7 @@ namespace AgCubio
         /// <param name="startmass"></param>
         /// <param name="minsplitmass"></param>
         /// <param name="maxsplits"></param>
-        public World(int width, int height, int maxfood, int topspeed, int attrition, int foodvalue, int startmass, int minsplitmass, int maxsplits)
+        public World(int width, int height, int maxfood, int topspeed, int attrition, int foodvalue, int startmass, int minsplitmass, int maxsplits, int numVirus)
         {
             Width = width;
             Height = height;
@@ -219,6 +221,7 @@ namespace AgCubio
             minimumSplitMass = minsplitmass;
             //maximumSplitDistance;
             maximumSplits = maxsplits;
+            numberOfVirus = numVirus;
         }
     }
 }

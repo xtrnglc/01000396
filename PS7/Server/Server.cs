@@ -24,6 +24,7 @@ namespace Server
         private string pathToFile = "gamestate.txt";
         private Cube Player;
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
+        private Dictionary<Cube, Socket> cubetosockets = new Dictionary<Cube, Socket>();
         private Random R = new Random();
         private World w = new World();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
@@ -59,6 +60,7 @@ namespace Server
             int startMass = 0;
             int minimumSplitMass = 0;
             int maximumSplits = 0;
+            int numberofVirus = 0;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
@@ -108,6 +110,10 @@ namespace Server
                                         break;
 
                                     case "maxsplits":
+                                        element = reader.Name;
+                                        break;
+
+                                    case "numberofvirus":
                                         element = reader.Name;
                                         break;
                                 }
@@ -161,19 +167,27 @@ namespace Server
                                         element = "";
                                         break;
 
+                                    case "numberofvirus":
+                                        int.TryParse(reader.Value, out numberofVirus);
+                                        element = "";
+                                        break;
+
                                     case "":
                                         break;
                                 }
                             }
                         }
                     }
+                    Console.WriteLine("Game state XML parsed successfully");
+                    w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits, numberofVirus);
                 }
+                
                 catch (Exception)
                 {
-                    Console.WriteLine("Invalid name encountered");
+                    Console.WriteLine("Game state XML not parsed correctly. Server will start with default parameters");
+                    w = new World();
                 }
-                Console.WriteLine("Game state XML parsed successfully");
-                w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits);
+                
             }
 
             //If no game state file present, use default constructor
@@ -182,7 +196,7 @@ namespace Server
                 w = new World();
             }
             System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
-            System.Timers.Timer attritionTimer = new System.Timers.Timer(2000);
+            System.Timers.Timer attritionTimer = new System.Timers.Timer(3000);
 
             attritionTimer.Elapsed += attritionUpdate;
             attritionTimer.AutoReset = true;
@@ -253,6 +267,7 @@ namespace Server
             }
             
             sockets.Add(state.workSocket, playerCube);
+            cubetosockets.Add(playerCube, state.workSocket);
 
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
@@ -282,6 +297,7 @@ namespace Server
                     Network.Send(s, message);
                 }
             }
+            
         }
 
         /// <summary>
@@ -372,6 +388,7 @@ namespace Server
             Tuple<int, int> coordinates;
             int speed;
             int offset;
+            Socket tempsocket;
 
             //grow new food
             lock (w)
@@ -379,6 +396,12 @@ namespace Server
                 if (w.ListOfFood.Count < w.maxFood)
                 {    
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
+                    w.ListOfFood.Add(randomFood.GetID(), randomFood);
+                    message += JsonConvert.SerializeObject(randomFood) + "\n";
+                    randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
+                    w.ListOfFood.Add(randomFood.GetID(), randomFood);
+                    message += JsonConvert.SerializeObject(randomFood) + "\n";
+                    randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
                     randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
@@ -393,6 +416,7 @@ namespace Server
                     }
                 }
 
+                //Handle move requests
                 message = "";
                 if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
                 {
@@ -431,6 +455,7 @@ namespace Server
                         w.ListOfPlayers.Add(temp.GetID(), temp);                       
                     }
                     message = "";
+
                     //sends player cubes to each client and deals with eating food
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
@@ -440,9 +465,30 @@ namespace Server
                             w.ListOfFood.Remove(temp2.GetID());
                             c.Mass += 1;
                             temp2.Mass = 0.0;
+                            //Send the dead cube
                             message2 += JsonConvert.SerializeObject(temp2) + "\n";
                         }
                         
+                        //Send the predator cube with updated mass
+                        message += JsonConvert.SerializeObject(c) + "\n";
+                    }
+
+                    foreach (Cube c in w.ListOfPlayers.Values.ToList())
+                    {
+                        while (playerEaten(c) != null)
+                        {
+                            temp2 = playerEaten(c);
+                            w.ListOfPlayers.Remove(temp2.GetID());
+                            cubetosockets.TryGetValue(temp2, out tempsocket);
+                            sockets.Remove(tempsocket);
+                            Destination.Remove(tempsocket);
+                            cubetosockets.Remove(temp2);
+                            c.Mass += temp2.Mass;
+                            temp2.Mass = 0.0;
+                            message2 += JsonConvert.SerializeObject(temp2) + "\n";
+                            
+                        }
+
                         message += JsonConvert.SerializeObject(c) + "\n";
                     }
 
@@ -454,6 +500,47 @@ namespace Server
                     }
                 }
             }  
+        }
+
+        /// <summary>
+        /// Determines if a player cube is overlapping another player cube
+        /// </summary>
+        /// <param name="playerCube"></param>
+        /// <returns></returns>
+        private Cube playerEaten(Cube playerCube)
+        {
+            double offset = 1.5;
+            while (w.ListOfPlayers.Count > 1)
+            {
+                foreach (Cube c in w.ListOfPlayers.Values)
+                {
+                    if (c.uid != playerCube.uid)
+                    {
+                        if (playerCube.GetX() > (int)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)c.GetX() + (playerCube.GetWidth() * offset))
+                        {
+                            if (playerCube.GetY() > (int)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)c.GetY() + (playerCube.GetWidth() * offset))
+                            {
+                                if (c.Mass > playerCube.Mass)
+                                {
+                                    return playerCube;
+                                }
+                                else if (playerCube.Mass > c.Mass)
+                                {
+                                    return c;
+                                }
+                                else
+                                {
+                                    return null;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                return null;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -490,11 +577,17 @@ namespace Server
         {
             lock (w)
             {
-                for (int i = 0; i < w.maxFood / 4; i++)
+                for (int i = 0; i < w.maxFood / 3; i++)
                 {
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                 }
+
+                //for (int i = 0; i < w.numberOfVirus; i++)
+                //{
+                //    Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 500);
+                //    w.ListOfFood.Add(virusCube.GetID(), virusCube);
+                //}
             }
         }
 
@@ -506,6 +599,7 @@ namespace Server
         private int RandomColor(Random r)
         {
             KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+            
             KnownColor randColor = colors[r.Next(0, colors.Length)];
             int colorCode = Color.FromKnownColor(randColor).ToArgb();
             return colorCode;
@@ -533,6 +627,22 @@ namespace Server
         /// <returns></returns>
         private Cube foodEaten(Cube playerCube)
         {
+
+            //foreach (Cube c in w.ListOfPlayers.Values)
+            //{
+            //    while (foodEaten(c) != null)
+            //    {
+            //        temp2 = foodEaten(c);
+            //        w.ListOfFood.Remove(temp2.GetID());
+            //        c.Mass += 1;
+            //        temp2.Mass = 0.0;
+            //        //Send the dead cube
+            //        message2 += JsonConvert.SerializeObject(temp2) + "\n";
+            //    }
+
+            //    //Send the predator cube with updated mass
+            //    message += JsonConvert.SerializeObject(c) + "\n";
+            //}
             double offset = 1.5;
             foreach (Cube c in w.ListOfFood.Values)
             {
@@ -546,6 +656,8 @@ namespace Server
             }
             return null;
         }
+
+        
 
         /// <summary>
         /// Generates coordinates that do not overlap player cubes
