@@ -478,15 +478,17 @@ namespace Server
                         while (playerEaten(c) != null)
                         {
                             temp2 = playerEaten(c);
-                            w.ListOfPlayers.Remove(temp2.GetID());
+                            
                             cubetosockets.TryGetValue(temp2, out tempsocket);
+                            c.Mass += temp2.Mass; 
+                            temp2.Mass = 0.0;
+                            //Tell the player that his cube is dead and remove references to the client
+                            string deathMessage = JsonConvert.SerializeObject(temp2) + "\n";
+                            w.ListOfPlayers.Remove(temp2.GetID());
+                            Network.Send(tempsocket, deathMessage);
+                            cubetosockets.Remove(temp2);
                             sockets.Remove(tempsocket);
                             Destination.Remove(tempsocket);
-                            cubetosockets.Remove(temp2);
-                            c.Mass += temp2.Mass;
-                            temp2.Mass = 0.0;
-                            message2 += JsonConvert.SerializeObject(temp2) + "\n";
-                            
                         }
 
                         message += JsonConvert.SerializeObject(c) + "\n";
