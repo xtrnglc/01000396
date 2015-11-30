@@ -104,8 +104,28 @@ KNOWN PROBLEMS:
 	Readme for PS8 AgCubio server
 
 Design decisions
-	Attrition rate decreases mass by the attrition rate given in the gamestate every 2 seconds.
-	The attrition rate is a percentage. So <attrition>10</attrition> means a cube loses 10% of its mass every 2 seconds
+	Updates from the server about generating food, updating player locations and dealing with player absorbing are sent every quarter of a second.
+	Attrition rate decreases mass by the attrition rate given in the gamestate every 3 seconds.
+	The attrition rate is a percentage. So <attrition>10</attrition> means a cube loses 10% of its mass every 3 seconds.
+	The server is also able to parse an XML file descring the game world parameters.
+	If no gamestate is used, then the default values are used.
+	The gamestate file must be a .txt file named "gamestate"
+	It must be in 01000396/PS7/Server/bin/Debug
+	The user can edit the values between the elements to edit the game state of the world.
+	It must be formatted as follows
+
+	<gamestate>
+	<width>1000</width>
+	<height>1000</height>
+	<maxfood>2000</maxfood>
+	<topspeed>500</topspeed>
+	<attrition>5</attrition>
+	<foodvalue>20</foodvalue>
+	<startmass>1000</startmass>
+	<minsplitmass>100</minsplitmass>
+	<maxsplits>10</maxsplits>
+	<numberofvirus>2</numberofvirus>
+	</gamestate>
 
 11/23/2015
 	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
@@ -138,12 +158,14 @@ Design decisions
 	<height>1000</height>
 	<maxfood>2000</maxfood>
 	<topspeed>500</topspeed>
-	<attrition>10</attrition>
+	<attrition>5</attrition>
 	<foodvalue>20</foodvalue>
 	<startmass>1000</startmass>
 	<minsplitmass>100</minsplitmass>
 	<maxsplits>10</maxsplits>
+	<numberofvirus>2</numberofvirus>
 	</gamestate>
+
 
 	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.
 	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger
