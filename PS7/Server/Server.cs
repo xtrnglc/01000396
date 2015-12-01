@@ -19,7 +19,7 @@ namespace Server
 {
     class Server
     {
-        private double UID = 5000.0;
+        private double UID = 1;
         private List<Socket> playerSockets = new List<Socket>();
         private string pathToFile = "gamestate.txt";
         private Cube Player;
@@ -29,7 +29,7 @@ namespace Server
         private World w = new World();
         private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
-        private int teamid = 0;
+        private int teamid = 5;
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -242,6 +242,7 @@ namespace Server
         /// </summary>
         private void ReceivePlayer(string data, State state)
         {
+            teamid += 5;
             int locationx = R.Next(1, w.GetWidth);
             int locationy = R.Next(1, w.GetHeight);
             UID += 1;       //Makes sure there is a unique ID for all players
@@ -249,7 +250,7 @@ namespace Server
             {
                 UID = 1.0;
             }
-            Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, 0, false, data, w.startMass);
+            Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, teamid, false, data, w.startMass);
             Player = playerCube;
             //if the dictionary is empty or if 
             lock (w)
@@ -309,6 +310,7 @@ namespace Server
             //Update(state);
             int x;
             int y;
+            double tempID;
             int xold;
             int yold;
             Tuple<int, int> pair;
@@ -330,21 +332,36 @@ namespace Server
                         //Deal with split
                         lock (w)
                         {
+                                
                                 sockets.TryGetValue(state.workSocket, out temp);
 
-                                Cube split1 = new Cube(temp.loc_x + temp.Mass, temp.loc_y + temp.Mass, temp.argb_color, temp.uid, teamid++, false, temp.Name, temp.Mass / 2);
-                                Cube split2 = new Cube(temp.loc_x - temp.Mass, temp.loc_y - temp.Mass, temp.argb_color, temp.uid, teamid, false, temp.Name, temp.Mass / 2);
+                                w.ListOfPlayers.Remove(temp.GetID());
 
+                                if (CubeIdExists(temp.uid + 1))
+                                    tempID = (double)(GenerateUID());
+                                else
+                                    tempID = temp.uid + 1;
+                                Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                                w.ListOfPlayers.Add(split1.GetID(), split1);
 
+                                if (CubeIdExists(temp.uid + 2))
+                                    tempID = (double)(GenerateUID());
+                                else
+                                    tempID = temp.uid + 2;
+                                Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
 
+                                
+                                
+                                w.ListOfPlayers.Add(split2.GetID(), split2);
+                                
+                                
+                                sockets[state.workSocket] = split1;
+                                string message = JsonConvert.SerializeObject(split2);
+                                Network.Send(state.workSocket, message + "\n");
+                                //splitCubes.Add(teamid, split1);
+                                //splitCubes.Add(teamid, split2);
 
-
-
-
-
-
-
-                            }
+                         }
 
                     }
                     else
@@ -554,7 +571,7 @@ namespace Server
             {
                 foreach (Cube c in w.ListOfPlayers.Values)
                 {
-                    if (c.uid != playerCube.uid)
+                    if (c.uid != playerCube.uid && c.team_id != playerCube.team_id)
                     {
                         if (playerCube.GetX() > (int)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)c.GetX() + (playerCube.GetWidth() * offset))
                         {
@@ -651,7 +668,7 @@ namespace Server
         {
             Random rnd = new Random();
             int uid = rnd.Next(10000);
-            while (w.ListOfPlayers.ContainsKey(uid))
+            while (w.ListOfPlayers.ContainsKey(uid) || w.ListOfFood.ContainsKey(uid))
             {
                 uid = rnd.Next(10000);
             }
@@ -711,6 +728,25 @@ namespace Server
             }
             coordinates = new Tuple<int, int>(x, y);
             return coordinates;
+        }
+
+        private bool CubeIdExists(double ID)
+        {
+            foreach (Cube c in w.ListOfPlayers.Values)
+            {
+                if (ID == c.uid)
+                {
+                    return true;
+                }
+            }
+            foreach (Cube f in w.ListOfFood.Values)
+            {
+                if (ID == f.uid)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

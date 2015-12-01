@@ -103,6 +103,8 @@ KNOWN PROBLEMS:
 
 	Readme for PS8 AgCubio server
 
+	TO DO: Fix the connection in the server network to IvP6Any (won't work right now, but will connect to Jim's client)
+
 Design decisions
 	Updates from the server about generating food, updating player locations and dealing with player absorbing are sent every quarter of a second.
 	Attrition rate decreases mass by the attrition rate given in the gamestate every 3 seconds.

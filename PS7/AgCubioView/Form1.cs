@@ -87,6 +87,7 @@ namespace AgCubioView
         public Form1()
         {
             InitializeComponent();
+            
             this.DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
             this.KeyPreview = true;
@@ -313,10 +314,11 @@ namespace AgCubioView
         /// <param name="e"></param>
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.S)
             {
-                //Grader, place a break point here then try and hit space. After stepping through once then possible to remove breakpoint to make game run smoothly
+            //    //Grader, place a break point here then try and hit space. After stepping through once then possible to remove breakpoint to make game run smoothly
                 Network.Send(currentState.workSocket, "(split, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
+                //MessageBox.Show("Here");
             }
         }
 
