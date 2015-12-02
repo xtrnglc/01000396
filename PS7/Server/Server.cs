@@ -219,7 +219,6 @@ namespace Server
         private void HandleConnections(State state)
         {
             playerSockets.Add(state.workSocket);
-            string message = "";
             state.connectionCallback = DataFromClient;
             string playerName = state.sb.ToString();
             Console.WriteLine("A new client has connected to the server");
@@ -311,7 +310,9 @@ namespace Server
             int xold;
             int yold;
             Tuple<int, int> pair;
-            Cube temp;
+            Cube temp, split1, split2, split3, split4;
+            
+            
             string message = "";
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
@@ -327,41 +328,62 @@ namespace Server
                 {
                     if (command.StartsWith("(split"))
                     {
-                        //Deal with split
-                        lock (w)
+                        string[] location = command.Split(',');
+                        location[2] = location[2].Substring(0, location[2].Length - 1);
+
+                        int.TryParse(location[1], out x);
+                        int.TryParse(location[2], out y);
+
+                            //Deal with split
+                            lock (w)
                         {
                             sockets.TryGetValue(state.workSocket, out temp);
+                            
+                            if (temp.Mass > w.minimumSplitMass && FindTeamCubes(temp.team_id) != null)
+                            {
+                                foreach (Cube c in FindTeamCubes(temp.team_id))
+                                {
+                                        c.Mass = c.Mass / 2;
+                                        c.loc_x -= 100;
+                                        c.loc_y -= 100;
+                                        Cube split = new Cube(c.loc_x + 100, c.loc_y +100, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
+                                        w.ListOfPlayers.Add(split.uid, split);
 
-                            w.ListOfPlayers.Remove(temp.GetID());
+                                        message += (JsonConvert.SerializeObject(split) + "\n");
+                                        message += (JsonConvert.SerializeObject(c) + "\n");
+                                        Network.Send(state.workSocket, message);
+                                }
+                                Network.Send(state.workSocket, message);
+                            }
 
-                            if (CubeIdExists(temp.uid + 1))
-                                tempID = (GenerateUID());
-                            else
-                                tempID = temp.uid + 1;
-                            Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
-                            w.ListOfPlayers.Add(split1.GetID(), split1);
+                            //w.ListOfPlayers.Remove(temp.GetID());
 
-                            if (CubeIdExists(temp.uid + 2))
-                                tempID = (GenerateUID());
-                            else
-                                tempID = temp.uid + 2;
-                            Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                            //if (CubeIdExists(temp.uid + 1))
+                            //    tempID = (GenerateUID());
+                            //else
+                            //    tempID = temp.uid + 1;
+                            //Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                            //w.ListOfPlayers.Add(split1.GetID(), split1);
 
-                                                                
-                            w.ListOfPlayers.Add(split2.GetID(), split2);
+                            //if (CubeIdExists(temp.uid + 2))
+                            //    tempID = (GenerateUID());
+                            //else
+                            //    tempID = temp.uid + 2;
+                            //Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                                                                    
+                            //w.ListOfPlayers.Add(split2.GetID(), split2);
 
-                            cubetosockets.Remove(temp);
-                            cubetosockets.Add(split1, state.workSocket);
+                            //cubetosockets.Remove(temp);
+                            //cubetosockets.Add(split1, state.workSocket);
 
-                            //sockets.Remove(state.workSocket);
-                            //sockets.Add(state.workSocket, split1);
-                            sockets[state.workSocket] = split1;
+                           
+                            //sockets[state.workSocket] = split1;
 
-                            temp.Mass = 0;
+                            //temp.Mass = 0;
 
                             //message += (JsonConvert.SerializeObject(split2) + "\n");
-                            message += (JsonConvert.SerializeObject(temp) + "\n");
-                            Network.Send(state.workSocket, message);
+                            //message += (JsonConvert.SerializeObject(temp) + "\n");
+                            //Network.Send(state.workSocket, message);
                             //splitCubes.Add(teamid, split1);
                             //splitCubes.Add(teamid, split2);
                          }
@@ -380,9 +402,17 @@ namespace Server
                             {
                                 x = w.GetWidth;
                             }
+                            if(x < 0)
+                            {
+                                x = 0;
+                            }
                             if(y > w.GetHeight)
                             {
                                 y = w.GetHeight;
+                            }
+                            if(y < 0)
+                            {
+                                y = 0;
                             }
                             sockets.TryGetValue(state.workSocket, out temp);
                             xold = (int)temp.GetX();
@@ -652,8 +682,59 @@ namespace Server
             }
             return null;
         }
+        /// <summary>
+        /// Returns true if cubes are colliding
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        private int CollisionDetection(double ID)
+        {
+            Cube main;
+            bool xCollision = false, yCollision = false;
+            double offset = 1;
+            List<Cube> templist = FindTeamCubes(ID);
+            foreach (Cube c in FindTeamCubes(ID))
+            {
+                main = c;
+                foreach (Cube u in FindTeamCubes(ID))
+                {
+                    if (u.GetID() == main.GetID())
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        if (main.GetX() > (int)u.GetX() - (main.GetWidth() * offset) && main.GetX() < (int)u.GetX() + (main.GetWidth() * offset))
+                        {
+                            yCollision = true;
+                        }
+                        if (main.GetY() > (int)u.GetY() - (main.GetWidth() * offset) && main.GetY() < (int)u.GetY() + (main.GetWidth() * offset))
+                        {
+                            xCollision = true;
+                        }
+                        if (xCollision && yCollision)
+                        {
+                            return 3;
+                        }
+                        if (xCollision)
+                        {
+                            return 1;
+                        }
+                        if (yCollision)
+                        {
+                            return 2;
+                        }
+                        if (!xCollision && !yCollision)
+                        {
+                            return 0;
+                        }
+                        
+                    }
+                }              
+            }
+            return 0;
+        }
 
-        
 
         /// <summary>
         /// Generates coordinates that do not overlap player cubes
@@ -721,11 +802,13 @@ namespace Server
             foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
             {
                 sockets.TryGetValue(s.Key, out temp);
-                if (FindTeamCubes(temp.team_id).Count != 0)
+                if (FindTeamCubes(temp.team_id).Count > 1)
                     foreach (Cube c in FindTeamCubes(temp.team_id))
                     {
-                        if (temp.team_id == c.team_id)
+                        if (c.GetID() == temp.GetID()) { }
+                        else if (temp.team_id == c.team_id)
                         {
+                            List<Cube> list = FindTeamCubes(temp.team_id);
                             //Speed is inversely related to the mass
                             speed = (10000 / temp.GetMass());
                             //If speed exceeds topspeed, then reassign the topspeed as the speed
@@ -736,29 +819,51 @@ namespace Server
                             offset = c.GetWidth();
                             xold = (int)c.GetX();
                             yold = (int)c.GetY();
-                            w.ListOfPlayers.Remove(c.GetID());
+                            
                             //pair is target destination
                             pair = s.Value;
                             //move toward target destination
-                            if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
-                            { }
-                            else if (pair.Item1 > xold)
-                                c.loc_x = xold + speed;
-                            else
-                                c.loc_x = xold - speed;
+                            
+                            {
+                                if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)  //it's in the right spot, doesn't need to move
+                                { }
+                                else if (pair.Item1 > xold)  //needs to move to the right
+                                {
+                                    switch (CollisionDetection(c.team_id))
+                                    {
+                                        case 0:
+                                            c.loc_x = xold + speed;
+                                            break;
+                                        case 1:
+                                            c.loc_x = xold - 5;
+                                            break;
+                                        case 2:
+                                            c.loc_y = yold - 5;
+                                            break;
+                                        case 3:
+                                            break;
+                                    }
 
+                                }
+                
+                                else
+                                {
+                                    
+                                }       
+                            }
+                            
                             if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
                             { }
                             else if (pair.Item2 > yold)
-                                c.loc_y = yold + speed;
+                            {
+                                
+                            }
                             else
-                                c.loc_y = yold - speed;
+                            {
+                                
+                            }
 
-                            //if (c.loc_x < (temp.loc_x + temp.GetWidth() / 2))
-                            //{
-                            //    c.loc_x = c.loc_x - temp.GetWidth() / 2;
-                            //}
-
+                            w.ListOfPlayers.Remove(c.GetID());
                             sockets[s.Key] = c;
                             w.ListOfPlayers.Add(c.GetID(), c);
                         }
