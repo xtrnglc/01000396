@@ -19,7 +19,7 @@ namespace Server
 {
     class Server
     {
-        private double UID = 1;
+        private int UID = 1;
         private List<Socket> playerSockets = new List<Socket>();
         private string pathToFile = "gamestate.txt";
         //private Cube Player;
@@ -248,16 +248,16 @@ namespace Server
             UID += 1;       //Makes sure there is a unique ID for all players
             if (UID > 10000.0)
             {
-                UID = 1.0;
+                UID = 1;
             }
-            Cube playerCube = new Cube(locationx, locationy, RandomColor(R), (double)UID, teamid, false, data, w.startMass);
+            Cube playerCube = new Cube(200, 200, RandomColor(R), UID, teamid, false, data, w.startMass);
             //Player = playerCube;
             //if the dictionary is empty or if 
             lock (w)
             {
                 if (w.ListOfPlayers.Count == 0)
                 {
-                    w.ListOfPlayers.Add((int)UID, playerCube);
+                    w.ListOfPlayers.Add(UID, playerCube);
                 }
                 else if (w.ListOfPlayers.ContainsKey((int)UID))
                 {
@@ -276,13 +276,13 @@ namespace Server
             string message = JsonConvert.SerializeObject(playerCube) + "\n";
             state.connectionCallback = DataFromClient;
             Network.Send(state.workSocket, message);
-            Console.WriteLine("Player " + data + "has joined the game");
+            Console.WriteLine("Player " + data + " has joined the game");
+            message = "";
 
             lock(w)
             if (sockets.Count > 0 && w.ListOfFood.Count > 0)
             {
-                
-                if (w.ListOfPlayers.Count > 0)
+                if (w.ListOfPlayers.Count > 1)
                 {
                     foreach (Cube t in w.ListOfPlayers.Values)
                     {
@@ -290,8 +290,7 @@ namespace Server
                     }
                     Network.Send(state.workSocket, message);
                 }
-                message = "";
-
+                    message = "";
                 foreach (Cube c in w.ListOfFood.Values)
                 {
                     message += JsonConvert.SerializeObject(c) + "\n";
@@ -309,7 +308,7 @@ namespace Server
             //Update(state);
             int x;
             int y;
-            double tempID;
+            int tempID;
             int xold;
             int yold;
             Tuple<int, int> pair;
@@ -332,41 +331,40 @@ namespace Server
                         //Deal with split
                         lock (w)
                         {
-                                
-                                sockets.TryGetValue(state.workSocket, out temp);
+                            sockets.TryGetValue(state.workSocket, out temp);
 
-                                w.ListOfPlayers.Remove(temp.GetID());
+                            w.ListOfPlayers.Remove(temp.GetID());
 
-                                if (CubeIdExists(temp.uid + 1))
-                                    tempID = (double)(GenerateUID());
-                                else
-                                    tempID = temp.uid + 1;
-                                Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
-                                w.ListOfPlayers.Add(split1.GetID(), split1);
+                            if (CubeIdExists(temp.uid + 1))
+                                tempID = (GenerateUID());
+                            else
+                                tempID = temp.uid + 1;
+                            Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                            w.ListOfPlayers.Add(split1.GetID(), split1);
 
-                                if (CubeIdExists(temp.uid + 2))
-                                    tempID = (double)(GenerateUID());
-                                else
-                                    tempID = temp.uid + 2;
-                                Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
+                            if (CubeIdExists(temp.uid + 2))
+                                tempID = (GenerateUID());
+                            else
+                                tempID = temp.uid + 2;
+                            Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
 
                                                                 
-                                w.ListOfPlayers.Add(split2.GetID(), split2);
+                            w.ListOfPlayers.Add(split2.GetID(), split2);
 
-                                cubetosockets.Remove(temp);
-                                cubetosockets.Add(split1, state.workSocket);
+                            cubetosockets.Remove(temp);
+                            cubetosockets.Add(split1, state.workSocket);
 
-                                //sockets.Remove(state.workSocket);
-                                //sockets.Add(state.workSocket, split1);
-                                sockets[state.workSocket] = split1;
+                            //sockets.Remove(state.workSocket);
+                            //sockets.Add(state.workSocket, split1);
+                            sockets[state.workSocket] = split1;
 
-                                temp.Mass = 0.0;
+                            temp.Mass = 0;
 
-                                //message += (JsonConvert.SerializeObject(split2) + "\n");
-                                message += (JsonConvert.SerializeObject(temp) + "\n");
-                                Network.Send(state.workSocket, message);
-                                //splitCubes.Add(teamid, split1);
-                                //splitCubes.Add(teamid, split2);
+                            //message += (JsonConvert.SerializeObject(split2) + "\n");
+                            message += (JsonConvert.SerializeObject(temp) + "\n");
+                            Network.Send(state.workSocket, message);
+                            //splitCubes.Add(teamid, split1);
+                            //splitCubes.Add(teamid, split2);
                          }
                     }
                     else
@@ -465,69 +463,56 @@ namespace Server
                     //sends player cubes to each client and deals with eating food
                     foreach (Cube c in w.ListOfPlayers.Values)
                     {
+                        message = "";
                         while (foodEaten(c) != null)
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
                             c.Mass += 1;
-                            temp2.Mass = 0.0;
+                            temp2.Mass = 0;
                             //Send the dead cube
-                            message2 += JsonConvert.SerializeObject(temp2) + "\n";
+                            message += JsonConvert.SerializeObject(temp2) + "\n";
                             message += JsonConvert.SerializeObject(c) + "\n";
+
                             foreach (Socket s in sockets.Keys)
                             {
                                 Network.Send(s, message);
-                                Network.Send(s, message2);
                             }
                         }
-                        
-                        //Send the predator cube with updated mass
-                        
-
-                        //send information to every client
-                        
                     }
-
                     
-
                     foreach (Cube c in w.ListOfPlayers.Values.ToList())
                     {
                         while (playerEaten(c) != null)
                         {
+                            message = "";
                             //temp2 = eaten
                             //c = eater
                             temp2 = playerEaten(c);                          
                             c.Mass += temp2.Mass; 
-                            temp2.Mass = 0.0;
+                            temp2.Mass = 0;
 
                             //Tell the player that his cube is dead and remove references to the client
                             string deathMessage = JsonConvert.SerializeObject(temp2) + "\n";
-                            message2 += deathMessage;
+                            message += deathMessage;
                             cubetosockets.TryGetValue(temp2, out tempsocket);
                             cubetosockets.TryGetValue(c, out tempsocket2);
                             message += JsonConvert.SerializeObject(c) + "\n";
 
                             Network.Send(tempsocket2, message);
-                            Network.Send(tempsocket2, message2);
                             Network.Send(tempsocket, message);
-                            Network.Send(tempsocket, deathMessage);
 
                             w.ListOfPlayers.Remove(temp2.GetID());
                             cubetosockets.Remove(temp2);
                             sockets.Remove(tempsocket);
                             Destination.Remove(tempsocket);
                             playerSockets.Remove(tempsocket);
-                        }
-                        foreach (Socket s in sockets.Keys)
-                        {
-                            Network.Send(s, message);
-                            Network.Send(s, message2);
-                        }
+                        }  
                     }
-
-                    
-
-
+                    foreach (Socket s in sockets.Keys)
+                    {
+                        Network.Send(s, message);
+                    }
                 }
             }  
         }
@@ -592,7 +577,7 @@ namespace Server
                 }
                 foreach (Socket s in sockets.Keys)
                 {
-                    Network.Send(s, message);
+                    //Network.Send(s, message);
                 }
             }
             
@@ -638,6 +623,7 @@ namespace Server
                 RandomColor(r);
             if (colorCode == -986896)
                 RandomColor(r);
+            
             return colorCode;
         }
 

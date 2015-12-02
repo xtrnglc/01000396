@@ -201,4 +201,7 @@ Design decisions
 
 	Also added a new parameter: number of viruses.
 
-
+12/01/2015
+	Our server wasn't drawing properly on other people's client because our cube model class uses doubles and so does not parse correctly when JSON 
+	deserializes it on other people's server. 
+	Change it all to ints and now it draws and works correctly on Kenny's and Michelle's client however still does not work on Jim's.
