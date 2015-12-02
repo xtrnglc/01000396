@@ -305,7 +305,6 @@ namespace Server
         /// </summary>
         private void DataFromClient(State state)
         {
-            //Update(state);
             int x;
             int y;
             int tempID;
@@ -565,7 +564,6 @@ namespace Server
         /// <param name="e"></param>
         private void attritionUpdate(Object o, ElapsedEventArgs e)
         {
-            string message = "";
             lock (w)
             {
                 foreach (Cube c in w.ListOfPlayers.Values)
@@ -574,12 +572,6 @@ namespace Server
                     {
                         c.Mass -= w.attritionRate * c.Mass / 100;
                     }
-
-                    message += JsonConvert.SerializeObject(c) + "\n";
-                }
-                foreach (Socket s in sockets.Keys)
-                {
-                    //Network.Send(s, message);
                 }
             }
             

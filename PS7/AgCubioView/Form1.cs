@@ -350,6 +350,7 @@ namespace AgCubioView
             
             if (Connected && playerAlive)
             {
+                //Uncomment for Viewport
                 //try
                 //{
                 //    float scale = (float)(world.ListOfPlayers[playerCube.uid].Mass * .001);
@@ -386,6 +387,7 @@ namespace AgCubioView
                         RectangleF rectangle = new RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
                         e.Graphics.FillRectangle(brush, rectangle);
 
+                        //Uncomment for name texts
                         ////Font font = new Font("Arial", cube.GetWidth() / 4);
                         //StringFormat stringFormat = new StringFormat();
                         //stringFormat.Alignment = StringAlignment.Center;
