@@ -282,7 +282,7 @@ namespace Server
             lock(w)
             if (sockets.Count > 0 && w.ListOfFood.Count > 0)
             {
-                if (w.ListOfPlayers.Count > 1)
+                if (w.ListOfPlayers.Count > 0)
                 {
                     foreach (Cube t in w.ListOfPlayers.Values)
                     {
@@ -421,15 +421,13 @@ namespace Server
             string message2 = "";
             
             Cube temp, temp2;
-            Tuple<int, int> pair;
-            Tuple<int, int> coordinates;
-            
+
             Socket tempsocket, tempsocket2;
 
             //grow new food
             lock (w)
             {
-                Move();
+                
 
                 if (w.ListOfFood.Count < w.maxFood)
                 {    
@@ -445,48 +443,44 @@ namespace Server
                     randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
-                    if (sockets.Count > 0)
+                    //Send new foods
+                    foreach (Socket s in sockets.Keys)
                     {
+                        Network.Send(s, message);
+                    }        
+                }
+                Move();
+                //Handle move requests
+                message = "";
+                message2 = "";
+                if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
+                {
+                    foreach (Cube c in w.ListOfPlayers.Values.ToList())
+                    {
+                        message += JsonConvert.SerializeObject(c) + "\n";
+                        //Send current position of each cube
                         foreach (Socket s in sockets.Keys)
                         {
                             Network.Send(s, message);
                         }
-                    }
-                }
-
-                //Handle move requests
-                message = "";
-                if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
-                {
-                    Move();
-                    message = "";
-
-                    //sends player cubes to each client and deals with eating food
-                    foreach (Cube c in w.ListOfPlayers.Values)
-                    {
-                        message = "";
                         while (foodEaten(c) != null)
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
-                            c.Mass += 1;
+                            c.Mass += temp2.Mass;
                             temp2.Mass = 0;
                             //Send the dead cube
                             message += JsonConvert.SerializeObject(temp2) + "\n";
-                            message += JsonConvert.SerializeObject(c) + "\n";
-
-                            foreach (Socket s in sockets.Keys)
-                            {
-                                Network.Send(s, message);
-                            }
+                            message2 += JsonConvert.SerializeObject(c) + "\n";
                         }
-                    }
-                    
-                    foreach (Cube c in w.ListOfPlayers.Values.ToList())
-                    {
-                        while (playerEaten(c) != null)
+                        //Send updated mass of cubes after eating food
+                        foreach (Socket s in sockets.Keys)
                         {
-                            message = "";
+                            Network.Send(s, message);
+                            Network.Send(s, message2);
+                        }
+                        while (playerEaten(c) != null)
+                        {  
                             //temp2 = eaten
                             //c = eater
                             temp2 = playerEaten(c);                          
@@ -494,26 +488,29 @@ namespace Server
                             temp2.Mass = 0;
 
                             //Tell the player that his cube is dead and remove references to the client
-                            string deathMessage = JsonConvert.SerializeObject(temp2) + "\n";
-                            message += deathMessage;
+                            message2 = JsonConvert.SerializeObject(temp2) + "\n";
                             cubetosockets.TryGetValue(temp2, out tempsocket);
                             cubetosockets.TryGetValue(c, out tempsocket2);
                             message += JsonConvert.SerializeObject(c) + "\n";
 
-                            Network.Send(tempsocket2, message);
+                            //Network.Send(tempsocket2, message);
                             Network.Send(tempsocket, message);
+                            Network.Send(tempsocket, message2);
 
                             w.ListOfPlayers.Remove(temp2.GetID());
                             cubetosockets.Remove(temp2);
                             sockets.Remove(tempsocket);
                             Destination.Remove(tempsocket);
                             playerSockets.Remove(tempsocket);
+                            //Send updated mass of cube after eating players
+                            foreach (Socket s in sockets.Keys)
+                            {
+                                Network.Send(s, message);
+                                Network.Send(s, message2);
+                            }
                         }  
                     }
-                    foreach (Socket s in sockets.Keys)
-                    {
-                        Network.Send(s, message);
-                    }
+                    
                 }
             }  
         }
@@ -573,8 +570,7 @@ namespace Server
                         c.Mass -= w.attritionRate * c.Mass / 100;
                     }
                 }
-            }
-            
+            }   
         }
 
         /// <summary>
@@ -715,7 +711,6 @@ namespace Server
         /// </summary>
         private void Move()
         {
-
             int xold;
             int yold;
             Cube temp;
