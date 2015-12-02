@@ -83,7 +83,7 @@ namespace NetworkController
 
             //TcpClient client = new TcpClient(hostname, port);
 
-            state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);                             //What happens if you can't connect?
+            state.workSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);                             //What happens if you can't connect?
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
 
             return socket;
@@ -190,7 +190,7 @@ namespace NetworkController
         /// </summary>
         public static void Server_Awaiting_Client_Loop(Action<State> callback)
         {
-            TcpListener listener = new TcpListener(IPAddress.Any, 11000);
+            TcpListener listener = new TcpListener(IPAddress.IPv6Any, 11000);
             State state = new State();
             connectionCallbackTemp = callback;
 

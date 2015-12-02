@@ -281,24 +281,23 @@ namespace Server
             lock(w)
             if (sockets.Count > 0 && w.ListOfFood.Count > 0)
             {
-                foreach (Socket s in sockets.Keys)
+                
+                if (w.ListOfPlayers.Count > 0)
                 {
-                    if (w.ListOfPlayers.Count > 0)
+                    foreach (Cube t in w.ListOfPlayers.Values)
                     {
-                        foreach (Cube t in w.ListOfPlayers.Values)
-                        {
-                            message += JsonConvert.SerializeObject(t) + "\n";
-                        }
-                        Network.Send(s, message);
+                        message += JsonConvert.SerializeObject(t) + "\n";
                     }
-                    message = "";
-
-                    foreach (Cube c in w.ListOfFood.Values)
-                    {
-                        message += JsonConvert.SerializeObject(c) + "\n";
-                    }
-                    Network.Send(s, message);
+                    Network.Send(state.workSocket, message);
                 }
+                message = "";
+
+                foreach (Cube c in w.ListOfFood.Values)
+                {
+                    message += JsonConvert.SerializeObject(c) + "\n";
+                }
+                Network.Send(state.workSocket, message);
+                
             }
         }
 
@@ -351,8 +350,7 @@ namespace Server
                                     tempID = temp.uid + 2;
                                 Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
 
-                                
-                                
+                                                                
                                 w.ListOfPlayers.Add(split2.GetID(), split2);
 
                                 cubetosockets.Remove(temp);
@@ -364,14 +362,12 @@ namespace Server
 
                                 temp.Mass = 0.0;
 
-                                message += (JsonConvert.SerializeObject(split2) + "\n");
-                                //message += (JsonConvert.SerializeObject(temp) + "\n");
+                                //message += (JsonConvert.SerializeObject(split2) + "\n");
+                                message += (JsonConvert.SerializeObject(temp) + "\n");
                                 Network.Send(state.workSocket, message);
                                 //splitCubes.Add(teamid, split1);
                                 //splitCubes.Add(teamid, split2);
-
                          }
-
                     }
                     else
                     {
@@ -463,8 +459,6 @@ namespace Server
                 message = "";
                 if (w.ListOfPlayers.Count > 0 && sockets.Count > 0)
                 {
-
-
                     Move();
                     message = "";
 
@@ -479,20 +473,22 @@ namespace Server
                             temp2.Mass = 0.0;
                             //Send the dead cube
                             message2 += JsonConvert.SerializeObject(temp2) + "\n";
+                            message += JsonConvert.SerializeObject(c) + "\n";
+                            foreach (Socket s in sockets.Keys)
+                            {
+                                Network.Send(s, message);
+                                Network.Send(s, message2);
+                            }
                         }
                         
                         //Send the predator cube with updated mass
-                        message += JsonConvert.SerializeObject(c) + "\n";
+                        
 
-
+                        //send information to every client
+                        
                     }
 
-                    //send information to every client
-                    foreach (Socket s in sockets.Keys)
-                    {
-                        Network.Send(s, message);
-                        Network.Send(s, message2);
-                    }
+                    
 
                     foreach (Cube c in w.ListOfPlayers.Values.ToList())
                     {
@@ -522,13 +518,14 @@ namespace Server
                             Destination.Remove(tempsocket);
                             playerSockets.Remove(tempsocket);
                         }
+                        foreach (Socket s in sockets.Keys)
+                        {
+                            Network.Send(s, message);
+                            Network.Send(s, message2);
+                        }
                     }
 
-                    foreach(Socket s in sockets.Keys)
-                    {
-                        Network.Send(s, message);
-                        Network.Send(s, message2);
-                    }
+                    
 
 
                 }
@@ -748,46 +745,50 @@ namespace Server
 
             foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
             {
-
                 sockets.TryGetValue(s.Key, out temp);
-                //if (w.ListOfPlayers.Values.Count > 1)
-                //foreach (Cube c in w.ListOfPlayers.Values)
-                //{
-                //    if (temp.team_id == c.team_id)
-                //    {
-                //        //Speed is inversely related to the mass
-                //        speed = (10000 / temp.GetMass());
-                //        //If speed exceeds topspeed, then reassign the topspeed as the speed
-                //        if (speed > w.topSpeed)
-                //        {
-                //            speed = w.topSpeed;
-                //        }
-                //        offset = c.GetWidth();
-                //        xold = (int)c.GetX();
-                //        yold = (int)c.GetY();
-                //        w.ListOfPlayers.Remove(c.GetID());
-                //        //pair is target destination
-                //        pair = s.Value;
-                //        //move toward target destination
-                //        if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
-                //        { }
-                //        else if (pair.Item1 > xold)
-                //            c.loc_x = xold + speed;
-                //        else
-                //            c.loc_x = xold - speed;
+                if (FindTeamCubes(temp.team_id).Count != 0)
+                    foreach (Cube c in FindTeamCubes(temp.team_id))
+                    {
+                        if (temp.team_id == c.team_id)
+                        {
+                            //Speed is inversely related to the mass
+                            speed = (10000 / temp.GetMass());
+                            //If speed exceeds topspeed, then reassign the topspeed as the speed
+                            if (speed > w.topSpeed)
+                            {
+                                speed = w.topSpeed;
+                            }
+                            offset = c.GetWidth();
+                            xold = (int)c.GetX();
+                            yold = (int)c.GetY();
+                            w.ListOfPlayers.Remove(c.GetID());
+                            //pair is target destination
+                            pair = s.Value;
+                            //move toward target destination
+                            if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
+                            { }
+                            else if (pair.Item1 > xold)
+                                c.loc_x = xold + speed;
+                            else
+                                c.loc_x = xold - speed;
 
-                //        if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
-                //        { }
-                //        else if (pair.Item2 > yold)
-                //            c.loc_y = yold + speed;
-                //        else
-                //            c.loc_y = yold - speed;
+                            if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
+                            { }
+                            else if (pair.Item2 > yold)
+                                c.loc_y = yold + speed;
+                            else
+                                c.loc_y = yold - speed;
 
-                //        sockets[s.Key] = c;
-                //        w.ListOfPlayers.Add(c.GetID(), c);
-                //    }
-                //}
-                //else
+                            //if (c.loc_x < (temp.loc_x + temp.GetWidth() / 2))
+                            //{
+                            //    c.loc_x = c.loc_x - temp.GetWidth() / 2;
+                            //}
+
+                            sockets[s.Key] = c;
+                            w.ListOfPlayers.Add(c.GetID(), c);
+                        }
+                    }
+                else
                 {
                     //Speed is inversely related to the mass
                     speed = (10000 / temp.GetMass());
@@ -820,37 +821,30 @@ namespace Server
                     sockets[s.Key] = temp;
                     w.ListOfPlayers.Add(temp.GetID(), temp);
                 }
-                ////Speed is inversely related to the mass
-                //speed = (10000 / temp.GetMass());
-                ////If speed exceeds topspeed, then reassign the topspeed as the speed
-                //if (speed > w.topSpeed)
-                //{
-                //    speed = w.topSpeed;
-                //}
-                //offset = temp.GetWidth();
-                //xold = (int)temp.GetX();
-                //yold = (int)temp.GetY();
-                //w.ListOfPlayers.Remove(temp.GetID());
-                ////pair is target destination
-                //pair = s.Value;
-                ////move toward target destination
-                //if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
-                //{ }
-                //else if (pair.Item1 > xold)
-                //    temp.loc_x = xold + speed;
-                //else
-                //    temp.loc_x = xold - speed;
-
-                //if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
-                //{ }
-                //else if (pair.Item2 > yold)
-                //    temp.loc_y = yold + speed;
-                //else
-                //    temp.loc_y = yold - speed;
-
-                //sockets[s.Key] = temp;
-                //w.ListOfPlayers.Add(temp.GetID(), temp);
             }
+        }
+
+        /// <summary>
+        /// Method will find all the cubes that have the same teamID as the cube that needs to move
+        /// </summary>
+        /// <param name="teamID"></param>
+        /// <returns></returns>
+        private List<Cube> FindTeamCubes(double teamID)
+        {
+            List<Cube> cubes = new List<Cube>();
+            if (w.ListOfPlayers.Values.Count != 0)
+            {
+                foreach (Cube c in w.ListOfPlayers.Values)
+                {
+                    if (teamID == c.team_id)
+                    {
+                        cubes.Add(c);
+                    }
+                }
+                return cubes;
+            }
+            else
+                return null;
         }
     }
 }

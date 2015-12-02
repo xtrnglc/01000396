@@ -227,6 +227,7 @@ namespace AgCubioView
         /// <param name="state"></param>
         private void ThirdCallBack(State state)                             //THREE CALLBACKS?
         {
+            int splitcount = 0;
             currentState = state;
             string dataString = state.sb.ToString();
             string[] substrings = Regex.Split(dataString, "\n");
@@ -256,12 +257,27 @@ namespace AgCubioView
                                 {
                                     if (cube.Mass == 0)
                                     {
-                                        if (cube.GetID() == playerCube.GetID())
+                                        if (cube.uid == playerCube.uid)
                                         {
-                                            playerAlive = false;
+                                            foreach (Cube c in world.ListOfPlayers.Values) 
+                                            {
+                                                if(c.team_id == playerCube.team_id)
+                                                {
+                                                    splitcount++;
+                                                }                                                
+                                            }
+                                            if (splitcount == 0)
+                                            {
+                                                playerAlive = false;
+                                                playersEaten++;
+                                            }
+                                            else
+                                            {
+                                                playerAlive = true;
+                                            }      
                                         }
                                         world.ListOfPlayers.Remove(cube.GetID());
-                                        playersEaten++;
+                                        
                                     }
                                     else
                                     {
