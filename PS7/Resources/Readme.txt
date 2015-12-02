@@ -176,6 +176,7 @@ Design decisions
 
 11/29/2015
 	Able to get player cubes being absorbed kinda working. The client we have might be the issue as there are inconsistencies when a player is being eaten.
+	The error is because we try to set font size to 0. SO I commented out the font drawings.
 	Sometimes it works correctly and other times we get the big red X and following error:
 
 	See the end of this message for details on invoking 
@@ -205,3 +206,4 @@ Design decisions
 	Our server wasn't drawing properly on other people's client because our cube model class uses doubles and so does not parse correctly when JSON 
 	deserializes it on other people's server. 
 	Change it all to ints and now it draws and works correctly on Kenny's and Michelle's client however still does not work on Jim's.
+	Also getting crazy lag. Might be my internet connection though.

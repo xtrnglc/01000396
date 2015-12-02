@@ -430,6 +430,8 @@ namespace Server
             //grow new food
             lock (w)
             {
+                Move();
+
                 if (w.ListOfFood.Count < w.maxFood)
                 {    
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
