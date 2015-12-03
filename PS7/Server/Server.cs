@@ -304,6 +304,7 @@ namespace Server
                 Network.Send(state.workSocket, message);
                 
             }
+            Console.WriteLine("Player id: " + playerCube.uid);
         }
 
         /// <summary>
@@ -443,10 +444,6 @@ namespace Server
             //grow new food
             lock (w)
             {
-                
-               
-
-
                 if (w.ListOfFood.Count < w.maxFood)
                 {    
                     Cube randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
@@ -676,110 +673,7 @@ namespace Server
             }
             return null;
         }
-        /// <summary>
-        /// Returns true if cubes are colliding
-        /// </summary>
-        /// <param name="ID"></param>
-        /// <returns></returns>
-        private int CollisionDetection(double ID)
-        {
-            Cube main;
-            bool xCollision = false, yCollision = false;
-            double offset = 1;
-            List<Cube> templist = FindTeamCubes(ID);
-            foreach (Cube c in FindTeamCubes(ID))
-            {
-                main = c;
-                foreach (Cube u in FindTeamCubes(ID))
-                {
-                    if (u.GetID() == main.GetID())
-                    {
-                        //do nothing
-                    }
-                    else
-                    {
-                        if (main.GetX() > (int)u.GetX() - (main.GetWidth() * offset) && main.GetX() < (int)u.GetX() + (main.GetWidth() * offset))
-                        {
-                            yCollision = true;
-                        }
-                        if (main.GetY() > (int)u.GetY() - (main.GetWidth() * offset) && main.GetY() < (int)u.GetY() + (main.GetWidth() * offset))
-                        {
-                            xCollision = true;
-                        }
-                        if (xCollision && yCollision)
-                        {
-                            return 3;
-                        }
-                        if (xCollision)
-                        {
-                            return 1;
-                        }
-                        if (yCollision)
-                        {
-                            return 2;
-                        }
-                        if (!xCollision && !yCollision)
-                        {
-                            return 0;
-                        }
-                        
-                    }
-                }              
-            }
-            return 0;
-        }
-
-
-        /// <summary>
-        /// Generates coordinates that do not overlap player cubes
-        /// </summary>
-        /// <returns></returns>
-        private Tuple<int,int> generateCoordinates()
-        {
-            Boolean valid = false;
-            Tuple<int, int> coordinates;
-            int x = 0;
-            int y = 0;
-            
-            double offset = 1.5;
-            while (!valid)
-            {
-                x = R.Next(1, w.GetWidth);
-                y = R.Next(1, w.GetHeight);
-                foreach (Cube c in w.ListOfPlayers.Values)
-                {
-                    if (c.GetX() > x - (c.GetWidth() * offset) && c.GetX() < x + (c.GetWidth() * offset))
-                    {
-                        if (c.GetY() > y - (c.GetWidth() * offset) && c.GetY() < y + (c.GetWidth() * offset))
-                        {
-                            valid = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            coordinates = new Tuple<int, int>(x, y);
-            return coordinates;
-        }
-
-        private bool CubeIdExists(double ID)
-        {
-            foreach (Cube c in w.ListOfPlayers.Values)
-            {
-                if (ID == c.uid)
-                {
-                    return true;
-                }
-            }
-            foreach (Cube f in w.ListOfFood.Values)
-            {
-                if (ID == f.uid)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+      
 
         /// <summary>
         /// Helper method to move the cube.
@@ -794,233 +688,266 @@ namespace Server
             int offset;
             Rectangle tempRectangle;
             Rectangle tempRactangle2;
-
-            foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
+            lock (w)
             {
-                sockets.TryGetValue(s.Key, out temp);
-                rectangles.TryGetValue(temp.uid, out tempRectangle);
-                if (FindTeamCubes(temp.team_id).Count > 1)
-                    foreach (Cube c in FindTeamCubes(temp.team_id))
-                    {
-                        if (c.GetID() == temp.GetID()) { }
-                        else if (temp.team_id == c.team_id)
+
+                foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
+                {
+                    sockets.TryGetValue(s.Key, out temp);
+                    rectangles.TryGetValue(temp.uid, out tempRectangle);
+                    if (FindTeamCubes(temp.team_id).Count > 1)
+                        foreach (Cube c in FindTeamCubes(temp.team_id))
                         {
-                            List<Cube> list = FindTeamCubes(temp.team_id);
-                            rectangles.TryGetValue(c.uid, out tempRectangle);
-                            //Speed is inversely related to the mass
-                            speed = (10000 / temp.GetMass());
-                            //If speed exceeds topspeed, then reassign the topspeed as the speed
-                            if (speed > w.topSpeed)
+                            if (c.GetID() == temp.GetID()) { }
+                            else if (temp.team_id == c.team_id)
                             {
-                                speed = w.topSpeed;
-                            }
-                            offset = c.GetWidth();
-                            xold = (int)c.GetX();
-                            yold = (int)c.GetY();
-                            
-                            //pair is target destination
-                            pair = s.Value;
-                            //move toward target destination
-                            
-                            
-                            if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)  //it's in the right spot, doesn't need to move
-                            { }
-                            else if (pair.Item1 > xold)  //needs to move to the right
-                            {
-                                foreach(Cube t in list)
+                                List<Cube> list = FindTeamCubes(temp.team_id);
+                                rectangles.TryGetValue(c.uid, out tempRectangle);
+                                //Speed is inversely related to the mass
+                                speed = (10000 / temp.GetMass());
+                                //If speed exceeds topspeed, then reassign the topspeed as the speed
+                                if (speed > w.topSpeed)
                                 {
-                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
-                                    if(t.uid != c.uid)
-                                    {
-                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
-                                        {
-                                            c.loc_x = xold + speed;
-                                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
-
-                                            rectangles[c.uid] = tempRectangle;
-                                        }
-                                        else
-                                        {
-                                            c.loc_x = xold - 15;
-                                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
-
-                            rectangles[c.uid] = tempRectangle;
-                                        }
-                                    }       
+                                    speed = w.topSpeed;
                                 }
-                            }
-                            //Move to the left
-                            else
-                            {
-                                foreach(Cube t in list)
+                                offset = c.GetWidth();
+                                xold = (int)c.GetX();
+                                yold = (int)c.GetY();
+
+                                //pair is target destination
+                                pair = s.Value;
+                                //move toward target destination
+
+
+                                if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)  //it's in the right spot, doesn't need to move
+                                { }
+                                else if (pair.Item1 > xold)  //needs to move to the right
                                 {
-                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
-                                    if (t.uid != c.uid)
+                                    foreach (Cube t in list)
                                     {
-                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                        rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                        if (t.uid != c.uid)
                                         {
-                                            c.loc_x = xold - speed;
-                                        }
-                                        else
-                                        {
-                                            c.loc_x = xold + 15;
-                                        }
-                                    }  
-                                } 
-                            }       
-                            if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
-                            { }
-                            //Move down
-                            else if (pair.Item2 > yold)
-                            {
-                                foreach(Cube t in list)
-                                {
-                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
-                                    if (t.uid != c.uid)
-                                    {
-                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
-                                        {
-                                            c.loc_y = yold + speed;
-                                        }
-                                        else
-                                        {
-                                            c.loc_y = yold - 15;
+                                            if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                            {
+                                                c.loc_x = xold + speed;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                            else
+                                            {
+                                                c.loc_x = xold - 15;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
                                         }
                                     }
-                                }           
-                            }
-                            //move up
-                            else
-                            {
-                                foreach(Cube t in list)
-                                {
-                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
-                                    if (t.uid != c.uid)
-                                    {
-                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
-                                        {
-                                            c.loc_y = yold - speed;
-                                        }
-                                        else
-                                        {
-                                            c.loc_y = yold + 15;
-                                        }
-                                    }  
-                                }   
-                            }
-
-                            //tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
-
-                            rectangles[c.uid] = tempRectangle;
-                            string message = JsonConvert.SerializeObject(c);
-                            
-                            w.ListOfPlayers.Remove(c.GetID());
-                            sockets[s.Key] = c;
-                            w.ListOfPlayers.Add(c.GetID(), c);
-
-                            if(stopWatch.ElapsedMilliseconds - c.splitTime > 5000)
-                            {
-                                Cube partnerCube = null;
-                                foreach(Cube t in list)
-                                {
-                                    if(t.uid != c.uid)
-                                    {
-                                        if (t.splitTime == c.splitTime)
-                                        {
-                                            partnerCube = t;
-                                        }
-                                    }
-                                    
                                 }
-
-                                int combinedMass = c.Mass + partnerCube.Mass;
-
-
-                                Cube combinedCube = null;
-                                
-                                Socket tempsocket;
-
-                                //Socket belongs to c
-                                if(cubetosockets.TryGetValue(c, out tempsocket))
-                                {
-                                    combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
-                                    cubetosockets.Remove(partnerCube);
-                                    sockets[tempsocket] = combinedCube;
-                                    cubetosockets.Remove(c);
-                                    cubetosockets.Add(combinedCube, tempsocket);
-                                    partnerCube.Mass = 0;
-                                    rectangles.Remove(partnerCube.uid);
-                                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
-                                    w.ListOfPlayers.Remove(partnerCube.uid);
-                                    w.ListOfPlayers[c.uid] = combinedCube;
-                                    combinedCube.splitTime = 0;
-                                    //message += JsonConvert.SerializeObject(partnerCube) + "\n";
-                                    //message += JsonConvert.SerializeObject(combinedCube) + "\n";
-                                }
-                                //Socket belongs to partner cube
+                                //Move to the left
                                 else
                                 {
-                                    combinedCube = new Cube(partnerCube.loc_x, partnerCube.loc_y, partnerCube.argb_color, partnerCube.uid, partnerCube.team_id, false, partnerCube.Name, combinedMass);
-                                    cubetosockets.TryGetValue(partnerCube, out tempsocket);
-                                    cubetosockets.Remove(partnerCube);
-                                    cubetosockets.Remove(c);
-                                    sockets[tempsocket] = combinedCube;
-                                    cubetosockets.Add(combinedCube, tempsocket);
-                                    c.Mass = 0;
-                                    rectangles.Remove(c.uid);
-                                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
-                                    w.ListOfPlayers.Remove(c.uid);
-                                    w.ListOfPlayers[partnerCube.uid] = combinedCube;
-                                    combinedCube.splitTime = 0;
-                                    //message += JsonConvert.SerializeObject(c) + "\n";
-                                    //message += JsonConvert.SerializeObject(combinedCube) + "\n";
+                                    foreach (Cube t in list)
+                                    {
+                                        rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                        if (t.uid != c.uid)
+                                        {
+                                            if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                            {
+                                                c.loc_x = xold - speed;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                            else
+                                            {
+                                                c.loc_x = xold + 15;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                        }
+                                    }
                                 }
-   
-                            }
+                                if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
+                                { }
+                                //Move down
+                                else if (pair.Item2 > yold)
+                                {
+                                    foreach (Cube t in list)
+                                    {
+                                        rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                        if (t.uid != c.uid)
+                                        {
+                                            if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                            {
+                                                c.loc_y = yold + speed;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                            else
+                                            {
+                                                c.loc_y = yold - 15;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                        }
+                                    }
+                                }
+                                //move up
+                                else
+                                {
+                                    foreach (Cube t in list)
+                                    {
+                                        rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                        if (t.uid != c.uid)
+                                        {
+                                            if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                            {
+                                                c.loc_y = yold - speed;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                            else
+                                            {
+                                                c.loc_y = yold + 15;
+                                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                                rectangles[c.uid] = tempRectangle;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                //tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                rectangles[c.uid] = tempRectangle;
+                                string message = JsonConvert.SerializeObject(c);
+
+                                w.ListOfPlayers.Remove(c.GetID());
+                                sockets[s.Key] = c;
+                                w.ListOfPlayers.Add(c.GetID(), c);
+
+                                foreach (Socket tempsocket in sockets.Keys)
+                                {
+                                    Network.Send(tempsocket, message + "\n");
+                                }
+
+                                
+                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 5000)
+                                {
+                                    Cube partnerCube = null;
+                                    foreach (Cube t in list)
+                                    {
+                                        if (t.uid != c.uid)
+                                        {
+                                            if (t.splitTime == c.splitTime)
+                                            {
+                                                partnerCube = t;
+                                            }
+                                        }
+
+                                    }
+
+                                    int combinedMass = c.Mass + partnerCube.Mass;
+
+
+                                    Cube combinedCube = null;
+
+                                    Socket tempsocket;
+
+                                    //Socket belongs to c
+                                    if (cubetosockets.TryGetValue(c, out tempsocket))
+                                    {
+                                        combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
+                                        cubetosockets.Remove(partnerCube);
+                                        sockets[tempsocket] = combinedCube;
+                                        cubetosockets.Remove(c);
+                                        cubetosockets.Add(combinedCube, tempsocket);
+                                        partnerCube.Mass = 0;
+                                        rectangles.Remove(partnerCube.uid);
+                                        tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
+                                            combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                                        w.ListOfPlayers.Remove(partnerCube.uid);
+                                        w.ListOfPlayers[c.uid] = combinedCube;
+                                        combinedCube.splitTime = 0;
+                                        string message1 = JsonConvert.SerializeObject(partnerCube) + "\n";
+                                        string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
+                                        Network.Send(tempsocket, message1);
+                                        Network.Send(tempsocket, message2);
+                                    }
+                                    //Socket belongs to partner cube
+                                    else
+                                    {
+                                        combinedCube = new Cube(partnerCube.loc_x, partnerCube.loc_y, partnerCube.argb_color, partnerCube.uid, partnerCube.team_id, false, partnerCube.Name, combinedMass);
+                                        cubetosockets.TryGetValue(partnerCube, out tempsocket);
+                                        cubetosockets.Remove(partnerCube);
+                                        cubetosockets.Remove(c);
+                                        sockets[tempsocket] = combinedCube;
+                                        cubetosockets.Add(combinedCube, tempsocket);
+                                        c.Mass = 0;
+                                        rectangles.Remove(c.uid);
+                                        tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                                        w.ListOfPlayers.Remove(c.uid);
+                                        w.ListOfPlayers[partnerCube.uid] = combinedCube;
+                                        combinedCube.splitTime = 0;
+
+                                        string message1 = JsonConvert.SerializeObject(c) + "\n";
+                                        string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
+                                        Network.Send(tempsocket, message1);
+                                        Network.Send(tempsocket, message2);
+                                    }
+
+                                }
 
 
 
-                            foreach (Socket tempsocket in sockets.Keys)
-                            {
-                                Network.Send(tempsocket, message + "\n");
+                                foreach (Socket tempsocket in sockets.Keys)
+                                {
+                                    Network.Send(tempsocket, message + "\n");
+                                }
                             }
                         }
-                    }
-                else
-                {
-                    //Speed is inversely related to the mass
-                    speed = (10000 / temp.GetMass());
-                    //If speed exceeds topspeed, then reassign the topspeed as the speed
-                    if (speed > w.topSpeed)
+                    else
                     {
-                        speed = w.topSpeed;
+                        //Speed is inversely related to the mass
+                        speed = (10000 / temp.GetMass());
+                        //If speed exceeds topspeed, then reassign the topspeed as the speed
+                        if (speed > w.topSpeed)
+                        {
+                            speed = w.topSpeed;
+                        }
+                        offset = temp.GetWidth();
+                        xold = (int)temp.GetX();
+                        yold = (int)temp.GetY();
+                        w.ListOfPlayers.Remove(temp.GetID());
+                        //pair is target destination
+                        pair = s.Value;
+                        //move toward target destination
+                        if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
+                        { }
+                        else if (pair.Item1 > xold)
+                            temp.loc_x = xold + speed;
+                        else
+                            temp.loc_x = xold - speed;
+
+                        if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
+                        { }
+                        else if (pair.Item2 > yold)
+                            temp.loc_y = yold + speed;
+                        else
+                            temp.loc_y = yold - speed;
+
+                        sockets[s.Key] = temp;
+
+                        tempRectangle = new Rectangle((int)(temp.loc_x - temp.GetWidth() * 1.5), (int)(temp.loc_y - temp.GetWidth() * 1.5), temp.GetWidth() * 3, temp.GetWidth() * 3);
+                        rectangles[temp.uid] = tempRectangle;
+                        w.ListOfPlayers.Add(temp.GetID(), temp);
                     }
-                    offset = temp.GetWidth();
-                    xold = (int)temp.GetX();
-                    yold = (int)temp.GetY();
-                    w.ListOfPlayers.Remove(temp.GetID());
-                    //pair is target destination
-                    pair = s.Value;
-                    //move toward target destination
-                    if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)
-                    { }
-                    else if (pair.Item1 > xold)
-                        temp.loc_x = xold + speed;
-                    else
-                        temp.loc_x = xold - speed;
-
-                    if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
-                    { }
-                    else if (pair.Item2 > yold)
-                        temp.loc_y = yold + speed;
-                    else
-                        temp.loc_y = yold - speed;
-
-                    sockets[s.Key] = temp;
-
-                    tempRectangle = new Rectangle((int)(temp.loc_x - temp.GetWidth() * 1.5), (int)(temp.loc_y - temp.GetWidth() * 1.5), temp.GetWidth() * 3, temp.GetWidth() * 3);
-                    rectangles[temp.uid] = tempRectangle;
-                    w.ListOfPlayers.Add(temp.GetID(), temp);
                 }
             }
         }
