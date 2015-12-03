@@ -877,7 +877,6 @@ namespace Server
                                                 }
                                             }
                                         }
-
                                     }
 
                                     double combinedMass = c.Mass + partnerCube.Mass;
