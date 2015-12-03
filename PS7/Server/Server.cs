@@ -799,7 +799,7 @@ namespace Server
                         else if (temp.team_id == c.team_id)
                         {
                             List<Cube> list = FindTeamCubes(temp.team_id);
-                            rectangles.TryGetValue(c.uid, out tempRactangle2);
+                            rectangles.TryGetValue(c.uid, out tempRectangle);
                             //Speed is inversely related to the mass
                             speed = (10000 / temp.GetMass());
                             //If speed exceeds topspeed, then reassign the topspeed as the speed
@@ -807,9 +807,9 @@ namespace Server
                             {
                                 speed = w.topSpeed;
                             }
-                            offset = temp.GetWidth();
-                            xold = (int)temp.GetX();
-                            yold = (int)temp.GetY();
+                            offset = c.GetWidth();
+                            xold = (int)c.GetX();
+                            yold = (int)c.GetY();
                             
                             //pair is target destination
                             pair = s.Value;
@@ -820,63 +820,92 @@ namespace Server
                             { }
                             else if (pair.Item1 > xold)  //needs to move to the right
                             {
-                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                foreach(Cube t in list)
                                 {
-                                    temp.loc_x = xold + speed;
-                                }
-                                else
-                                {
-                                    temp.loc_x = xold - 5;
+                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                    if(t.uid != c.uid)
+                                    {
+                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                        {
+                                            c.loc_x = xold + speed;
+                                        }
+                                        else
+                                        {
+                                            c.loc_x = xold - 15;
+                                        }
+                                    }       
                                 }
                             }
                             //Move to the left
                             else
                             {
-                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                foreach(Cube t in list)
                                 {
-                                    temp.loc_x = xold - speed;
-                                }
-                                else
-                                {
-                                    temp.loc_x = xold + 5;
-                                }
-                                
+                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                    if (t.uid != c.uid)
+                                    {
+                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                        {
+                                            c.loc_x = xold - speed;
+                                        }
+                                        else
+                                        {
+                                            c.loc_x = xold + 15;
+                                        }
+                                    }  
+                                } 
                             }       
                             if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
                             { }
                             //Move down
                             else if (pair.Item2 > yold)
                             {
-
-                                rectangles.TryGetValue(c.uid, out tempRactangle2);
-                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                foreach(Cube t in list)
                                 {
-                                    temp.loc_y = yold + speed;
-                                }
-                                else
-                                {
-                                    temp.loc_y = yold - 5;
-                                }
+                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                    if (t.uid != c.uid)
+                                    {
+                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                        {
+                                            c.loc_y = yold + speed;
+                                        }
+                                        else
+                                        {
+                                            c.loc_y = yold - 15;
+                                        }
+                                    }
+                                }           
                             }
                             //move up
                             else
                             {
-                                rectangles.TryGetValue(c.uid, out tempRactangle2);
-                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                foreach(Cube t in list)
                                 {
-                                    temp.loc_y = yold - speed;
-                                }
-                                else
-                                {
-                                    temp.loc_y = yold + 5;
-                                }    
+                                    rectangles.TryGetValue(t.uid, out tempRactangle2);
+                                    if (t.uid != c.uid)
+                                    {
+                                        if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                        {
+                                            c.loc_y = yold - speed;
+                                        }
+                                        else
+                                        {
+                                            c.loc_y = yold + 15;
+                                        }
+                                    }  
+                                }   
+                            }
+                            rectangles[c.uid] = tempRectangle;
+                            string message = JsonConvert.SerializeObject(c);
+                            
+                            foreach(Socket tempsocket in sockets.Keys)
+                            {
+                                Network.Send(tempsocket, message +"\n");
                             }
 
-                            rectangles[temp.uid] = tempRectangle;
-                            
-                            w.ListOfPlayers.Remove(temp.GetID());
-                            sockets[s.Key] = temp;
-                            w.ListOfPlayers.Add(temp.GetID(), temp);
+                            w.ListOfPlayers.Remove(c.GetID());
+                            sockets[s.Key] = c;
+                            w.ListOfPlayers.Add(c.GetID(), c);
                         }
                     }
                 else
