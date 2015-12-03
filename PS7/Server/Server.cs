@@ -31,6 +31,7 @@ namespace Server
         private Dictionary<int, Rectangle> rectangles = new Dictionary<int, Rectangle>();
         private World w = new World();
         //private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
+        private Dictionary<int, Cube> VirusList = new Dictionary<int, Cube>();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
         private int teamid = 0;
         private System.Timers.Timer aTimer;
@@ -254,7 +255,7 @@ namespace Server
             {
                 UID = 1;
             }
-            Cube playerCube = new Cube(200, 200, RandomColor(R), UID, teamid, false, data, w.startMass);
+            Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
             //RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
             Rectangle playerRectangle = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
@@ -486,6 +487,12 @@ namespace Server
                         Network.Send(s, message);
                     }        
                 }
+
+                if (VirusList.Count < w.numberOfVirus)
+                {
+                    MakeVirus();
+                    VirusList = FindVirus();
+                }
                 Move();
                 //Handle move requests
                 message = "";
@@ -506,6 +513,27 @@ namespace Server
                             w.ListOfFood.Remove(temp2.GetID());
                             c.Mass += temp2.Mass;
                             temp2.Mass = 0;
+                            //Send the dead cube
+                            message += JsonConvert.SerializeObject(temp2) + "\n";
+                            message2 += JsonConvert.SerializeObject(c) + "\n";
+
+                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                            rectangles[c.uid] = tempRectangle;
+                        }
+
+                        while (VirusEaten(c) != null)
+                        {
+                            temp2 = VirusEaten(c);
+                            w.ListOfFood.Remove(temp2.GetID());
+                            VirusList.Remove(temp2.GetID());
+                            temp2.Mass = 0;
+                            if (c.numberOfSplits >= w.maximumSplits)
+                                c.Mass += temp2.Mass;
+                            else      //split the cube
+                            {
+
+                            }
+                            
                             //Send the dead cube
                             message += JsonConvert.SerializeObject(temp2) + "\n";
                             message2 += JsonConvert.SerializeObject(c) + "\n";
@@ -634,6 +662,8 @@ namespace Server
                     Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 1000);
                     w.ListOfFood.Add(virusCube.GetID(), virusCube);
                 }
+
+                VirusList = FindVirus();
             }
         }
 
@@ -646,8 +676,10 @@ namespace Server
         {
             KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
             
+            
             KnownColor randColor = colors[r.Next(0, colors.Length)];
             int colorCode = Color.FromKnownColor(randColor).ToArgb();
+            
             if (colorCode == -331546)    //don't want pink
                 RandomColor(r);
             if (colorCode == -4139)
@@ -657,6 +689,14 @@ namespace Server
             if (colorCode == -986896)
                 RandomColor(r);
             
+            return colorCode;
+        }
+
+        private int PlayerColor(Random r)
+        {
+            KnownColor[] colors = new KnownColor[8] { KnownColor.Red, KnownColor.Yellow, KnownColor.Blue, KnownColor.Beige, KnownColor.Cyan, KnownColor.DarkGray, KnownColor.Green, KnownColor.DeepSkyBlue };
+            KnownColor randColor = colors[r.Next(0, colors.Length)];
+            int colorCode = Color.FromKnownColor(randColor).ToArgb();
             return colorCode;
         }
 
@@ -708,9 +748,11 @@ namespace Server
             Tuple<int, int> pair;
             int speed;
             int offset;
+            List<Cube> partnerCubeList = new List<Cube>();
             Rectangle tempRectangle;
             Rectangle tempRactangle2;
             Boolean partnerFound = false;
+            double combinedMass = 0;
             lock (w)
             {
 
@@ -727,7 +769,7 @@ namespace Server
                                 List<Cube> list = FindTeamCubes(temp.team_id);
                                 rectangles.TryGetValue(c.uid, out tempRectangle);
                                 //Speed is inversely related to the mass
-                                speed = (10000 / temp.GetMass());
+                                speed = (15000 / temp.GetMass());
                                 //If speed exceeds topspeed, then reassign the topspeed as the speed
                                 if (speed > w.topSpeed)
                                 {
@@ -751,6 +793,8 @@ namespace Server
                                         rectangles.TryGetValue(t.uid, out tempRactangle2);
                                         if (t.uid != c.uid)
                                         {
+
+
                                             if (!tempRectangle.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_x = xold + speed;
@@ -846,6 +890,15 @@ namespace Server
                                     }
                                 }
 
+                                if (c.loc_x > w.GetWidth)
+                                    c.loc_x = xold;
+                                if (c.loc_x < 0)
+                                    c.loc_x = c.GetWidth();
+                                if (c.loc_y > w.GetHeight)
+                                    c.loc_y = yold;
+                                if (c.loc_y < 0)
+                                    c.loc_y = c.GetWidth();
+
                                 //tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                 rectangles[c.uid] = tempRectangle;
@@ -864,24 +917,13 @@ namespace Server
                                 if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000)
                                 {
                                     Cube partnerCube = null;
-                                    foreach (Cube t in list)
+                                    partnerCubeList = FindSplitCubes(c.splitTime;
+
+                                    foreach(Cube x in partnerCubeList)
                                     {
-                                        if (t.uid != c.uid)
-                                        {
-                                            if (!partnerFound)
-                                            {
-                                                if (t.splitTime == c.splitTime)
-                                                {
-                                                    partnerCube = t;
-                                                    partnerFound = true;
-                                                }
-                                            }
-                                        }
+                                        combinedMass += x.Mass;
                                     }
-
-                                    double combinedMass = c.Mass + partnerCube.Mass;
-
-
+                                     
                                     Cube combinedCube = null;
 
                                     Socket tempsocket;
@@ -939,7 +981,7 @@ namespace Server
                     else
                     {
                         //Speed is inversely related to the mass
-                        speed = (10000 / temp.GetMass());
+                        speed = (15000 / temp.GetMass());
                         //If speed exceeds topspeed, then reassign the topspeed as the speed
                         if (speed > w.topSpeed)
                         {
@@ -977,6 +1019,14 @@ namespace Server
         }
 
         /// <summary>
+        /// Method will merge 2 cubes
+        /// </summary>
+        private void Merge()
+        {
+
+        }
+
+        /// <summary>
         /// Method will find all the cubes that have the same teamID as the cube that needs to move
         /// </summary>
         /// <param name="teamID"></param>
@@ -997,6 +1047,70 @@ namespace Server
             }
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Method will find all the split cubes
+        /// </summary>
+        /// <param name="splitTime"></param>
+        /// <returns></returns>
+        private List<Cube> FindSplitCubes(long splitTime)
+        {
+            List<Cube> cubes = new List<Cube>();
+            if (w.ListOfPlayers.Values.Count != 0)
+            {
+                foreach (Cube c in w.ListOfPlayers.Values)
+                {
+                    if (splitTime == c.splitTime)
+                    {
+                        cubes.Add(c);
+                    }
+                }
+                return cubes;
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Method will find the viruses
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<int, Cube> FindVirus ()
+        {
+            Dictionary<int, Cube> virusList = new Dictionary<int, Cube>();
+            foreach (Cube v in w.ListOfFood.Values)
+            {
+                if (v.Name != "")
+                    virusList.Add(v.uid, v);
+            }
+
+            return virusList;
+        }
+
+        /// <summary>
+        /// Will make a virus
+        /// </summary>
+        private void MakeVirus()
+        {
+            Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 1000);
+            w.ListOfFood.Add(virusCube.GetID(), virusCube);
+        }
+
+        private Cube VirusEaten(Cube playerCube)
+        {
+            double offset = 1.5;
+            foreach (Cube v in VirusList.Values)
+            {
+                if (playerCube.GetX() > (int)v.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)v.GetX() + (playerCube.GetWidth() * offset))
+                {
+                    if (playerCube.GetY() > (int)v.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)v.GetY() + (playerCube.GetWidth() * offset))
+                    {
+                        return v;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
