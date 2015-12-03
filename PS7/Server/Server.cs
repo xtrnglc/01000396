@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Xml;
 using System.IO;
 
+
 namespace Server
 {
     class Server
@@ -26,6 +27,7 @@ namespace Server
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
         private Dictionary<Cube, Socket> cubetosockets = new Dictionary<Cube, Socket>();
         private Random R = new Random();
+        private Dictionary<int, Rectangle> rectangles = new Dictionary<int, Rectangle>();
         private World w = new World();
         //private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
@@ -250,6 +252,8 @@ namespace Server
                 UID = 1;
             }
             Cube playerCube = new Cube(200, 200, RandomColor(R), UID, teamid, false, data, w.startMass);
+            //RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
+            Rectangle playerRectangle = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
             //if the dictionary is empty or if 
             lock (w)
@@ -268,7 +272,7 @@ namespace Server
                     w.ListOfPlayers.Add((int)UID, playerCube);
                 }
             }
-            
+            rectangles.Add(playerCube.uid, playerRectangle);
             sockets.Add(state.workSocket, playerCube);
             cubetosockets.Add(playerCube, state.workSocket);
 
@@ -311,7 +315,7 @@ namespace Server
             int yold;
             Tuple<int, int> pair;
             Cube temp, split1, split2, split3, split4;
-            
+            Rectangle tempRectangle;
             
             string message = "";
             string commands = state.sb.ToString();
@@ -343,49 +347,25 @@ namespace Server
                             {
                                 foreach (Cube c in FindTeamCubes(temp.team_id))
                                 {
-                                        c.Mass = c.Mass / 2;
-                                        c.loc_x -= 100;
-                                        c.loc_y -= 100;
-                                        Cube split = new Cube(c.loc_x + 100, c.loc_y +100, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
-                                        w.ListOfPlayers.Add(split.uid, split);
+                                    c.Mass = c.Mass / 2;
+                                    c.loc_x -= 100;
+                                    c.loc_y -= 100;
 
-                                        message += (JsonConvert.SerializeObject(split) + "\n");
-                                        message += (JsonConvert.SerializeObject(c) + "\n");
-                                        Network.Send(state.workSocket, message);
+                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                    rectangles[c.uid] = tempRectangle;
+
+                                    Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
+                                    tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth() * 3, split.GetWidth() * 3);
+                                    rectangles.Add(split.uid, tempRectangle);
+
+                                    w.ListOfPlayers.Add(split.uid, split);
+
+                                    message += (JsonConvert.SerializeObject(split) + "\n");
+                                    message += (JsonConvert.SerializeObject(c) + "\n");
+                                    Network.Send(state.workSocket, message);
                                 }
                                 Network.Send(state.workSocket, message);
                             }
-
-                            //w.ListOfPlayers.Remove(temp.GetID());
-
-                            //if (CubeIdExists(temp.uid + 1))
-                            //    tempID = (GenerateUID());
-                            //else
-                            //    tempID = temp.uid + 1;
-                            //Cube split1 = new Cube(temp.loc_x + 50, temp.loc_y + 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
-                            //w.ListOfPlayers.Add(split1.GetID(), split1);
-
-                            //if (CubeIdExists(temp.uid + 2))
-                            //    tempID = (GenerateUID());
-                            //else
-                            //    tempID = temp.uid + 2;
-                            //Cube split2 = new Cube(temp.loc_x - 50, temp.loc_y - 50, temp.argb_color, tempID, temp.team_id, false, temp.Name, temp.Mass / 2);
-                                                                    
-                            //w.ListOfPlayers.Add(split2.GetID(), split2);
-
-                            //cubetosockets.Remove(temp);
-                            //cubetosockets.Add(split1, state.workSocket);
-
-                           
-                            //sockets[state.workSocket] = split1;
-
-                            //temp.Mass = 0;
-
-                            //message += (JsonConvert.SerializeObject(split2) + "\n");
-                            //message += (JsonConvert.SerializeObject(temp) + "\n");
-                            //Network.Send(state.workSocket, message);
-                            //splitCubes.Add(teamid, split1);
-                            //splitCubes.Add(teamid, split2);
                          }
                     }
                     else
@@ -449,6 +429,7 @@ namespace Server
         {
             string message = "";
             string message2 = "";
+            Rectangle tempRectangle;
             
             Cube temp, temp2;
 
@@ -502,6 +483,9 @@ namespace Server
                             //Send the dead cube
                             message += JsonConvert.SerializeObject(temp2) + "\n";
                             message2 += JsonConvert.SerializeObject(c) + "\n";
+
+                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                            rectangles[c.uid] = tempRectangle;
                         }
                         //Send updated mass of cubes after eating food
                         foreach (Socket s in sockets.Keys)
@@ -532,6 +516,9 @@ namespace Server
                             sockets.Remove(tempsocket);
                             Destination.Remove(tempsocket);
                             playerSockets.Remove(tempsocket);
+
+                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                            rectangles[c.uid] = tempRectangle;
                             //Send updated mass of cube after eating players
                             foreach (Socket s in sockets.Keys)
                             {
@@ -798,10 +785,13 @@ namespace Server
             Tuple<int, int> pair;
             int speed;
             int offset;
+            Rectangle tempRectangle;
+            Rectangle tempRactangle2;
 
             foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
             {
                 sockets.TryGetValue(s.Key, out temp);
+                rectangles.TryGetValue(temp.uid, out tempRectangle);
                 if (FindTeamCubes(temp.team_id).Count > 1)
                     foreach (Cube c in FindTeamCubes(temp.team_id))
                     {
@@ -809,6 +799,7 @@ namespace Server
                         else if (temp.team_id == c.team_id)
                         {
                             List<Cube> list = FindTeamCubes(temp.team_id);
+                            rectangles.TryGetValue(c.uid, out tempRactangle2);
                             //Speed is inversely related to the mass
                             speed = (10000 / temp.GetMass());
                             //If speed exceeds topspeed, then reassign the topspeed as the speed
@@ -816,56 +807,76 @@ namespace Server
                             {
                                 speed = w.topSpeed;
                             }
-                            offset = c.GetWidth();
-                            xold = (int)c.GetX();
-                            yold = (int)c.GetY();
+                            offset = temp.GetWidth();
+                            xold = (int)temp.GetX();
+                            yold = (int)temp.GetY();
                             
                             //pair is target destination
                             pair = s.Value;
                             //move toward target destination
                             
+                            
+                            if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)  //it's in the right spot, doesn't need to move
+                            { }
+                            else if (pair.Item1 > xold)  //needs to move to the right
                             {
-                                if (xold < pair.Item1 + offset && xold > pair.Item1 - offset)  //it's in the right spot, doesn't need to move
-                                { }
-                                else if (pair.Item1 > xold)  //needs to move to the right
+                                if (!tempRectangle.IntersectsWith(tempRactangle2))
                                 {
-                                    switch (CollisionDetection(c.team_id))
-                                    {
-                                        case 0:
-                                            c.loc_x = xold + speed;
-                                            break;
-                                        case 1:
-                                            c.loc_x = xold - 5;
-                                            break;
-                                        case 2:
-                                            c.loc_y = yold - 5;
-                                            break;
-                                        case 3:
-                                            break;
-                                    }
-
+                                    temp.loc_x = xold + speed;
                                 }
-                
                                 else
                                 {
-                                    
-                                }       
+                                    temp.loc_x = xold - 5;
+                                }
                             }
-                            
-                            if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
-                            { }
-                            else if (pair.Item2 > yold)
-                            {
-                                
-                            }
+                            //Move to the left
                             else
                             {
+                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                {
+                                    temp.loc_x = xold - speed;
+                                }
+                                else
+                                {
+                                    temp.loc_x = xold + 5;
+                                }
                                 
+                            }       
+                            if (yold < pair.Item2 + offset && yold > pair.Item2 - offset)
+                            { }
+                            //Move down
+                            else if (pair.Item2 > yold)
+                            {
+
+                                rectangles.TryGetValue(c.uid, out tempRactangle2);
+                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                {
+                                    temp.loc_y = yold + speed;
+                                }
+                                else
+                                {
+                                    temp.loc_y = yold - 5;
+                                }
+                            }
+                            //move up
+                            else
+                            {
+                                rectangles.TryGetValue(c.uid, out tempRactangle2);
+                                if (!tempRectangle.IntersectsWith(tempRactangle2))
+                                {
+                                    temp.loc_y = yold - speed;
+                                }
+                                else
+                                {
+                                    temp.loc_y = yold + 5;
+                                }    
                             }
 
-                            w.ListOfPlayers.Remove(c.GetID());
-                            sockets[s.Key] = c;
-                            w.ListOfPlayers.Add(c.GetID(), c);
+                            rectangles[temp.uid] = tempRectangle;
+                            
+                            w.ListOfPlayers.Remove(temp.GetID());
+                            sockets[s.Key] = temp;
+                            w.ListOfPlayers.Add(temp.GetID(), temp);
                         }
                     }
                 else
@@ -899,6 +910,9 @@ namespace Server
                         temp.loc_y = yold - speed;
 
                     sockets[s.Key] = temp;
+
+                    tempRectangle = new Rectangle((int)(temp.loc_x - temp.GetWidth() * 1.5), (int)(temp.loc_y - temp.GetWidth() * 1.5), temp.GetWidth() * 3, temp.GetWidth() * 3);
+                    rectangles[temp.uid] = tempRectangle;
                     w.ListOfPlayers.Add(temp.GetID(), temp);
                 }
             }
