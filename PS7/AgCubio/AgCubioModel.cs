@@ -22,21 +22,33 @@ namespace AgCubio
         /// <summary>
         /// variabes for the cube class to keep track of position, color, ID, team ID, name and if it's food or not.
         /// </summary>
-        public int loc_x { get; set; }                               //JSON PROPERTY?
-        public int loc_y { get; set; }
+        /// 
+        [JsonProperty]
+        public double loc_x { get; set; }
+        [JsonProperty]//JSON PROPERTY?
+        public double loc_y { get; set; }
+        [JsonProperty]
         public int argb_color { get; set; }
+        [JsonProperty]
         public int uid { get; set; }
+        [JsonProperty]
         public int team_id { get; set; }
+        [JsonProperty]
         public bool food { get; set; }
+        [JsonProperty]
         public string Name { get; set; }
-        public int Mass { get; set; }
+        [JsonProperty]
+        public double Mass { get; set; }
+
+
+        //NOT JSON PROPERTY DO NOT SEND
         public int numberOfSplits { get; set; }
         public long splitTime { get; set; }
-
+        
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
-        public Cube(int x, int y, int color, int ID, int teamID, bool foodtemp, string name, int mass)
+        public Cube(double x, double y, int color, int ID, int teamID, bool foodtemp, string name, double mass)
         {
             //{"loc_x":689.0,"loc_y":498.0,"argb_color":-16777216,"uid":5656,"team_id":0,"food":false,"Name":"cow","Mass":1000.0}
             this.loc_x = x;

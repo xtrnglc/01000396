@@ -207,3 +207,26 @@ Design decisions
 	deserializes it on other people's server. 
 	Change it all to ints and now it draws and works correctly on Kenny's and Michelle's client however still does not work on Jim's.
 	Also getting crazy lag. Might be my internet connection though.
+
+12/02/2015
+	Fixed the lag by adding more sends.
+	Fixed the error we are getting with the red X.
+	Able to get the cube to split and merge correctly once.
+
+	Our algorithm for splitting is:
+		1. Half the mass of the existing cube
+		2. Create a replica cube
+		3. Initialize their start positions (needs work, right now we have it so that they start a little bit away from each other)
+		4. Create a Rectangle class object to represent the cubes
+		5. Store Rectangles in rectangles dictionary and new cubes in w.listofplayers
+		6. Initialize splittime on new cubes
+
+	Our algorithm for dealing with split cubes not merging is:
+		1. Using the Rectangle class' Intersect method which returns true if a Rectangle object is touching another Rectangle
+		2. If false, i.e. not touching then proceed update location as usual
+		3. Else, bounce the cube off by sending it a little bit in the opposite direction
+
+	Our algorithm for remerging is:
+		1. After a specified time apart,
+		2. The cubes with the same split time will combined their masses
+		3. A new cube with the combined mass will replace the "main" cube while deleting all other cubes ("main" cube is the cube that is associated with the socket)

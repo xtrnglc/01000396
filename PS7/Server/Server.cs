@@ -317,6 +317,8 @@ namespace Server
             int tempID;
             int xold;
             int yold;
+            long splittime = 0;
+            Boolean first = true;
             Tuple<int, int> pair;
             Cube temp, split1, split2, split3, split4;
             Rectangle tempRectangle;
@@ -343,7 +345,7 @@ namespace Server
                         int.TryParse(location[2], out y);
 
                             //Deal with split
-                            lock (w)
+                        lock (w)
                         {
                             sockets.TryGetValue(state.workSocket, out temp);
                             
@@ -354,16 +356,36 @@ namespace Server
                                     c.Mass = c.Mass / 2;
                                     c.loc_x -= 100;
                                     c.loc_y -= 100;
-
-                                    c.splitTime = stopWatch.ElapsedMilliseconds;
-
-                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                   
+                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
+                                        c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangle;
 
                                     Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
-                                    tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth() * 3, split.GetWidth() * 3);
+                                    tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
+                                        * 3, split.GetWidth() * 3);
                                     rectangles.Add(split.uid, tempRectangle);
-                                    split.splitTime = c.splitTime;
+
+                                    if (c.splitTime == 0)
+                                    {
+                                        c.splitTime = stopWatch.ElapsedMilliseconds;
+                                            split.splitTime = c.splitTime;
+                                        }
+                                    else
+                                    {
+                                        if (first)
+                                        {
+                                            splittime = stopWatch.ElapsedMilliseconds;
+                                            split.splitTime = splittime;
+                                            first = false;
+                                        }
+                                        else
+                                        {
+                                            split.splitTime = splittime;
+                                        }
+                                        
+                                    }
+                                    
                                     w.ListOfPlayers.Add(split.uid, split);
 
                                     message += (JsonConvert.SerializeObject(split) + "\n");
@@ -607,11 +629,11 @@ namespace Server
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                 }
 
-                //for (int i = 0; i < w.numberOfVirus; i++)
-                //{
-                //    Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 500);
-                //    w.ListOfFood.Add(virusCube.GetID(), virusCube);
-                //}
+                for (int i = 0; i < w.numberOfVirus; i++)
+                {
+                    Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 1000);
+                    w.ListOfFood.Add(virusCube.GetID(), virusCube);
+                }
             }
         }
 
@@ -688,6 +710,7 @@ namespace Server
             int offset;
             Rectangle tempRectangle;
             Rectangle tempRactangle2;
+            Boolean partnerFound = false;
             lock (w)
             {
 
@@ -838,22 +861,26 @@ namespace Server
                                 }
 
                                 
-                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 5000)
+                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000)
                                 {
                                     Cube partnerCube = null;
                                     foreach (Cube t in list)
                                     {
                                         if (t.uid != c.uid)
                                         {
-                                            if (t.splitTime == c.splitTime)
+                                            if (!partnerFound)
                                             {
-                                                partnerCube = t;
+                                                if (t.splitTime == c.splitTime)
+                                                {
+                                                    partnerCube = t;
+                                                    partnerFound = true;
+                                                }
                                             }
                                         }
 
                                     }
 
-                                    int combinedMass = c.Mass + partnerCube.Mass;
+                                    double combinedMass = c.Mass + partnerCube.Mass;
 
 
                                     Cube combinedCube = null;
@@ -903,8 +930,6 @@ namespace Server
                                     }
 
                                 }
-
-
 
                                 foreach (Socket tempsocket in sockets.Keys)
                                 {
