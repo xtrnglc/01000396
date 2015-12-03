@@ -31,6 +31,7 @@ namespace AgCubio
         public string Name { get; set; }
         public int Mass { get; set; }
         public int numberOfSplits { get; set; }
+        public long splitTime { get; set; }
 
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments

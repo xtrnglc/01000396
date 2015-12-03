@@ -14,6 +14,7 @@ using System.Timers;
 using System.Drawing;
 using System.Xml;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace Server
@@ -32,6 +33,9 @@ namespace Server
         //private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
         private int teamid = 0;
+        private System.Timers.Timer aTimer;
+        private System.Timers.Timer attritionTimer;
+        private Stopwatch stopWatch = new Stopwatch();
         /// <summary>
         /// Main function, will build new world and start the server
         /// </summary>
@@ -199,10 +203,9 @@ namespace Server
             {
                 w = new World();
             }
-            System.Timers.Timer aTimer = new System.Timers.Timer(1000/25);
-            System.Timers.Timer attritionTimer = new System.Timers.Timer(3000);
-            System.Timers.Timer splitTimer = new System.Timers.Timer(5000);
-
+            aTimer = new System.Timers.Timer(1000/25);
+            attritionTimer = new System.Timers.Timer(3000);
+            stopWatch.Start();
             attritionTimer.Elapsed += attritionUpdate;
             attritionTimer.AutoReset = true;
             attritionTimer.Enabled = true;
@@ -351,13 +354,15 @@ namespace Server
                                     c.loc_x -= 100;
                                     c.loc_y -= 100;
 
+                                    c.splitTime = stopWatch.ElapsedMilliseconds;
+
                                     tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangle;
 
                                     Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
                                     tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth() * 3, split.GetWidth() * 3);
                                     rectangles.Add(split.uid, tempRectangle);
-
+                                    split.splitTime = c.splitTime;
                                     w.ListOfPlayers.Add(split.uid, split);
 
                                     message += (JsonConvert.SerializeObject(split) + "\n");
@@ -439,6 +444,8 @@ namespace Server
             lock (w)
             {
                 
+               
+
 
                 if (w.ListOfFood.Count < w.maxFood)
                 {    
@@ -828,10 +835,16 @@ namespace Server
                                         if (!tempRectangle.IntersectsWith(tempRactangle2))
                                         {
                                             c.loc_x = xold + speed;
+                                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                                            rectangles[c.uid] = tempRectangle;
                                         }
                                         else
                                         {
                                             c.loc_x = xold - 15;
+                                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
+                            rectangles[c.uid] = tempRectangle;
                                         }
                                     }       
                                 }
@@ -895,17 +908,82 @@ namespace Server
                                     }  
                                 }   
                             }
+
+                            //tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+
                             rectangles[c.uid] = tempRectangle;
                             string message = JsonConvert.SerializeObject(c);
                             
-                            foreach(Socket tempsocket in sockets.Keys)
-                            {
-                                Network.Send(tempsocket, message +"\n");
-                            }
-
                             w.ListOfPlayers.Remove(c.GetID());
                             sockets[s.Key] = c;
                             w.ListOfPlayers.Add(c.GetID(), c);
+
+                            if(stopWatch.ElapsedMilliseconds - c.splitTime > 5000)
+                            {
+                                Cube partnerCube = null;
+                                foreach(Cube t in list)
+                                {
+                                    if(t.uid != c.uid)
+                                    {
+                                        if (t.splitTime == c.splitTime)
+                                        {
+                                            partnerCube = t;
+                                        }
+                                    }
+                                    
+                                }
+
+                                int combinedMass = c.Mass + partnerCube.Mass;
+
+
+                                Cube combinedCube = null;
+                                
+                                Socket tempsocket;
+
+                                //Socket belongs to c
+                                if(cubetosockets.TryGetValue(c, out tempsocket))
+                                {
+                                    combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
+                                    cubetosockets.Remove(partnerCube);
+                                    sockets[tempsocket] = combinedCube;
+                                    cubetosockets.Remove(c);
+                                    cubetosockets.Add(combinedCube, tempsocket);
+                                    partnerCube.Mass = 0;
+                                    rectangles.Remove(partnerCube.uid);
+                                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                                    w.ListOfPlayers.Remove(partnerCube.uid);
+                                    w.ListOfPlayers[c.uid] = combinedCube;
+                                    combinedCube.splitTime = 0;
+                                    //message += JsonConvert.SerializeObject(partnerCube) + "\n";
+                                    //message += JsonConvert.SerializeObject(combinedCube) + "\n";
+                                }
+                                //Socket belongs to partner cube
+                                else
+                                {
+                                    combinedCube = new Cube(partnerCube.loc_x, partnerCube.loc_y, partnerCube.argb_color, partnerCube.uid, partnerCube.team_id, false, partnerCube.Name, combinedMass);
+                                    cubetosockets.TryGetValue(partnerCube, out tempsocket);
+                                    cubetosockets.Remove(partnerCube);
+                                    cubetosockets.Remove(c);
+                                    sockets[tempsocket] = combinedCube;
+                                    cubetosockets.Add(combinedCube, tempsocket);
+                                    c.Mass = 0;
+                                    rectangles.Remove(c.uid);
+                                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                                    w.ListOfPlayers.Remove(c.uid);
+                                    w.ListOfPlayers[partnerCube.uid] = combinedCube;
+                                    combinedCube.splitTime = 0;
+                                    //message += JsonConvert.SerializeObject(c) + "\n";
+                                    //message += JsonConvert.SerializeObject(combinedCube) + "\n";
+                                }
+   
+                            }
+
+
+
+                            foreach (Socket tempsocket in sockets.Keys)
+                            {
+                                Network.Send(tempsocket, message + "\n");
+                            }
                         }
                     }
                 else
