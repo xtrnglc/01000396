@@ -133,14 +133,19 @@ Design decisions
 	<height>1000</height>
 	<maxfood>2000</maxfood>
 	<topspeed>500</topspeed>
-	<attrition>5</attrition>
+	<attrition>5</attrition>					//5% of mass
 	<foodvalue>20</foodvalue>
 	<startmass>1000</startmass>
 	<minsplitmass>100</minsplitmass>
-	<maxsplits>10</maxsplits>
-	<numberofvirus>2</numberofvirus>
+	<maxsplits>6</maxsplits>
+	<numberofvirus>3</numberofvirus>
 	<maxsize>15000</maxsize>
+	<mergetimer>10</mergetimer>					//this is in seconds
+	<virussize>1000</virussize>
 	</gamestate>
+
+	
+
 
 
 11/23/2015

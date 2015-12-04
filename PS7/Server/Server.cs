@@ -118,6 +118,9 @@ namespace Server
             int maximumSplits = 0;
             int numberofVirus = 0;
             int maxsize = 0;
+            int mergeTimer = 0;
+            int virusSize = 0;
+            int attritiontimer = 0;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
@@ -174,6 +177,15 @@ namespace Server
                                         element = reader.Name;
                                         break;
                                     case "maxsize":
+                                        element = reader.Name;
+                                        break;
+                                    case "mergetimer":
+                                        element = reader.Name;
+                                        break;
+                                    case "virussize":
+                                        element = reader.Name;
+                                        break;
+                                    case "attritiontime":
                                         element = reader.Name;
                                         break;
                                 }
@@ -236,6 +248,21 @@ namespace Server
                                         element = "";
                                         break;
 
+                                    case "mergetimer":
+                                        int.TryParse(reader.Value, out mergeTimer);
+                                        element = "";
+                                        break;
+
+                                    case "virussize":
+                                        int.TryParse(reader.Value, out virusSize);
+                                        element = "";
+                                        break;
+
+                                    case "attritiontime":
+                                        int.TryParse(reader.Value, out attritiontimer);
+                                        element = "";
+                                        break;
+
                                     case "":
                                         break;
                                 }
@@ -243,7 +270,7 @@ namespace Server
                         }
                     }
                     Console.WriteLine("Game state XML parsed successfully");
-                    w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits, numberofVirus, maxsize);
+                    w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits, numberofVirus, maxsize, mergeTimer, virusSize, attritiontimer);
                 }
                 
                 catch (Exception)
@@ -260,7 +287,7 @@ namespace Server
                 w = new World();
             }
             aTimer = new System.Timers.Timer(1000/25);
-            attritionTimer = new System.Timers.Timer(3000);
+            attritionTimer = new System.Timers.Timer(w.attritionTimer * 1000);
             stopWatch.Start();
             attritionTimer.Elapsed += attritionUpdate;
             attritionTimer.AutoReset = true;
@@ -1055,7 +1082,7 @@ namespace Server
                                 }
 
                                 //Remerge cubes after 10 seconds. Should really be its own function
-                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000 && c.splitTime != 0)
+                                if (stopWatch.ElapsedMilliseconds - c.splitTime > (w.mergeTimer * 1000) && c.splitTime != 0)
                                 {
                                     partnerCubeList = FindSplitCubes(c.splitTime);
 
@@ -1332,7 +1359,7 @@ namespace Server
         /// </summary>
         private void MakeVirus()
         {
-            Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", 1000);
+            Cube virusCube = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), -10039894, UID += 1, 0, true, "virus", w.virusSize);
             w.ListOfFood.Add(virusCube.GetID(), virusCube);
         }
 
