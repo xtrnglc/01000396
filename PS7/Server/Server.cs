@@ -738,7 +738,6 @@ namespace Server
             return null;
         }
       
-
         /// <summary>
         /// Helper method to move the cube.
         /// </summary>
@@ -756,7 +755,6 @@ namespace Server
             Rectangle tempRactangle2;
             lock (w)
             {
-
                 foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
                 {
                     sockets.TryGetValue(s.Key, out temp);
@@ -931,7 +929,7 @@ namespace Server
                                 }
 
                                 message = "";
-                                partnerCubeList = FindTeamCubes(c.team_id);
+                                partnerCubeList = FindSplitCubes(c.splitTime);
                                 if(partnerCubeList.Count != 0)
                                 {
                                     
@@ -968,14 +966,9 @@ namespace Server
                                             {
                                                 Network.Send(tempsocket, message + "\n");
                                             }
-                                        }
-                                        
+                                        }          
                                     }  
                                 }
-
-                                
-
-
                             }
                         }
                     else
@@ -1078,12 +1071,14 @@ namespace Server
                     string message1 = JsonConvert.SerializeObject(partnerCube) + "\n";
                     string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
 
-
-
                     List<Cube> teamcubes = FindTeamCubes(c.team_id);
                     foreach (Cube cube in teamcubes)
                     {
                         cube.numberOfSplits--;
+                        if(cube.numberOfSplits < 0)
+                        {
+                            cube.numberOfSplits = 0;
+                        }
                     }
 
                     cubesToKill.Add(partnerCube);
@@ -1109,6 +1104,16 @@ namespace Server
                         rectangles.Remove(partnerCube.uid);
                         w.ListOfPlayers.Remove(partnerCube.uid);
                         cubesToKill.Add(partnerCube);
+                    }
+
+                    List<Cube> teamcubes = FindTeamCubes(c.team_id);
+                    foreach (Cube cube in teamcubes)
+                    {
+                        cube.numberOfSplits--;
+                        if (cube.numberOfSplits < 0)
+                        {
+                            cube.numberOfSplits = 0;
+                        }
                     }
 
                     return cubesToKill;
