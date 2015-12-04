@@ -919,14 +919,15 @@ namespace Server
                                     message = "";
                                     foreach(Cube cube in cubesThatNeedToDie)
                                     {
-                                        message += JsonConvert.SerializeObject(cube);
+                                        message += JsonConvert.SerializeObject(cube) +"\n";
+                                    }
+                                    foreach (Socket tempsocket in sockets.Keys)
+                                    {
+                                        Network.Send(tempsocket, message);
                                     }
                                 }
 
-                                foreach (Socket tempsocket in sockets.Keys)
-                                {
-                                    Network.Send(tempsocket, message + "\n");
-                                }
+                                
 
                                 message = "";
                                 partnerCubeList = FindSplitCubes(c.splitTime);
@@ -959,12 +960,12 @@ namespace Server
                                             cubesThatNeedToDie = Merge(finalcubemerge);
                                             foreach (Cube deadCube in cubesThatNeedToDie)
                                             {
-                                                message += JsonConvert.SerializeObject(deadCube);
+                                                message += JsonConvert.SerializeObject(deadCube) +"\n";
                                             }
 
                                             foreach (Socket tempsocket in sockets.Keys)
                                             {
-                                                Network.Send(tempsocket, message + "\n");
+                                                Network.Send(tempsocket, message);
                                             }
                                         }          
                                     }  
@@ -1115,7 +1116,6 @@ namespace Server
                             cube.numberOfSplits = 0;
                         }
                     }
-
                     return cubesToKill;
                 }
             }
