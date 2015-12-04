@@ -70,6 +70,7 @@ namespace Server
             int minimumSplitMass = 0;
             int maximumSplits = 0;
             int numberofVirus = 0;
+            int maxsize = 0;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
 
@@ -123,6 +124,9 @@ namespace Server
                                         break;
 
                                     case "numberofvirus":
+                                        element = reader.Name;
+                                        break;
+                                    case "maxsize":
                                         element = reader.Name;
                                         break;
                                 }
@@ -180,6 +184,10 @@ namespace Server
                                         int.TryParse(reader.Value, out numberofVirus);
                                         element = "";
                                         break;
+                                    case "maxsize":
+                                        int.TryParse(reader.Value, out maxsize);
+                                        element = "";
+                                        break;
 
                                     case "":
                                         break;
@@ -188,7 +196,7 @@ namespace Server
                         }
                     }
                     Console.WriteLine("Game state XML parsed successfully");
-                    w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits, numberofVirus);
+                    w = new World(Width, Height, maxFood, topSpeed, attritionRate, foodValue, startMass, minimumSplitMass, maximumSplits, numberofVirus, maxsize);
                 }
                 
                 catch (Exception)
@@ -769,7 +777,7 @@ namespace Server
                                 List<Cube> list = FindTeamCubes(temp.team_id);
                                 rectangles.TryGetValue(c.uid, out tempRectangle);
                                 //Speed is inversely related to the mass
-                                speed = (15000 / c.GetMass());
+                                speed = (w.maxSize / c.GetMass());
                                 //If speed exceeds topspeed, then reassign the topspeed as the speed
                                 if (speed > w.topSpeed)
                                 {
@@ -927,8 +935,6 @@ namespace Server
                                     }
                                 }
 
-                                
-
                                 message = "";
                                 partnerCubeList = FindSplitCubes(c.splitTime);
                                 if(partnerCubeList.Count != 0)
@@ -975,7 +981,7 @@ namespace Server
                     else
                     {
                         //Speed is inversely related to the mass
-                        speed = (15000 / temp.GetMass());
+                        speed = (w.maxSize / temp.GetMass());
                         //If speed exceeds topspeed, then reassign the topspeed as the speed
                         if (speed > w.topSpeed)
                         {

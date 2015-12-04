@@ -228,5 +228,27 @@ Design decisions
 
 	Our algorithm for remerging is:
 		1. After a specified time apart,
-		2. The cubes with the same split time will combined their masses
+		2. The cubes with the same split time will combine their masses
 		3. A new cube with the combined mass will replace the "main" cube while deleting all other cubes ("main" cube is the cube that is associated with the socket)
+
+12/03/2015
+	Ok I will attempt to explain the remerging.
+
+	When a cube splits, it makes a copy of itself with half its mass and the split and the main both have the same split timer.
+	So for example say we have original cube with mass = 8.
+
+	If we split, then we now have two cubes both with mass = 4 and a split time of lets say 1.
+	If we split again, we now have 4 cubes. Two with mass = 2 and splittime = 1 and two with mass = 2 and splittime = 2
+	If we split again, we now have 8 cubes. Two with mass = 1 and splittime = 1 and two with mass = 1 and splittime = 2 and four with mass = 1 and splittime = 3.
+	So after a specified time, the two cubes that were split(i.e. splittime = 1) earliest will merge. So now we have 7 cubes. the two cubes with splittime combine to make a cube with mass = 2 and splittime = 0.
+	After time, the two cubes at splittime = 2 will merge. So we now have two cubes of mass = 2 and splittime = 0 and 4 cubes of mass = 1 and splittime = 3.
+	Then the four cubes at splittime 3 will merge and we have 2 cubes with splittime 0 and mass 2 and one cube that the four cubes merged into that has splittime = 0 and amss = 4.
+	Then the two cubes with mass 2 will combine so now we have two cubes with mass = 4. 
+	Finally we merge these two and end up with the cube of mass = 8 we had originally assuming no food were eaten.
+
+	The implementation of this is very funky, To merge, you create a new cube and combine the masses and set the reference of an existing cube equal to the new combined cube and erase all references to other partner cube with same splittime. 
+	The merge function ideally would send the dead cubes of mass 0 and new combined cube in the merge function but the client did not seem to get the data? So instead it returns a list of cubes that need to die and the caller function deals with sending
+	it over to the client.
+	I realize this is very ineffecient and obviously does not work out well :( . 
+
+	Also our move when split is buggy because the friendly teamcubes will always attempt to bounce off each other but if somehow they overlap then they both want to go the opposite way and it does not work as we want it to.
