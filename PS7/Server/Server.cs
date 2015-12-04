@@ -21,17 +21,45 @@ namespace Server
 {
     class Server
     {
+        /// <summary>
+        /// UID starts at 1. Each cube will have a unique ID, will add 1 to everycube
+        /// </summary>
         private int UID = 1;
+        /// <summary>
+        /// List of all the sockets that will connect to the server and keeps track of them
+        /// </summary>
         private List<Socket> playerSockets = new List<Socket>();
+        /// <summary>
+        /// Is the path to the editable xml file to change game parameters
+        /// </summary>
         private string pathToFile = "gamestate.txt";
-        //private Cube Player;
+        /// <summary>
+        /// Keeps the socket as the key, and the cube associated with the socket as the value
+        /// </summary>
         private Dictionary<Socket, Cube> sockets = new Dictionary<Socket, Cube>();
+        /// <summary>
+        /// Oppisite as above, in case we need the Cube associated with a certain socket
+        /// </summary>
         private Dictionary<Cube, Socket> cubetosockets = new Dictionary<Cube, Socket>();
+        /// <summary>
+        /// Global random variable so we don't have to create one every color method call
+        /// </summary>
         private Random R = new Random();
+        /// <summary>
+        /// For collision dectection. Every player cube will have a rectangle associated with it
+        /// </summary>
         private Dictionary<int, Rectangle> rectangles = new Dictionary<int, Rectangle>();
+        /// <summary>
+        /// Creates a world object so the server can keep track of things, use constants
+        /// </summary>
         private World w = new World();
-        //private Dictionary<int, Cube> splitCubes = new Dictionary<int, Cube>();
+        /// <summary>
+        /// Keeps track of the special cubes - viruses
+        /// </summary>
         private Dictionary<int, Cube> VirusList = new Dictionary<int, Cube>();
+        /// <summary>
+        /// used for coorindates
+        /// </summary>
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
         private int teamid = 0;
         private System.Timers.Timer aTimer;
@@ -360,49 +388,7 @@ namespace Server
                             
                             if (temp.Mass > w.minimumSplitMass && FindTeamCubes(temp.team_id) != null)
                             {
-                                foreach (Cube c in FindTeamCubes(temp.team_id))
-                                {
-                                    c.Mass = c.Mass / 2;
-                                    c.loc_x -= 100;
-                                    c.loc_y -= 100;
-                                        c.numberOfSplits++;
-                                        
-                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
-                                        c.GetWidth() * 3);
-                                    rectangles[c.uid] = tempRectangle;
-
-                                    Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
-                                        split.numberOfSplits = c.numberOfSplits;
-                                    tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
-                                        * 3, split.GetWidth() * 3);
-                                    rectangles.Add(split.uid, tempRectangle);
-
-                                    if (c.splitTime == 0)
-                                    {
-                                        c.splitTime = stopWatch.ElapsedMilliseconds;
-                                            split.splitTime = c.splitTime;
-                                        }
-                                    else
-                                    {
-                                        if (first)
-                                        {
-                                            splittime = stopWatch.ElapsedMilliseconds;
-                                            split.splitTime = splittime;
-                                            first = false;
-                                        }
-                                        else
-                                        {
-                                            split.splitTime = splittime;
-                                        }
-                                        
-                                    }
-                                    
-                                    w.ListOfPlayers.Add(split.uid, split);
-
-                                    message += (JsonConvert.SerializeObject(split) + "\n");
-                                    message += (JsonConvert.SerializeObject(c) + "\n");
-                                    Network.Send(state.workSocket, message);
-                                }
+                                message += Split(temp);
                                 Network.Send(state.workSocket, message);
                             }
                          }
@@ -491,6 +477,16 @@ namespace Server
                     randomFood = new Cube(R.Next(1, w.GetWidth), R.Next(1, w.GetHeight), RandomColor(R), UID += 1, 0, true, "", w.foodValue);
                     w.ListOfFood.Add(randomFood.GetID(), randomFood);
                     message += JsonConvert.SerializeObject(randomFood) + "\n";
+
+                    if (VirusList.Count < w.numberOfVirus)
+                    {
+                        MakeVirus();
+                        VirusList = FindVirus();
+                        foreach (Cube v in VirusList.Values)
+                        {
+                            message += JsonConvert.SerializeObject(v) + "\n";
+                        }
+                    }
                     //Send new foods
                     foreach (Socket s in sockets.Keys)
                     {
@@ -498,11 +494,7 @@ namespace Server
                     }        
                 }
 
-                if (VirusList.Count < w.numberOfVirus)
-                {
-                    MakeVirus();
-                    VirusList = FindVirus();
-                }
+                
                 Move();
                 //Handle move requests
                 message = "";
@@ -541,7 +533,7 @@ namespace Server
                                 c.Mass += temp2.Mass;
                             else      //split the cube
                             {
-
+                                message += Split(c);
                             }
                             
                             //Send the dead cube
@@ -702,9 +694,15 @@ namespace Server
             return colorCode;
         }
 
+        /// <summary>
+        /// Will return colors that are easy to see
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         private int PlayerColor(Random r)
         {
-            KnownColor[] colors = new KnownColor[8] { KnownColor.Red, KnownColor.Yellow, KnownColor.Blue, KnownColor.Beige, KnownColor.Cyan, KnownColor.DarkGray, KnownColor.Green, KnownColor.DeepSkyBlue };
+            KnownColor[] colors = new KnownColor[12] { KnownColor.Red, KnownColor.Indigo, KnownColor.Blue, KnownColor.Purple, KnownColor.Cyan, KnownColor.DarkGray, KnownColor.Green, KnownColor.DeepSkyBlue,
+            KnownColor.Orange, KnownColor.Olive, KnownColor.Teal, KnownColor.Chocolate};
             KnownColor randColor = colors[r.Next(0, colors.Length)];
             int colorCode = Color.FromKnownColor(randColor).ToArgb();
             return colorCode;
@@ -1198,6 +1196,11 @@ namespace Server
             w.ListOfFood.Add(virusCube.GetID(), virusCube);
         }
 
+        /// <summary>
+        /// Method checks to see if the a virus has been eaten
+        /// </summary>
+        /// <param name="playerCube"></param>
+        /// <returns></returns>
         private Cube VirusEaten(Cube playerCube)
         {
             double offset = 1.5;
@@ -1212,6 +1215,75 @@ namespace Server
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Method accepts a cube to be split. Will deserialize the cube and send back a message as it's return type
+        /// </summary>
+        /// <param name="tempCube"></param>
+        /// <returns></returns>
+        private string Split(Cube tempCube)
+        {
+            
+
+            long splittime = 0;
+            Boolean first = true;
+            Tuple<int, int> pair;
+            Cube split1, split2, split3, split4;
+            Rectangle tempRectangle;
+            Socket tempS;
+
+            string message = "";
+
+            
+
+            if (tempCube.Mass > w.minimumSplitMass && FindTeamCubes(tempCube.team_id) != null)
+            {
+                foreach (Cube c in FindTeamCubes(tempCube.team_id))
+                {
+                    c.Mass = c.Mass / 2;
+                    c.loc_x -= 100;
+                    c.loc_y -= 100;
+                    c.numberOfSplits++;
+
+                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
+                        c.GetWidth() * 3);
+                    rectangles[c.uid] = tempRectangle;
+
+                    Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
+                    split.numberOfSplits = c.numberOfSplits;
+                    tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
+                        * 3, split.GetWidth() * 3);
+                    rectangles.Add(split.uid, tempRectangle);
+
+                    if (c.splitTime == 0)
+                    {
+                        c.splitTime = stopWatch.ElapsedMilliseconds;
+                        split.splitTime = c.splitTime;
+                    }
+                    else
+                    {
+                        if (first)
+                        {
+                            splittime = stopWatch.ElapsedMilliseconds;
+                            split.splitTime = splittime;
+                            first = false;
+                        }
+                        else
+                        {
+                            split.splitTime = splittime;
+                        }
+
+                    }
+
+                    w.ListOfPlayers.Add(split.uid, split);
+
+                    message += (JsonConvert.SerializeObject(split) + "\n");
+                    message += (JsonConvert.SerializeObject(c) + "\n");
+                    
+                }
+            }
+            return message;
         }
     }
 }
