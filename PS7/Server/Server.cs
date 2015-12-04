@@ -607,38 +607,110 @@ namespace Server
                             Network.Send(s, message);
                             Network.Send(s, message2);
                         }
+                        message = "";
                         while (playerEaten(c) != null)
-                        {  
+                        {
+                            temp2 = playerEaten(c);
                             //temp2 = eaten
                             //c = eater
-                            temp2 = playerEaten(c);                          
-                            c.Mass += temp2.Mass; 
-                            temp2.Mass = 0;
-
-                            //Tell the player that his cube is dead and remove references to the client
-                            message2 = JsonConvert.SerializeObject(temp2) + "\n";
-                            cubetosockets.TryGetValue(temp2, out tempsocket);
-                            cubetosockets.TryGetValue(c, out tempsocket2);
-                            message += JsonConvert.SerializeObject(c) + "\n";
-
-                            //Network.Send(tempsocket2, message);
-                            Network.Send(tempsocket, message);
-                            Network.Send(tempsocket, message2);
-
-                            w.ListOfPlayers.Remove(temp2.GetID());
-                            cubetosockets.Remove(temp2);
-                            sockets.Remove(tempsocket);
-                            Destination.Remove(tempsocket);
-                            playerSockets.Remove(tempsocket);
-
-                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
-                            rectangles[c.uid] = tempRectangle;
-                            //Send updated mass of cube after eating players
-                            foreach (Socket s in sockets.Keys)
+                            //Deal with regular cubes being eaten
+                            if (FindTeamCubes(temp2.team_id).Count == 1)
                             {
-                                Network.Send(s, message);
-                                Network.Send(s, message2);
+                                c.Mass += temp2.Mass;
+                                temp2.Mass = 0;
+
+                                //Tell the player that his cube is dead and remove references to the client
+                                message2 = JsonConvert.SerializeObject(temp2) + "\n";
+                                cubetosockets.TryGetValue(temp2, out tempsocket);
+                                cubetosockets.TryGetValue(c, out tempsocket2);
+                                message += JsonConvert.SerializeObject(c) + "\n";
+
+                                //Network.Send(tempsocket2, message);
+                                Network.Send(tempsocket, message);
+                                Network.Send(tempsocket, message2);
+
+                                w.ListOfPlayers.Remove(temp2.GetID());
+                                cubetosockets.Remove(temp2);
+                                sockets.Remove(tempsocket);
+                                Destination.Remove(tempsocket);
+                                playerSockets.Remove(tempsocket);
+
+                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                rectangles[c.uid] = tempRectangle;
+                                //Send updated mass of cube after eating players
+                                foreach (Socket s in sockets.Keys)
+                                {
+                                    Network.Send(s, message);
+                                    Network.Send(s, message2);
+                                }
                             }
+                            //Deal with eating split cubes
+                            else
+                            {
+                                Socket transferSocket;
+                                //If main cube from split is being eaten
+                                if(cubetosockets.TryGetValue(temp2, out transferSocket))
+                                {
+                                    c.Mass += temp2.Mass;
+                                    temp2.Mass = 0;
+
+                                    //Tell the player that his cube is dead and remove references to the client
+                                    message2 = JsonConvert.SerializeObject(temp2) + "\n";
+                                    cubetosockets.TryGetValue(c, out tempsocket2);
+                                    message += JsonConvert.SerializeObject(c) + "\n";
+
+                                    //Network.Send(tempsocket2, message);
+
+                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                    rectangles[c.uid] = tempRectangle;
+
+                                    w.ListOfPlayers.Remove(temp2.GetID());
+                                    cubetosockets.Remove(temp2);
+                                    List < Cube > transferCube = FindTeamCubes(temp2.team_id);
+                                    transferCube.Remove(temp2);
+                                    Cube newMain = transferCube.ElementAt(0);
+                                    sockets[transferSocket] = newMain;
+                                    cubetosockets.Add(newMain, transferSocket);
+
+                                    foreach (Socket s in sockets.Keys)
+                                    {
+                                        Network.Send(s, message);
+                                        Network.Send(s, message2);
+                                    }
+                                }
+                                else
+                                {
+                                    c.Mass += temp2.Mass;
+                                    temp2.Mass = 0;
+
+                                    //Tell the player that his cube is dead and remove references to the client
+                                    message2 = JsonConvert.SerializeObject(temp2) + "\n";
+                                    cubetosockets.TryGetValue(temp2, out tempsocket);
+                                    cubetosockets.TryGetValue(c, out tempsocket2);
+                                    message += JsonConvert.SerializeObject(c) + "\n";
+
+                                    //Network.Send(tempsocket2, message);
+                                    Network.Send(tempsocket, message);
+                                    Network.Send(tempsocket, message2);
+
+                                    w.ListOfPlayers.Remove(temp2.GetID());
+                                    cubetosockets.Remove(temp2);
+                                    sockets.Remove(tempsocket);
+                                    Destination.Remove(tempsocket);
+                                    playerSockets.Remove(tempsocket);
+
+                                    tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                    rectangles[c.uid] = tempRectangle;
+                                    //Send updated mass of cube after eating players
+                                    foreach (Socket s in sockets.Keys)
+                                    {
+                                        Network.Send(s, message);
+                                        Network.Send(s, message2);
+                                    }
+                                }
+                            }
+                                                     
+                           
                         }  
                     }
                     
