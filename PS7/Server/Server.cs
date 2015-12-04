@@ -514,7 +514,7 @@ namespace Server
             string message2 = "";
             Rectangle tempRectangle;
             
-            Cube temp, temp2;
+            Cube temp2;
 
             Socket tempsocket, tempsocket2;
 
@@ -710,11 +710,8 @@ namespace Server
                                     }
                                 }
                             }
-                                                     
-                           
                         }  
-                    }
-                    
+                    }                 
                 }
             }  
         }
@@ -832,8 +829,8 @@ namespace Server
         /// <returns></returns>
         private int PlayerColor(Random r)
         {
-            KnownColor[] colors = new KnownColor[12] { KnownColor.Red, KnownColor.Indigo, KnownColor.Blue, KnownColor.Purple, KnownColor.Cyan, KnownColor.DarkGray, KnownColor.Green, KnownColor.DeepSkyBlue,
-            KnownColor.Orange, KnownColor.Olive, KnownColor.Teal, KnownColor.Chocolate};
+            KnownColor[] colors = new KnownColor[13] { KnownColor.Red, KnownColor.Indigo, KnownColor.Blue, KnownColor.Purple, KnownColor.Cyan, KnownColor.DarkGray, KnownColor.Green, KnownColor.DeepSkyBlue,
+            KnownColor.Orange, KnownColor.Olive, KnownColor.Teal, KnownColor.Chocolate, KnownColor.BlueViolet};
             KnownColor randColor = colors[r.Next(0, colors.Length)];
             int colorCode = Color.FromKnownColor(randColor).ToArgb();
             return colorCode;
@@ -1048,10 +1045,12 @@ namespace Server
                                     Network.Send(tempsocket, message + "\n");
                                 }
 
+                                //Remerge cubes after 10 seconds. Should really be its own function
                                 if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000 && c.splitTime != 0)
                                 {
                                     partnerCubeList = FindSplitCubes(c.splitTime);
 
+                                    //Merge cubes into one and kill rest of cubes
                                     cubesThatNeedToDie = Merge(partnerCubeList);
                                     message = "";
                                     foreach(Cube cube in cubesThatNeedToDie)
@@ -1064,6 +1063,7 @@ namespace Server
                                     }
                                 }
 
+                                //Final remerge into one cube
                                 message = "";
                                 partnerCubeList = FindSplitCubes(c.splitTime);
                                 if(partnerCubeList.Count != 0)

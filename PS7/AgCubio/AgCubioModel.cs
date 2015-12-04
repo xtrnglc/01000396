@@ -41,7 +41,9 @@ namespace AgCubio
         public double Mass { get; set; }
 
 
-        //NOT JSON PROPERTY DO NOT SEND
+        //NOT JSON PROPERTY DO NOT SEND 
+        //So this might be why our server is not working with Jim's client. Because we send over cube info his cube class does not have
+        //However it works on a friend's client and debugging their client it seems like it ignores these two fields
         public int numberOfSplits { get; set; }
         public long splitTime { get; set; }
         
