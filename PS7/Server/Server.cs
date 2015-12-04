@@ -664,6 +664,7 @@ namespace Server
                                     tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangle;
 
+                                    //Remove references to the old cube and have one of the team cubes be the "main" cube
                                     w.ListOfPlayers.Remove(temp2.GetID());
                                     cubetosockets.Remove(temp2);
                                     List < Cube > transferCube = FindTeamCubes(temp2.team_id);

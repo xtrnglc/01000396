@@ -108,7 +108,8 @@ KNOWN PROBLEMS:
 	TO DO: Fix the connection in the server network to IvP6Any (won't work right now, but will connect to Jim's client)
 	TO DO: Viruses
 	TO DO: Polish moving?
-	TO DO: WHEN A PLAYER EATS A SPLIT CUBE???
+	
+	We have play tested our server on our client and on another team's client and they both work the same however our server does not work with Jim's.
 	
 
 Design decisions
@@ -249,3 +250,7 @@ Design decisions
 	I realize this is very ineffecient and obviously does not work out well :( . 
 
 	Also our move when split is buggy because the friendly teamcubes will always attempt to bounce off each other but if somehow they overlap then they both want to go the opposite way and it does not work as we want it to.
+	
+	Fixed the issue of eating split cubes. If the "main" cube from the split is being eaten then the socket will then get a new main from one of the other splits.
+	If a split that is eaten is not main then carry on as usual. Might present issues in remerging.
+
