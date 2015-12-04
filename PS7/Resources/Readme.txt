@@ -127,7 +127,9 @@ Design decisions
 	<minsplitmass>100</minsplitmass>
 	<maxsplits>10</maxsplits>
 	<numberofvirus>2</numberofvirus>
+	<maxsize>15000</maxsize>
 	</gamestate>
+
 
 11/23/2015
 	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
