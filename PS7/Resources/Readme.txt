@@ -108,6 +108,7 @@ KNOWN PROBLEMS:
 	TO DO: Fix the connection in the server network to IvP6Any (won't work right now, but will connect to Jim's client)
 	TO DO: Viruses
 	TO DO: Polish moving?
+	TO DO: WHEN A PLAYER EATS A SPLIT CUBE???
 	
 
 Design decisions
