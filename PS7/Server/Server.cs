@@ -377,39 +377,19 @@ namespace Server
             string message = "";
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
-
+            long splittime = 0;
+            Rectangle tempRectangle;
+            Boolean first = true;
             int count = substrings.Count();
             state.sb.Clear();
             state.sb.Append(substrings[count - 1]);
             substrings[count - 1] = null;
             if (substrings.Count() > 0)
-            foreach (string command in substrings)
-            {
-                if (command != null)
+                foreach (string command in substrings)
                 {
-                    if (command.StartsWith("(split"))
+                    if (command != null)
                     {
-                        string[] location = command.Split(',');
-                        location[2] = location[2].Substring(0, location[2].Length - 1);
-
-                        int.TryParse(location[1], out x);
-                        int.TryParse(location[2], out y);
-
-                            //Deal with split
-                        lock (w)
-                        {
-                            sockets.TryGetValue(state.workSocket, out temp);
-                            
-                            if (temp.Mass > w.minimumSplitMass && FindTeamCubes(temp.team_id) != null)
-                            {
-                                message += Split(temp);
-                                Network.Send(state.workSocket, message);
-                            }
-                         }
-                    }
-                    else
-                    {
-                        lock (w)
+                        if (command.StartsWith("(split"))
                         {
                             string[] location = command.Split(',');
                             location[2] = location[2].Substring(0, location[2].Length - 1);
@@ -417,43 +397,110 @@ namespace Server
                             int.TryParse(location[1], out x);
                             int.TryParse(location[2], out y);
 
-                            if(x > w.GetWidth)
+                            //Deal with split
+                            lock (w)
                             {
-                                x = w.GetWidth;
-                            }
-                            if(x < 0)
-                            {
-                                x = 0;
-                            }
-                            if(y > w.GetHeight)
-                            {
-                                y = w.GetHeight;
-                            }
-                            if(y < 0)
-                            {
-                                y = 0;
-                            }
-                            sockets.TryGetValue(state.workSocket, out temp);
-                            xold = (int)temp.GetX();
-                            yold = (int)temp.GetY();
-                            
-                            pair = new Tuple<int, int>(x, y);
+                                sockets.TryGetValue(state.workSocket, out temp);
 
-                            if (Destination.ContainsKey(state.workSocket))
-                            {
-                                Destination[state.workSocket] = pair;
-                            }
-                            else
-                            {
-                                Destination.Add(state.workSocket, pair);
-                            }
+                                if (temp.Mass > w.minimumSplitMass && FindTeamCubes(temp.team_id) != null)
+                                {
+                                    foreach (Cube c in FindTeamCubes(temp.team_id))
+                                    {
+                                        c.Mass = c.Mass / 2;
+                                        c.loc_x -= 100;
+                                        c.loc_y -= 100;
+                                        c.numberOfSplits++;
 
-                            string msg = JsonConvert.SerializeObject(temp);
-                            Network.Send(state.workSocket, msg + "\n");   
-                        }    
+                                        tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
+                                        c.GetWidth() * 3);
+                                        rectangles[c.uid] = tempRectangle;
+
+                                        Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
+                                        split.numberOfSplits = c.numberOfSplits;
+                                        tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
+                                         * 3, split.GetWidth() * 3);
+                                        rectangles.Add(split.uid, tempRectangle);
+
+                                        if (c.splitTime == 0)
+                                        {
+                                            c.splitTime = stopWatch.ElapsedMilliseconds;
+                                            split.splitTime = c.splitTime;
+                                        }
+                                        else
+                                        {
+                                            if (first)
+                                            {
+                                                splittime = stopWatch.ElapsedMilliseconds;
+                                                split.splitTime = splittime;
+                                                first = false;
+                                            }
+                                            else
+                                            {
+                                                split.splitTime = splittime;
+                                            }
+
+                                        }
+
+                                        w.ListOfPlayers.Add(split.uid, split);
+
+                                        message += (JsonConvert.SerializeObject(split) + "\n");
+                                        message += (JsonConvert.SerializeObject(c) + "\n");
+                                        Network.Send(state.workSocket, message);
+                                    }
+
+
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            lock (w)
+                            {
+                                string[] location = command.Split(',');
+                                location[2] = location[2].Substring(0, location[2].Length - 1);
+
+                                int.TryParse(location[1], out x);
+                                int.TryParse(location[2], out y);
+
+                                if (x > w.GetWidth)
+                                {
+                                    x = w.GetWidth;
+                                }
+                                if (x < 0)
+                                {
+                                    x = 0;
+                                }
+                                if (y > w.GetHeight)
+                                {
+                                    y = w.GetHeight;
+                                }
+                                if (y < 0)
+                                {
+                                    y = 0;
+                                }
+                                sockets.TryGetValue(state.workSocket, out temp);
+                                xold = (int)temp.GetX();
+                                yold = (int)temp.GetY();
+
+                                pair = new Tuple<int, int>(x, y);
+
+                                if (Destination.ContainsKey(state.workSocket))
+                                {
+                                    Destination[state.workSocket] = pair;
+                                }
+                                else
+                                {
+                                    Destination.Add(state.workSocket, pair);
+                                }
+
+                                string msg = JsonConvert.SerializeObject(temp);
+                                Network.Send(state.workSocket, msg + "\n");
+                            }
+                        }
                     }
+
                 }
-            }
         }
 
         /// <summary>
