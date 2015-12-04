@@ -368,6 +368,7 @@ namespace Server
         /// </summary>
         private void DataFromClient(State state)
         {
+            
             int x;
             int y;
             int xold;
@@ -450,7 +451,7 @@ namespace Server
                                 }
                             }
                         }
-                        else
+                        else if (command.StartsWith("(move"))
                         {
                             lock (w)
                             {
@@ -494,6 +495,14 @@ namespace Server
                                 string msg = JsonConvert.SerializeObject(temp);
                                 Network.Send(state.workSocket, msg + "\n");
                             }
+                        }
+                        else
+                        {
+                            //Bad command, terminate socket
+                            sockets.Remove(state.workSocket);
+                            playerSockets.Remove(state.workSocket);
+                            Destination.Remove(state.workSocket);
+                            state.workSocket.Disconnect(false);
                         }
                     }
 
