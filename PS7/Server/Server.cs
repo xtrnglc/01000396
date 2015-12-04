@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+Author: Trung Le and Adam Sorensen
+12/2/2015
+CS 3500
+PS8 - AgCubio Server
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,12 +65,24 @@ namespace Server
         /// </summary>
         private Dictionary<int, Cube> VirusList = new Dictionary<int, Cube>();
         /// <summary>
-        /// used for coorindates
+        /// used for coorindates of the mouse
         /// </summary>
         private Dictionary<Socket, Tuple<int, int>> Destination = new Dictionary<Socket, Tuple<int, int>>();
+        /// <summary>
+        /// Every player cube will get a unique team ID, this is used for keeping track of splitting and "friendly" cubes
+        /// </summary>
         private int teamid = 0;
+        /// <summary>
+        /// Timer for the heartbeat
+        /// </summary>
         private System.Timers.Timer aTimer;
+        /// <summary>
+        /// Timer for the attrition
+        /// </summary>
         private System.Timers.Timer attritionTimer;
+        /// <summary>
+        /// Stop watch for the splitting and merging
+        /// </summary>
         private Stopwatch stopWatch = new Stopwatch();
         /// <summary>
         /// Main function, will build new world and start the server
@@ -351,15 +370,10 @@ namespace Server
         {
             int x;
             int y;
-            int tempID;
             int xold;
             int yold;
-            long splittime = 0;
-            Boolean first = true;
             Tuple<int, int> pair;
-            Cube temp, split1, split2, split3, split4;
-            Rectangle tempRectangle;
-            
+            Cube temp;
             string message = "";
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
@@ -1224,18 +1238,10 @@ namespace Server
         /// <returns></returns>
         private string Split(Cube tempCube)
         {
-            
-
             long splittime = 0;
             Boolean first = true;
-            Tuple<int, int> pair;
-            Cube split1, split2, split3, split4;
-            Rectangle tempRectangle;
-            Socket tempS;
-
+            Rectangle tempRectangle;           
             string message = "";
-
-            
 
             if (tempCube.Mass > w.minimumSplitMass && FindTeamCubes(tempCube.team_id) != null)
             {
@@ -1273,14 +1279,11 @@ namespace Server
                         {
                             split.splitTime = splittime;
                         }
-
                     }
-
                     w.ListOfPlayers.Add(split.uid, split);
 
                     message += (JsonConvert.SerializeObject(split) + "\n");
                     message += (JsonConvert.SerializeObject(c) + "\n");
-                    
                 }
             }
             return message;
