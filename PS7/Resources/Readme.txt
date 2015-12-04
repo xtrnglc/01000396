@@ -111,6 +111,10 @@ Design decisions
 	The attrition rate is a percentage. So <attrition>10</attrition> means a cube loses 10% of its mass every 3 seconds.
 	The server is also able to parse an XML file descring the game world parameters.
 	If no gamestate is used, then the default values are used.
+
+
+	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT
+
 	The gamestate file must be a .txt file named "gamestate"
 	It must be in 01000396/PS7/Server/bin/Debug
 	The user can edit the values between the elements to edit the game state of the world.
@@ -155,22 +159,6 @@ Design decisions
 	The gamestate file must be a .txt file named "gamestate"
 	It must be in 01000396/PS7/Server/bin/Debug
 	The user can edit the values between the elements to edit the game state of the world.
-	It must be formatted as follows
-
-	<gamestate>
-	<width>1000</width>
-	<height>1000</height>
-	<maxfood>2000</maxfood>
-	<topspeed>500</topspeed>
-	<attrition>5</attrition>
-	<foodvalue>20</foodvalue>
-	<startmass>1000</startmass>
-	<minsplitmass>100</minsplitmass>
-	<maxsplits>10</maxsplits>
-	<numberofvirus>2</numberofvirus>
-	</gamestate>
-
-
 	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.
 	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger
 
