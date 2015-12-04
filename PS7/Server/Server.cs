@@ -447,9 +447,6 @@ namespace Server
                                         message += (JsonConvert.SerializeObject(c) + "\n");
                                         Network.Send(state.workSocket, message);
                                     }
-
-
-
                                 }
                             }
                         }
@@ -573,15 +570,47 @@ namespace Server
                         while (foodEaten(c) != null)
                         {
                             temp2 = foodEaten(c);
-                            w.ListOfFood.Remove(temp2.GetID());
-                            c.Mass += temp2.Mass;
-                            temp2.Mass = 0;
-                            //Send the dead cube
-                            message += JsonConvert.SerializeObject(temp2) + "\n";
-                            message2 += JsonConvert.SerializeObject(c) + "\n";
+                            if(FindTeamCubes(temp2.uid).Count > 1)
+                            {
+                                w.ListOfFood.Remove(temp2.GetID());
+                                c.Mass += temp2.Mass;
+                                temp2.Mass = 0;
+                                //Send the dead cube
+                                message += JsonConvert.SerializeObject(temp2) + "\n";
+                                message2 += JsonConvert.SerializeObject(c) + "\n";
 
-                            tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
-                            rectangles[c.uid] = tempRectangle;
+                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                rectangles[c.uid] = tempRectangle;
+                            }
+                            else
+                            {
+                                w.ListOfFood.Remove(temp2.GetID());
+                                c.Mass += temp2.Mass;
+                                temp2.Mass = 0;
+                                //Send the dead cube
+                                message += JsonConvert.SerializeObject(temp2) + "\n";
+                                message2 += JsonConvert.SerializeObject(c) + "\n";
+
+                                tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                rectangles[c.uid] = tempRectangle;
+
+                                //If main cube is eaten, transfer socket 
+                                Socket transferSocket;
+                                if(cubetosockets.TryGetValue(temp2, out transferSocket))
+                                {
+                                    List<Cube> transferCube = FindTeamCubes(temp2.uid);
+                                    transferCube.Remove(temp2);
+                                    Cube newMain = transferCube.ElementAt(0);
+                                    sockets[transferSocket] = newMain;
+                                }
+                                else
+                                {
+                                    //Do nothing?
+                                }
+
+                                
+                                
+                            }
                         }
 
                         while (VirusEaten(c) != null)

@@ -388,11 +388,11 @@ namespace AgCubioView
                         e.Graphics.FillRectangle(brush, rectangle);
 
                         //Uncomment for name texts
-                        Font font = new Font("Arial", cube.GetWidth() / 4);
-                        StringFormat stringFormat = new StringFormat();
-                        stringFormat.Alignment = StringAlignment.Center;
-                        stringFormat.LineAlignment = StringAlignment.Center;
-                        e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
+                        //Font font = new Font("Arial", cube.GetWidth() / 4);
+                        //StringFormat stringFormat = new StringFormat();
+                        //stringFormat.Alignment = StringAlignment.Center;
+                        //stringFormat.LineAlignment = StringAlignment.Center;
+                        //e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
                     }
 
                     try
