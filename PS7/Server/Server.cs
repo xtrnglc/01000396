@@ -357,12 +357,14 @@ namespace Server
                                     c.Mass = c.Mass / 2;
                                     c.loc_x -= 100;
                                     c.loc_y -= 100;
-                                   
+                                        c.numberOfSplits++;
+                                        
                                     tempRectangle = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
                                         c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangle;
 
                                     Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
+                                        split.numberOfSplits = c.numberOfSplits;
                                     tempRectangle = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
                                         * 3, split.GetWidth() * 3);
                                     rectangles.Add(split.uid, tempRectangle);
@@ -749,10 +751,9 @@ namespace Server
             int speed;
             int offset;
             List<Cube> partnerCubeList = new List<Cube>();
+            List<Cube> cubesThatNeedToDie = new List<Cube>();
             Rectangle tempRectangle;
             Rectangle tempRactangle2;
-            Boolean partnerFound = false;
-            double combinedMass = 0;
             lock (w)
             {
 
@@ -761,15 +762,16 @@ namespace Server
                     sockets.TryGetValue(s.Key, out temp);
                     rectangles.TryGetValue(temp.uid, out tempRectangle);
                     if (FindTeamCubes(temp.team_id).Count > 1)
-                        foreach (Cube c in FindTeamCubes(temp.team_id))
+                        foreach (Cube c in FindTeamCubes(temp.team_id).ToList())
                         {
                             if (c.GetID() == temp.GetID()) { }
+                            else if (cubesThatNeedToDie != null && cubesThatNeedToDie.Contains(c)) { }
                             else if (temp.team_id == c.team_id)
                             {
                                 List<Cube> list = FindTeamCubes(temp.team_id);
                                 rectangles.TryGetValue(c.uid, out tempRectangle);
                                 //Speed is inversely related to the mass
-                                speed = (15000 / temp.GetMass());
+                                speed = (15000 / c.GetMass());
                                 //If speed exceeds topspeed, then reassign the topspeed as the speed
                                 if (speed > w.topSpeed)
                                 {
@@ -793,8 +795,6 @@ namespace Server
                                         rectangles.TryGetValue(t.uid, out tempRactangle2);
                                         if (t.uid != c.uid)
                                         {
-
-
                                             if (!tempRectangle.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_x = xold + speed;
@@ -913,69 +913,69 @@ namespace Server
                                     Network.Send(tempsocket, message + "\n");
                                 }
 
-                                
-                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000)
+                                if (stopWatch.ElapsedMilliseconds - c.splitTime > 10000 && c.splitTime != 0)
                                 {
-                                    Cube partnerCube = null;
-                                    partnerCubeList = FindSplitCubes(c.splitTime;
+                                    partnerCubeList = FindSplitCubes(c.splitTime);
 
-                                    foreach(Cube x in partnerCubeList)
+                                    cubesThatNeedToDie = Merge(partnerCubeList);
+                                    message = "";
+                                    foreach(Cube cube in cubesThatNeedToDie)
                                     {
-                                        combinedMass += x.Mass;
+                                        message += JsonConvert.SerializeObject(cube);
                                     }
-                                     
-                                    Cube combinedCube = null;
-
-                                    Socket tempsocket;
-
-                                    //Socket belongs to c
-                                    if (cubetosockets.TryGetValue(c, out tempsocket))
-                                    {
-                                        combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
-                                        cubetosockets.Remove(partnerCube);
-                                        sockets[tempsocket] = combinedCube;
-                                        cubetosockets.Remove(c);
-                                        cubetosockets.Add(combinedCube, tempsocket);
-                                        partnerCube.Mass = 0;
-                                        rectangles.Remove(partnerCube.uid);
-                                        tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
-                                            combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
-                                        w.ListOfPlayers.Remove(partnerCube.uid);
-                                        w.ListOfPlayers[c.uid] = combinedCube;
-                                        combinedCube.splitTime = 0;
-                                        string message1 = JsonConvert.SerializeObject(partnerCube) + "\n";
-                                        string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
-                                        Network.Send(tempsocket, message1);
-                                        Network.Send(tempsocket, message2);
-                                    }
-                                    //Socket belongs to partner cube
-                                    else
-                                    {
-                                        combinedCube = new Cube(partnerCube.loc_x, partnerCube.loc_y, partnerCube.argb_color, partnerCube.uid, partnerCube.team_id, false, partnerCube.Name, combinedMass);
-                                        cubetosockets.TryGetValue(partnerCube, out tempsocket);
-                                        cubetosockets.Remove(partnerCube);
-                                        cubetosockets.Remove(c);
-                                        sockets[tempsocket] = combinedCube;
-                                        cubetosockets.Add(combinedCube, tempsocket);
-                                        c.Mass = 0;
-                                        rectangles.Remove(c.uid);
-                                        tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5), combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
-                                        w.ListOfPlayers.Remove(c.uid);
-                                        w.ListOfPlayers[partnerCube.uid] = combinedCube;
-                                        combinedCube.splitTime = 0;
-
-                                        string message1 = JsonConvert.SerializeObject(c) + "\n";
-                                        string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
-                                        Network.Send(tempsocket, message1);
-                                        Network.Send(tempsocket, message2);
-                                    }
-
                                 }
 
                                 foreach (Socket tempsocket in sockets.Keys)
                                 {
                                     Network.Send(tempsocket, message + "\n");
                                 }
+
+                                message = "";
+                                partnerCubeList = FindTeamCubes(c.team_id);
+                                if(partnerCubeList.Count != 0)
+                                {
+                                    
+                                    Boolean finalTwo = false;
+                                    List<Cube> finalcubemerge = new List<Cube>();
+                                    if (partnerCubeList.Count == 2)
+                                    {
+                                        
+                                        foreach (Cube finalmerge in partnerCubeList)
+                                        {
+                                            if(finalmerge.splitTime == 0)
+                                            {
+                                                finalTwo = true;
+                                            }
+                                            else
+                                            {
+                                                finalTwo = false;
+                                            }
+                                            if (finalTwo)
+                                            {
+                                                finalcubemerge.Add(finalmerge);
+                                            }
+                                            
+                                        }
+                                        if (finalTwo)
+                                        {
+                                            cubesThatNeedToDie = Merge(finalcubemerge);
+                                            foreach (Cube deadCube in cubesThatNeedToDie)
+                                            {
+                                                message += JsonConvert.SerializeObject(deadCube);
+                                            }
+
+                                            foreach (Socket tempsocket in sockets.Keys)
+                                            {
+                                                Network.Send(tempsocket, message + "\n");
+                                            }
+                                        }
+                                        
+                                    }  
+                                }
+
+                                
+
+
                             }
                         }
                     else
@@ -1019,11 +1019,101 @@ namespace Server
         }
 
         /// <summary>
-        /// Method will merge 2 cubes
+        /// Method will merge all cubes that have the same split time
         /// </summary>
-        private void Merge()
+        private List<Cube> Merge(List<Cube> partnerCubeList)
         {
+            lock(w)
+            {
+                List<Cube> cubesToKill = new List<Cube>();
+                Cube combinedCube = null;
+                Cube c;
+                Cube partnerCube;
+                Socket tempsocket = null;
+                double combinedMass = 0;
+                bool mainCubeDetected = false;
+                Rectangle tempRectangle;
+                Cube[] cubeArray = new Cube[partnerCubeList.Count];
+                int i = 0;
+                List<Cube> remainingPartnerCubes = partnerCubeList;
 
+                foreach (Cube x in partnerCubeList)
+                {
+                    cubeArray[i] = x;
+                    i++;
+                    combinedMass += x.Mass;
+                    if (cubetosockets.TryGetValue(x, out tempsocket))
+                    {
+                        mainCubeDetected = true;
+                    }
+                }
+
+                if (mainCubeDetected)
+                {
+                    if (cubetosockets.TryGetValue(cubeArray[0], out tempsocket))
+                    {
+                        c = cubeArray[0];
+                        partnerCube = cubeArray[1];
+                    }
+                    else
+                    {
+                        cubetosockets.TryGetValue(cubeArray[1], out tempsocket);
+                        c = cubeArray[1];
+                        partnerCube = cubeArray[0];
+                    }
+                    combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
+                    combinedCube.splitTime = 0;
+                    cubetosockets.Remove(partnerCube);
+                    sockets[tempsocket] = combinedCube;
+                    cubetosockets.Remove(c);
+                    cubetosockets.Add(combinedCube, tempsocket);
+                    partnerCube.Mass = 0;
+                    rectangles.Remove(partnerCube.uid);
+                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
+                        combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                    rectangles[c.uid] = tempRectangle;
+                    w.ListOfPlayers.Remove(partnerCube.uid);
+                    w.ListOfPlayers[c.uid] = combinedCube;
+                    
+                    string message1 = JsonConvert.SerializeObject(partnerCube) + "\n";
+                    string message2 = JsonConvert.SerializeObject(combinedCube) + "\n";
+
+
+
+                    List<Cube> teamcubes = FindTeamCubes(c.team_id);
+                    foreach (Cube cube in teamcubes)
+                    {
+                        cube.numberOfSplits--;
+                    }
+
+                    cubesToKill.Add(partnerCube);
+                    return cubesToKill;
+                }
+                else
+                {
+                    c = cubeArray[0];
+                    combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
+                    combinedCube.splitTime = 0;
+                    tempRectangle = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
+                        combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
+                    rectangles[c.uid] = tempRectangle;
+                    w.ListOfPlayers[c.uid] = combinedCube;
+
+                    remainingPartnerCubes.Remove(c);
+
+                    foreach (Cube x in remainingPartnerCubes)
+                    {
+                        partnerCube = x;
+                        cubetosockets.Remove(partnerCube);
+                        partnerCube.Mass = 0;
+                        rectangles.Remove(partnerCube.uid);
+                        w.ListOfPlayers.Remove(partnerCube.uid);
+                        cubesToKill.Add(partnerCube);
+                    }
+
+                    return cubesToKill;
+                }
+            }
         }
 
         /// <summary>
