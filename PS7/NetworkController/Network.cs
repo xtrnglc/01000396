@@ -173,7 +173,7 @@ namespace NetworkController
             try
             {
                 Socket s = (Socket)state_in_an_ar_object.AsyncState;
-
+                Network.IsConnected(s);
                 int bytesSent = s.EndSend(state_in_an_ar_object);
                 sendDone.Set();
             }
@@ -246,11 +246,12 @@ namespace NetworkController
             try
             {
                 String content = String.Empty;
-
+                
                 // Retrieve the state object and the handler socket
                 // from the asynchronous state object.
                 State state = (State)ar.AsyncState;
                 Socket handler = state.workSocket;
+                Network.IsConnected(handler);
                 //state.connectionCallback = connectionCallbackTemp;
                 // Read data from the client socket. 
                 int bytesRead = handler.EndReceive(ar);
@@ -284,6 +285,16 @@ namespace NetworkController
             }
             
         }
+
+        public static bool IsConnected(this Socket socket)
+        {
+            try
+            {
+                return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+            }
+            catch (SocketException) { return false; }
+        }
+        
     }
 }
 

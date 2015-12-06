@@ -110,6 +110,8 @@ KNOWN PROBLEMS:
 	TO DO: Polish moving?
 	
 	We have play tested our server on our client and on another team's client and they both work the same however our server does not work with Jim's.
+	Also note: to split on our client press s. The space bar does not work for some reason.
+	Also disconnects are not handle gracefully 
 	
 
 Design decisions

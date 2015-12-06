@@ -412,6 +412,7 @@ namespace Server
             state.sb.Clear();
             state.sb.Append(substrings[count - 1]);
             substrings[count - 1] = null;
+
             if (substrings.Count() > 0)
                 foreach (string command in substrings)
                 {
