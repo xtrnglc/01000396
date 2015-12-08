@@ -5,6 +5,7 @@ PS7 - AgCubio
 
 
 README FOR PS8 AGCUBIO SERVER BELOW HORIZONTAL LINE
+README FOR PS9 AGCUBIO DATABASE AND WEB SERVER BELOW
 
 TO START GAME, 
 	START SERVER
@@ -261,3 +262,25 @@ Design decisions
 	Fixed the issue of eating split cubes. If the "main" cube from the split is being eaten then the socket will then get a new main from one of the other splits.
 	If a split that is eaten is not main then carry on as usual. Might present issues in remerging.
 
+--------------------------------------------------------------------------------------------------------
+
+	Readme for PS9 AgCubio database and web server
+
+12/07/2015
+	Created a static helper class AccessDatabase to help faciliate database manipulation and extraction. Currently has only one useful function: Insert.
+	The MySQL database has been modified to contain two tables. One where a player has not eaten any other players and one where they have. 
+	The columns for PlayersTable1 (the one for players that have eaten other players) are
+	PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath, PlayersEaten
+	The columns for PlayersTable2 (the one for players that have not eaten other players) are
+	PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath
+
+	The idea is to update both tables simultaneously. Currently having issues with the foreign key functionality. 
+	
+	Also modified the cube class to contain number of cubes eaten, maximum mass achieved and a list of other players they have eaten.
+	Will probably add other fields to keep track of time of death and time alive.
+
+	Modified the server to increment cubes eaten for each cube. 
+
+	TO DO: Update database when a player dies
+	TO DO: Go through database and check for player id to make sure it is unique
+	TO DO: Web server part		
