@@ -338,8 +338,8 @@ namespace Server
                 UID = 1;
             }
             Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
-            //playerCube.maxMass = w.startMass;
-            //playerCube.spawnTime = stopWatch.ElapsedMilliseconds;
+            playerCube.setMaxMass(w.startMass);
+            playerCube.setSpawnTime(stopWatch.ElapsedMilliseconds); 
 
             Rectangle playerRectangleF = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
@@ -609,15 +609,14 @@ namespace Server
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
-
-                            /*
-                            c.cubesEaten++;
+                            c.IncrementCubesEaten();
+                            
                             c.Mass += temp2.Mass;
 
-                            if(c.Mass > c.maxMass)
+                            if(c.Mass > c.getMaxMass())
                             {
-                                c.maxMass = c.Mass;
-                            }*/
+                                c.setMaxMass(c.Mass);
+                            }
 
                             temp2.Mass = 0;
                             //Send the dead cube
@@ -664,24 +663,21 @@ namespace Server
                             if (FindTeamCubes(temp2.team_id).Count == 1)
                             {
                                 c.Mass += temp2.Mass;
-                                /*
-                                if (c.Mass > c.maxMass)
+
+                                if (c.Mass > c.getMaxMass())
                                 {
-                                    c.maxMass = c.Mass;
+                                    c.setMaxMass(c.Mass);
                                 }
-                                c.updatePlayersEaten(temp2.Name);
-                                c.cubesEaten++;
-                                
-                                */
                                 temp2.Mass = 0;
 
-                                
+                                c.updatePlayersEaten(temp2.Name);
+                                c.IncrementCubesEaten();
 
                                 /*
                                 Update database entry here
                                 */
 
-                                //updateDB(temp2);
+                                updateDB(temp2);
 
 
                                 //Tell the player that his cube is dead and remove references to the client
@@ -718,17 +714,14 @@ namespace Server
                                 {
                                     c.Mass += temp2.Mass;
 
-                                    /*
-                                    if (c.Mass > c.maxMass)
+                                    if (c.Mass > c.getMaxMass())
                                     {
-                                        c.maxMass = c.Mass;
+                                        c.setMaxMass(c.Mass);
                                     }
-                                    c.cubesEaten++;
-                                    c.updatePlayersEaten(temp2.Name);
-                                    */
                                     temp2.Mass = 0;
 
-                                    
+                                    c.IncrementCubesEaten();
+                                    c.updatePlayersEaten(temp2.Name);
 
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -758,16 +751,15 @@ namespace Server
                                 else
                                 {
                                     c.Mass += temp2.Mass;
-                                    /*
-                                    if (c.Mass > c.maxMass)
+
+                                    if (c.Mass > c.getMaxMass())
                                     {
-                                        c.maxMass = c.Mass;
+                                        c.setMaxMass(c.Mass);
                                     }
-                                    c.cubesEaten++;
-                                    c.updatePlayersEaten(temp2.Name);*/
                                     temp2.Mass = 0;
 
-                                    
+                                    c.IncrementCubesEaten();
+                                    c.updatePlayersEaten(temp2.Name);
 
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -807,15 +799,15 @@ namespace Server
         /// <param name="c"></param>
         private void updateDB(Cube c)
         {
-            //long timeAlive = stopWatch.ElapsedMilliseconds - c.spawnTime;
+            long timeAlive = stopWatch.ElapsedMilliseconds - c.getSpawnTime();
             long timeOfDeath = stopWatch.ElapsedMilliseconds;
 
-            //if(c.playersEaten.Count == 0)
+            if(c.playersEaten.Count == 0)
             {
                 //Empty string to show that the player has died without eating any other player
                 //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, "");
             }
-            //else
+            else
             {
                 //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, c.playersEaten.ToString());
             }
