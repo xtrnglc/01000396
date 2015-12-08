@@ -805,11 +805,11 @@ namespace Server
             if(c.playersEaten.Count == 0)
             {
                 //Empty string to show that the player has died without eating any other player
-                //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, "");
+                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, "");
             }
             else
             {
-                //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, c.playersEaten.ToString());
+                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, c.playersEaten.ToString());
             }
         }
 
