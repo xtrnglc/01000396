@@ -39,11 +39,12 @@ namespace AgCubio
         public string Name { get; set; }
         [JsonProperty]
         public double Mass { get; set; }
-        public int cubesEaten { get; set; }
 
-        public long spawnTime { get; set; }
+        private int cubesEaten = 0;
 
-        public double maxMass { get; set; }
+        private long spawnTime;
+
+        private double maxMass;
 
         public List<string> playersEaten = new List<string>();
 
@@ -53,6 +54,26 @@ namespace AgCubio
         public int numberOfSplits { get; set; }
         public long splitTime { get; set; }
         
+
+        public void IncrementCubesEaten()
+        {
+            cubesEaten++;
+        }
+
+        public int getCubesEaten()
+        {
+            return cubesEaten;
+        }
+
+        public void setSpawnTime(long time)
+        {
+            spawnTime = time;
+        }
+
+        public long getSpawnTime()
+        {
+            return spawnTime;
+        }
         /// <summary>
         /// Constructor for the Cube class. Takes in 7 arguments
         /// </summary>
@@ -137,6 +158,20 @@ namespace AgCubio
         {
             return (int)uid;
         }
+
+        public double getMaxMass()
+        {
+            return maxMass;
+        }
+
+        public void setMaxMass(double newM)
+        {
+            maxMass = newM;
+        }
+
+
+
+
 
         public void updatePlayersEaten(string playername)
         {

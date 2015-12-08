@@ -338,8 +338,8 @@ namespace Server
                 UID = 1;
             }
             Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
-            playerCube.maxMass = w.startMass;
-            playerCube.spawnTime = stopWatch.ElapsedMilliseconds;
+            //playerCube.maxMass = w.startMass;
+            //playerCube.spawnTime = stopWatch.ElapsedMilliseconds;
 
             Rectangle playerRectangleF = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
@@ -807,15 +807,15 @@ namespace Server
         /// <param name="c"></param>
         private void updateDB(Cube c)
         {
-            long timeAlive = stopWatch.ElapsedMilliseconds - c.spawnTime;
+            //long timeAlive = stopWatch.ElapsedMilliseconds - c.spawnTime;
             long timeOfDeath = stopWatch.ElapsedMilliseconds;
 
-            if(c.playersEaten.Count == 0)
+            //if(c.playersEaten.Count == 0)
             {
                 //Empty string to show that the player has died without eating any other player
                 //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, "");
             }
-            else
+            //else
             {
                 //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, c.playersEaten.ToString());
             }
