@@ -799,6 +799,7 @@ namespace Server
         /// <param name="c"></param>
         private void updateDB(Cube c)
         {
+            string playerseaten = "";
             long timeAlive = stopWatch.ElapsedMilliseconds - c.getSpawnTime();
             long timeOfDeath = stopWatch.ElapsedMilliseconds;
 
@@ -809,7 +810,11 @@ namespace Server
             }
             else
             {
-                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, c.playersEaten.ToString());
+                foreach(string r in c.playersEaten)
+                {
+                    playerseaten += r + " ";
+                }
+                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, playerseaten);
             }
         }
 
