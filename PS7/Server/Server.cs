@@ -395,7 +395,6 @@ namespace Server
         /// </summary>
         private void DataFromClient(State state)
         {
-            
             int x;
             int y;
             int xold;
@@ -608,6 +607,7 @@ namespace Server
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
+                            c.cubesEaten++;
                             c.Mass += temp2.Mass;
                             temp2.Mass = 0;
                             //Send the dead cube
@@ -656,6 +656,9 @@ namespace Server
                                 c.Mass += temp2.Mass;
                                 temp2.Mass = 0;
 
+                                c.updatePlayersEaten(temp2.Name);
+                                c.cubesEaten++;
+
                                 //Tell the player that his cube is dead and remove references to the client
                                 message2 = JsonConvert.SerializeObject(temp2) + "\n";
                                 cubetosockets.TryGetValue(temp2, out tempsocket);
@@ -691,6 +694,9 @@ namespace Server
                                     c.Mass += temp2.Mass;
                                     temp2.Mass = 0;
 
+                                    c.cubesEaten++;
+                                    c.updatePlayersEaten(temp2.Name);
+
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";
                                     cubetosockets.TryGetValue(c, out tempsocket2);
@@ -720,6 +726,9 @@ namespace Server
                                 {
                                     c.Mass += temp2.Mass;
                                     temp2.Mass = 0;
+
+                                    c.cubesEaten++;
+                                    c.updatePlayersEaten(temp2.Name);
 
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";

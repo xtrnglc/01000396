@@ -39,7 +39,7 @@ namespace AgCubio
         public string Name { get; set; }
         [JsonProperty]
         public double Mass { get; set; }
-        public int foodEaten { get; set; }
+        public int cubesEaten { get; set; }
 
         public List<string> playersEaten = new List<string>();
 
@@ -136,7 +136,15 @@ namespace AgCubio
 
         public void updatePlayersEaten(string playername)
         {
-            playersEaten.Add(playername);
+            if (playersEaten.Contains(playername))
+            {
+                //do nothing
+            }
+            else
+            {
+                playersEaten.Add(playername);
+            }
+            
         }
 
         public List<String> getPlayersEaten()
