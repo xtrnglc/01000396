@@ -279,7 +279,8 @@ Design decisions
 	Also modified the cube class to contain number of cubes eaten, maximum mass achieved and a list of other players they have eaten.
 	Will probably add other fields to keep track of time of death and time alive.
 
-	Modified the server to increment cubes eaten for each cube. 
+	Modified the server to increment cubes eaten for each cube and to check for max mass. 
+	Everytime mass is updated it checks if the current mass is larger than the max mass achieved
 
 	TO DO: Update database when a player dies
 	TO DO: Go through database and check for player id to make sure it is unique

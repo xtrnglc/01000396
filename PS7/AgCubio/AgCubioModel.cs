@@ -41,6 +41,10 @@ namespace AgCubio
         public double Mass { get; set; }
         public int cubesEaten { get; set; }
 
+        public long spawnTime { get; set; }
+
+        public double maxMass { get; set; }
+
         public List<string> playersEaten = new List<string>();
 
         //NOT JSON PROPERTY DO NOT SEND 

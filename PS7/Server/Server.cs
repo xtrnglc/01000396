@@ -338,7 +338,9 @@ namespace Server
                 UID = 1;
             }
             Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
-            //RectangleFF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
+            playerCube.maxMass = w.startMass;
+            playerCube.spawnTime = stopWatch.ElapsedMilliseconds;
+
             RectangleF playerRectangleF = new RectangleF((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
             //if the dictionary is empty or if 
@@ -608,7 +610,14 @@ namespace Server
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
                             c.cubesEaten++;
+                            
                             c.Mass += temp2.Mass;
+
+                            if(c.Mass > c.maxMass)
+                            {
+                                c.maxMass = c.Mass;
+                            }
+
                             temp2.Mass = 0;
                             //Send the dead cube
                             message += JsonConvert.SerializeObject(temp2) + "\n";
@@ -654,10 +663,24 @@ namespace Server
                             if (FindTeamCubes(temp2.team_id).Count == 1)
                             {
                                 c.Mass += temp2.Mass;
+
+                                if (c.Mass > c.maxMass)
+                                {
+                                    c.maxMass = c.Mass;
+                                }
                                 temp2.Mass = 0;
 
                                 c.updatePlayersEaten(temp2.Name);
                                 c.cubesEaten++;
+
+                                /*
+                                Create a death time.
+                                Time alive = death time - spawn time
+                                Update database entry here
+                                */
+
+
+
 
                                 //Tell the player that his cube is dead and remove references to the client
                                 message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -691,7 +714,14 @@ namespace Server
                                 //If main cube from split is being eaten
                                 if(cubetosockets.TryGetValue(temp2, out transferSocket))
                                 {
+
+
                                     c.Mass += temp2.Mass;
+
+                                    if (c.Mass > c.maxMass)
+                                    {
+                                        c.maxMass = c.Mass;
+                                    }
                                     temp2.Mass = 0;
 
                                     c.cubesEaten++;
@@ -724,7 +754,14 @@ namespace Server
                                 }
                                 else
                                 {
+
+
                                     c.Mass += temp2.Mass;
+
+                                    if (c.Mass > c.maxMass)
+                                    {
+                                        c.maxMass = c.Mass;
+                                    }
                                     temp2.Mass = 0;
 
                                     c.cubesEaten++;
