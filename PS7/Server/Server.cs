@@ -56,7 +56,7 @@ namespace Server
         /// <summary>
         /// For collision dectection. Every player cube will have a rectangle associated with it
         /// </summary>
-        private Dictionary<int, RectangleF> rectangles = new Dictionary<int, RectangleF>();
+        private Dictionary<int, Rectangle> rectangles = new Dictionary<int, Rectangle>();
         /// <summary>
         /// Creates a world object so the server can keep track of things, use constants
         /// </summary>
@@ -341,7 +341,7 @@ namespace Server
             playerCube.maxMass = w.startMass;
             playerCube.spawnTime = stopWatch.ElapsedMilliseconds;
 
-            RectangleF playerRectangleF = new RectangleF((float)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (float)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
+            Rectangle playerRectangleF = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
             //if the dictionary is empty or if 
             lock (w)
@@ -407,7 +407,7 @@ namespace Server
             string commands = state.sb.ToString();
             string[] substrings = Regex.Split(commands, "\n");
             long splittime = 0;
-            RectangleF tempRectangleF;
+            Rectangle tempRectangleF;
             Boolean first = true;
             int count = substrings.Count();
             state.sb.Clear();
@@ -441,13 +441,13 @@ namespace Server
                                         c.loc_y -= 100;
                                         c.numberOfSplits++;
 
-                                        tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
+                                        tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
                                         c.GetWidth() * 3);
                                         rectangles[c.uid] = tempRectangleF;
 
                                         Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
                                         split.numberOfSplits = c.numberOfSplits;
-                                        tempRectangleF = new RectangleF((float)(split.loc_x - split.GetWidth() * 1.5), (float)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
+                                        tempRectangleF = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
                                          * 3, split.GetWidth() * 3);
                                         rectangles.Add(split.uid, tempRectangleF);
 
@@ -550,7 +550,7 @@ namespace Server
         {
             string message = "";
             string message2 = "";
-            RectangleF tempRectangleF;
+            Rectangle tempRectangleF;
             
             Cube temp2;
 
@@ -609,21 +609,22 @@ namespace Server
                         {
                             temp2 = foodEaten(c);
                             w.ListOfFood.Remove(temp2.GetID());
+
+                            /*
                             c.cubesEaten++;
-                            
                             c.Mass += temp2.Mass;
 
                             if(c.Mass > c.maxMass)
                             {
                                 c.maxMass = c.Mass;
-                            }
+                            }*/
 
                             temp2.Mass = 0;
                             //Send the dead cube
                             message += JsonConvert.SerializeObject(temp2) + "\n";
                             message2 += JsonConvert.SerializeObject(c) + "\n";
 
-                            tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                            tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                             rectangles[c.uid] = tempRectangleF;
                         }
 
@@ -644,7 +645,7 @@ namespace Server
                             message += JsonConvert.SerializeObject(temp2) + "\n";
                             message2 += JsonConvert.SerializeObject(c) + "\n";
 
-                            tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                            tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                             rectangles[c.uid] = tempRectangleF;
                         }
                         //Send updated mass of cubes after eating food
@@ -663,21 +664,24 @@ namespace Server
                             if (FindTeamCubes(temp2.team_id).Count == 1)
                             {
                                 c.Mass += temp2.Mass;
-
+                                /*
                                 if (c.Mass > c.maxMass)
                                 {
                                     c.maxMass = c.Mass;
                                 }
-                                temp2.Mass = 0;
-
                                 c.updatePlayersEaten(temp2.Name);
                                 c.cubesEaten++;
+                                
+                                */
+                                temp2.Mass = 0;
+
+                                
 
                                 /*
                                 Update database entry here
                                 */
 
-                                updateDB(temp2);
+                                //updateDB(temp2);
 
 
                                 //Tell the player that his cube is dead and remove references to the client
@@ -696,7 +700,7 @@ namespace Server
                                 Destination.Remove(tempsocket);
                                 playerSockets.Remove(tempsocket);
 
-                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                                 rectangles[c.uid] = tempRectangleF;
                                 //Send updated mass of cube after eating players
                                 foreach (Socket s in sockets.Keys)
@@ -714,14 +718,17 @@ namespace Server
                                 {
                                     c.Mass += temp2.Mass;
 
+                                    /*
                                     if (c.Mass > c.maxMass)
                                     {
                                         c.maxMass = c.Mass;
                                     }
-                                    temp2.Mass = 0;
-
                                     c.cubesEaten++;
                                     c.updatePlayersEaten(temp2.Name);
+                                    */
+                                    temp2.Mass = 0;
+
+                                    
 
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -730,7 +737,7 @@ namespace Server
 
                                     //Network.Send(tempsocket2, message);
 
-                                    tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                    tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangleF;
 
                                     //Remove references to the old cube and have one of the team cubes be the "main" cube
@@ -751,15 +758,16 @@ namespace Server
                                 else
                                 {
                                     c.Mass += temp2.Mass;
-
+                                    /*
                                     if (c.Mass > c.maxMass)
                                     {
                                         c.maxMass = c.Mass;
                                     }
+                                    c.cubesEaten++;
+                                    c.updatePlayersEaten(temp2.Name);*/
                                     temp2.Mass = 0;
 
-                                    c.cubesEaten++;
-                                    c.updatePlayersEaten(temp2.Name);
+                                    
 
                                     //Tell the player that his cube is dead and remove references to the client
                                     message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -777,7 +785,7 @@ namespace Server
                                     Destination.Remove(tempsocket);
                                     playerSockets.Remove(tempsocket);
 
-                                    tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                    tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
                                     rectangles[c.uid] = tempRectangleF;
                                     //Send updated mass of cube after eating players
                                     foreach (Socket s in sockets.Keys)
@@ -982,8 +990,8 @@ namespace Server
             int offset;
             List<Cube> partnerCubeList = new List<Cube>();
             List<Cube> cubesThatNeedToDie = new List<Cube>();
-            RectangleF tempRectangleF;
-            RectangleF tempRactangle2;
+            Rectangle tempRectangleF;
+            Rectangle tempRactangle2;
             lock (w)
             {
                 foreach (KeyValuePair<Socket, Tuple<int, int>> s in Destination.ToList())
@@ -1027,14 +1035,14 @@ namespace Server
                                             if (!tempRectangleF.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_x = xold + speed;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
                                             else
                                             {
                                                 c.loc_x = xold - 15;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
@@ -1052,14 +1060,14 @@ namespace Server
                                             if (!tempRectangleF.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_x = xold - speed;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
                                             else
                                             {
                                                 c.loc_x = xold + 15;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
@@ -1079,14 +1087,14 @@ namespace Server
                                             if (!tempRectangleF.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_y = yold + speed;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
                                             else
                                             {
                                                 c.loc_y = yold - 15;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
@@ -1104,14 +1112,14 @@ namespace Server
                                             if (!tempRectangleF.IntersectsWith(tempRactangle2))
                                             {
                                                 c.loc_y = yold - speed;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
                                             else
                                             {
                                                 c.loc_y = yold + 15;
-                                                tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                                tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                                 rectangles[c.uid] = tempRectangleF;
                                             }
@@ -1128,7 +1136,7 @@ namespace Server
                                 if (c.loc_y < 0)
                                     c.loc_y = c.GetWidth();
 
-                                //tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
+                                //tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3, c.GetWidth() * 3);
 
                                 rectangles[c.uid] = tempRectangleF;
                                 string message = JsonConvert.SerializeObject(c);
@@ -1236,7 +1244,7 @@ namespace Server
 
                         sockets[s.Key] = temp;
 
-                        tempRectangleF = new RectangleF((float)(temp.loc_x - temp.GetWidth() * 1.5), (float)(temp.loc_y - temp.GetWidth() * 1.5), temp.GetWidth() * 3, temp.GetWidth() * 3);
+                        tempRectangleF = new Rectangle((int)(temp.loc_x - temp.GetWidth() * 1.5), (int)(temp.loc_y - temp.GetWidth() * 1.5), temp.GetWidth() * 3, temp.GetWidth() * 3);
                         rectangles[temp.uid] = tempRectangleF;
                         w.ListOfPlayers.Add(temp.GetID(), temp);
                     }
@@ -1258,7 +1266,7 @@ namespace Server
                 Socket tempsocket = null;
                 double combinedMass = 0;
                 bool mainCubeDetected = false;
-                RectangleF tempRectangleF;
+                Rectangle tempRectangleF;
                 Cube[] cubeArray = new Cube[partnerCubeList.Count];
                 int i = 0;
                 List<Cube> remainingPartnerCubes = partnerCubeList;
@@ -1295,7 +1303,7 @@ namespace Server
                     cubetosockets.Add(combinedCube, tempsocket);
                     partnerCube.Mass = 0;
                     rectangles.Remove(partnerCube.uid);
-                    tempRectangleF = new RectangleF((float)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (float)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
+                    tempRectangleF = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
                         combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
                     rectangles[c.uid] = tempRectangleF;
                     w.ListOfPlayers.Remove(partnerCube.uid);
@@ -1322,7 +1330,7 @@ namespace Server
                     c = cubeArray[0];
                     combinedCube = new Cube(c.loc_x, c.loc_y, c.argb_color, c.uid, c.team_id, false, c.Name, combinedMass);
                     combinedCube.splitTime = 0;
-                    tempRectangleF = new RectangleF((float)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (float)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
+                    tempRectangleF = new Rectangle((int)(combinedCube.loc_x - combinedCube.GetWidth() * 1.5), (int)(combinedCube.loc_y - combinedCube.GetWidth() * 1.5),
                         combinedCube.GetWidth() * 3, combinedCube.GetWidth() * 3);
                     rectangles[c.uid] = tempRectangleF;
                     w.ListOfPlayers[c.uid] = combinedCube;
@@ -1454,7 +1462,7 @@ namespace Server
         {
             long splittime = 0;
             Boolean first = true;
-            RectangleF tempRectangleF;           
+            Rectangle tempRectangleF;           
             string message = "";
 
             if (tempCube.Mass > w.minimumSplitMass && FindTeamCubes(tempCube.team_id) != null)
@@ -1466,13 +1474,13 @@ namespace Server
                     c.loc_y -= 100;
                     c.numberOfSplits++;
 
-                    tempRectangleF = new RectangleF((float)(c.loc_x - c.GetWidth() * 1.5), (float)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
+                    tempRectangleF = new Rectangle((int)(c.loc_x - c.GetWidth() * 1.5), (int)(c.loc_y - c.GetWidth() * 1.5), c.GetWidth() * 3,
                         c.GetWidth() * 3);
                     rectangles[c.uid] = tempRectangleF;
 
                     Cube split = new Cube(c.loc_x + 200, c.loc_y + 200, c.argb_color, GenerateUID(), c.team_id, false, c.Name, c.Mass);
                     split.numberOfSplits = c.numberOfSplits;
-                    tempRectangleF = new RectangleF((float)(split.loc_x - split.GetWidth() * 1.5), (float)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
+                    tempRectangleF = new Rectangle((int)(split.loc_x - split.GetWidth() * 1.5), (int)(split.loc_y - split.GetWidth() * 1.5), split.GetWidth()
                         * 3, split.GetWidth() * 3);
                     rectangles.Add(split.uid, tempRectangleF);
 
