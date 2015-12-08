@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AccessDatabase\bin\Debug\AccessDatabase.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -57,10 +61,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AccessDatabase\AccessDatabase.csproj">
-      <Project>{ab64e8ea-9844-44c3-b89e-23e0e30faa35}</Project>
-      <Name>AccessDatabase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AgCubioView\AgCubioView.csproj">
       <Project>{17fcafd1-2758-4446-9bc8-ae5dede27621}</Project>
       <Name>AgCubioView</Name>

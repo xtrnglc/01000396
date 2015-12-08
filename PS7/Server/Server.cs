@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
-using Database;
+using DatabaseController;
 
 
 namespace Server
@@ -555,7 +555,7 @@ namespace Server
             Cube temp2;
 
             Socket tempsocket, tempsocket2;
-
+            
             //grow new food
             lock (w)
             {
@@ -674,12 +674,10 @@ namespace Server
                                 c.cubesEaten++;
 
                                 /*
-                                Create a death time.
-                                Time alive = death time - spawn time
                                 Update database entry here
                                 */
 
-
+                                updateDB(temp2);
 
 
                                 //Tell the player that his cube is dead and remove references to the client
@@ -714,8 +712,6 @@ namespace Server
                                 //If main cube from split is being eaten
                                 if(cubetosockets.TryGetValue(temp2, out transferSocket))
                                 {
-
-
                                     c.Mass += temp2.Mass;
 
                                     if (c.Mass > c.maxMass)
@@ -754,8 +750,6 @@ namespace Server
                                 }
                                 else
                                 {
-
-
                                     c.Mass += temp2.Mass;
 
                                     if (c.Mass > c.maxMass)
@@ -800,6 +794,26 @@ namespace Server
         }
 
         /// <summary>
+        /// Updates the database with the dead player cube
+        /// </summary>
+        /// <param name="c"></param>
+        private void updateDB(Cube c)
+        {
+            long timeAlive = stopWatch.ElapsedMilliseconds - c.spawnTime;
+            long timeOfDeath = stopWatch.ElapsedMilliseconds;
+
+            if(c.playersEaten.Count == 0)
+            {
+                //Empty string to show that the player has died without eating any other player
+                //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, "");
+            }
+            else
+            {
+                //AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.maxMass, c.cubesEaten, (int)timeOfDeath, c.playersEaten.ToString());
+            }
+        }
+
+        /// <summary>
         /// Determines if a player cube is overlapping another player cube
         /// </summary>
         /// <param name="playerCube"></param>
@@ -813,9 +827,9 @@ namespace Server
                 {
                     if (c.uid != playerCube.uid && c.team_id != playerCube.team_id)
                     {
-                        if (playerCube.GetX() > (float)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (float)c.GetX() + (playerCube.GetWidth() * offset))
+                        if (playerCube.GetX() > (int)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)c.GetX() + (playerCube.GetWidth() * offset))
                         {
-                            if (playerCube.GetY() > (float)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (float)c.GetY() + (playerCube.GetWidth() * offset))
+                            if (playerCube.GetY() > (int)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)c.GetY() + (playerCube.GetWidth() * offset))
                             {
                                 if (c.Mass > playerCube.Mass)
                                 {
@@ -944,9 +958,9 @@ namespace Server
             double offset = 1.5;
             foreach (Cube c in w.ListOfFood.Values)
             {
-                if (playerCube.GetX() > (float)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (float)c.GetX() + (playerCube.GetWidth() * offset))
+                if (playerCube.GetX() > (int)c.GetX() - (playerCube.GetWidth() * offset) && playerCube.GetX() < (int)c.GetX() + (playerCube.GetWidth() * offset))
                 {
-                    if (playerCube.GetY() > (float)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (float)c.GetY() + (playerCube.GetWidth() * offset))
+                    if (playerCube.GetY() > (int)c.GetY() - (playerCube.GetWidth() * offset) && playerCube.GetY() < (int)c.GetY() + (playerCube.GetWidth() * offset))
                     {
                         return c;
                     }  

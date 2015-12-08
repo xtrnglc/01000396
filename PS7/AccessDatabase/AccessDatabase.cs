@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace Database
+namespace DatabaseController
 {
     public static class AccessDatabase
     {
@@ -34,9 +34,9 @@ namespace Database
                     command.CommandText = "insert into PlayersTable2 (PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + playerid.ToString() + ", '" + playername + "', " + timealive.ToString()
                         + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
                     command.ExecuteNonQuery();
+
                     command.CommandText = "insert into PlayersTable1 (PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath, PlayersEaten) values(" + playerid.ToString() + ", '" + playername + "', " + timealive.ToString()
                                            + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ", '" + playerseaten +"');"; command.ExecuteNonQuery();
-                    command.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
@@ -44,6 +44,8 @@ namespace Database
                 }
             }
         }
+
+
 
         /// <summary>
         /// Deletes a player from the database
