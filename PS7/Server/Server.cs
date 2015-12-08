@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
+using Database;
 
 
 namespace Server
@@ -123,7 +124,6 @@ namespace Server
             int attritiontimer = 0;
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
-
             //Try and parse the game state xml file
             if (choice == "Y" || choice == "y")
             {

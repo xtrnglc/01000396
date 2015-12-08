@@ -39,7 +39,9 @@ namespace AgCubio
         public string Name { get; set; }
         [JsonProperty]
         public double Mass { get; set; }
+        public int foodEaten { get; set; }
 
+        public List<string> playersEaten = new List<string>();
 
         //NOT JSON PROPERTY DO NOT SEND 
         //So this might be why our server is not working with Jim's client. Because we send over cube info his cube class does not have
@@ -131,6 +133,18 @@ namespace AgCubio
         {
             return (int)uid;
         }
+
+        public void updatePlayersEaten(string playername)
+        {
+            playersEaten.Add(playername);
+        }
+
+        public List<String> getPlayersEaten()
+        {
+            return playersEaten;
+        }
+
+        
     }
 
     /// <summary>
