@@ -33,7 +33,7 @@ namespace DatabaseController
                     MySqlCommand command = conn.CreateCommand();
 
                     //Insert into general info table
-                    command.CommandText = "insert into PlayersTable1 (PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values('" + playername + "', " + timealive.ToString()
+                    command.CommandText = "insert into PlayersTable1 (GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + sessionid.ToString()+ ", '" + playername + "', " + timealive.ToString()
                                            + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
                     command.ExecuteNonQuery();
 
@@ -64,9 +64,8 @@ namespace DatabaseController
         /// Get a unique sessionid for every client
         /// </summary>
         /// <returns></returns>
-        public static int getGameSession()
+        public static int getGameSession(int startsession)
         {
-            int sessionID = 1;
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -77,14 +76,14 @@ namespace DatabaseController
 
                     // Create a command
                     MySqlCommand command = conn.CreateCommand();
-                    command.CommandText = "select , GameSessionID from PlayersTable1";
+                    command.CommandText = "select GameSessionID from PlayersTable1";
 
                     // Execute the command and cycle through the DataReader object
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            sessionID++;
+                            startsession++;
                         }
                     }
                 }
@@ -93,7 +92,7 @@ namespace DatabaseController
                     Console.WriteLine(e.Message);
                 }
             }
-            return sessionID;
+            return startsession;
         }
 
     }

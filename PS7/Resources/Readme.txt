@@ -284,4 +284,11 @@ Design decisions
 
 	TO DO: Update database when a player dies
 	TO DO: Go through database and check for player id to make sure it is unique
-	TO DO: Web server part		
+	TO DO: Web server part	
+	
+12/08/2015
+	Re did the database. Now have three tables.
+	PlayersTable1 contains all general information about the player and related game session
+	PlayersEaten contains the list of cubes that were eaten and who they were eaten by and the game session
+	Rankings table contains the top 5 ranks based on maximum mass achieved
+		

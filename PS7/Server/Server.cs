@@ -81,6 +81,7 @@ namespace Server
         /// Timer for the attrition
         /// </summary>
         private System.Timers.Timer attritionTimer;
+        int sessID = 1;
         /// <summary>
         /// Stop watch for the splitting and merging
         /// </summary>
@@ -122,6 +123,7 @@ namespace Server
             int mergeTimer = 0;
             int virusSize = 0;
             int attritiontimer = 0;
+            
             Console.WriteLine("Do you have an XML gamestate file? Y to try and parse the file");
             string choice = Console.ReadLine();
             //Try and parse the game state xml file
@@ -340,8 +342,9 @@ namespace Server
             Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
             playerCube.setMaxMass(w.startMass);
             playerCube.setSpawnTime(stopWatch.ElapsedMilliseconds);
-            playerCube.setSessionID(AccessDatabase.getGameSession());
-
+            
+            playerCube.setSessionID(AccessDatabase.getGameSession(sessID));
+            sessID++;
             Rectangle playerRectangleF = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
             //if the dictionary is empty or if 
