@@ -32,6 +32,8 @@ namespace DatabaseController
                     conn.Open();
                     MySqlCommand command = conn.CreateCommand();
 
+                    updateRanking(playername, maximumass, sessionid);
+
                     //Insert into general info table
                     command.CommandText = "insert into PlayersTable1 (GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + sessionid.ToString()+ ", '" + playername + "', " + timealive.ToString()
                                            + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
@@ -55,6 +57,12 @@ namespace DatabaseController
             }
         }
 
+        /// <summary>
+        /// Updates the top 5 all time rankings
+        /// </summary>
+        /// <param name="playername"></param>
+        /// <param name="maximumass"></param>
+        /// <param name="sessionid"></param>
         public static void updateRanking(string playername, double maximumass, int sessionid)
         {
             Dictionary<double, string> rankings = new Dictionary<double, string>();
@@ -80,10 +88,12 @@ namespace DatabaseController
                     {
                         while (reader.Read())
                         {
-                            entryValue = (reader["Rank"] + "&" + reader["PlayerName"] +  "&" + reader["MaximumMass"] + "&" + reader["GameSessionID"]);
-                            double.TryParse(reader["MaximumMass"].ToString(), out massKey);
-                            rankings.Add(massKey, entryValue);
-                            toSort.Add(massKey);
+                            if(double.TryParse(reader["MaximumMass"].ToString(), out massKey))
+                            {
+                                entryValue = (reader["Rank"] + "&" + reader["PlayerName"] + "&" + reader["MaximumMass"] + "&" + reader["GameSessionID"]);
+                                rankings.Add(massKey, entryValue); //Will run into issues if two players have the exact same mass
+                                toSort.Add(massKey);
+                            }
                         }
                     }
 
@@ -91,7 +101,11 @@ namespace DatabaseController
 
                     toSort.Sort();
                     toSort.Reverse();
-                    toSort.RemoveAt(5);
+
+                    if(toSort.Count > 5)
+                    {
+                        toSort.RemoveAt(5);
+                    }
 
                     string mock = "1&" + playername + "&" + maximumass + "&" + sessionid;
                     rankings.Add(maximumass, mock);
@@ -100,12 +114,11 @@ namespace DatabaseController
                     {
                         rankings.TryGetValue(d, out temp);
                         substrings = temp.Split('&');
-                        command.CommandText = "update RankingTable set PlayerName='" + substrings[1]  + "', MaximumMass='"+ substrings[2] + "', GameSessionID='" + substrings[3] +"' WHERE Rank='" + r + "';";
+                        command.CommandText = "update RankingTable set PlayerName='" + substrings[1]  + "', MaximumMass='"+ substrings[2] + "', GameSessionID='" + substrings[3] 
+                            +"' WHERE Rank='" + r + "';";
                         command.ExecuteNonQuery();
                         r++;
                     }
-
-
                 }
                 catch (Exception e)
                 {
