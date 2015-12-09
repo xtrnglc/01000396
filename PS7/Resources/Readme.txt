@@ -266,6 +266,15 @@ Design decisions
 
 	Readme for PS9 AgCubio database and web server
 
+	Database Description:
+	PlayersTable1 - General Information about the server, includes player names, game sessions, time alive, time of death, maximum mass, cubes eaten
+	PlayersEaten - Organized into three columns, a game session id, a predator and a prey. The predator is the eater cube and the prey is the eaten cube
+	RankingTable - A table to keep track of the top 5 mass achieved
+
+	The tables are independent but ideally should be "linked" via player name/ predator. I am unable to do this via MySQL so far but the code invariant will ensure that 
+	the entries on each table is consistent with the others.
+	
+	 
 12/07/2015
 	Created a static helper class AccessDatabase to help faciliate database manipulation and extraction. Currently has only one useful function: Insert.
 	The MySQL database has been modified to contain two tables. One where a player has not eaten any other players and one where they have. 
@@ -291,4 +300,4 @@ Design decisions
 	PlayersTable1 contains all general information about the player and related game session
 	PlayersEaten contains the list of cubes that were eaten and who they were eaten by and the game session
 	Rankings table contains the top 5 ranks based on maximum mass achieved
-		
+	Our rankings table has 5 entries and ranks. The updateRankings method will attempt to sort and update the rankings accordingly.	

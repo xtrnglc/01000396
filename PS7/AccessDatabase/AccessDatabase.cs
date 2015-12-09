@@ -35,7 +35,8 @@ namespace DatabaseController
                     updateRanking(playername, maximumass, sessionid);
 
                     //Insert into general info table
-                    command.CommandText = "insert into PlayersTable1 (GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + sessionid.ToString()+ ", '" + playername + "', " + timealive.ToString()
+                    command.CommandText = "insert into PlayersTable1 (GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + sessionid.ToString()
+                        + ", '" + playername + "', " + timealive.ToString()
                                            + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
                     command.ExecuteNonQuery();
 
@@ -45,7 +46,8 @@ namespace DatabaseController
                     {
                         foreach(string name in playerseaten)
                         {
-                            command.CommandText = "insert into PlayersEatenTable (GameSessionID, PredatorName, PreyName) values(" + sessionid.ToString() +", '" + playername + "', " + "'" + name + "');";
+                            command.CommandText = "insert into PlayersEatenTable (GameSessionID, PredatorName, PreyName) values(" + sessionid.ToString() +", '" 
+                                + playername + "', " + "'" + name + "');";
                             command.ExecuteNonQuery();
                         }
                     }    
@@ -83,7 +85,7 @@ namespace DatabaseController
                     MySqlCommand command = conn.CreateCommand();
                     command.CommandText = "select Rank, GameSessionID, PlayerName, MaximumMass from RankingTable";
 
-                    // Execute the command and cycle through the DataReader object
+                    //Get the current rankings
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -97,11 +99,14 @@ namespace DatabaseController
                         }
                     }
 
+                    //Add the new player ranking
                     toSort.Add(maximumass);
 
+                    //Sort the rankings
                     toSort.Sort();
                     toSort.Reverse();
 
+                    //Only keep top 5
                     if(toSort.Count > 5)
                     {
                         toSort.RemoveAt(5);
@@ -110,6 +115,7 @@ namespace DatabaseController
                     string mock = "1&" + playername + "&" + maximumass + "&" + sessionid;
                     rankings.Add(maximumass, mock);
 
+                    //Update table 
                     foreach(double d in toSort)
                     {
                         rankings.TryGetValue(d, out temp);
@@ -160,6 +166,5 @@ namespace DatabaseController
             }
             return startsession;
         }
-
     }
 }
