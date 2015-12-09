@@ -59,6 +59,72 @@ namespace DatabaseController
             }
         }
 
+        public static string getScores()
+        {
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Time of Death</th><th>Cubes Eaten</th><th>Maximum Mass</th><th>Rank</th>";
+            string end = "</table></body>";
+            string temp = "";
+            string playernametemp;
+            string temp2;
+            Dictionary<string, string> nametorank = new Dictionary<string, string>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    // Create a command
+                    MySqlCommand command = conn.CreateCommand();
+
+                    command.CommandText = "Select Rank, PlayerName from RankingTable";
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if(reader["PlayerName"].ToString() != "")
+                            {
+                                nametorank.Add(reader["PlayerName"].ToString(), reader["Rank"].ToString());
+                            }
+                        }
+                    }
+
+                    command.CommandText = "select PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath from PlayersTable1";
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            temp = "<tr>" + "<td>" + reader["PlayerName"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                            
+                            playernametemp = reader["PlayerName"].ToString();
+
+                            if(nametorank.TryGetValue(playernametemp, out temp2))
+                            {
+                                temp += "<td>" + temp2 + "</td></tr>";
+                            }
+                            else
+                            {
+                                temp += "<td> - </td></tr>";
+                            }
+                            htmlString += temp;
+
+                        }
+                    }
+
+                    htmlString += end;
+                }
+
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            return htmlString;
+        }
+
         /// <summary>
         /// Updates the top 5 all time rankings
         /// </summary>

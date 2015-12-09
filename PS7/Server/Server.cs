@@ -345,7 +345,7 @@ namespace Server
             }
             else
             {
-                Console.WriteLine("Here1");
+                Console.WriteLine("A web server request has connected to the server");
                 state.connectionCallback = HandleServerRequest;
             }
                
@@ -354,7 +354,35 @@ namespace Server
 
         private void HandleServerRequest(State state)
         {
-            Console.WriteLine("Here2");
+            string request = state.sb.ToString();
+            
+            string[] lines = Regex.Split(request, "\n");
+            string response = "HTTP/1.1 200 OK \r\nConnection: close \r\nContent-Type: text/html; charset=UTF-8 \r\n";
+            string response2 = "\r\n";
+            Console.WriteLine(lines[0]);
+            if (lines[0].Contains("scores"))
+            {
+                Network.Send(state.workSocket, response);
+                Network.Send(state.workSocket, response2);
+                Network.Send(state.workSocket, "<h1>These are the scores</h1>");
+                string tmp = AccessDatabase.getScores();
+                Network.Send(state.workSocket, tmp);
+            }
+            else if (lines[0].Contains("games"))
+            {
+                Network.Send(state.workSocket, response);
+                Network.Send(state.workSocket, response2);
+            }
+            else if (lines[0].Contains("eaten"))
+            {
+                Network.Send(state.workSocket, response);
+                Network.Send(state.workSocket, response2);
+            }
+            //other server request
+            else
+            {
+                //send an HTML error
+            }
         }
 
         /// <summary>
