@@ -55,6 +55,11 @@ namespace DatabaseController
             }
         }
 
+        public static void updateRanking(string playername, double maximumass, int sessionid)
+        {
+
+        }
+
         /// <summary>
         /// Get a unique sessionid for every client
         /// </summary>
@@ -88,35 +93,8 @@ namespace DatabaseController
                     Console.WriteLine(e.Message);
                 }
             }
-
             return sessionID;
         }
 
-
-        /// <summary>
-        /// Deletes a player from the database
-        /// </summary>
-        /// <param name="playerid"></param>
-        public static void Delete(int playerid)
-        {
-            // Connect to the DB
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    // Open a connection
-                    conn.Open();
-                    MySqlCommand command = conn.CreateCommand();
-                    command.CommandText = "delete from PlayersTable2 where PlayerID = '" + playerid.ToString() + "';";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "delete from PlayersTable1 where PlayerID = '" + playerid.ToString() + "';";
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-        }
     }
 }
