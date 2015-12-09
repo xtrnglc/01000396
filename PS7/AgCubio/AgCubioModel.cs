@@ -40,6 +40,8 @@ namespace AgCubio
         [JsonProperty]
         public double Mass { get; set; }
 
+        private int sessionID;
+
         private int cubesEaten = 0;
 
         private long spawnTime;
@@ -54,7 +56,15 @@ namespace AgCubio
         public int numberOfSplits { get; set; }
         public long splitTime { get; set; }
         
+        public void setSessionID(int id)
+        {
+            sessionID = id;
+        }
 
+        public int getSessionID()
+        {
+            return sessionID;
+        }
         public void IncrementCubesEaten()
         {
             cubesEaten++;

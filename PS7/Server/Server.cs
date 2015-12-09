@@ -339,7 +339,8 @@ namespace Server
             }
             Cube playerCube = new Cube(200, 200, PlayerColor(R), UID, teamid, false, data, w.startMass);
             playerCube.setMaxMass(w.startMass);
-            playerCube.setSpawnTime(stopWatch.ElapsedMilliseconds); 
+            playerCube.setSpawnTime(stopWatch.ElapsedMilliseconds);
+            playerCube.setSessionID(AccessDatabase.getGameSession());
 
             Rectangle playerRectangleF = new Rectangle((int)(playerCube.loc_x - playerCube.GetWidth() * 1.5), (int)(playerCube.loc_y - playerCube.GetWidth() * 1.5), playerCube.GetWidth() * 3, playerCube.GetWidth() * 3);
             //Player = playerCube;
@@ -590,7 +591,6 @@ namespace Server
                     }        
                 }
 
-                
                 Move();
                 //Handle move requests
                 message = "";
@@ -678,7 +678,6 @@ namespace Server
                                 */
 
                                 updateDB(temp2);
-
 
                                 //Tell the player that his cube is dead and remove references to the client
                                 message2 = JsonConvert.SerializeObject(temp2) + "\n";
@@ -799,23 +798,11 @@ namespace Server
         /// <param name="c"></param>
         private void updateDB(Cube c)
         {
-            string playerseaten = "";
             long timeAlive = stopWatch.ElapsedMilliseconds - c.getSpawnTime();
             long timeOfDeath = stopWatch.ElapsedMilliseconds;
 
-            if(c.playersEaten.Count == 0)
-            {
-                //Empty string to show that the player has died without eating any other player
-                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, "");
-            }
-            else
-            {
-                foreach(string r in c.playersEaten)
-                {
-                    playerseaten += r + " ";
-                }
-                AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, playerseaten);
-            }
+            AccessDatabase.Insert(c.uid, c.Name, (int)timeAlive, c.getMaxMass(), c.getCubesEaten(), (int)timeOfDeath, c.getSessionID(), c.getPlayersEaten());
+            
         }
 
         /// <summary>
