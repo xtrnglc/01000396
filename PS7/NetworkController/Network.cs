@@ -89,6 +89,8 @@ namespace NetworkController
             return socket;
         }
 
+
+
         /// <summary>
         /// Network code that begins receiving data and calls call back to send player name
         /// </summary>
@@ -191,25 +193,82 @@ namespace NetworkController
         public static void Server_Awaiting_Client_Loop(Action<State> callback)
         {
             TcpListener listener = new TcpListener(IPAddress.IPv6Any, 11000);
+            TcpListener WebListener = new TcpListener(IPAddress.IPv6Any, 11100);
             State state = new State();
+            State WebState = new State();
             connectionCallbackTemp = callback;
 
             state.connectionCallback = callback;
+            WebState.connectionCallback = callback;
             try
             {
                 listener.Start();
+                WebListener.Start();
                 
                 while(true)
                 {
                     allDone.Reset();
                     Console.WriteLine("Waiting for a connection...");
                     listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
+                    WebListener.BeginAcceptSocket(new AsyncCallback(Accept_Web_Server), WebListener.Server);
+                    
                     allDone.WaitOne();
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine("Problem");
+                Console.ReadKey();
+            }
+        }
+
+        //public static void Server_Awaiting_WebServer_Loop(Action<State> callback)
+        //{
+        //    TcpListener listener = new TcpListener(IPAddress.IPv6Any, 11100);
+        //    State state = new State();
+        //    connectionCallbackTemp = callback;
+
+        //    state.connectionCallback = callback;
+        //    try
+        //    {
+        //        listener.Start();
+
+        //        while (true)
+        //        {
+        //            allDone.Reset();
+        //            Console.WriteLine("Waiting for a connection...");
+        //            listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
+        //            allDone.WaitOne();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
+        //}
+
+        /// <summary>
+        /// Accepts a new web server connection
+        /// </summary>
+        /// <param name="ar"></param>
+        public static void Accept_Web_Server(IAsyncResult ar)
+        {
+            try
+            {
+                Socket listener = (Socket)ar.AsyncState;
+                Socket handler = listener.EndAccept(ar);
+
+                //listener.BeginAccept(Accept_Web_Server, listener);
+
+                State state = new State();
+                state.workSocket = handler;
+                state.connectionCallback = connectionCallbackTemp;
+                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+            }
+            catch (Exception)
+            {
+
             }
         }
 
@@ -223,7 +282,6 @@ namespace NetworkController
         {
             try
             {
-                //Console.WriteLine("here");
                 Socket listener = (Socket)ar.AsyncState;
                 Socket handler = listener.EndAccept(ar);
 
@@ -237,8 +295,7 @@ namespace NetworkController
             catch (Exception)
             {
 
-            }
-            
+            } 
         }
 
         public static void ReadCallback(IAsyncResult ar)

@@ -298,29 +298,63 @@ namespace Server
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
             generateIntitialFood();
-            Network.Server_Awaiting_Client_Loop(HandleConnections);
+
+            //Network.Server_Awaiting_Client_Loop(HandleServerConnections);
+            Network.Server_Awaiting_Client_Loop(HandleClientConnections);
+           
         }
+
+        private void HandleServerConnections(State state)
+        {
+            string request = state.sb.ToString();
+            Console.WriteLine("A web server request has connected to the server");
+            state.sb.Clear();
+            
+
+            Network.Server_Awaiting_Client_Loop(HandleClientConnections);
+        }
+
+
 
         /// <summary>
         /// Needs to be a callback function required by the networking code
         /// Sets up a callback to receive a players name and then request more data
         /// 
         /// </summary>
-        private void HandleConnections(State state)
+        private void HandleClientConnections(State state)
         {
-            playerSockets.Add(state.workSocket);
-            state.connectionCallback = DataFromClient;
-            string playerName = state.sb.ToString();
-            Console.WriteLine("A new client has connected to the server");
-            state.sb.Clear();
-            lock (w)
+            EndPoint d = state.workSocket.LocalEndPoint;
+            d.ToString();
+
+    
+            if(d.ToString().Contains("11000"))
             {
-                if (playerName.EndsWith("\n"))
+                playerSockets.Add(state.workSocket);
+                state.connectionCallback = DataFromClient;
+                string playerName = state.sb.ToString();
+                Console.WriteLine("A new client has connected to the server");
+                state.sb.Clear();
+                lock (w)
                 {
-                    playerName = playerName.Remove(playerName.Length - 1);
+                    if (playerName.EndsWith("\n"))
+                    {
+                        playerName = playerName.Remove(playerName.Length - 1);
+                    }
+                    ReceivePlayer(playerName, state);
                 }
-                ReceivePlayer(playerName, state);
             }
+            else
+            {
+                Console.WriteLine("Here1");
+                state.connectionCallback = HandleServerRequest;
+            }
+               
+            
+        }
+
+        private void HandleServerRequest(State state)
+        {
+            Console.WriteLine("Here2");
         }
 
         /// <summary>
