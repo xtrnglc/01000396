@@ -56,6 +56,12 @@
   <ItemGroup>
     <Content Include="MySql.Data.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AccessDatabase\AccessDatabase.csproj">
+      <Project>{ab64e8ea-9844-44c3-b89e-23e0e30faa35}</Project>
+      <Name>AccessDatabase</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

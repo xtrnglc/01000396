@@ -57,7 +57,56 @@ namespace DatabaseController
 
         public static void updateRanking(string playername, double maximumass, int sessionid)
         {
+            Dictionary<double, string> rankings = new Dictionary<double, string>();
+            string entryValue;
+            double massKey;
+            List<double> toSort = new List<double>();
+            string temp;
+            string[] substrings;
+            
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
 
+                    // Create a command
+                    MySqlCommand command = conn.CreateCommand();
+                    command.CommandText = "select Rank, GameSessionID, PlayerName, MaximumMass from RankingTable";
+
+                    // Execute the command and cycle through the DataReader object
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            entryValue = (reader["Rank"] + "&" + reader["PlayerName"] +  "&" + reader["MaximumMass"] + "&" + reader["GameSessionID"]);
+                            double.TryParse(reader["MaximumMass"].ToString(), out massKey);
+                            rankings.Add(massKey, entryValue);
+                            toSort.Add(massKey);
+                        }
+                    }
+
+                    toSort.Add(maximumass);
+
+                    toSort.Sort();
+
+                    toSort.RemoveAt(5); 
+
+                    foreach(double d in toSort)
+                    {
+                        rankings.TryGetValue(d, out temp);
+                        substrings = temp.Split('&');
+
+                    }
+
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
         }
 
         /// <summary>
@@ -66,7 +115,6 @@ namespace DatabaseController
         /// <returns></returns>
         public static int getGameSession(int startsession)
         {
-
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
