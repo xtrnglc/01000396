@@ -14,7 +14,7 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            AccessDatabase.updateRanking();
+            AccessDatabase.updateRanking("test", 1500, 12);
             Console.Read();
         }
 

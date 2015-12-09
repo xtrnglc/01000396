@@ -63,7 +63,7 @@ namespace DatabaseController
             List<double> toSort = new List<double>();
             string temp;
             string[] substrings;
-            
+            int r = 1;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
@@ -90,14 +90,19 @@ namespace DatabaseController
                     toSort.Add(maximumass);
 
                     toSort.Sort();
+                    toSort.Reverse();
+                    toSort.RemoveAt(5);
 
-                    toSort.RemoveAt(5); 
+                    string mock = "1&" + playername + "&" + maximumass + "&" + sessionid;
+                    rankings.Add(maximumass, mock);
 
                     foreach(double d in toSort)
                     {
                         rankings.TryGetValue(d, out temp);
                         substrings = temp.Split('&');
-
+                        command.CommandText = "update RankingTable set PlayerName='" + substrings[1]  + "', MaximumMass='"+ substrings[2] + "', GameSessionID='" + substrings[3] +"' WHERE Rank='" + r + "';";
+                        command.ExecuteNonQuery();
+                        r++;
                     }
 
 
