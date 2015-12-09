@@ -54,6 +54,10 @@
     <Folder Include="Packages\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AccessDatabase\AccessDatabase.csproj">
+      <Project>{ab64e8ea-9844-44c3-b89e-23e0e30faa35}</Project>
+      <Name>AccessDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AgCubioView\AgCubioView.csproj">
       <Project>{17fcafd1-2758-4446-9bc8-ae5dede27621}</Project>
       <Name>AgCubioView</Name>

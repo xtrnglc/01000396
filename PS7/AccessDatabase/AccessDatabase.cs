@@ -31,12 +31,10 @@ namespace DatabaseController
                     // Open a connection
                     conn.Open();
                     MySqlCommand command = conn.CreateCommand();
-                    command.CommandText = "insert into PlayersTable2 (PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values(" + playerid.ToString() + ", '" + playername + "', " + timealive.ToString()
-                        + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
-                    command.ExecuteNonQuery();
 
-                    command.CommandText = "insert into PlayersTable1 (PlayerID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath, PlayersEaten) values(" + playerid.ToString() + ", '" + playername + "', " + timealive.ToString()
-                                           + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ", '" + playerseaten +"');"; command.ExecuteNonQuery();
+                    command.CommandText = "insert into PlayersTable1 (PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath) values('" + playername + "', " + timealive.ToString()
+                                           + ", " + maximumass.ToString() + ", " + cubeseaten.ToString() + ", " + timeofdeath.ToString() + ");";
+                    command.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
