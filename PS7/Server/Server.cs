@@ -373,6 +373,15 @@ namespace Server
             {
                 Network.Send(state.workSocket, response);
                 Network.Send(state.workSocket, response2);
+
+                //"GET /games?player=Joe HTTP/1.1\r"
+
+                string temp = lines[0].Substring(18);
+                string[] t2 = temp.Split(' ' );
+                string playerName = t2[0];
+                string tmp = AccessDatabase.getPlayerInfo(playerName);
+                Network.Send(state.workSocket, tmp);
+                state.workSocket.Disconnect(false);
             }
             else if (lines[0].Contains("eaten"))
             {

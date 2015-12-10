@@ -59,6 +59,47 @@ namespace DatabaseController
             }
         }
 
+        public static string getPlayerInfo(string playername)
+        {
+            string header = "<h3>Info for " + playername + "</h3>";
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>"+header+"</caption><tr><th>Game Session</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th>";
+            string end = "</table></body>";
+            string temp;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    // Create a command
+                    MySqlCommand command = conn.CreateCommand();
+                    command.CommandText = "select GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath from PlayersTable1;";
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["PlayerName"].ToString().Equals(playername))
+                            {
+                                temp = "<tr>" + "<td>" + reader["GameSessionID"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                                htmlString += temp;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+
+            htmlString += end;
+            return htmlString;
+        }
+
         public static string getScores()
         {
             string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Rank</th>";
