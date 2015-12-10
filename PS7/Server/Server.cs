@@ -303,7 +303,7 @@ namespace Server
             Network.Server_Awaiting_Client_Loop(HandleClientConnections);
            
         }
-
+        //do we need this?
         private void HandleServerConnections(State state)
         {
             string request = state.sb.ToString();
@@ -363,7 +363,7 @@ namespace Server
             string[] lines = Regex.Split(request, "\n");
             string response = "HTTP/1.1 200 OK \r\nConnection: close \r\nContent-Type: text/html; charset=UTF-8 \r\n";
             string response2 = "\r\n";
-            Console.WriteLine(lines[0]);
+            Console.WriteLine("Server request: " + lines[0]);
             if (lines[0].Contains("scores"))
             {
                 Network.Send(state.workSocket, response);
