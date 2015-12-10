@@ -59,6 +59,77 @@ namespace DatabaseController
             }
         }
 
+        public static string getSessionInfo(string sessionid)
+        {
+            string header = "<h3>Info for session " + sessionid + "</h3>";
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>" + header + "</caption><tr><th>PlayerName</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Players Eaten</th>";
+            string end = "</table></body>";
+            string playerseaten = "";
+            string temp;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    // Create a command
+                    MySqlCommand command = conn.CreateCommand();
+                    command.CommandText = "select GameSessionID, PredatorName, PreyName from PlayersEatenTable;";
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["GameSessionID"].ToString().Equals(sessionid))
+                            {
+                                playerseaten += reader["PreyName"] + " ";
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    // Create a command
+                    MySqlCommand command = conn.CreateCommand();
+                    command.CommandText = "select GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath from PlayersTable1;";
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["GameSessionID"].ToString().Equals(sessionid))
+                            {
+                                temp = "<tr>" + "<td>" + reader["PlayerName"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                                string temp2 = "<td>" + playerseaten + "</td></tr>";
+                                temp += temp2;
+                                htmlString += temp;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+
+            htmlString += end;
+            return htmlString;
+        }
+
         public static string getPlayerInfo(string playername)
         {
             string header = "<h3>Info for " + playername + "</h3>";
@@ -95,7 +166,6 @@ namespace DatabaseController
                 }
             }
 
-
             htmlString += end;
             return htmlString;
         }
@@ -121,8 +191,6 @@ namespace DatabaseController
 
                     command.CommandText = "Select Rank, GameSessionID, PlayerName from RankingTable";
 
-                    
-
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -139,7 +207,7 @@ namespace DatabaseController
                                     nametorank.Add(reader["PlayerName"].ToString(), newlist);
                                 }
                                 catch(Exception e)
-                                {
+                                { 
                                     List<Tuple<string, string>> tempList;
                                     Tuple<string, string> pair2;
                                     nametorank.TryGetValue(reader["PlayerName"].ToString(), out tempList);

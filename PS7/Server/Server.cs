@@ -387,6 +387,15 @@ namespace Server
             {
                 Network.Send(state.workSocket, response);
                 Network.Send(state.workSocket, response2);
+
+
+                //GET /eaten?id=35 HTTP/1.1
+                string temp = lines[0].Substring(14);
+                string[] t2 = temp.Split(' ');
+                string session = t2[0];
+                string tmp = AccessDatabase.getSessionInfo(session);
+                Network.Send(state.workSocket, tmp);
+                state.workSocket.Disconnect(false);
             }
             //other server request
             else
