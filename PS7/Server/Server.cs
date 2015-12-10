@@ -369,9 +369,8 @@ namespace Server
                 Network.Send(state.workSocket, response);
                 Network.Send(state.workSocket, response2);
                 string tmp = AccessDatabase.getScores();
-                Network.Send(state.workSocket, tmp);
-                state.workSocket.Shutdown(SocketShutdown.Both);
-                state.workSocket.Disconnect(false);
+                Network.SendWeb(state.workSocket, tmp);
+                
             }
             else if (lines[0].Contains("games"))
             {
@@ -384,8 +383,8 @@ namespace Server
                 string[] t2 = temp.Split(' ' );
                 string playerName = t2[0];
                 string tmp = AccessDatabase.getPlayerInfo(playerName);
-                Network.Send(state.workSocket, tmp);
-                state.workSocket.Disconnect(false);
+                Network.SendWeb(state.workSocket, tmp);
+                
             }
             else if (lines[0].Contains("eaten"))
             {
@@ -398,8 +397,9 @@ namespace Server
                 string[] t2 = temp.Split(' ');
                 string session = t2[0];
                 string tmp = AccessDatabase.getSessionInfo(session);
-                Network.Send(state.workSocket, tmp);
-                state.workSocket.Disconnect(false);
+                Network.SendWeb(state.workSocket, tmp);
+
+                
             }
             //other server request
             else
@@ -408,8 +408,8 @@ namespace Server
                 string tutorial = "<h2> Valid syntax is of one of the following forms</h2><p>localhost:11100/eaten?id=35</p><p>localhost:11100/games?player=Joe</p><p>localhost:11100/scores</p><h1>Here is a table of players on record</h1>";
                 string display = AccessDatabase.getScores();
                 string htmlString = header + tutorial + display;
-                Network.Send(state.workSocket, htmlString);
-                state.workSocket.Disconnect(false);
+                Network.SendWeb(state.workSocket, htmlString);
+                
             }
         }
 

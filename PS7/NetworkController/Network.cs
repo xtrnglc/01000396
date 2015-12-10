@@ -167,6 +167,28 @@ namespace NetworkController
         }
 
         /// <summary>
+        /// send method for the web server (will disconnect)
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="data"></param>
+        public static void SendWeb(Socket socket, String data)
+        {
+            try
+            {
+                byte[] byteData = Encoding.ASCII.GetBytes(data);
+
+                socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Helper method for the Send method
         /// </summary>
         /// <param name="state_in_an_ar_object"></param>
@@ -222,31 +244,6 @@ namespace NetworkController
                 Console.ReadKey();
             }
         }
-
-        //public static void Server_Awaiting_WebServer_Loop(Action<State> callback)
-        //{
-        //    TcpListener listener = new TcpListener(IPAddress.IPv6Any, 11100);
-        //    State state = new State();
-        //    connectionCallbackTemp = callback;
-
-        //    state.connectionCallback = callback;
-        //    try
-        //    {
-        //        listener.Start();
-
-        //        while (true)
-        //        {
-        //            allDone.Reset();
-        //            Console.WriteLine("Waiting for a connection...");
-        //            listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
-        //            allDone.WaitOne();
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //    }
-        //}
 
         /// <summary>
         /// Accepts a new web server connection

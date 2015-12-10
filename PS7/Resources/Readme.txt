@@ -314,3 +314,7 @@ Design decisions
 	
 	TO DO: Add hyperlinks 
 	TO DO: Clean up disconnects
+
+12/10/15
+	Problem with the sockets is with the readcallback. It thinks the socket is still open and will throw an exception. Looks like it's on another thread.
+	We might need to make new network code just to handle the readcallback with the web server requests. 
