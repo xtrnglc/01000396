@@ -370,6 +370,7 @@ namespace Server
                 Network.Send(state.workSocket, response2);
                 string tmp = AccessDatabase.getScores();
                 Network.Send(state.workSocket, tmp);
+                state.workSocket.Shutdown(SocketShutdown.Both);
                 state.workSocket.Disconnect(false);
             }
             else if (lines[0].Contains("games"))

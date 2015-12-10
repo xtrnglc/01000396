@@ -305,16 +305,12 @@ Design decisions
 12/09/2015
 	Got sending html to the browser working. It is all in the AccessDataBase code.
 	
+	Player link
+	<td><a href=\"http://localhost:11100/games?player=Joe\"><div style=\"height:100%;width:100%\">TEXT</div></a></td>
 
-	<td>
-		<a href="http://example.com">
-			<div style="height:100%;width:100%">
-				hello world
-			</div>
-		</a>
-	</td>
+	Session link
+	<td><a href=\"http://localhost:11100/eaten?id=35\"><div style=\"height:100%;width:100%\">TEXT</div></a></td>
 
-
-
+	
 	TO DO: Add hyperlinks 
 	TO DO: Clean up disconnects
