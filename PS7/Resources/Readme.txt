@@ -301,3 +301,20 @@ Design decisions
 	PlayersEaten contains the list of cubes that were eaten and who they were eaten by and the game session
 	Rankings table contains the top 5 ranks based on maximum mass achieved
 	Our rankings table has 5 entries and ranks. The updateRankings method will attempt to sort and update the rankings accordingly.	
+
+12/09/2015
+	Got sending html to the browser working. It is all in the AccessDataBase code.
+	
+
+	<td>
+		<a href="http://example.com">
+			<div style="height:100%;width:100%">
+				hello world
+			</div>
+		</a>
+	</td>
+
+
+
+	TO DO: Add hyperlinks 
+	TO DO: Clean up disconnects
