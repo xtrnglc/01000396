@@ -61,12 +61,12 @@ namespace DatabaseController
 
         public static string getScores()
         {
-            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Time of Death</th><th>Cubes Eaten</th><th>Maximum Mass</th><th>Rank</th>";
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Rank</th>";
             string end = "</table></body>";
             string temp = "";
             string playernametemp;
             string temp2;
-            Dictionary<string, string> nametorank = new Dictionary<string, string>();
+            Dictionary<string, List<Tuple<string, string>>> nametorank = new Dictionary<string, List<Tuple<string, string>>>();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -78,7 +78,9 @@ namespace DatabaseController
                     // Create a command
                     MySqlCommand command = conn.CreateCommand();
 
-                    command.CommandText = "Select Rank, PlayerName from RankingTable";
+                    command.CommandText = "Select Rank, GameSessionID, PlayerName from RankingTable";
+
+                    
 
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
@@ -86,24 +88,51 @@ namespace DatabaseController
                         {
                             if(reader["PlayerName"].ToString() != "")
                             {
-                                nametorank.Add(reader["PlayerName"].ToString(), reader["Rank"].ToString());
+                                List<Tuple<string, string>> newlist = new List<Tuple<string, string>>();
+                                Tuple<string, string> pair;
+
+                                pair = new Tuple<string, string>(reader["GameSessionID"].ToString(), reader["Rank"].ToString());
+                                newlist.Add(pair);
+                                try
+                                {
+                                    nametorank.Add(reader["PlayerName"].ToString(), newlist);
+                                }
+                                catch(Exception e)
+                                {
+                                    List<Tuple<string, string>> tempList;
+                                    Tuple<string, string> pair2;
+                                    nametorank.TryGetValue(reader["PlayerName"].ToString(), out tempList);
+                                    pair2 = new Tuple<string, string>(reader["GameSessionID"].ToString(), reader["Rank"].ToString());
+                                    tempList.Add(pair2);
+                                    nametorank[reader["PlayerName"].ToString()] = tempList;
+                                }
                             }
                         }
                     }
 
-                    command.CommandText = "select PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath from PlayersTable1";
+                    command.CommandText = "select GameSessionID, PlayerName, TimeAlive, MaximumMass, CubesEaten, TimeOfDeath from PlayersTable1";
 
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
+                        List<Tuple<string, string>> tempList;
                         while (reader.Read())
                         {
                             temp = "<tr>" + "<td>" + reader["PlayerName"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
                             
                             playernametemp = reader["PlayerName"].ToString();
 
-                            if(nametorank.TryGetValue(playernametemp, out temp2))
+                            List<string> newlist = new List<string>();
+
+                            if (nametorank.TryGetValue(playernametemp, out tempList))
                             {
-                                temp += "<td>" + temp2 + "</td></tr>";
+                                foreach(Tuple < string, string> x in tempList)
+                                {
+                                    if(x.Item1 == reader["GameSessionID"].ToString())
+                                    {
+                                        temp2 = "<td>" + x.Item2 + "</td></tr>";
+                                        temp += temp2;
+                                    }
+                                }
                             }
                             else
                             {

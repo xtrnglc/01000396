@@ -367,6 +367,7 @@ namespace Server
                 Network.Send(state.workSocket, "<h1>These are the scores</h1>");
                 string tmp = AccessDatabase.getScores();
                 Network.Send(state.workSocket, tmp);
+                state.workSocket.Disconnect(false);
             }
             else if (lines[0].Contains("games"))
             {
