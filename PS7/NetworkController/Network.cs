@@ -261,7 +261,7 @@ namespace NetworkController
                 State state = new State();
                 state.workSocket = handler;
                 state.connectionCallback = connectionCallbackTemp;
-                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallbackWeb), state);
             }
             catch (Exception)
             {
@@ -338,6 +338,60 @@ namespace NetworkController
                 Console.WriteLine(e.Message);
             }
             
+        }
+
+        /// <summary>
+        /// Read call back for the web server
+        /// </summary>
+        /// <param name="ar"></param>
+        public static void ReadCallbackWeb(IAsyncResult ar)
+        {
+            try
+            {
+                String content = String.Empty;
+
+                // Retrieve the state object and the handler socket
+                // from the asynchronous state object.
+                State state = (State)ar.AsyncState;
+                Socket handler = state.workSocket;
+                Socket tempSocket = state.workSocket;
+                Network.IsConnected(handler);
+                //state.connectionCallback = connectionCallbackTemp;
+                // Read data from the client socket. 
+                int bytesRead = handler.EndReceive(ar);
+
+                if (bytesRead > 0)
+                {
+                    // There  might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.connectionCallback(state);
+                    // Check for end-of-file tag. If it is not there, read 
+                    // more data.
+                    content = state.sb.ToString();
+                    if (content.IndexOf("<EOF>") > -1)
+                    {
+                        // All the data has been read from the 
+                        // client. Display it on the console.
+                        //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
+                        // Echo the data back to the client.
+                        Send(handler, content);
+                    }
+                    else
+                    {
+                        // Not all data received. Get more.
+                        if (tempSocket.Connected)
+                        {
+                            handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
 
         public static bool IsConnected(this Socket socket)
