@@ -379,7 +379,7 @@ namespace NetworkController
                     else
                     {
                         // Not all data received. Get more.
-                        if (tempSocket.Connected)
+                        if (SocketConnected(tempSocket) && SocketConnected(handler))
                         {
                             handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
                         }
@@ -392,6 +392,16 @@ namespace NetworkController
                 Console.WriteLine(e.Message);
             }
 
+        }
+
+        public static bool SocketConnected(Socket s)
+        {
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
         }
 
         public static bool IsConnected(this Socket socket)
