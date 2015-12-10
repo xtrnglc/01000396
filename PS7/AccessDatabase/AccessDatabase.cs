@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using NetworkController;
 
 namespace DatabaseController
 {
@@ -59,6 +60,14 @@ namespace DatabaseController
             }
         }
 
+        public static void errorMessageDisplay()
+        {
+            string header = "<h1> You have entered an invalid request</h1>";
+            string tutorial = "<h2> Valid syntax is of one of the following forms</h2><p>localhost:11100/eaten?id=35</p><p>localhost:11100/games?player=Joe</p><p>localhost:11100/scores</p>";
+            string display = getScores();
+            string htmlString = header + tutorial + display;
+        }
+
         public static string getSessionInfo(string sessionid)
         {
             string header = "<h3>Info for session " + sessionid + "</h3>";
@@ -66,6 +75,7 @@ namespace DatabaseController
             string end = "</table></body>";
             string playerseaten = "";
             string temp;
+            bool sessionfound = false;
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -84,6 +94,7 @@ namespace DatabaseController
                             if (reader["GameSessionID"].ToString().Equals(sessionid))
                             {
                                 playerseaten += reader["PreyName"] + " ";
+                                
                             }
                         }
                     }
@@ -115,6 +126,7 @@ namespace DatabaseController
                                 string temp2 = "<td>" + playerseaten + "</td></tr>";
                                 temp += temp2;
                                 htmlString += temp;
+                                sessionfound = true;
                             }
                         }
                     }
@@ -123,6 +135,13 @@ namespace DatabaseController
                 {
                     Console.WriteLine(e.Message);
                 }
+            }
+
+            if(sessionfound == false)
+            {
+                string errormessage = "<h2>The session you are looking for does not exist</h2><h1>Here is the table of sessions on record</h1>";
+                string text = getScores();
+                return errormessage + text;
             }
 
 
@@ -136,6 +155,7 @@ namespace DatabaseController
             string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>"+header+"</caption><tr><th>Game Session</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th>";
             string end = "</table></body>";
             string temp;
+            bool playerFound = false;
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -156,6 +176,7 @@ namespace DatabaseController
                             {
                                 temp = "<tr>" + "<td>" + reader["GameSessionID"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
                                 htmlString += temp;
+                                playerFound = true;
                             }
                         }
                     }
@@ -164,6 +185,14 @@ namespace DatabaseController
                 {
                     Console.WriteLine(e.Message);
                 }
+            }
+
+            if (playerFound == false)
+            {
+                string errormessage = "<h2>The player you are looking for does not exist</h2><h1>Here is the table of players on record</h1>";
+                string text = getScores();
+                return errormessage + text;
+                
             }
 
             htmlString += end;
@@ -240,6 +269,10 @@ namespace DatabaseController
                                     {
                                         temp2 = "<td>" + x.Item2 + "</td></tr>";
                                         temp += temp2;
+                                    }
+                                    else
+                                    {
+                                        temp += "<td> - </td></tr>";
                                     }
                                 }
                             }

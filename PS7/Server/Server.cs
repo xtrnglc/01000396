@@ -364,7 +364,6 @@ namespace Server
             {
                 Network.Send(state.workSocket, response);
                 Network.Send(state.workSocket, response2);
-                Network.Send(state.workSocket, "<h1>These are the scores</h1>");
                 string tmp = AccessDatabase.getScores();
                 Network.Send(state.workSocket, tmp);
                 state.workSocket.Disconnect(false);
@@ -400,7 +399,12 @@ namespace Server
             //other server request
             else
             {
-                //send an HTML error
+                string header = "<h1> You have entered an invalid request</h1>";
+                string tutorial = "<h2> Valid syntax is of one of the following forms</h2><p>localhost:11100/eaten?id=35</p><p>localhost:11100/games?player=Joe</p><p>localhost:11100/scores</p><h1>Here is a table of players on record</h1>";
+                string display = AccessDatabase.getScores();
+                string htmlString = header + tutorial + display;
+                Network.Send(state.workSocket, htmlString);
+                state.workSocket.Disconnect(false);
             }
         }
 
