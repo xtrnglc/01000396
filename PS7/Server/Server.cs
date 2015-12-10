@@ -352,6 +352,10 @@ namespace Server
             
         }
 
+        /// <summary>
+        /// Handles server requests
+        /// </summary>
+        /// <param name="state"></param>
         private void HandleServerRequest(State state)
         {
             string request = state.sb.ToString();

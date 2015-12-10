@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+Author: Trung Le and Adam Sorensen
+12/2/2015
+CS 3500
+PS9 - AgCubio Server
+Database helper class
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +68,9 @@ namespace DatabaseController
             }
         }
 
+        /// <summary>
+        /// Displays an error message
+        /// </summary>
         public static void errorMessageDisplay()
         {
             string header = "<h1> You have entered an invalid request</h1>";
@@ -68,6 +79,11 @@ namespace DatabaseController
             string htmlString = header + tutorial + display;
         }
 
+        /// <summary>
+        /// Gets info about a session
+        /// </summary>
+        /// <param name="sessionid"></param>
+        /// <returns></returns>
         public static string getSessionInfo(string sessionid)
         {
             string header = "<h3>Info for session " + sessionid + "</h3>";
@@ -149,6 +165,11 @@ namespace DatabaseController
             return htmlString;
         }
 
+        /// <summary>
+        /// Gets info about a player
+        /// </summary>
+        /// <param name="playername"></param>
+        /// <returns></returns>
         public static string getPlayerInfo(string playername)
         {
             string header = "<h3>Info for " + playername + "</h3>";
@@ -199,6 +220,10 @@ namespace DatabaseController
             return htmlString;
         }
 
+        /// <summary>
+        /// Gets the scores
+        /// </summary>
+        /// <returns></returns>
         public static string getScores()
         {
             string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Rank</th>";
