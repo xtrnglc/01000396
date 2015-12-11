@@ -177,9 +177,9 @@ namespace NetworkController
             {
                 byte[] byteData = Encoding.ASCII.GetBytes(data);
 
+
                 socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
             }
             catch (Exception e)
             {
@@ -374,15 +374,16 @@ namespace NetworkController
                         // client. Display it on the console.
                         //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
                         // Echo the data back to the client.
-                        Send(handler, content);
+                        SendWeb(handler, content);
                     }
                     else
                     {
                         // Not all data received. Get more.
-                        if (SocketConnected(tempSocket) && SocketConnected(handler))
-                        {
-                            handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
-                        }
+
+                        handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallbackWeb), state);
+                        
+                        
+                        
                         
                     }
                 }

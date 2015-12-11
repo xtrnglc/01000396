@@ -87,11 +87,13 @@ namespace DatabaseController
         public static string getSessionInfo(string sessionid)
         {
             string header = "<h3>Info for session " + sessionid + "</h3>";
-            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>" + header + "</caption><tr><th>PlayerName</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Players Eaten</th>";
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>" + header + "</caption><tr><th>PlayerName</th><th>Time Alive in milliseconds</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Players Eaten</th>";
             string end = "</table></body>";
             string playerseaten = "";
             string temp;
             bool sessionfound = false;
+            string[] playersarray;
+            Dictionary<string, string> playernamelinks = new Dictionary<string, string>();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -121,6 +123,25 @@ namespace DatabaseController
                 }
             }
 
+            
+            if(playerseaten != "")
+            {
+                playersarray = playerseaten.Split(' ');
+                
+                //Add a link associated with each prey,
+                foreach (string s in playersarray)
+                {
+                    if(s != playersarray.Last())
+                    {
+                        string temp1 = "<td><a href =\"http://localhost:11100/games?player=" + s + "\"><div style=\"height:100%;width:100%\">" + s + " </div></a></td>";
+                        playernamelinks.Add(s, temp1);
+                    }
+                   
+                }
+                
+            }
+            
+
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -136,13 +157,37 @@ namespace DatabaseController
                     {
                         while (reader.Read())
                         {
+
                             if (reader["GameSessionID"].ToString().Equals(sessionid))
                             {
-                                temp = "<tr>" + "<td>" + reader["PlayerName"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
-                                string temp2 = "<td>" + playerseaten + "</td></tr>";
-                                temp += temp2;
-                                htmlString += temp;
-                                sessionfound = true;
+                                if(playernamelinks.Count > 0)
+                                {
+                                    foreach(KeyValuePair<string, string> x in playernamelinks)
+                                    {
+                                        string playername = reader["PlayerName"].ToString();
+                                        string temp1 = "<tr><td><a href =\"http://localhost:11100/games?player=" + playername + "\"><div style=\"height:100%;width:100%\">" + playername + " </div></a></td>";
+                                        temp = temp1 + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                                        string preyname = x.Key;
+                                        string preylink = x.Value;
+                                        temp += preylink;
+                                        temp += "</tr>";
+                                        sessionfound = true;
+                                        htmlString += temp;
+                                    }
+                                    
+
+                                }
+                                else
+                                {
+                                    string playername = reader["PlayerName"].ToString();
+                                    string temp1 = "<tr><td><a href =\"http://localhost:11100/games?player=" + playername + "\"><div style=\"height:100%;width:100%\">" + playername + " </div></a></td>";
+                                    temp = temp1 + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                                    string temp2 = "<td> - </td></tr>";
+                                    temp += temp2;
+                                    htmlString += temp;
+                                    sessionfound = true;
+                                }
+                                
                             }
                         }
                     }
@@ -177,7 +222,7 @@ namespace DatabaseController
             string end = "</table></body>";
             string temp;
             bool playerFound = false;
-
+            //<td><a href=\"http://localhost:11100/eaten?id=35\"><div style=\"height:100%;width:100%\">TEXT</div></a></td>
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
@@ -195,7 +240,9 @@ namespace DatabaseController
                         {
                             if (reader["PlayerName"].ToString().Equals(playername))
                             {
-                                temp = "<tr>" + "<td>" + reader["GameSessionID"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
+                                string sessid = reader["GameSessionID"].ToString();
+                                string temp1 = "<tr><td><a href =\"http://localhost:11100/eaten?id=" + sessid + "\"><div style=\"height:100%;width:100%\">" + sessid + " </div></a></td>";
+                                temp = temp1 + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
                                 htmlString += temp;
                                 playerFound = true;
                             }
@@ -226,7 +273,7 @@ namespace DatabaseController
         /// <returns></returns>
         public static string getScores()
         {
-            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Rank</th>";
+            string htmlString = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head><body><table style=\"width: 100 % \"><caption>Scores for all players</caption><tr><th>Player Name</th><th>Time Alive (milliseconds)</th><th>Maximum Mass</th><th>Cubes Eaten</th><th>Time Of Death</th><th>Rank</th>";
             string end = "</table></body>";
             string temp = "";
             string playernametemp;
@@ -280,8 +327,9 @@ namespace DatabaseController
                         List<Tuple<string, string>> tempList;
                         while (reader.Read())
                         {
-                            temp = "<tr>" + "<td>" + reader["PlayerName"] + "</td>" + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
-                            
+                            string playername = reader["PlayerName"].ToString();
+                            string temp1= "<tr><td><a href =\"http://localhost:11100/games?player=" + playername +"\"><div style=\"height:100%;width:100%\">" + playername + " </div></a></td>";
+                            temp = temp1 + "<td>" + reader["TimeAlive"] + "</td>" + "<td>" + reader["MaximumMass"] + "</td>" + "<td>" + reader["CubesEaten"] + "</td>" + "<td>" + reader["TimeOfDeath"] + "</td>";
                             playernametemp = reader["PlayerName"].ToString();
 
                             List<string> newlist = new List<string>();

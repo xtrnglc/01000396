@@ -318,3 +318,8 @@ Design decisions
 12/10/15
 	Problem with the sockets is with the readcallback. It thinks the socket is still open and will throw an exception. Looks like it's on another thread.
 	We might need to make new network code just to handle the readcallback with the web server requests. 
+
+	hyper links work. 
+	TO DO: Clean up disconnects so it releases the socket on disconnect to be reused by another command from the browser
+	At the moment after a request is received and html is sent to the browser, the browser expects more data. And trying to manually shut the socket down leads to error.
+	look into this.
