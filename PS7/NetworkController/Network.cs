@@ -175,11 +175,16 @@ namespace NetworkController
         {
             try
             {
-                byte[] byteData = Encoding.ASCII.GetBytes(data);
+                lock(socket)
+                {
+                    byte[] byteData = Encoding.ASCII.GetBytes(data);
 
 
-                socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
-                socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+                    socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                    //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+                }
             }
             catch (Exception e)
             {
@@ -196,13 +201,23 @@ namespace NetworkController
         {
             try
             {
+                
                 Socket s = (Socket)state_in_an_ar_object.AsyncState;
-                Network.IsConnected(s);
-                int bytesSent = s.EndSend(state_in_an_ar_object);
-                sendDone.Set();
+                lock(s)
+                {
+                    if (s.Connected)
+                    {
+                        Network.IsConnected(s);
+                        int bytesSent = s.EndSend(state_in_an_ar_object);
+                        sendDone.Set();
+                    }
+                    
+                }
+                
             }
             catch (Exception)
             {
+                Console.WriteLine("Error with the socket");
             }
         }
 
@@ -256,7 +271,7 @@ namespace NetworkController
                 Socket listener = (Socket)ar.AsyncState;
                 Socket handler = listener.EndAccept(ar);
 
-                //listener.BeginAccept(Accept_Web_Server, listener);
+                listener.BeginAccept(Accept_Web_Server, listener);
 
                 State state = new State();
                 state.workSocket = handler;
@@ -282,7 +297,7 @@ namespace NetworkController
                 Socket listener = (Socket)ar.AsyncState;
                 Socket handler = listener.EndAccept(ar);
 
-                listener.BeginAccept(Accept_a_New_Client, listener);
+                //listener.BeginAccept(Accept_a_New_Client, listener);
 
                 State state = new State();
                 state.workSocket = handler;
@@ -346,6 +361,7 @@ namespace NetworkController
         /// <param name="ar"></param>
         public static void ReadCallbackWeb(IAsyncResult ar)
         {
+
             try
             {
                 String content = String.Empty;
@@ -378,9 +394,22 @@ namespace NetworkController
                     }
                     else
                     {
-                        // Not all data received. Get more.
+                        lock(handler)
+                        {
+                            // Not all data received. Get more.
+                            if (handler.Connected)
+                            {
+                                Console.WriteLine("Connected");
+                                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallbackWeb), state);
+                            }
+                            if (!handler.Connected)
+                            {
+                                Console.WriteLine("Not Connected");
+                            }
 
-                        handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallbackWeb), state);
+                            
+                        }
+                        
                         
                         
                         
