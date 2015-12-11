@@ -205,6 +205,8 @@ namespace DatabaseController
                 return errormessage + text;
             }
 
+            string link = "<h2><a href =\"http://localhost:11100/scores\"> Back to scores</a></h2>";
+            htmlString += link;
 
             htmlString += end;
             return htmlString;
@@ -262,7 +264,8 @@ namespace DatabaseController
                 return errormessage + text;
                 
             }
-
+            string link = "<h2><a href =\"http://localhost:11100/scores\"> Back to scores</a></h2>";
+            htmlString += link;
             htmlString += end;
             return htmlString;
         }
