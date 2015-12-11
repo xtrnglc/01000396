@@ -345,7 +345,6 @@ namespace Server
             }
             else
             {
-                Console.WriteLine("A web server request has connected to the server");
                 state.connectionCallback = HandleServerRequest;
             }
                
@@ -363,7 +362,12 @@ namespace Server
             string[] lines = Regex.Split(request, "\n");
             string response = "HTTP/1.1 200 OK \r\nConnection: close \r\nContent-Type: text/html; charset=UTF-8 \r\n";
             string response2 = "\r\n";
-            Console.WriteLine("Server request: " + lines[0]);
+            if (!lines[0].Contains("favicon.ico"))
+            {
+                Console.WriteLine("A web server request has connected to the server");
+                Console.WriteLine("Server request: " + lines[0]);
+            }
+            
             if (lines[0].Contains("scores"))
             {
                 Network.Send(state.workSocket, response);

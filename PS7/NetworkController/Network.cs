@@ -310,6 +310,10 @@ namespace NetworkController
             } 
         }
 
+        /// <summary>
+        /// Readcallback method
+        /// </summary>
+        /// <param name="ar"></param>
         public static void ReadCallback(IAsyncResult ar)
         {
             try
@@ -361,7 +365,6 @@ namespace NetworkController
         /// <param name="ar"></param>
         public static void ReadCallbackWeb(IAsyncResult ar)
         {
-
             try
             {
                 String content = String.Empty;
@@ -399,21 +402,10 @@ namespace NetworkController
                             // Not all data received. Get more.
                             if (handler.Connected)
                             {
-                                Console.WriteLine("Connected");
+                                
                                 handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallbackWeb), state);
                             }
-                            if (!handler.Connected)
-                            {
-                                Console.WriteLine("Not Connected");
-                            }
-
-                            
-                        }
-                        
-                        
-                        
-                        
-                        
+                        }        
                     }
                 }
             }
@@ -424,15 +416,7 @@ namespace NetworkController
 
         }
 
-        public static bool SocketConnected(Socket s)
-        {
-            bool part1 = s.Poll(1000, SelectMode.SelectRead);
-            bool part2 = (s.Available == 0);
-            if (part1 && part2)
-                return false;
-            else
-                return true;
-        }
+        
 
         public static bool IsConnected(this Socket socket)
         {

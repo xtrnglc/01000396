@@ -323,3 +323,8 @@ Design decisions
 	TO DO: Clean up disconnects so it releases the socket on disconnect to be reused by another command from the browser
 	At the moment after a request is received and html is sent to the browser, the browser expects more data. And trying to manually shut the socket down leads to error.
 	look into this.
+
+12/11/15
+	Can have multiple web server requests per session now. Not exactly sure how I fixed it. I locked the socket that would be disconnected in all the 
+	problem areas, most notably the readcallbackWeb and sendWeb methods that would be using the socket. The readcallback would try and use the socket
+	after it went to the sendWeb method which disconnects the socket. I also check to see if the socket is even connected before requesting more data.
