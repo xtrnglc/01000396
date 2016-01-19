@@ -172,7 +172,7 @@ namespace AgCubioView
         /// <param name="e"></param>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            ConnectMethod();
+            ConnectMethod();//ds
         }
 
         /// <summary>
