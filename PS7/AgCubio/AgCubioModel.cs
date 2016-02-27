@@ -206,7 +206,7 @@ namespace AgCubio
             maxFood = 2000;
             topSpeed = 500;
             attritionRate = 10;
-            foodValue = 1;
+            foodValue = 20;
             startMass = 1000;
             minimumSplitMass = 100;
             numberOfVirus = 0;
