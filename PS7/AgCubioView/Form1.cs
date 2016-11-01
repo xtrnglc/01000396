@@ -87,6 +87,7 @@ namespace AgCubioView
         public Form1()
         {
             InitializeComponent();
+            
             this.DoubleBuffered = true;
             this.ServerTextBox.Text = "localhost";
             this.KeyPreview = true;
@@ -105,6 +106,7 @@ namespace AgCubioView
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "AgCubio";
+            this.PlayerNameLabel.Visible = true;
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace AgCubioView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)                             
         {
             if(Connected)
             {
@@ -125,6 +127,7 @@ namespace AgCubioView
         /// </summary>
         private void ConnectMethod()
         {
+            base.Invalidate();
             this.PlayerNameLabel.Visible = false;
             this.PlayerNameTextBox.Visible = false;
             this.ServerLabel.Visible = false;
@@ -203,6 +206,10 @@ namespace AgCubioView
             firstCube = currentState.sb.ToString();
             string [] substrings = Regex.Split(firstCube, "\n");
             playerCube = JsonConvert.DeserializeObject<Cube>(substrings[0]);
+            if (world.ListOfPlayers.Count == 0)
+            {
+                world.ListOfPlayers.Add(playerCube.GetID(), playerCube);
+            }
             playerDrawn = true;
             int count = substrings.Count() - 1;
             string partialCube = substrings.Last();
@@ -218,8 +225,9 @@ namespace AgCubioView
         /// Stores cubes into dictionaries
         /// </summary>
         /// <param name="state"></param>
-        private void ThirdCallBack(State state)
+        private void ThirdCallBack(State state)                             //THREE CALLBACKS?
         {
+            int splitcount = 0;
             currentState = state;
             string dataString = state.sb.ToString();
             string[] substrings = Regex.Split(dataString, "\n");
@@ -245,35 +253,50 @@ namespace AgCubioView
                             Cube cube = JsonConvert.DeserializeObject<Cube>(entry);
                             {
 
-                                if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID))
+                                if (cube.GetFood() == false && world.ListOfPlayers.ContainsKey(cube.GetID()))
                                 {
                                     if (cube.Mass == 0)
                                     {
-                                        if (cube.GetID == playerCube.GetID)
+                                        if (cube.uid == playerCube.uid)
                                         {
-                                            playerAlive = false;
+                                            foreach (Cube c in world.ListOfPlayers.Values) 
+                                            {
+                                                if(c.team_id == playerCube.team_id)
+                                                {
+                                                    splitcount++;
+                                                }                                                
+                                            }
+                                            if (splitcount == 0)
+                                            {
+                                                playerAlive = false;
+                                                playersEaten++;
+                                            }
+                                            else
+                                            {
+                                                playerAlive = true;
+                                            }      
                                         }
-                                        world.ListOfPlayers.Remove(cube.GetID);
-                                        playersEaten++;
+                                        world.ListOfPlayers.Remove(cube.GetID());
+                                        
                                     }
                                     else
                                     {
-                                        world.ListOfPlayers.Remove(cube.GetID);
-                                        world.ListOfPlayers[cube.GetID] = cube;
+                                        world.ListOfPlayers.Remove(cube.GetID());
+                                        world.ListOfPlayers[cube.GetID()] = cube;
                                     }
 
                                 }
-                                else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID))
+                                else if (cube.GetFood() == true && world.ListOfFood.ContainsKey(cube.GetID()))
                                 {
                                     if (cube.Mass == 0)
                                     {
-                                        world.ListOfFood.Remove(cube.GetID);
+                                        world.ListOfFood.Remove(cube.GetID());
                                         foodEaten++;
                                     }
                                     else
                                     {
-                                        world.ListOfFood.Remove(cube.GetID);
-                                        world.ListOfFood[cube.GetID] = cube;
+                                        world.ListOfFood.Remove(cube.GetID());
+                                        world.ListOfFood[cube.GetID()] = cube;
                                     }
                                 }
                                 else
@@ -307,10 +330,11 @@ namespace AgCubioView
         /// <param name="e"></param>
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.S)
             {
-                //Grader, place a break point here then try and hit space. After stepping through once then possible to remove breakpoint to make game run smoothly
+            //    //Grader, place a break point here then try and hit space. After stepping through once then possible to remove breakpoint to make game run smoothly
                 Network.Send(currentState.workSocket, "(split, " + MouseX.ToString() + ", " + MouseY.ToString() + ")\n");
+                //MessageBox.Show("Here");
             }
         }
 
@@ -321,24 +345,36 @@ namespace AgCubioView
         /// <param name="e"></param>
         protected void OnPaint(object sender, PaintEventArgs e)
         {
+            //Focus();
+            base.Invalidate();
+            
             if (Connected && playerAlive)
             {
+                //Uncomment for Viewport
+                //try
+                //{
+                //    float scale = (float)(world.ListOfPlayers[playerCube.uid].Mass * .001);
+                //    e.Graphics.ScaleTransform(scale, scale);
+                //    e.Graphics.TranslateTransform(-world.ListOfPlayers[playerCube.uid].loc_x, -world.ListOfPlayers[playerCube.uid].loc_y);
+                //    e.Graphics.TranslateTransform(+this.Size.Width / 2 / scale, +this.Size.Height / 2 / scale);
+                //}
+                //catch
+                //{; }
                 //base.Update();
                 lock (world)
                 {
-                    
                     foreach (KeyValuePair<int, Cube> c in world.ListOfFood)
                     {
                         Cube cube = c.Value;
                         SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.argb_color));
-                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, 2, 2);
+                        e.Graphics.FillRectangle(brush, (float)cube.loc_x, (float)cube.loc_y, cube.GetWidth(), cube.GetWidth());
                         base.Invalidate();
                     }
 
                     foreach (KeyValuePair<int, Cube> c in world.ListOfPlayers)
                     {
                         Cube cube = c.Value;
-                        if (cube.GetID == playerCube.GetID)
+                        if (cube.GetID() == playerCube.GetID())
                         {
                             playerMass = cube.GetMass();
                             if (playerMass == 0)
@@ -351,11 +387,12 @@ namespace AgCubioView
                         RectangleF rectangle = new RectangleF((float)cube.loc_x - cube.GetWidth() * 1.5f, (float)cube.loc_y - cube.GetWidth() * 1.5f, cube.GetWidth() * 3, cube.GetWidth() * 3);
                         e.Graphics.FillRectangle(brush, rectangle);
 
-                        Font font = new Font("Arial", cube.GetWidth() / 4);
-                        StringFormat stringFormat = new StringFormat();
-                        stringFormat.Alignment = StringAlignment.Center;
-                        stringFormat.LineAlignment = StringAlignment.Center;
-                        e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
+                        //Uncomment for name texts
+                        //Font font = new Font("Arial", cube.GetWidth() / 4);
+                        //StringFormat stringFormat = new StringFormat();
+                        //stringFormat.Alignment = StringAlignment.Center;
+                        //stringFormat.LineAlignment = StringAlignment.Center;
+                        //e.Graphics.DrawString(cube.Name, font, Brushes.Yellow, rectangle, stringFormat);
                     }
 
                     try
@@ -390,9 +427,30 @@ namespace AgCubioView
             else if(Connected && !playerAlive)
             {
                 MessageBox.Show("You have died");
+                this.currentState.workSocket.Disconnect(false);
             }
         }
     }
 }
 
 
+//foreach (Cube cube in world.ListOfPlayers.Values)
+//                    {
+//                        // Draws the actual cube
+//                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)cube.GetColor()));
+//RectangleF rectangle = new RectangleF((float)cube.loc_x, (float)cube.loc_y, (float)cube.GetWidth(), (float)cube.GetWidth());
+//e.Graphics.FillRectangle(brush, rectangle);
+
+//                        // Deals with name on cube
+//                        Font font = new Font("Arial", 16F);
+//StringFormat stringFormat = new StringFormat();
+//stringFormat.Alignment = StringAlignment.Center;
+//                        stringFormat.LineAlignment = StringAlignment.Center;
+//                        e.Graphics.DrawString(cube.Name, font, Brushes.Black, rectangle, stringFormat);
+//                    }
+//                    // Draw food cubes
+//                    foreach (AgCubio.Cube food in world.ListOfFood.Values)
+//                    {
+//                        SolidBrush brush = new SolidBrush(Color.FromArgb((int)food.GetColor()));
+//e.Graphics.FillRectangle(brush, (float)food.loc_x, (float)food.loc_y, 5, 5);
+//                    }

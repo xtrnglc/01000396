@@ -3,6 +3,9 @@
 CS 3500
 PS7 - AgCubio
 
+
+README FOR PS8 AGCUBIO SERVER BELOW HORIZONTAL LINE
+
 TO START GAME, 
 	START SERVER
 	START CLIENT
@@ -95,4 +98,166 @@ KNOWN PROBLEMS:
 
 	Place a breakpoint at Form1_KeyDown method
 	anywhere between lines 308 and 314, step through with f10 and the split works fine
+
+	--------------------------------------------------------------------------------------------------------
+
+	Readme for PS8 AgCubio server
+
+	This is AgCubio on hard mode
+
+	TO DO: Fix the connection in the server network to IvP6Any (won't work right now, but will connect to Jim's client)
+	TO DO: Viruses
+	TO DO: Polish moving?
+	
+	We have play tested our server on our client and on another team's client and they both work the same however our server does not work with Jim's.
+	Also note: to split on our client press s. The space bar does not work for some reason.
+	Also disconnects are not handle gracefully 
+	
+
+Design decisions
+	
+	Updates from the server about generating food, updating player locations and dealing with player absorbing are sent every quarter of a second.
+	Attrition rate decreases mass by the attrition rate given in the gamestate every 3 seconds.
+	The attrition rate is a percentage. So <attrition>10</attrition> means a cube loses 10% of its mass every 3 seconds.
+	The server is also able to parse an XML file descring the game world parameters.
+	If no gamestate is used, then the default values are used.
+
+
+	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT	IMPORTANT  IMPORTANT
+
+	The gamestate file must be a .txt file named "gamestate"
+	It must be in 01000396/PS7/Server/bin/Debug
+	The user can edit the values between the elements to edit the game state of the world.
+	It must be formatted as follows
+
+	<gamestate>
+	<width>1000</width>
+	<height>1000</height>
+	<maxfood>2000</maxfood>
+	<topspeed>500</topspeed>
+	<attrition>5</attrition>					//5% of mass
+	<foodvalue>20</foodvalue>
+	<startmass>1000</startmass>
+	<minsplitmass>100</minsplitmass>
+	<maxsplits>6</maxsplits>
+	<numberofvirus>3</numberofvirus>
+	<maxsize>15000</maxsize>
+	<mergetimer>10</mergetimer>					//this is in seconds
+	<virussize>1000</virussize>
+	</gamestate>
+
+	
+
+
+
+11/23/2015
+	To start we went over the MSDN async socket server example and implemented the two functions in the assignment Server_Awaiting_Client_Loop and Accept_a_New_Client
+	We were able to get the server and our client that we wrote to contact each other. We were able to send the player name to the server and the server is able to use it
+	in a callback method in server.cs to create a cube object and serialize it with Json and send it back to the client. However after sending the initial player cube Json string
+	we are having trouble sending the rest of the cubes over.
+
+11/24/2015
+	We have a dictionary keeping track of sockets and cubes where each socket correspond to a unique player cube
+	We have a dictionary keeping track of a player cube and its destination
+	We are able to send over the player cube and the intitial start up cubes from the server to the client.
+	Able to have multiple clients connect to the server
+	Able to draw players from other client on seperate clients
+	Able to move the player cube
+	We did this by have a dictionary of sockets and a tuple representing the destination of where the cube wants to go. 
+	In the heartbeat method update, we update the location of the player cube so it eventually reaches its destination.
+	The speed is proporionate to the mass of the cube, right now speed is mass / 300 but should be able to get it cleaner.
+	And any time the current location of the cube is within 5 units of the destiniation, the cube stays still
+
+11/28/2015
+	We got the server to be able to accept and parse an XML file describing the game state of the world.
+	If no gamestate is used, then the default values are used.
+	The gamestate file must be a .txt file named "gamestate"
+	It must be in 01000396/PS7/Server/bin/Debug
+	The user can edit the values between the elements to edit the game state of the world.
+	Also got all cubes to respect the boundaries of the world. The player cube will not move beyond the given boundary.
+	Speed fixed to be constant / cube.mass so that it slows down as it gets bigger
+
+	Created unit testing for model class
+
+11/29/2015
+	Able to get player cubes being absorbed kinda working. The client we have might be the issue as there are inconsistencies when a player is being eaten.
+	The error is because we try to set font size to 0. SO I commented out the font drawings.
+	Sometimes it works correctly and other times we get the big red X and following error:
+
+	See the end of this message for details on invoking 
+	just-in-time (JIT) debugging instead of this dialog box.
+
+	************** Exception Text **************
+	System.ArgumentException: Value of '0' is not valid for 'emSize'. 'emSize' should be greater than 0 and less than or equal to System.Single.MaxValue.
+	Parameter name: emSize
+	at System.Drawing.Font.Initialize(FontFamily family, Single emSize, FontStyle style, GraphicsUnit unit, Byte gdiCharSet, Boolean gdiVerticalFont)
+	at System.Drawing.Font.Initialize(String familyName, Single emSize, FontStyle style, GraphicsUnit unit, Byte gdiCharSet, Boolean gdiVerticalFont)
+	at System.Drawing.Font..ctor(String familyName, Single emSize)
+	at AgCubioView.Form1.OnPaint(Object sender, PaintEventArgs e) in C:\Users\trungl\Source\Repos\01000396\PS7\AgCubioView\Form1.cs:line 363
+	at System.Windows.Forms.Control.OnPaint(PaintEventArgs e)
+	at System.Windows.Forms.Form.OnPaint(PaintEventArgs e)
+	at System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+	at System.Windows.Forms.Control.WmPaint(Message& m)
+	at System.Windows.Forms.Control.WndProc(Message& m)
+	at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+	at System.Windows.Forms.Form.WndProc(Message& m)
+	at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+	at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+	at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+
+	Also added a new parameter: number of viruses.
+
+12/01/2015
+	Our server wasn't drawing properly on other people's client because our cube model class uses doubles and so does not parse correctly when JSON 
+	deserializes it on other people's server. 
+	Change it all to ints and now it draws and works correctly on Kenny's and Michelle's client however still does not work on Jim's.
+	Also getting crazy lag. Might be my internet connection though.
+
+12/02/2015
+	Fixed the lag by adding more sends.
+	Fixed the error we are getting with the red X.
+	Able to get the cube to split and merge correctly once.
+
+	Our algorithm for splitting is:
+		1. Half the mass of the existing cube
+		2. Create a replica cube
+		3. Initialize their start positions (needs work, right now we have it so that they start a little bit away from each other)
+		4. Create a Rectangle class object to represent the cubes
+		5. Store Rectangles in rectangles dictionary and new cubes in w.listofplayers
+		6. Initialize splittime on new cubes
+
+	Our algorithm for dealing with split cubes not merging is:
+		1. Using the Rectangle class' Intersect method which returns true if a Rectangle object is touching another Rectangle
+		2. If false, i.e. not touching then proceed update location as usual
+		3. Else, bounce the cube off by sending it a little bit in the opposite direction
+
+	Our algorithm for remerging is:
+		1. After a specified time apart,
+		2. The cubes with the same split time will combine their masses
+		3. A new cube with the combined mass will replace the "main" cube while deleting all other cubes ("main" cube is the cube that is associated with the socket)
+
+12/03/2015
+	Ok I will attempt to explain the remerging.
+
+	When a cube splits, it makes a copy of itself with half its mass and the split and the main both have the same split timer.
+	So for example say we have original cube with mass = 8.
+
+	If we split, then we now have two cubes both with mass = 4 and a split time of lets say 1.
+	If we split again, we now have 4 cubes. Two with mass = 2 and splittime = 1 and two with mass = 2 and splittime = 2
+	If we split again, we now have 8 cubes. Two with mass = 1 and splittime = 1 and two with mass = 1 and splittime = 2 and four with mass = 1 and splittime = 3.
+	So after a specified time, the two cubes that were split(i.e. splittime = 1) earliest will merge. So now we have 7 cubes. the two cubes with splittime combine to make a cube with mass = 2 and splittime = 0.
+	After time, the two cubes at splittime = 2 will merge. So we now have two cubes of mass = 2 and splittime = 0 and 4 cubes of mass = 1 and splittime = 3.
+	Then the four cubes at splittime 3 will merge and we have 2 cubes with splittime 0 and mass 2 and one cube that the four cubes merged into that has splittime = 0 and amss = 4.
+	Then the two cubes with mass 2 will combine so now we have two cubes with mass = 4. 
+	Finally we merge these two and end up with the cube of mass = 8 we had originally assuming no food were eaten.
+
+	The implementation of this is very funky, To merge, you create a new cube and combine the masses and set the reference of an existing cube equal to the new combined cube and erase all references to other partner cube with same splittime. 
+	The merge function ideally would send the dead cubes of mass 0 and new combined cube in the merge function but the client did not seem to get the data? So instead it returns a list of cubes that need to die and the caller function deals with sending
+	it over to the client.
+	I realize this is very ineffecient and obviously does not work out well :( . 
+
+	Also our move when split is buggy because the friendly teamcubes will always attempt to bounce off each other but if somehow they overlap then they both want to go the opposite way and it does not work as we want it to.
+	
+	Fixed the issue of eating split cubes. If the "main" cube from the split is being eaten then the socket will then get a new main from one of the other splits.
+	If a split that is eaten is not main then carry on as usual. Might present issues in remerging.
 

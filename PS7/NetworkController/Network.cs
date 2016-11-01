@@ -37,7 +37,7 @@ namespace NetworkController
         /// </summary>
         public StringBuilder sb = new StringBuilder();
 
-        public Action<State> connectionCallback;
+        public Action<State> connectionCallback;                             //OH action states. Very interesting.
 
     }
     public static class Network
@@ -52,7 +52,16 @@ namespace NetworkController
         private static string response = string.Empty;
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent sendDone = new ManualResetEvent(false);
-        
+        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        private static Action<State> connectionCallbackTemp;
+        private static TcpListener server;
+
+        // One StringSocket per connected client
+        private static List<StringSocket> allSockets;                              //We did not include this here. We put this in server and used socket.
+
+        // the name associated with the socket
+        private static List<string> user_names;
+
 
         /// <summary>
         /// Size of the buffer
@@ -74,9 +83,8 @@ namespace NetworkController
 
             //TcpClient client = new TcpClient(hostname, port);
 
-            state.workSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            state.workSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);                             //What happens if you can't connect?
             state.workSocket.BeginConnect(hostname, port, new AsyncCallback(Connected_to_Server), state);
-
 
             return socket;
         }
@@ -90,7 +98,7 @@ namespace NetworkController
             State state = (State)state_in_an_ar_object.AsyncState;
             state.connectionCallback(state);                //Calls the callback method from View and sends player name
 
-            state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
+            state.workSocket.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);                              //What happens if the connection gets closed?
         }
 
         /// <summary>
@@ -112,7 +120,7 @@ namespace NetworkController
                 if (bytesRead > 0)
                 {
                     // There might be more data, so store the data received so far.
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));                             //You may get a data overload?
                     state.connectionCallback(state);                //Draws player cube
                 }
                 else
@@ -143,9 +151,17 @@ namespace NetworkController
         /// <param name="data"></param>
         public static void Send(Socket socket, String data)
         {
-            byte[] byteData = Encoding.ASCII.GetBytes(data);
+            try
+            {
+                byte[] byteData = Encoding.ASCII.GetBytes(data);
 
-            socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+                socket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), socket);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
         /// <summary>
@@ -157,7 +173,7 @@ namespace NetworkController
             try
             {
                 Socket s = (Socket)state_in_an_ar_object.AsyncState;
-
+                Network.IsConnected(s);
                 int bytesSent = s.EndSend(state_in_an_ar_object);
                 sendDone.Set();
             }
@@ -165,6 +181,120 @@ namespace NetworkController
             {
             }
         }
+
+        /// <summary>
+        /// OS will listen for a connection and save the callback function with the request
+        /// when a connection request comes, should invoke the Accept_a_New_Client method
+        /// This is an event loop, needs to set up a new connection listener for another connection
+        /// 
+        /// </summary>
+        public static void Server_Awaiting_Client_Loop(Action<State> callback)
+        {
+            TcpListener listener = new TcpListener(IPAddress.IPv6Any, 11000);
+            State state = new State();
+            connectionCallbackTemp = callback;
+
+            state.connectionCallback = callback;
+            try
+            {
+                listener.Start();
+                
+                while(true)
+                {
+                    allDone.Reset();
+                    Console.WriteLine("Waiting for a connection...");
+                    listener.BeginAcceptSocket(new AsyncCallback(Accept_a_New_Client), listener.Server);
+                    allDone.WaitOne();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Create a new socket
+        /// Call the callback provided by the above method
+        /// Await a new connection request
+        /// Networking code should not start listening for data, game server should do that
+        /// </summary>
+        public static void Accept_a_New_Client(IAsyncResult ar)
+        {
+            try
+            {
+                //Console.WriteLine("here");
+                Socket listener = (Socket)ar.AsyncState;
+                Socket handler = listener.EndAccept(ar);
+
+                listener.BeginAccept(Accept_a_New_Client, listener);
+
+                State state = new State();
+                state.workSocket = handler;
+                state.connectionCallback = connectionCallbackTemp;
+                handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+            }
+            catch (Exception)
+            {
+
+            }
+            
+        }
+
+        public static void ReadCallback(IAsyncResult ar)
+        {
+            try
+            {
+                String content = String.Empty;
+                
+                // Retrieve the state object and the handler socket
+                // from the asynchronous state object.
+                State state = (State)ar.AsyncState;
+                Socket handler = state.workSocket;
+                Network.IsConnected(handler);
+                //state.connectionCallback = connectionCallbackTemp;
+                // Read data from the client socket. 
+                int bytesRead = handler.EndReceive(ar);
+
+                if (bytesRead > 0)
+                {
+                    // There  might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.connectionCallback(state);
+                    // Check for end-of-file tag. If it is not there, read 
+                    // more data.
+                    content = state.sb.ToString();
+                    if (content.IndexOf("<EOF>") > -1)
+                    {
+                        // All the data has been read from the 
+                        // client. Display it on the console.
+                        //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
+                        // Echo the data back to the client.
+                        Send(handler, content);
+                    }
+                    else
+                    {
+                        // Not all data received. Get more.
+                        handler.BeginReceive(state.buffer, 0, State.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+        }
+
+        public static bool IsConnected(this Socket socket)
+        {
+            try
+            {
+                return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+            }
+            catch (SocketException) { return false; }
+        }
+        
     }
 }
 
